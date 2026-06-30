@@ -223,7 +223,7 @@ header.scrolled {
 
 .nav-links a {
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.86rem;
   color: var(--text-muted);
   position: relative;
 }
@@ -1099,6 +1099,7 @@ footer {
     align-items: center !important;
     justify-content: center !important;
     border: none !important;
+    text-decoration: none !important;
     cursor: pointer !important;
     transition: transform 0.2s ease !important;
   }

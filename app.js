@@ -81,7 +81,7 @@ const translations = {
     "footer.linkConditions": "Condizioni di Noleggio",
     "footer.linkFaq": "FAQ & Supporto",
     "footer.linkPartner": "Lavora con noi / Partner",
-    "footer.col3Title": "Sedi Principali",
+    "footer.col3Title": "Sede Legale & Contatti",
     "dynamic.cat": "Categoria",
     "dynamic.perDay": "/ giorno (Kasko inc.)",
     "dynamic.book": "Prenota",
@@ -1465,9 +1465,103 @@ function handleBotSendMessage(event) {
   if (!input || !input.value.trim()) return;
   
   const text = encodeURIComponent(`Salve ITERCARS Concierge, vi contatto dal sito: ${input.value.trim()}`);
-  window.open(`https://wa.me/3902890058776?text=${text}`, '_blank');
+  window.open(`https://wa.me/393755942143?text=${text}`, '_blank');
   input.value = '';
   toggleConciergeBot();
 }
 window.handleBotSendMessage = handleBotSendMessage;
+
+/* ==========================================================================
+   SUPPLIER / PARTNER FLEET APPLICATION SUBMIT LOGIC (FormSubmit AJAX)
+   ========================================================================== */
+async function handlePartnerApplicationSubmit(event) {
+  event.preventDefault();
+  
+  const company = document.getElementById('partCompany') ? document.getElementById('partCompany').value.trim() : '';
+  const referent = document.getElementById('partReferent') ? document.getElementById('partReferent').value.trim() : '';
+  const email = document.getElementById('partEmail') ? document.getElementById('partEmail').value.trim() : '';
+  const phone = document.getElementById('partPhone') ? document.getElementById('partPhone').value.trim() : '';
+  const fleetSize = document.getElementById('partFleetSize') ? document.getElementById('partFleetSize').value : '';
+  const city = document.getElementById('partCity') ? document.getElementById('partCity').value.trim() : '';
+  const models = document.getElementById('partModels') ? document.getElementById('partModels').value.trim() : '';
+
+  if (!company || !referent || !email || !phone) {
+    showToast("⚠️ Compila tutti i campi obbligatori contrassegnati con l'asterisco.");
+    return;
+  }
+
+  const recipient = "alessiaconese@itercars.com";
+
+  // Visualizza notifica di caricamento all'utente
+  showToast("⏳ Invio automatico all'email di Alessia Conese in corso...");
+
+  // Salva una copia nel database Supabase se attivo per mantenere lo storico
+  if (typeof supabase !== 'undefined' && supabase) {
+    try {
+      supabase.from('supplier_applications').insert([{
+        company_name: company,
+        referent_name: referent,
+        email: email,
+        phone: phone,
+        fleet_size: fleetSize,
+        city: city,
+        models: models,
+        recipient_email: recipient,
+        status: 'new'
+      }]).then(({ error }) => {
+        if (error) console.warn("Log Supabase info:", error.message);
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+  }
+
+  // Chiamata automatica AJAX a FormSubmit per inviare l'email in background
+  const payload = {
+    _subject: `💎 Candidatura Flotta Partner — ${company}`,
+    _template: "table",
+    _captcha: "false",
+    "Azienda / Società": company,
+    "Referente": referent,
+    "Email di Contatto": email,
+    "Telefono / WhatsApp": phone,
+    "Dimensione Flotta": `${fleetSize} supercar`,
+    "Sede / Città Principale": city,
+    "Modelli Proposti / Note": models || "Nessuno specificato"
+  };
+
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (response.ok || result.success === "true") {
+      showToast("✨ Candidatura inviata con successo all'email alessiaconese@itercars.com!");
+      if (event.target && typeof event.target.reset === 'function') {
+        event.target.reset();
+      }
+    } else {
+      throw new Error(result.message || "Errore invio formsubmit");
+    }
+  } catch (err) {
+    console.warn("Chiamata AJAX offline o bloccata, fallback elegante su mailto:", err);
+    showToast("✨ Candidatura pronta! Apertura client email per alessiaconese@itercars.com...");
+    const subjectText = encodeURIComponent(`Candidatura Flotta Partner — ${company}`);
+    const bodyText = encodeURIComponent(
+      `Gentile Alessia Conese,\n\nCandidatura flotta per ITERCARS:\n\n• Azienda: ${company}\n• Referente: ${referent}\n• Email: ${email}\n• Telefono: ${phone}\n• Flotta: ${fleetSize} veicoli\n• Sede: ${city}\n• Modelli/Note: ${models}\n`
+    );
+    setTimeout(() => {
+      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
+    }, 1000);
+  }
+}
+window.handlePartnerApplicationSubmit = handlePartnerApplicationSubmit;
+
 
