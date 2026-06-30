@@ -74,7 +74,7 @@
             <i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DI NOLEGGIO AUTO PREMIUM
           </div>
           <h1 data-i18n="hero.title">Guidare l'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span></h1>
-          <p data-i18n="hero.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia, copertura Kasko totale e un'esperienza di guida indimenticabile.</p>
+          <p class="hero-subtitle" data-i18n="hero.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia, copertura Kasko totale e un'esperienza di guida indimenticabile.</p>
           
           <div class="hero-btns">
             <a href="#flotta" class="btn btn-primary">
@@ -195,10 +195,10 @@
       <!-- Filter Pills -->
       <div class="filter-pills" id="categoryFilters">
         <button class="pill-btn active" onclick="filterFleet('tutti', this)" data-i18n="filter.all">Tutti i Modelli</button>
-        <button class="pill-btn" onclick="filterFleet('Supercar', this)">🏎️ Supercar</button>
-        <button class="pill-btn" onclick="filterFleet('SUV', this)">🚙 SUV Lusso</button>
-        <button class="pill-btn" onclick="filterFleet('Sportiva', this)">🔥 Sportive</button>
-        <button class="pill-btn" onclick="filterFleet('Elettrica', this)">⚡ Elettriche</button>
+        <button class="pill-btn" onclick="filterFleet('Supercar', this)">Supercar</button>
+        <button class="pill-btn" onclick="filterFleet('SUV', this)">SUV Lusso</button>
+        <button class="pill-btn" onclick="filterFleet('Sportiva', this)">Sportive</button>
+        <button class="pill-btn" onclick="filterFleet('Elettrica', this)">Elettriche</button>
       </div>
 
       <!-- Cars Grid -->
@@ -240,6 +240,60 @@
           <div class="feature-icon"><i class="ri-refresh-line"></i></div>
           <h3 data-i18n="why.box4Title">Garanzia Modello</h3>
           <p data-i18n="why.box4Desc">Nessuna sorpresa: riceverai esattamente la marca, il modello e la motorizzazione specificata al momento della prenotazione.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= VIP SERVICES & CONCIERGE ================= -->
+  <section class="vip-services-section" id="servizi">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Esperienza Esclusiva</span>
+        <h2>I Nostri <span class="text-gold">Servizi VIP & Concierge</span></h2>
+        <p>Molto più di un noleggio auto: un ecosistema lifestyle su misura progettato per garantire il massimo comfort, discrezione e rapidità.</p>
+      </div>
+
+      <div class="vip-services-grid">
+        <!-- Card 1 -->
+        <div class="glass-card vip-service-card">
+          <div class="vip-service-icon"><i class="ri-flight-takeoff-line"></i></div>
+          <h3 class="vip-service-title">Consegna Door-to-Jet & Yacht</h3>
+          <p class="vip-service-desc">La vettura ti attende direttamente sulla pista del jet privato o al molo del tuo yacht. Zero file, check-in digitale su iPad completato dal nostro staff in 60 secondi.</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="glass-card vip-service-card">
+          <div class="vip-service-icon"><i class="ri-shield-star-line"></i></div>
+          <h3 class="vip-service-title">Kasko VIP Franchigia Zero</h3>
+          <p class="vip-service-desc">Copertura assicurativa All-Risk totale inclusa in ogni prenotazione senza massimali bloccati su carta di credito e con anonimato garantito al 100% per celebrità.</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="glass-card vip-service-card">
+          <div class="vip-service-icon"><i class="ri-customer-service-2-line"></i></div>
+          <h3 class="vip-service-title">Concierge Lifestyle H24</h3>
+          <p class="vip-service-desc">Assistente personale dedicato linea diretta per prenotare tavoli nei ristoranti stellati Michelin, accessi prioritari ai club esclusivi e biglietti per eventi mondani.</p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="glass-card vip-service-card">
+          <div class="vip-service-icon"><i class="ri-user-star-line"></i></div>
+          <h3 class="vip-service-title">Chauffeur & Security Privata</h3>
+          <p class="vip-service-desc">Possibilità di richiedere autisti professionisti 5 stelle plurilingue o personale di scorta e protezione ravvicinata per eventi di rappresentanza e delegazioni diplomatiche.</p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="glass-card vip-service-card">
+          <div class="vip-service-icon"><i class="ri-time-line"></i></div>
+          <h3 class="vip-service-title">Assistenza Fly & Drive 60 min</h3>
+          <p class="vip-service-desc">In caso di imprevisto tecnico in qualsiasi località europea, garantiamo l'invio rapido di un mezzo sostitutivo di pari o superiore valore entro un massimo di 60 minuti.</p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="glass-card vip-service-card">
+          <div class="vip-service-icon"><i class="ri-sound-module-line"></i></div>
+          <h3 class="vip-service-title">Setup Vettura Tailor-Made</h3>
+          <p class="vip-service-desc">Ogni auto viene preparata su misura prima della consegna con la tua playlist musicale preferita, temperatura interna ideale e bevande o Champagne di lusso nel frigobar.</p>
         </div>
       </div>
     </div>
@@ -499,7 +553,7 @@
             <a href="#home" data-i18n="nav.home">Chi Siamo</a>
             <a href="#perche-noi" data-i18n="footer.linkConditions">Condizioni di Noleggio</a>
             <a href="#" data-i18n="footer.linkFaq">FAQ & Supporto</a>
-            <a href="#" data-i18n="footer.linkPartner">Lavora con noi / Partner</a>
+            <a href="partners.html" data-i18n="footer.linkPartner">Lavora con noi / Partner</a>
           </div>
         </div>
 
