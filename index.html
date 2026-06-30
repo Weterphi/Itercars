@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITERCARS — Noleggio Auto Premium & Esclusive | Marketplace</title>
+  <meta name="description" content="Esplora e noleggia le supercar e auto di lusso più esclusive al mondo. Servizio concierge 24/7, consegna a domicilio e flotta garantita.">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- CSS Principale -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header id="header">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <div class="logo-icon"><i class="ri-steering-fill"></i></div>
+        <span>ITER<span class="text-gradient">CARS</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="#home" class="active" data-i18n="nav.home">Home</a></li>
+        <li><a href="#flotta" data-i18n="nav.fleet">La Flotta</a></li>
+        <li><a href="#perche-noi" data-i18n="nav.why">Perché Noi</a></li>
+        <li><a href="#servizi" data-i18n="nav.vip">Servizi VIP</a></li>
+        <li><a href="#contatti" data-i18n="nav.contacts">Contatti</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Custom Language Selector -->
+        <div class="lang-dropdown-wrapper" style="position: relative;">
+          <button class="btn btn-outline" id="langDropdownBtn" onclick="toggleLangMenu(event)" style="padding: 8px 16px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; border-radius: var(--radius-full);">
+            <span id="currentLangFlag" style="font-size: 1.2rem;">🇮🇹</span>
+            <span id="currentLangCode" style="font-weight: 700;">IT</span>
+            <i class="ri-arrow-down-s-line"></i>
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div class="glass-card lang-dropdown-menu" id="langDropdownMenu">
+            <button onclick="selectLang('it')"><span class="lang-flag">🇮🇹</span> <strong>IT</strong> - Italiano</button>
+            <button onclick="selectLang('en')"><span class="lang-flag">🇬🇧</span> <strong>EN</strong> - English</button>
+            <button onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <strong>ES</strong> - Español</button>
+            <button onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <strong>FR</strong> - Français</button>
+            <div style="height: 1px; background: var(--border-glass); margin: 6px 0;"></div>
+            <button onclick="openOtherLangsModal()" style="color: var(--accent-primary); font-weight: 600;">
+              <i class="ri-global-line"></i> <span data-i18n="lang.other">Altre lingue...</span>
+            </button>
+          </div>
+        </div>
+
+        <a href="#flotta" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
+          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 02 8900 LUSSO</span>
+        </a>
+        <button class="btn btn-primary nav-area-btn" id="navAreaBtn" onclick="openAuthModal()" title="Area Riservata">
+          <i class="ri-user-3-fill" style="font-size: 1.15rem;"></i> <span data-i18n="nav.area" id="navAreaText">Area Riservata</span>
+        </button>
+        <button class="btn btn-outline mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" title="Menu">
+          <i class="ri-menu-line" id="mobileMenuIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
+  <div class="hero-bg-wrapper">
+    <section class="hero" id="home">
+      <div class="container hero-content">
+        <div class="hero-text">
+          <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); backdrop-filter: blur(8px); border-radius: 99px; margin-bottom: 20px; color: #34d399; font-size: 0.85rem; font-weight: 600;" data-i18n="hero.badge">
+            <i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DI NOLEGGIO AUTO PREMIUM
+          </div>
+          <h1 data-i18n="hero.title">Guidare l'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span></h1>
+          <p data-i18n="hero.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia, copertura Kasko totale e un'esperienza di guida indimenticabile.</p>
+          
+          <div class="hero-btns">
+            <a href="#flotta" class="btn btn-primary">
+              <span data-i18n="hero.btnDiscover">Scopri i Veicoli</span> <i class="ri-roadster-fill"></i>
+            </a>
+            <button onclick="openModal('Consulenza Preventivo VIP', 0)" class="btn btn-outline">
+              <span data-i18n="hero.btnQuote">Calcola Preventivo</span> <i class="ri-calculator-line"></i>
+            </button>
+          </div>
+
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h3>80+</h3>
+              <p data-i18n="hero.stat1">Supercar Esclusive</p>
+            </div>
+            <div class="stat-item">
+              <h3>24/7</h3>
+              <p data-i18n="hero.stat2">Concierge Dedicato</p>
+            </div>
+            <div class="stat-item">
+              <h3>100%</h3>
+              <p data-i18n="hero.stat3">Garanzia Modello</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleek VIP Card al posto dell'immagine duplicata -->
+        <div class="hero-visual">
+          <div class="glass-card" style="padding: 32px; border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(10, 14, 23, 0.75); backdrop-filter: blur(20px); max-width: 400px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.8);">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 16px;">
+              <div style="width: 54px; height: 54px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #000; flex-shrink: 0;"><i class="ri-shield-star-fill"></i></div>
+              <div>
+                <h4 style="font-size: 1.15rem; color: #fff;" data-i18n="vip.title">Garanzia VIP Kasko</h4>
+                <span style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 600;" data-i18n="vip.subtitle">Copertura 100% Inclusa</span>
+              </div>
+            </div>
+            <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 24px;" data-i18n="vip.desc">Ogni noleggio include assistenza stradale 24/7 con elicottero o supercar sostitutiva entro 60 minuti in tutta Europa.</p>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+              <span style="font-size: 0.85rem; color: #fff; font-weight: 500;"><i class="ri-check-double-line text-gradient"></i> <span data-i18n="vip.check1">Consegna in Villa</span></span>
+              <span style="font-size: 0.85rem; color: #fff; font-weight: 500;"><i class="ri-check-double-line text-gradient"></i> <span data-i18n="vip.check2">Zero Franchigia</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SEARCH & FILTER BAR ================= -->
+    <section class="search-section">
+      <div class="container">
+        <form class="search-box" id="searchForm" onsubmit="handleSearch(event)">
+          <div class="search-grid">
+            
+            <div class="form-group">
+              <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
+              <div class="input-wrapper">
+                <i class="ri-building-line"></i>
+                <select class="form-control" id="searchLocation">
+                  <option value="" data-i18n="search.locAny">Qualsiasi Città / Aeroporto</option>
+                  <option value="Milano">Milano Centro / Linate / Malpensa</option>
+                  <option value="Roma">Roma Fiumicino / Via Veneto</option>
+                  <option value="Costa Smeralda">Porto Cervo (Costa Smeralda)</option>
+                  <option value="Monaco">Monte Carlo / Costa Azzurra</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label><i class="ri-calendar-event-line"></i> <span data-i18n="search.dateFrom">Data Ritiro</span></label>
+              <div class="input-wrapper">
+                <i class="ri-calendar-2-line"></i>
+                <input type="date" class="form-control" id="searchDateFrom" value="2026-07-01">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label><i class="ri-calendar-check-line"></i> <span data-i18n="search.dateTo">Data Riconsegna</span></label>
+              <div class="input-wrapper">
+                <i class="ri-calendar-check-fill"></i>
+                <input type="date" class="form-control" id="searchDateTo" value="2026-07-05">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label><i class="ri-car-line"></i> <span data-i18n="search.category">Categoria Auto</span></label>
+              <div class="input-wrapper">
+                <i class="ri-filter-3-line"></i>
+                <select class="form-control" id="searchCategory">
+                  <option value="tutti" data-i18n="search.catAll">Tutte le Categorie</option>
+                  <option value="Supercar">Supercar</option>
+                  <option value="SUV">SUV di Lusso</option>
+                  <option value="Sportiva">Coupé & Sportive</option>
+                  <option value="Elettrica">Hypercar Elettriche</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="padding-top: 20px;">
+              <button type="submit" class="btn btn-gold" style="width: 100%; height: 48px;">
+                <i class="ri-search-line"></i> <span data-i18n="search.btn">Cerca Auto</span>
+              </button>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+
+  <!-- ================= FLEET / CATALOG SECTION ================= -->
+  <section class="fleet-section" id="flotta">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="fleet.tag">La Nostra Flotta</span>
+        <h2 data-i18n="fleet.title">Veicoli Selezionati per <span class="text-gradient">Emozioni Pure</span></h2>
+        <p data-i18n="fleet.subtitle">Scegli il modello perfetto per il tuo prossimo viaggio d'affari, weekend esclusivo o evento speciale.</p>
+      </div>
+
+      <!-- Filter Pills -->
+      <div class="filter-pills" id="categoryFilters">
+        <button class="pill-btn active" onclick="filterFleet('tutti', this)" data-i18n="filter.all">Tutti i Modelli</button>
+        <button class="pill-btn" onclick="filterFleet('Supercar', this)">🏎️ Supercar</button>
+        <button class="pill-btn" onclick="filterFleet('SUV', this)">🚙 SUV Lusso</button>
+        <button class="pill-btn" onclick="filterFleet('Sportiva', this)">🔥 Sportive</button>
+        <button class="pill-btn" onclick="filterFleet('Elettrica', this)">⚡ Elettriche</button>
+      </div>
+
+      <!-- Cars Grid -->
+      <div class="fleet-grid" id="fleetGrid">
+        <!-- Le auto verranno generate dinamicamente con JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= WHY CHOOSE US ================= -->
+  <section class="features-section" id="perche-noi">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag" data-i18n="why.tag">I Nostri Vantaggi</span>
+        <h2 data-i18n="why.title">Perché Scegliere <span class="text-gold">ITERCARS</span></h2>
+        <p data-i18n="why.subtitle">Ridefiniamo il concetto di autonoleggio combinando flotta proprietaria di prim'ordine e accoglienza a 5 stelle.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="glass-card feature-box">
+          <div class="feature-icon"><i class="ri-vip-diamond-line"></i></div>
+          <h3 data-i18n="why.box1Title">Consegna Ovunque</h3>
+          <p data-i18n="why.box1Desc">Consegniamo la vettura direttamente al tuo hotel, villa privata o terminal jet privato con il nostro staff.</p>
+        </div>
+
+        <div class="glass-card feature-box">
+          <div class="feature-icon"><i class="ri-shield-check-fill"></i></div>
+          <h3 data-i18n="why.box2Title">Kasko Totale VIP</h3>
+          <p data-i18n="why.box2Desc">Viaggia in assoluta serenità con franchigia zero e copertura assicurativa completa su tutti i nostri veicoli.</p>
+        </div>
+
+        <div class="glass-card feature-box">
+          <div class="feature-icon"><i class="ri-customer-service-2-fill"></i></div>
+          <h3 data-i18n="why.box3Title">Concierge 24/7</h3>
+          <p data-i18n="why.box3Desc">Assistenza dedicata giorno e notte. Prenotazioni ristoranti, itinerari su misura e supporto tecnico immediato.</p>
+        </div>
+
+        <div class="glass-card feature-box">
+          <div class="feature-icon"><i class="ri-refresh-line"></i></div>
+          <h3 data-i18n="why.box4Title">Garanzia Modello</h3>
+          <p data-i18n="why.box4Desc">Nessuna sorpresa: riceverai esattamente la marca, il modello e la motorizzazione specificata al momento della prenotazione.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= AUTHENTICATION MODAL (LOGIN / REGISTER) ================= -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal-content" style="max-width: 580px;">
+      <button class="close-modal" onclick="closeAuthModal()"><i class="ri-close-line"></i></button>
+      
+      <!-- LOGIN VIEW -->
+      <div id="loginFormBox">
+        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-lock-2-fill text-gradient"></i> Accedi all'Area Riservata</h3>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">Inserisci le tue credenziali per accedere ai tuoi privilegi VIP e tariffe esclusive.</p>
+        
+        <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 16px;">
+          <div class="form-group">
+            <label>Indirizzo Email *</label>
+            <input type="email" class="form-control" id="authLoginEmail" required placeholder="nome.cognome@email.com">
+          </div>
+          <div class="form-group">
+            <label>Password *</label>
+            <input type="password" class="form-control" id="authLoginPassword" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 8px;">
+            <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Non sei ancora registrato?</span>
+          <button type="button" onclick="switchAuthMode('register')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Registrati qui</button>
+        </div>
+      </div>
+
+      <!-- REGISTRATION VIEW -->
+      <div id="registerFormBox" style="display: none;">
+        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gold"></i> Registrazione Membro VIP</h3>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Crea il tuo profilo ITERCARS per sbloccare sconti riservati e supporto concierge.</p>
+        
+        <form onsubmit="handleRegister(event)" style="display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label>Nome *</label>
+              <input type="text" class="form-control" id="regFirstName" required placeholder="Mario">
+            </div>
+            <div class="form-group">
+              <label>Cognome *</label>
+              <input type="text" class="form-control" id="regLastName" required placeholder="Rossi">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label>Data di Nascita *</label>
+              <input type="date" class="form-control" id="regBirthDate" required>
+            </div>
+            <div class="form-group">
+              <label>Paese *</label>
+              <input type="text" class="form-control" id="regCountry" required placeholder="Italia">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label>Email *</label>
+              <input type="email" class="form-control" id="regEmail" required placeholder="mario.rossi@email.com">
+            </div>
+            <div class="form-group">
+              <label>Telefono / WhatsApp *</label>
+              <input type="tel" class="form-control" id="regPhone" required placeholder="+39 340 0000000">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label>Password * (min. 6 caratteri)</label>
+              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="••••••••">
+            </div>
+            <div class="form-group">
+              <label>Conferma Password *</label>
+              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="••••••••">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px;">
+            <span>Crea Account VIP</span> <i class="ri-vip-crown-fill"></i>
+          </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
+          <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= VIP DASHBOARD MODAL ================= -->
+  <div class="modal-overlay" id="vipDashboardModal">
+    <div class="modal-content" style="max-width: 680px; text-align: center;">
+      <button class="close-modal" onclick="closeVipDashboardModal()"><i class="ri-close-line"></i></button>
+      
+      <div style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.15); border: 2px solid var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 2.2rem; color: var(--accent-primary);">
+        <i class="ri-vip-crown-fill"></i>
+      </div>
+
+      <h3 style="font-size: 1.8rem; margin-bottom: 4px;" id="vipUserName">Benvenuto, Membro VIP</h3>
+      <span style="display: inline-block; background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px;" id="vipUserLevel">Silver Member</span>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px; text-align: left; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);"><i class="ri-mail-line"></i> Email registrata:</span>
+          <strong id="vipUserEmail" style="color: var(--text-main);">email@dominio.com</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);"><i class="ri-discount-percent-line"></i> Sconto flotta riservato:</span>
+          <strong style="color: var(--accent-primary);">5% Attivo</strong>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--text-muted);"><i class="ri-customer-service-2-line"></i> Linea Concierge prioritario:</span>
+          <strong style="color: var(--accent-gold);">24/7 H24</strong>
+        </div>
+      </div>
+
+      <!-- SEZIONE STORICO NOLEGGI & PAESI -->
+      <div style="text-align: left; margin-bottom: 24px;">
+        <h4 style="font-size: 1.15rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+          <span><i class="ri-history-line"></i> Storico Noleggi & Paesi Visitati</span>
+          <span style="font-size: 0.8rem; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 12px; color: var(--text-muted);">Sync Live Supabase</span>
+        </h4>
+        <div id="vipBookingsContainer" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 4px;">
+          <div style="text-align: center; color: var(--text-muted); padding: 20px;">Caricamento storico in corso...</div>
+        </div>
+      </div>
+
+      <button onclick="handleLogout()" class="btn btn-outline" style="width: 100%; border-color: rgba(239, 68, 68, 0.5); color: #ef4444;">
+        <i class="ri-logout-box-r-line"></i> Esci dal Portale
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= OTHER LANGUAGES MODAL ================= -->
+  <div class="modal-overlay" id="otherLangsModal">
+    <div class="modal-content" style="max-width: 620px;">
+      <button class="close-modal" onclick="closeOtherLangsModal()"><i class="ri-close-line"></i></button>
+      
+      <h3 style="font-size: 1.5rem; margin-bottom: 8px;"><i class="ri-global-line text-gradient"></i> <span data-i18n="lang.modalTitle">Seleziona Lingua</span></h3>
+      <p style="color: var(--text-muted); margin-bottom: 24px;" data-i18n="lang.modalSub">Scegli la lingua di visualizzazione per il marketplace ITERCARS.</p>
+
+      <div class="langs-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 6px;">
+        <button class="lang-grid-item" onclick="selectLang('it')"><span class="lang-flag">🇮🇹</span> <span><strong>IT</strong> - Italiano</span></button>
+        <button class="lang-grid-item" onclick="selectLang('en')"><span class="lang-flag">🇬🇧</span> <span><strong>EN</strong> - English</span></button>
+        <button class="lang-grid-item" onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <span><strong>ES</strong> - Español</span></button>
+        <button class="lang-grid-item" onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <span><strong>FR</strong> - Français</span></button>
+        <button class="lang-grid-item" onclick="selectLang('de')"><span class="lang-flag">🇩🇪</span> <span><strong>DE</strong> - Deutsch</span></button>
+        <button class="lang-grid-item" onclick="selectLang('ru')"><span class="lang-flag">🇷🇺</span> <span><strong>RU</strong> - Русский</span></button>
+        <button class="lang-grid-item" onclick="selectLang('zh')"><span class="lang-flag">🇨🇳</span> <span><strong>ZH</strong> - 中文</span></button>
+        <button class="lang-grid-item" onclick="selectLang('ar')"><span class="lang-flag">🇸🇦</span> <span><strong>AR</strong> - العربية</span></button>
+        <button class="lang-grid-item" onclick="selectLang('ja')"><span class="lang-flag">🇯🇵</span> <span><strong>JA</strong> - 日本語</span></button>
+        <button class="lang-grid-item" onclick="selectLang('pt')"><span class="lang-flag">🇵🇹</span> <span><strong>PT</strong> - Português</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= BOOKING MODAL ================= -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()"><i class="ri-close-line"></i></button>
+      
+      <h3 id="modalTitle" style="font-size: 1.6rem; margin-bottom: 8px;">Prenota Veicolo</h3>
+      <p id="modalSubtitle" style="color: var(--text-muted); margin-bottom: 24px;">Compila il modulo per ricevere conferma immediata dal nostro team.</p>
+
+      <form id="bookingForm" onsubmit="submitBooking(event)" style="display: flex; flex-direction: column; gap: 16px;">
+        <input type="hidden" id="modalCarName">
+        <input type="hidden" id="modalCarPrice">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label data-i18n="modal.name">Nome e Cognome *</label>
+            <input type="text" class="form-control" id="clientNameInput" required placeholder="Mario Rossi">
+          </div>
+          <div class="form-group">
+            <label data-i18n="modal.phone">Telefono / WhatsApp *</label>
+            <input type="tel" class="form-control" id="clientPhoneInput" required placeholder="+39 340 0000000">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="modal.email">Indirizzo Email *</label>
+          <input type="email" class="form-control" id="clientEmailInput" required placeholder="mario.rossi@email.com">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="form-group">
+            <label data-i18n="modal.days">Giorni di Noleggio</label>
+            <input type="number" class="form-control" id="rentalDays" value="3" min="1" max="30" onchange="updatePriceCalculation()">
+          </div>
+          <div class="form-group">
+            <label data-i18n="modal.extras">Servizi Aggiuntivi</label>
+            <select class="form-control" id="extraService" onchange="updatePriceCalculation()">
+              <option value="0" data-i18n="modal.extra0">Consegna Standard (Inclusa)</option>
+              <option value="150" data-i18n="modal.extra150">Consegna in Villa / Aeroporto (+€150)</option>
+              <option value="300" data-i18n="modal.extra300">Autista Privato mezza giornata (+€300)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Preventivo Box -->
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div>
+            <span style="font-size: 0.85rem; color: var(--text-muted); display: block;" data-i18n="modal.estimate">Stima Totale Preventivo:</span>
+            <strong style="font-size: 1.4rem; color: var(--accent-primary);" id="totalPriceDisplay">€ 0</strong>
+          </div>
+          <span style="font-size: 0.8rem; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 4px;" data-i18n="modal.kaskoInc">Kasko Inclusa</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; height: 50px; font-size: 1.05rem;">
+          <i class="ri-check-double-line"></i> <span data-i18n="modal.btnConfirm">Conferma Richiesta Prenotazione</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer id="contatti">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="#" class="logo" style="margin-bottom: 16px;">
+            <div class="logo-icon"><i class="ri-steering-fill"></i></div>
+            <span>ITER<span class="text-gradient">CARS</span></span>
+          </a>
+          <p data-i18n="footer.desc">Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-instagram-line"></i></a>
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-facebook-fill"></i></a>
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-linkedin-fill"></i></a>
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-whatsapp-line"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footer.col1Title">Categorie Flotta</h4>
+          <div class="footer-links">
+            <a href="#flotta" onclick="filterFleet('Supercar', null)">Supercar & Hypercar</a>
+            <a href="#flotta" onclick="filterFleet('SUV', null)">SUV di Lusso</a>
+            <a href="#flotta" onclick="filterFleet('Sportiva', null)">Coupé & Cabriolet</a>
+            <a href="#flotta" onclick="filterFleet('Elettrica', null)">Flotta Elettrica</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footer.col2Title">Link Utili</h4>
+          <div class="footer-links">
+            <a href="#home" data-i18n="nav.home">Chi Siamo</a>
+            <a href="#perche-noi" data-i18n="footer.linkConditions">Condizioni di Noleggio</a>
+            <a href="#" data-i18n="footer.linkFaq">FAQ & Supporto</a>
+            <a href="#" data-i18n="footer.linkPartner">Lavora con noi / Partner</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footer.col3Title">Sedi Principali</h4>
+          <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
+            <p><i class="ri-map-pin-2-fill text-gradient"></i> Milano — Via Montenapoleone, 22</p>
+            <p><i class="ri-map-pin-2-fill text-gradient"></i> Roma — Via Vittorio Veneto, 108</p>
+            <p><i class="ri-map-pin-2-fill text-gradient"></i> Porto Cervo — Promenade du Port</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. Progetto LuxuryCar.</p>
+        <div style="display: flex; gap: 20px;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Termini di Servizio</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Mobile Phone Button -->
+  <button onclick="toggleConciergeBot()" class="mobile-floating-phone" title="Contatta Concierge Bot" aria-label="Contatta Concierge">
+    <i class="ri-phone-line"></i>
+  </button>
+
+  <!-- ITERCARS Concierge Bot Window (Mock WhatsApp/Contact Assistant) -->
+  <div class="concierge-bot-window glass-card" id="conciergeBotWindow">
+    <div class="bot-header">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div class="bot-avatar"><i class="ri-vip-crown-fill"></i></div>
+        <div>
+          <h4 style="font-size: 1rem; color: #fff; margin: 0;">ITERCARS Concierge</h4>
+          <span style="font-size: 0.75rem; color: #34d399; display: flex; align-items: center; gap: 4px;">
+            <span class="status-dot"></span> Assistente Online
+          </span>
+        </div>
+      </div>
+      <button onclick="toggleConciergeBot()" class="btn-close-bot"><i class="ri-close-line"></i></button>
+    </div>
+    
+    <div class="bot-body" id="botMessages">
+      <div class="bot-msg">
+        <p>Benvenuto in ITERCARS! Come preferisci metterti in contatto con il nostro team VIP?</p>
+        
+        <div class="bot-contact-cards">
+          <a href="tel:+3902890058776" class="bot-card-link">
+            <i class="ri-phone-fill" style="color: var(--accent-primary); font-size: 1.3rem;"></i>
+            <div>
+              <strong>Chiama ITERCARS</strong>
+              <span>+39 02 8900 LUSSO</span>
+            </div>
+          </a>
+          
+          <a href="mailto:concierge@itercars.com" class="bot-card-link">
+            <i class="ri-mail-fill" style="color: var(--accent-gold); font-size: 1.3rem;"></i>
+            <div>
+              <strong>Lascia un'email</strong>
+              <span>concierge@itercars.com</span>
+            </div>
+          </a>
+        </div>
+
+        <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Oppure scrivi il tuo messaggio qui sotto per essere reindirizzato direttamente su WhatsApp:</p>
+      </div>
+    </div>
+
+    <form class="bot-footer" onsubmit="handleBotSendMessage(event)">
+      <input type="text" id="botInputText" placeholder="Scrivi messaggio per WhatsApp..." required autocomplete="off">
+      <button type="submit" class="btn btn-primary" style="padding: 10px 14px; border-radius: 12px;" title="Invia su WhatsApp"><i class="ri-send-plane-fill"></i></button>
+    </form>
+  </div>
+
+  <!-- Supabase JS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Script JS Principale -->
+  <script src="app.js"></script>
+</body>
+</html>
