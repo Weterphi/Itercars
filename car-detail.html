@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dettaglio Auto — ITERCARS</title>
+  <meta name="description" content="Scopri le specifiche e prenota questo fantastico veicolo premium su ITERCARS.">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- CSS Principale e di Pagina -->
+  <link rel="stylesheet" href="index.css?v=6">
+  <link rel="stylesheet" href="car-detail.css?v=3">
+</head>
+<body>
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo" title="ITERCARS Luxury Supercar Rental">
+        <img src="logo.png?v=12" alt="ITERCARS Logo" class="navbar-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html#home">Home</a></li>
+        <li><a href="index.html#flotta">La Flotta</a></li>
+        <li><a href="index.html#perche-noi">Perché Noi</a></li>
+        <li><a href="index.html#servizi">Servizi VIP</a></li>
+        <li><a href="index.html#contatti">Contatti</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
+          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
+        </a>
+        <a href="index.html" class="btn btn-primary nav-area-btn">
+          <i class="ri-arrow-left-line"></i> <span>Torna al Marketplace</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO IMMAGINE ================= -->
+  <section class="car-detail-hero" id="heroSection">
+    <!-- Immagine puramente visiva, senza testo sovrapposto -->
+  </section>
+
+  <!-- ================= CAR DETTAGLIO LAYOUT ================= -->
+  <div class="container car-detail-layout">
+    
+    <!-- COLONNA SINISTRA: Specifiche e Descrizione -->
+    <div class="car-main-content">
+      
+      <!-- TITOLO E CATEGORIA MOSTATI QUI -->
+      <div class="content-header" style="margin-bottom: 30px;">
+        <div id="detailBadgeContainer" style="margin-bottom: 15px;"></div>
+        <h1 class="car-title-xl" id="detailCarName" style="font-size: 3rem; margin-bottom: 15px; text-shadow: none;">Caricamento...</h1>
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <span style="color: #a0aec0; font-size: 1.1rem;"><i class="ri-steering-2-line text-gradient"></i> <span id="detailCarCategory">Categoria</span></span>
+          <span style="color: #f59e0b; font-size: 1.1rem;"><i class="ri-star-fill"></i> <span id="detailCarRating">5.0</span>/5</span>
+        </div>
+      </div>
+
+      <div class="specs-grid">
+        <div class="spec-box">
+          <i class="ri-speed-up-line spec-icon"></i>
+          <span class="spec-label">Velocità Max</span>
+          <span class="spec-value" id="specSpeed">-- km/h</span>
+        </div>
+        <div class="spec-box">
+          <i class="ri-timer-flash-line spec-icon"></i>
+          <span class="spec-label">0-100 km/h</span>
+          <span class="spec-value" id="specAccel">-- s</span>
+        </div>
+        <div class="spec-box">
+          <i class="ri-fire-line spec-icon"></i>
+          <span class="spec-label">Potenza</span>
+          <span class="spec-value" id="specHp">-- CV</span>
+        </div>
+        <div class="spec-box">
+          <i class="ri-group-line spec-icon"></i>
+          <span class="spec-label">Posti</span>
+          <span class="spec-value" id="specSeats">--</span>
+        </div>
+        <div class="spec-box">
+          <i class="ri-settings-4-line spec-icon"></i>
+          <span class="spec-label">Motore</span>
+          <span class="spec-value" id="specEngine">--</span>
+        </div>
+      </div>
+
+      <div class="car-description">
+        <h3>Descrizione del Veicolo</h3>
+        <p id="detailDescription">Scopri l'emozione di guidare un capolavoro di ingegneria. Questo veicolo unisce prestazioni mozzafiato, lusso ineguagliabile e tecnologia all'avanguardia per offrirti un'esperienza di noleggio indimenticabile, sia per un viaggio d'affari che per un weekend speciale.</p>
+        
+        <h4 style="margin-top: 30px; font-size: 1.3rem; margin-bottom: 15px; color: #fff;">Equipaggiamento Premium Inclusi</h4>
+        <ul class="features-list">
+          <li><i class="ri-check-line"></i> Interni in pelle e finiture in carbonio</li>
+          <li><i class="ri-check-line"></i> Sistema di infotainment avanzato</li>
+          <li><i class="ri-check-line"></i> Climatizzatore automatico multi-zona</li>
+          <li><i class="ri-check-line"></i> Sensori di parcheggio e retrocamera</li>
+          <li><i class="ri-check-line"></i> Fari Full-LED Matrix</li>
+          <li><i class="ri-check-line"></i> Impianto audio Surround High-End</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- COLONNA DESTRA: Sticky Booking Form -->
+    <div class="car-sidebar">
+      <div class="booking-widget-sticky">
+        <div class="widget-price-header">
+          <div class="widget-price-amount" id="detailPrice">€ --</div>
+          <div class="widget-price-period">al giorno (Kasko inclusa)</div>
+        </div>
+
+        <form id="detailBookingForm" onsubmit="submitDetailBooking(event)">
+          <div class="booking-form-group">
+            <label>Luogo di Ritiro</label>
+            <input type="text" class="booking-form-control" id="detailLocation" placeholder="Città, Hotel o Aeroporto" required>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="booking-form-group">
+              <label>Ritiro</label>
+              <input type="date" class="booking-form-control" required>
+            </div>
+            <div class="booking-form-group">
+              <label>Riconsegna</label>
+              <input type="date" class="booking-form-control" required>
+            </div>
+          </div>
+
+          <div class="booking-form-group">
+            <label>Nome e Cognome</label>
+            <input type="text" class="booking-form-control" id="detailName" placeholder="Il tuo nome" required>
+          </div>
+
+          <div class="booking-form-group">
+            <label>Telefono / WhatsApp</label>
+            <input type="tel" class="booking-form-control" id="detailPhone" placeholder="+39 ..." required>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-book-full">
+            Richiedi Disponibilità <i class="ri-send-plane-fill"></i>
+          </button>
+          <p style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--text-muted);">Nessun pagamento richiesto ora. Un concierge ti confermerà la disponibilità entro 15 minuti.</p>
+        </form>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- Script Principali -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Usa i dati da app.js -->
+  <script src="app.js?v=7"></script>
+  <script src="car-detail.js?v=2"></script>
+</body>
+</html>

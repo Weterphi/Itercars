@@ -1,0 +1,239 @@
+/* ==========================================================================
+   CAR DETAIL PAGE SPECIFIC STYLES
+   ========================================================================== */
+
+.car-detail-hero {
+  position: relative;
+  width: 100%;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  padding-top: 130px;
+  padding-bottom: 80px;
+  border-bottom: 1px solid var(--border-glass);
+  overflow: hidden;
+}
+
+.car-detail-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  
+  /* L'animazione di zoom è stata rimossa per garantire la massima nitidezza assoluta dell'immagine originale, senza sfocature da rendering GPU */
+}
+
+/* Il gradiente è stato rimosso per mostrare la foto super chiara originale */
+
+@keyframes cinematicZoom {
+  0% { transform: scale(1) translateZ(0); }
+  100% { transform: scale(1.1) translateZ(0); }
+}
+
+.car-detail-hero .container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.hero-text {
+  text-shadow: 0 2px 15px rgba(0,0,0,0.8);
+}
+
+.car-title-xl {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 15px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.9), 0 4px 30px rgba(0,0,0,0.8);
+}
+
+.car-badge-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  backdrop-filter: blur(8px);
+  border-radius: 99px;
+  color: #34d399;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Detail Layout Grid */
+.car-detail-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  padding: 60px 0;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .car-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Specifiche Grid */
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.spec-box {
+  background: rgba(26, 35, 51, 0.5);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: var(--transition-fast);
+}
+
+.spec-box:hover {
+  background: rgba(26, 35, 51, 0.8);
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-5px);
+}
+
+.spec-icon {
+  font-size: 1.8rem;
+  color: var(--accent-primary);
+}
+
+.spec-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.spec-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Descrizione Auto */
+.car-description {
+  margin-bottom: 40px;
+}
+
+.car-description h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.car-description p {
+  color: var(--text-muted);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+
+/* Equipaggiamento (Features list) */
+.features-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.features-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-main);
+}
+
+.features-list li i {
+  color: var(--accent-primary);
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .features-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Booking Widget Sticky */
+.booking-widget-sticky {
+  position: sticky;
+  top: 100px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  box-shadow: var(--shadow-lg);
+}
+
+.widget-price-header {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.widget-price-amount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1;
+}
+
+.widget-price-period {
+  color: var(--text-muted);
+  font-size: 1rem;
+}
+
+.booking-form-group {
+  margin-bottom: 20px;
+}
+
+.booking-form-group label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.booking-form-control {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(17, 24, 39, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: var(--transition-fast);
+}
+
+.booking-form-control:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.btn-book-full {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}

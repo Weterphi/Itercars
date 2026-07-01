@@ -9,8 +9,8 @@
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
-  <!-- CSS Principale -->
-  <link rel="stylesheet" href="index.css">
+  <!-- CSS -->
+  <link rel="stylesheet" href="index.css?v=14">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
   <header id="header">
     <div class="container nav-container">
       <a href="#" class="logo" title="ITERCARS Luxury Supercar Rental">
-        <img src="logo-navbar.png" alt="ITERCARS Logo" class="navbar-logo-img">
+        <img src="logo_fallback.png?v=15" alt="ITERCARS Logo" class="navbar-logo-img">
       </a>
 
       <ul class="nav-links">
@@ -66,14 +66,17 @@
 
   <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
   <div class="hero-bg-wrapper">
+    <video autoplay muted loop playsinline class="hero-bg-video">
+      <source src="aston-martin-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-overlay"></div>
     <section class="hero" id="home">
       <div class="container hero-content">
         <div class="hero-text">
           <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); backdrop-filter: blur(8px); border-radius: 99px; margin-bottom: 20px; color: #34d399; font-size: 0.85rem; font-weight: 600;" data-i18n="hero.badge">
             <i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DI NOLEGGIO AUTO PREMIUM
           </div>
-          <h1 data-i18n="hero.title">Guidare l'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span></h1>
-          <p class="hero-subtitle" data-i18n="hero.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia, copertura Kasko totale e un'esperienza di guida indimenticabile.</p>
+          <!-- Titolo e Sottotitolo rimossi come richiesto -->
           
           <div class="hero-btns">
             <a href="#flotta" class="btn btn-primary">
@@ -84,102 +87,74 @@
             </button>
           </div>
 
-          <div class="hero-stats">
-            <div class="stat-item">
-              <h3>80+</h3>
-              <p data-i18n="hero.stat1">Supercar Esclusive</p>
-            </div>
-            <div class="stat-item">
-              <h3>24/7</h3>
-              <p data-i18n="hero.stat2">Concierge Dedicato</p>
-            </div>
-            <div class="stat-item">
-              <h3>100%</h3>
-              <p data-i18n="hero.stat3">Garanzia Modello</p>
-            </div>
-          </div>
+          <!-- Le statistiche sono state spostate sotto le categorie -->
         </div>
 
-        <!-- Sleek VIP Card al posto dell'immagine duplicata -->
-        <div class="hero-visual">
-          <div class="glass-card" style="padding: 32px; border: 1px solid rgba(245, 158, 11, 0.4); background: rgba(10, 14, 23, 0.75); backdrop-filter: blur(20px); max-width: 400px; width: 100%; box-shadow: 0 25px 50px rgba(0,0,0,0.8);">
-            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 16px;">
-              <div style="width: 54px; height: 54px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: #000; flex-shrink: 0;"><i class="ri-shield-star-fill"></i></div>
-              <div>
-                <h4 style="font-size: 1.15rem; color: #fff;" data-i18n="vip.title">Garanzia VIP Kasko</h4>
-                <span style="font-size: 0.85rem; color: var(--accent-gold); font-weight: 600;" data-i18n="vip.subtitle">Copertura 100% Inclusa</span>
-              </div>
-            </div>
-            <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 24px;" data-i18n="vip.desc">Ogni noleggio include assistenza stradale 24/7 con elicottero o supercar sostitutiva entro 60 minuti in tutta Europa.</p>
-            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.04); padding: 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-              <span style="font-size: 0.85rem; color: #fff; font-weight: 500;"><i class="ri-check-double-line text-gradient"></i> <span data-i18n="vip.check1">Consegna in Villa</span></span>
-              <span style="font-size: 0.85rem; color: #fff; font-weight: 500;"><i class="ri-check-double-line text-gradient"></i> <span data-i18n="vip.check2">Zero Franchigia</span></span>
-            </div>
-          </div>
-        </div>
+        <!-- Sezione card VIP rimossa su richiesta dell'utente -->
       </div>
     </section>
 
-    <!-- ================= SEARCH & FILTER BAR ================= -->
-    <section class="search-section">
-      <div class="container">
-        <form class="search-box" id="searchForm" onsubmit="handleSearch(event)">
-          <div class="search-grid">
-            
-            <div class="form-group">
-              <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
-              <div class="input-wrapper">
-                <i class="ri-building-line"></i>
-                <select class="form-control" id="searchLocation">
-                  <option value="" data-i18n="search.locAny">Qualsiasi Città / Aeroporto</option>
-                  <option value="Milano">Milano Centro / Linate / Malpensa</option>
-                  <option value="Roma">Roma Fiumicino / Via Veneto</option>
-                  <option value="Costa Smeralda">Porto Cervo (Costa Smeralda)</option>
-                  <option value="Monaco">Monte Carlo / Costa Azzurra</option>
-                </select>
+    <div id="desktopSearchContainer">
+      <section class="search-section" id="mainSearchSection">
+        <div class="container">
+          <form class="search-box" id="searchForm" onsubmit="handleSearch(event)">
+            <div class="search-grid">
+              
+              <div class="form-group">
+                  <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
+                  <div class="input-wrapper">
+                    <i class="ri-building-line"></i>
+                    <select class="form-control" id="searchLocation">
+                      <option value="" data-i18n="search.locAny">Qualsiasi Città / Aeroporto</option>
+                      <option value="Milano">Milano Centro / Linate / Malpensa</option>
+                      <option value="Roma">Roma Fiumicino / Via Veneto</option>
+                      <option value="Costa Smeralda">Porto Cervo (Costa Smeralda)</option>
+                      <option value="Monaco">Monte Carlo / Costa Azzurra</option>
+                    </select>
+                  </div>
+                </div>
+
+              <div class="form-group">
+                <label><i class="ri-calendar-event-line"></i> <span data-i18n="search.dateFrom">Data Ritiro</span></label>
+                <div class="input-wrapper">
+                  <i class="ri-calendar-2-line"></i>
+                  <input type="date" class="form-control" id="searchDateFrom" value="2026-07-01">
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label><i class="ri-calendar-event-line"></i> <span data-i18n="search.dateFrom">Data Ritiro</span></label>
-              <div class="input-wrapper">
-                <i class="ri-calendar-2-line"></i>
-                <input type="date" class="form-control" id="searchDateFrom" value="2026-07-01">
+              <div class="form-group">
+                <label><i class="ri-calendar-check-line"></i> <span data-i18n="search.dateTo">Data Riconsegna</span></label>
+                <div class="input-wrapper">
+                  <i class="ri-calendar-check-fill"></i>
+                  <input type="date" class="form-control" id="searchDateTo" value="2026-07-05">
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label><i class="ri-calendar-check-line"></i> <span data-i18n="search.dateTo">Data Riconsegna</span></label>
-              <div class="input-wrapper">
-                <i class="ri-calendar-check-fill"></i>
-                <input type="date" class="form-control" id="searchDateTo" value="2026-07-05">
+              <div class="form-group">
+                <label><i class="ri-car-line"></i> <span data-i18n="search.category">Categoria Auto</span></label>
+                <div class="input-wrapper">
+                  <i class="ri-filter-3-line"></i>
+                  <select class="form-control" id="searchCategory">
+                    <option value="tutti" data-i18n="search.catAll">Tutte le Categorie</option>
+                    <option value="Supercar">Supercar</option>
+                    <option value="SUV">SUV di Lusso</option>
+                    <option value="Sportiva">Coupé & Sportive</option>
+                    <option value="Elettrica">Hypercar Elettriche</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div class="form-group">
-              <label><i class="ri-car-line"></i> <span data-i18n="search.category">Categoria Auto</span></label>
-              <div class="input-wrapper">
-                <i class="ri-filter-3-line"></i>
-                <select class="form-control" id="searchCategory">
-                  <option value="tutti" data-i18n="search.catAll">Tutte le Categorie</option>
-                  <option value="Supercar">Supercar</option>
-                  <option value="SUV">SUV di Lusso</option>
-                  <option value="Sportiva">Coupé & Sportive</option>
-                  <option value="Elettrica">Hypercar Elettriche</option>
-                </select>
+              <div style="padding-top: 20px;">
+                <button type="submit" class="btn btn-gold" style="width: 100%; height: 48px;">
+                  <i class="ri-search-line"></i> <span data-i18n="search.btn">Cerca Auto</span>
+                </button>
               </div>
-            </div>
 
-            <div style="padding-top: 20px;">
-              <button type="submit" class="btn btn-gold" style="width: 100%; height: 48px;">
-                <i class="ri-search-line"></i> <span data-i18n="search.btn">Cerca Auto</span>
-              </button>
             </div>
-
-          </div>
-        </form>
-      </div>
-    </section>
+          </form>
+        </div>
+      </section>
+    </div>
   </div>
 
   <!-- ================= FLEET / CATALOG SECTION ================= -->
@@ -187,25 +162,82 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag" data-i18n="fleet.tag">La Nostra Flotta</span>
-        <h2 data-i18n="fleet.title">Veicoli Selezionati per <span class="text-gradient">Emozioni Pure</span></h2>
-        <p data-i18n="fleet.subtitle">Scegli il modello perfetto per il tuo prossimo viaggio d'affari, weekend esclusivo o evento speciale.</p>
+        <h2 data-i18n="fleet.title">Guidare l'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span></h2>
+        <p data-i18n="fleet.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.</p>
       </div>
+    </div>
 
-      <!-- Filter Pills -->
-      <div class="filter-pills" id="categoryFilters">
-        <button class="pill-btn active" onclick="filterFleet('tutti', this)" data-i18n="filter.all">Tutti i Modelli</button>
-        <button class="pill-btn" onclick="filterFleet('Supercar', this)">Supercar</button>
-        <button class="pill-btn" onclick="filterFleet('SUV', this)">SUV Lusso</button>
-        <button class="pill-btn" onclick="filterFleet('Sportiva', this)">Sportive</button>
-        <button class="pill-btn" onclick="filterFleet('Elettrica', this)">Elettriche</button>
+    <div class="category-wide-container">
+      <div class="category-highlights">
+        <!-- Luxury -->
+        <div class="category-highlight-card" onclick="filterFleet('Supercar', null)">
+          <img src="maserati-mc20.jpg" alt="Luxury" class="category-highlight-img">
+          <div class="category-highlight-content">
+            <h3>Luxury</h3>
+            <p>Lusso vero, senza eguali</p>
+            <i class="ri-arrow-right-line arrow-icon"></i>
+          </div>
+        </div>
+
+        <!-- Cabrio -->
+        <div class="category-highlight-card" onclick="filterFleet('Cabrio', null)">
+          <img src="ferrari-812-gts.jpg" alt="Cabrio" class="category-highlight-img">
+          <div class="category-highlight-content">
+            <h3>Cabrio</h3>
+            <p>Guida a cielo aperto, emozioni senza limiti</p>
+            <i class="ri-arrow-right-line arrow-icon"></i>
+          </div>
+        </div>
+
+        <!-- SUV -->
+        <div class="category-highlight-card" onclick="filterFleet('SUV', null)">
+          <img src="lamborghini-urus.jpg" alt="SUV" class="category-highlight-img">
+          <div class="category-highlight-content">
+            <h3>SUV</h3>
+            <p>Potenza e versatilità in ogni terreno</p>
+            <i class="ri-arrow-right-line arrow-icon"></i>
+          </div>
+        </div>
+
+        <!-- Prestige -->
+        <div class="category-highlight-card" onclick="filterFleet('Sportiva', null)">
+          <img src="audi-rs6.jpg" alt="Prestige" class="category-highlight-img">
+          <div class="category-highlight-content">
+            <h3>Prestige</h3>
+            <p>Prestazioni superiori senza compromessi</p>
+            <i class="ri-arrow-right-line arrow-icon"></i>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- Cars Grid -->
-      <div class="fleet-grid" id="fleetGrid">
+    <!-- STATISTICHE SPOSTATE SOTTO LE CATEGORIE -->
+    <div class="container" style="margin-top: 50px; margin-bottom: 30px;">
+      <div class="hero-stats" style="border-top: none; padding-top: 0; gap: 80px; justify-content: center; width: 100%;">
+        <div class="stat-item">
+          <h3>80+</h3>
+          <p data-i18n="hero.stat1">Supercar Esclusive</p>
+        </div>
+        <div class="stat-item">
+          <h3>24/7</h3>
+          <p data-i18n="hero.stat2">Concierge Dedicato</p>
+        </div>
+        <div class="stat-item">
+          <h3>100%</h3>
+          <p data-i18n="hero.stat3">Garanzia Modello</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <!-- Cars Grid (Grouped by Category) -->
+      <div id="fleetGrid">
         <!-- Le auto verranno generate dinamicamente con JS -->
       </div>
     </div>
   </section>
+
+  <div id="mobileSearchContainer"></div>
 
   <!-- ================= WHY CHOOSE US ================= -->
   <section class="features-section" id="perche-noi">
@@ -524,7 +556,7 @@
       <div class="footer-grid">
         <div class="footer-col">
           <a href="#" class="logo" style="margin-bottom: 16px;" title="ITERCARS Luxury Supercar Rental">
-            <img src="logo-navbar.png" alt="ITERCARS Logo" class="footer-logo-img">
+            <img src="logo_fallback.png?v=15" alt="ITERCARS Logo" class="footer-logo-img">
           </a>
           <p data-i18n="footer.desc">Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.</p>
           <div style="display: flex; gap: 12px; margin-top: 20px;">
@@ -633,5 +665,28 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Script JS Principale -->
   <script src="app.js"></script>
+  <script>
+    function handleMobileSearch() {
+      const searchSection = document.getElementById('mainSearchSection');
+      const mobileContainer = document.getElementById('mobileSearchContainer');
+      const desktopContainer = document.getElementById('desktopSearchContainer');
+
+      if (window.innerWidth <= 768) {
+        if (searchSection && mobileContainer && searchSection.parentNode !== mobileContainer) {
+          searchSection.style.marginTop = '40px';
+          searchSection.style.marginBottom = '20px';
+          mobileContainer.appendChild(searchSection);
+        }
+      } else {
+        if (searchSection && desktopContainer && searchSection.parentNode !== desktopContainer) {
+          searchSection.style.marginTop = '';
+          searchSection.style.marginBottom = '';
+          desktopContainer.appendChild(searchSection);
+        }
+      }
+    }
+    window.addEventListener('resize', handleMobileSearch);
+    document.addEventListener('DOMContentLoaded', handleMobileSearch);
+  </script>
 </body>
 </html>
