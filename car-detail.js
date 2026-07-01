@@ -93,6 +93,11 @@ async function submitDetailBooking(event) {
   const email = document.getElementById("detailEmail") ? document.getElementById("detailEmail").value : '';
   const phone = document.getElementById("detailPhone").value;
 
+  // Cache user data locally if available
+  if (typeof cacheUserData === 'function') {
+    cacheUserData(name, email, phone);
+  }
+
   if (typeof showToast === 'function') {
     showToast(`⏳ Invio richiesta di disponibilità in corso per ${carName}...`);
   }

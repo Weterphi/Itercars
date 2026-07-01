@@ -1117,6 +1117,9 @@ async function submitBooking(event) {
   const clientPhone = document.getElementById("clientPhoneInput") ? document.getElementById("clientPhoneInput").value : "N/D";
   const clientEmail = document.getElementById("clientEmailInput") ? document.getElementById("clientEmailInput").value : "N/D";
 
+  // Cache user data locally
+  cacheUserData(clientName, clientEmail, clientPhone);
+
   const total = (carPrice * days) + extraPrice;
   const dict = translations[currentLang] || translations.it;
 
@@ -1669,6 +1672,9 @@ async function handleAvailabilitySubmit(event) {
   const dates = document.getElementById('availDate').textContent;
   const categoria = document.getElementById('availCategoria').textContent;
 
+  // Cache user data locally
+  cacheUserData(name, email, phone);
+
   if (!name || !phone || !email) {
     showToast("⚠️ Compila Nome, Telefono ed Email.");
     return;
@@ -1860,10 +1866,62 @@ function setupAddressAutocomplete(inputId, suggestionsId) {
   });
 }
 
+/* ==========================================================================
+   USER DATA AUTOFILL & CACHING
+   ========================================================================== */
+function cacheUserData(name, email, phone) {
+  if (name) localStorage.setItem('itercars_user_name', name);
+  if (email) localStorage.setItem('itercars_user_email', email);
+  if (phone) localStorage.setItem('itercars_user_phone', phone);
+}
+
+async function prefillUserDataForms() {
+  let userData = {
+    name: localStorage.getItem('itercars_user_name') || '',
+    email: localStorage.getItem('itercars_user_email') || '',
+    phone: localStorage.getItem('itercars_user_phone') || ''
+  };
+
+  if (typeof supabase !== 'undefined' && supabase) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && session.user) {
+        const user = session.user;
+        if (user.email) userData.email = user.email;
+        if (user.user_metadata && user.user_metadata.full_name) userData.name = user.user_metadata.full_name;
+        if (user.phone || (user.user_metadata && user.user_metadata.phone)) userData.phone = user.phone || user.user_metadata.phone;
+      }
+    } catch(e) {}
+  }
+
+  const availName = document.getElementById('availName');
+  const availEmail = document.getElementById('availEmail');
+  const availPhone = document.getElementById('availPhone');
+  if (availName && !availName.value) availName.value = userData.name;
+  if (availEmail && !availEmail.value) availEmail.value = userData.email;
+  if (availPhone && !availPhone.value) availPhone.value = userData.phone;
+
+  const clientName = document.getElementById('clientNameInput');
+  const clientEmail = document.getElementById('clientEmailInput');
+  const clientPhone = document.getElementById('clientPhoneInput');
+  if (clientName && !clientName.value) clientName.value = userData.name;
+  if (clientEmail && !clientEmail.value) clientEmail.value = userData.email;
+  if (clientPhone && !clientPhone.value) clientPhone.value = userData.phone;
+
+  const detailName = document.getElementById('detailName');
+  const detailEmail = document.getElementById('detailEmail');
+  const detailPhone = document.getElementById('detailPhone');
+  if (detailName && !detailName.value) detailName.value = userData.name;
+  if (detailEmail && !detailEmail.value) detailEmail.value = userData.email;
+  if (detailPhone && !detailPhone.value) detailPhone.value = userData.phone;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   setupAddressAutocomplete('searchLocation', 'searchLocationSuggestions');
   setupAddressAutocomplete('detailLocation', 'detailLocationSuggestions');
   
+  prefillUserDataForms();
+
   // Handle Logo Animation Switch
   const logoContainer = document.getElementById("navbarLogoContainer");
   if (logoContainer) {

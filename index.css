@@ -1413,8 +1413,15 @@ footer {
 }
 
 @media (max-width: 991px) {
-  .navbar-logo-img {
-    height: 70px;
+  header {
+    padding: 10px 0;
+  }
+  .navbar-logo-wheel, .navbar-logo-text {
+    height: 38px;
+  }
+  header.scrolled .navbar-logo-wheel,
+  header.scrolled .navbar-logo-text {
+    height: 30px;
   }
   .footer-logo-img {
     height: 80px;
