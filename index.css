@@ -729,7 +729,7 @@ header.scrolled .navbar-logo-text {
 
 @media (min-width: 1200px) {
   .category-highlight-img {
-    height: 380px; /* Molto più grande e impattante su desktop */
+    height: 550px; /* Molto più grande e impattante su desktop */
   }
 }
 
