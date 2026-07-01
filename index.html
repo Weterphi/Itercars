@@ -10,7 +10,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="index.css?v=30">
+  <link rel="stylesheet" href="index.css?v=31">
 </head>
 <body>
 
@@ -504,10 +504,10 @@
       <button class="close-modal" onclick="closeModal()"><i class="ri-close-line"></i></button>
       
       <h3 id="modalTitle" style="font-size: 1.6rem; margin-bottom: 8px;">Prenota Veicolo</h3>
-      <p id="modalSubtitle" style="color: var(--text-muted); margin-bottom: 24px;">Compila il modulo per ricevere conferma immediata dal nostro team.</p>
+      <p id="modalSubtitle" style="color: var(--text-muted); margin-bottom: 16px;">Compila il modulo per ricevere conferma immediata dal nostro team.</p>
 
-      <form id="bookingForm" onsubmit="submitBooking(event)" style="display: flex; flex-direction: column; gap: 16px;">
-        <div class="form-group" id="carSelectionGroup" style="display: none; margin-bottom: 16px;">
+      <form id="bookingForm" onsubmit="submitBooking(event)" style="display: flex; flex-direction: column; gap: 10px;">
+        <div class="form-group" id="carSelectionGroup" style="display: none;">
           <label data-i18n="modal.selectCar">Seleziona Auto</label>
           <select class="form-control" id="modalCarSelect" onchange="updateModalCarSelection()">
             <option value="Tutte le Auto">Tutte le Auto (Consulenza Generale)</option>

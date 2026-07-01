@@ -1055,6 +1055,8 @@ header.scrolled .navbar-logo-text {
   transform: translateY(30px);
   transition: var(--transition-smooth);
   box-shadow: var(--shadow-lg);
+  max-height: 85vh;
+  overflow-y: auto;
 }
 
 .modal-overlay.active .modal-content {
@@ -1164,6 +1166,20 @@ footer {
 }
 
 @media (max-width: 640px) {
+  .modal-content {
+    padding: 24px;
+    padding-top: 40px; /* space for close button */
+  }
+  .close-modal {
+    top: 12px;
+    right: 12px;
+  }
+  #modalTitle {
+    font-size: 1.4rem !important;
+  }
+  .fleet-filters {
+    display: none;
+  }
   .nav-links {
     display: none;
   }
