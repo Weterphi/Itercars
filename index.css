@@ -409,7 +409,7 @@ header.scrolled .navbar-logo-text {
   display: flex;
   align-items: flex-end; /* Push to the bottom */
   padding-top: 130px;
-  padding-bottom: 20px; /* Less padding at the bottom to push content down */
+  padding-bottom: 50px; /* Less padding at the bottom */
   z-index: 2;
 }
 
@@ -1413,6 +1413,9 @@ footer {
 }
 
 @media (max-width: 991px) {
+  .hero {
+    padding-bottom: 10px !important;
+  }
   header {
     padding: 10px 0;
   }
