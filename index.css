@@ -1828,7 +1828,7 @@ footer {
     padding-right: 0;
   }
   body.fleet-page .car-card {
-    height: 85vh;
+    height: calc(100vh - 70px);
     border-radius: 0;
     border-left: none;
     border-right: none;
