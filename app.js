@@ -1870,7 +1870,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       logoContainer.classList.remove("logo-animating");
       logoContainer.classList.add("logo-idle");
-    }, 2500); // Wait for logoSlideIn animation to finish
+    }, 1200); // Wait for logoSlideIn animation to finish
   }
 });
 
