@@ -1075,16 +1075,58 @@ function openModal(carName, price) {
   const title = document.getElementById("modalTitle");
   const carInput = document.getElementById("modalCarName");
   const priceInput = document.getElementById("modalCarPrice");
+  const carSelectionGroup = document.getElementById("carSelectionGroup");
+  const carSelect = document.getElementById("modalCarSelect");
 
-  title.innerText = carName.includes("Richiesta") || carName.includes("Consulenza") ? carName : `Prenota: ${carName}`;
-  carInput.value = carName;
-  priceInput.value = price;
-  currentSelectedCarPrice = price;
+  if (carName.includes("Richiesta") || carName.includes("Consulenza")) {
+    title.innerText = carName;
+    if (carSelectionGroup) carSelectionGroup.style.display = "block";
+    carInput.value = "Tutte le Auto";
+    priceInput.value = 0;
+    currentSelectedCarPrice = 0;
+
+    if (carSelect && carSelect.options.length <= 1) {
+      fleetData.forEach(car => {
+        let opt = document.createElement("option");
+        opt.value = car.name;
+        opt.text = car.name;
+        opt.dataset.price = car.price;
+        carSelect.appendChild(opt);
+      });
+    }
+    if (carSelect) carSelect.value = "Tutte le Auto";
+  } else {
+    if (carSelectionGroup) carSelectionGroup.style.display = "none";
+    title.innerText = `Prenota: ${carName}`;
+    carInput.value = carName;
+    priceInput.value = price;
+    currentSelectedCarPrice = price;
+  }
 
   updatePriceCalculation();
 
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
+}
+
+window.updateModalCarSelection = function() {
+  const select = document.getElementById("modalCarSelect");
+  if (!select) return;
+  const selectedOption = select.options[select.selectedIndex];
+  const carInput = document.getElementById("modalCarName");
+  const priceInput = document.getElementById("modalCarPrice");
+  
+  if (select.value === "Tutte le Auto") {
+    carInput.value = "Tutte le Auto";
+    priceInput.value = 0;
+    currentSelectedCarPrice = 0;
+  } else {
+    carInput.value = select.value;
+    const p = parseFloat(selectedOption.dataset.price) || 0;
+    priceInput.value = p;
+    currentSelectedCarPrice = p;
+  }
+  updatePriceCalculation();
 }
 
 function closeModal() {

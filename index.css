@@ -409,7 +409,7 @@ header.scrolled .navbar-logo-text {
   display: flex;
   align-items: flex-end; /* Push to the bottom */
   padding-top: 130px;
-  padding-bottom: 50px; /* Less padding at the bottom */
+  padding-bottom: 20px; /* Less padding at the bottom to push content down */
   z-index: 2;
 }
 
