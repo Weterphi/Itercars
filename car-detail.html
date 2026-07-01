@@ -10,16 +10,17 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS Principale e di Pagina -->
-  <link rel="stylesheet" href="index.css?v=6">
-  <link rel="stylesheet" href="car-detail.css?v=3">
+  <link rel="stylesheet" href="index.css?v=25">
+  <link rel="stylesheet" href="car-detail.css?v=5">
 </head>
 <body>
 
   <!-- ================= HEADER / NAVBAR ================= -->
   <header id="header">
     <div class="container nav-container">
-      <a href="index.html" class="logo" title="ITERCARS Luxury Supercar Rental">
-        <img src="logo.png?v=12" alt="ITERCARS Logo" class="navbar-logo-img">
+      <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS Luxury Supercar Rental">
+        <img src="logo-wheel.png?v=1" alt="Wheel" class="navbar-logo-wheel">
+        <img src="logo-text.png?v=1" alt="ITERCARS" class="navbar-logo-text">
       </a>
 
       <ul class="nav-links">
@@ -58,8 +59,14 @@
         <h1 class="car-title-xl" id="detailCarName" style="font-size: 3rem; margin-bottom: 15px; text-shadow: none;">Caricamento...</h1>
         <div style="display: flex; gap: 20px; align-items: center;">
           <span style="color: #a0aec0; font-size: 1.1rem;"><i class="ri-steering-2-line text-gradient"></i> <span id="detailCarCategory">Categoria</span></span>
-          <span style="color: #f59e0b; font-size: 1.1rem;"><i class="ri-star-fill"></i> <span id="detailCarRating">5.0</span>/5</span>
+          <span style="color: #ce2b37; font-size: 1.1rem;"><i class="ri-star-fill"></i> <span id="detailCarRating">5.0</span>/5</span>
         </div>
+      </div>
+
+      <!-- IMMAGINE PRINCIPALE CON ZOOM -->
+      <div class="presentation-image-container" onclick="openLightbox()">
+        <img src="" id="detailMainImage" class="presentation-image" alt="Auto">
+        <div class="zoom-hint"><i class="ri-zoom-in-line"></i> Clicca per ingrandire</div>
       </div>
 
       <div class="specs-grid">
@@ -112,29 +119,35 @@
       <div class="booking-widget-sticky">
         <div class="widget-price-header">
           <div class="widget-price-amount" id="detailPrice">€ --</div>
-          <div class="widget-price-period">al giorno (Kasko inclusa)</div>
+          <div class="widget-price-period">al giorno (Assicurazione inclusa)</div>
         </div>
 
         <form id="detailBookingForm" onsubmit="submitDetailBooking(event)">
-          <div class="booking-form-group">
-            <label>Luogo di Ritiro</label>
-            <input type="text" class="booking-form-control" id="detailLocation" placeholder="Città, Hotel o Aeroporto" required>
+          <div class="booking-form-group" style="position: relative;">
+            <label class="booking-label"><i class="ri-map-pin-line"></i> Luogo di Ritiro</label>
+            <input type="text" class="booking-form-control" id="detailLocation" placeholder="Città, Hotel o Aeroporto" autocomplete="off" required>
+            <ul id="detailLocationSuggestions" class="autocomplete-suggestions"></ul>
           </div>
           
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
             <div class="booking-form-group">
               <label>Ritiro</label>
-              <input type="date" class="booking-form-control" required>
+              <input type="date" class="booking-form-control" id="detailDateFrom" required>
             </div>
             <div class="booking-form-group">
               <label>Riconsegna</label>
-              <input type="date" class="booking-form-control" required>
+              <input type="date" class="booking-form-control" id="detailDateTo" required>
             </div>
           </div>
 
           <div class="booking-form-group">
             <label>Nome e Cognome</label>
             <input type="text" class="booking-form-control" id="detailName" placeholder="Il tuo nome" required>
+          </div>
+
+          <div class="booking-form-group">
+            <label>Email</label>
+            <input type="email" class="booking-form-control" id="detailEmail" placeholder="La tua email" required>
           </div>
 
           <div class="booking-form-group">
@@ -152,10 +165,16 @@
     
   </div>
 
+  <!-- LIGHTBOX PER ZOOM -->
+  <div id="lightboxOverlay" class="lightbox-overlay" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-img" id="lightboxImage" src="">
+  </div>
+
   <!-- Script Principali -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Usa i dati da app.js -->
-  <script src="app.js?v=7"></script>
-  <script src="car-detail.js?v=2"></script>
+  <script src="app.js?v=17"></script>
+  <script src="car-detail.js?v=5"></script>
 </body>
 </html>

@@ -38,6 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
     heroSection.style.setProperty('--hero-bg', `url('${car.image}')`);
   }
 
+  // Set the main presentation image
+  const mainImage = document.getElementById("detailMainImage");
+  if (mainImage) {
+    mainImage.src = car.image;
+    mainImage.alt = car.name;
+  }
+
   // Badge rimosso
   const badgeContainer = document.getElementById("detailBadgeContainer");
   if (badgeContainer) badgeContainer.innerHTML = '';
@@ -75,21 +82,107 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("detailPrice").innerText = `€ ${car.price}`;
 });
 
-function submitDetailBooking(event) {
+async function submitDetailBooking(event) {
   event.preventDefault();
   
   const carName = document.getElementById("detailCarName").innerText;
   const location = document.getElementById("detailLocation").value;
+  const dateFrom = document.getElementById("detailDateFrom") ? document.getElementById("detailDateFrom").value : '';
+  const dateTo = document.getElementById("detailDateTo") ? document.getElementById("detailDateTo").value : '';
   const name = document.getElementById("detailName").value;
+  const email = document.getElementById("detailEmail") ? document.getElementById("detailEmail").value : '';
   const phone = document.getElementById("detailPhone").value;
 
-  // Use the showToast from app.js
   if (typeof showToast === 'function') {
-    showToast(`✨ Richiesta inviata con successo per ${carName}! Un concierge ti contatterà a breve al ${phone}.`);
-  } else {
-    alert(`Richiesta inviata per ${carName}. Ti contatteremo a breve.`);
+    showToast(`⏳ Invio richiesta di disponibilità in corso per ${carName}...`);
+  }
+  
+  const recipient = "info@itercars.com";
+  
+  if (typeof supabase !== 'undefined' && supabase) {
+    try {
+      supabase.from('availability_requests').insert([{
+        name: name,
+        phone: phone,
+        email: email,
+        notes: '',
+        location: location,
+        dates: `${dateFrom} al ${dateTo}`,
+        category: `Modello: ${carName}`,
+        status: 'new'
+      }]).then(({ error }) => {
+         if (error) console.warn("Supabase log:", error.message);
+      });
+    } catch(e) { console.warn(e); }
   }
 
-  // Clear form
-  document.getElementById("detailBookingForm").reset();
+  const payload = {
+    _subject: `🚙 Nuova Prenotazione Auto (Da Pagina Dettaglio) — ${carName}`,
+    _template: "table",
+    _captcha: "false",
+    "Veicolo Richiesto": carName,
+    "Luogo di Ritiro": location,
+    "Date Richieste": `${dateFrom} al ${dateTo}`,
+    "Nome Cliente": name,
+    "Telefono Cliente": phone,
+    "Email Cliente": email
+  };
+
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      if (typeof showToast === 'function') {
+        showToast(`✨ Richiesta inviata con successo! Un concierge ti contatterà a breve al ${phone}.`);
+      } else {
+        alert(`Richiesta inviata per ${carName}. Ti contatteremo a breve.`);
+      }
+      document.getElementById("detailBookingForm").reset();
+    }
+  } catch (err) {
+    console.warn("Fallback su mailto:", err);
+    const subjectText = encodeURIComponent(`Richiesta Prenotazione — ${carName}`);
+    const bodyText = encodeURIComponent(
+      `Richiesta prenotazione da ITERCARS:\n\n• Veicolo: ${carName}\n• Luogo: ${location}\n• Date: ${dateFrom} al ${dateTo}\n• Nome: ${name}\n• Telefono: ${phone}\n• Email: ${email}\n`
+    );
+    setTimeout(() => {
+      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
+      document.getElementById("detailBookingForm").reset();
+    }, 1000);
+  }
 }
+
+/* ==========================================================================
+   LIGHTBOX ZOOM LOGIC
+   ========================================================================== */
+function openLightbox() {
+  const overlay = document.getElementById("lightboxOverlay");
+  const img = document.getElementById("lightboxImage");
+  const mainImageSrc = document.getElementById("detailMainImage").src;
+  
+  if (overlay && img && mainImageSrc) {
+    img.src = mainImageSrc;
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden"; // Prevent scrolling
+  }
+}
+
+function closeLightbox() {
+  const overlay = document.getElementById("lightboxOverlay");
+  if (overlay) {
+    overlay.classList.remove("active");
+    document.body.style.overflow = ""; // Restore scrolling
+  }
+}
+
+// Chiudi col tasto ESC
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeLightbox();
+});

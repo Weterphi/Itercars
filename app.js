@@ -37,7 +37,7 @@ const translations = {
     "hero.stat1": "Supercar Esclusive",
     "hero.stat2": "Concierge Dedicato",
     "hero.stat3": "Garanzia Modello",
-    "vip.title": "Garanzia VIP Kasko",
+    "vip.title": "Garanzia Assicurativa VIP",
     "vip.subtitle": "Copertura 100% Inclusa",
     "vip.desc": "Ogni noleggio include assistenza stradale 24/7 con elicottero o supercar sostitutiva entro 60 minuti in tutta Europa.",
     "vip.check1": "Consegna in Villa",
@@ -48,7 +48,7 @@ const translations = {
     "search.dateTo": "Data Riconsegna",
     "search.category": "Categoria Auto",
     "search.catAll": "Tutte le Categorie",
-    "search.btn": "Cerca Auto",
+    "search.btn": "Consulta Disponibilità",
     "fleet.tag": "La Nostra Flotta",
     "fleet.title": 'Guidare l\'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span>',
     "fleet.subtitle": "Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.",
@@ -58,7 +58,7 @@ const translations = {
     "why.subtitle": "Ridefiniamo il concetto di autonoleggio combinando flotta proprietaria di prim'ordine e accoglienza a 5 stelle.",
     "why.box1Title": "Consegna Ovunque",
     "why.box1Desc": "Consegniamo la vettura direttamente al tuo hotel, villa privata o terminal jet privato con il nostro staff.",
-    "why.box2Title": "Kasko Totale VIP",
+    "why.box2Title": "Copertura Totale VIP",
     "why.box2Desc": "Viaggia in assoluta serenità con franchigia zero e copertura assicurativa completa su tutti i nostri veicoli.",
     "why.box3Title": "Concierge 24/7",
     "why.box3Desc": "Assistenza dedicata giorno e notte. Prenotazioni ristoranti, itinerari su misura e supporto tecnico immediato.",
@@ -73,7 +73,7 @@ const translations = {
     "modal.extra150": "Consegna in Villa / Aeroporto (+€150)",
     "modal.extra300": "Autista Privato mezza giornata (+€300)",
     "modal.estimate": "Stima Totale Preventivo:",
-    "modal.kaskoInc": "Kasko Inclusa",
+    "modal.kaskoInc": "Assicurazione Inclusa",
     "modal.btnConfirm": "Conferma Richiesta Prenotazione",
     "footer.desc": "Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.",
     "footer.col1Title": "Categorie Flotta",
@@ -83,7 +83,7 @@ const translations = {
     "footer.linkPartner": "Lavora con noi / Partner",
     "footer.col3Title": "Sede Legale & Contatti",
     "dynamic.cat": "Categoria",
-    "dynamic.perDay": "/ giorno (Kasko inc.)",
+    "dynamic.perDay": "/ giorno (Assic. inc.)",
     "dynamic.book": "Prenota",
     "dynamic.noVehicles": "Nessun veicolo trovato",
     "dynamic.tryChange": "Prova a cambiare i filtri di ricerca o la categoria.",
@@ -250,7 +250,7 @@ const translations = {
     "hero.stat1": "Supercars Exclusives",
     "hero.stat2": "Concierge Dédié",
     "hero.stat3": "Modèle Garanti",
-    "vip.title": "Garantie VIP Kasko",
+    "vip.title": "Garantie VIP Assurance",
     "vip.subtitle": "Couverture 100% Incluse",
     "vip.desc": "Chaque location comprend une assistance routière 24h/24 et 7j/7 avec hélicoptère ou supercar de remplacement en 60 minutes dans toute l'Europe.",
     "vip.check1": "Livraison en Villa",
@@ -315,13 +315,13 @@ const translations = {
     "nav.area": "VIP Bereich",
     "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 PREMIUMLUXUS-MIETWAGEN-MARKTPLATZ',
     "hero.title": 'Exzellenz fahren <br><span class="text-gradient">Kennt Keine Grenzen.</span>',
-    "hero.subtitle": "Wählen Sie aus den exklusivsten Supercars und Limousinen des Planeten. Individuelle Lieferung, wo immer Sie sind, Vollkaskoschutz und ein unvergessliches Fahrerlebnis.",
+    "hero.subtitle": "Wählen Sie aus den exklusivsten Supercars und Limousinen des Planeten. Individuelle Lieferung, wo immer Sie sind, Vollversicherung und ein unvergessliches Fahrerlebnis.",
     "hero.btnDiscover": "Fahrzeuge entdecken",
     "hero.btnQuote": "Sofortangebot",
     "hero.stat1": "Exklusive Supercars",
     "hero.stat2": "Engagierter Concierge",
     "hero.stat3": "Garantiertes Modell",
-    "vip.title": "VIP-Kaskogarantie",
+    "vip.title": "VIP-Versicherungsgarantie",
     "vip.subtitle": "100% Abdeckung Inklusive",
     "vip.desc": "Jede Miete beinhaltet 24/7 Pannenhilfe mit Hubschrauber oder Ersatz-Supercar innerhalb von 60 Minuten in ganz Europa.",
     "vip.check1": "Lieferung zur Villa",
@@ -342,7 +342,7 @@ const translations = {
     "why.subtitle": "Wir definieren die Autovermietung neu, indem wir eine erstklassige eigene Flotte mit 5-Sterne-Gastfreundschaft kombinieren.",
     "why.box1Title": "Lieferung Überall",
     "why.box1Desc": "Wir liefern das Auto mit unserem Personal direkt an Ihr Hotel, Ihre Privatvilla oder Ihren Jet-Terminal.",
-    "why.box2Title": "VIP Vollkaskoschutz",
+    "why.box2Title": "VIP Vollversicherung",
     "why.box2Desc": "Reisen Sie in absoluter Sorglosigkeit ohne Selbstbeteiligung und mit vollem Versicherungsschutz für alle unsere Fahrzeuge.",
     "why.box3Title": "24/7 Concierge",
     "why.box3Desc": "Engagierte Unterstützung Tag und Nacht. Restaurantbuchungen, maßgeschneiderte Reiserouten und sofortiger technischer Support.",
@@ -973,7 +973,7 @@ function renderCarCard(car, dict) {
   const cleanBadge = (car.badge || '').replace(/[\u1F600-\u1F64F\u1F300-\u1F5FF\u1F680-\u1F6FF\u1F1E6-\u1F1FF\u2600-\u26FF\u2700-\u27BF]/g, '').trim();
   return `
     <div class="glass-card car-card">
-      <a href="car-detail.html?car=${encodeURIComponent(car.name)}" style="display: block; position: relative;">
+      <a href="car-detail.html?v=4&car=${encodeURIComponent(car.name)}" style="display: block; position: relative;">
         <div class="car-image-container">
           <span class="car-badge">${cleanBadge}</span>
           <span class="car-rating"><i class="ri-star-fill"></i> ${car.rating}</span>
@@ -1600,4 +1600,277 @@ async function handlePartnerApplicationSubmit(event) {
 }
 window.handlePartnerApplicationSubmit = handlePartnerApplicationSubmit;
 
+/* ==========================================================================
+   AVAILABILITY REQUEST (Consulta Disponibilità) LOGIC
+   ========================================================================== */
+async function openAvailabilityModal(event) {
+  event.preventDefault();
+  
+  const loc = document.getElementById('searchLocation') ? document.getElementById('searchLocation').value : '';
+  const dFrom = document.getElementById('searchDateFrom') ? document.getElementById('searchDateFrom').value : '';
+  const dTo = document.getElementById('searchDateTo') ? document.getElementById('searchDateTo').value : '';
+  const catSelect = document.getElementById('searchCategory');
+  let cat = catSelect ? catSelect.options[catSelect.selectedIndex].text : '';
+
+  if (catSelect && catSelect.value === 'Specifico') {
+    const specificSelect = document.getElementById('searchSpecificModel');
+    if (specificSelect && specificSelect.value) {
+      cat = specificSelect.value;
+    } else {
+      cat = "Modello Specifico";
+    }
+  }
+
+  const displayLoc = loc || 'Qualsiasi Città / Aeroporto';
+  const displayDates = dFrom && dTo ? `${dFrom} al ${dTo}` : 'Date non specificate';
+
+  if (document.getElementById('availLuogo')) document.getElementById('availLuogo').textContent = displayLoc;
+  if (document.getElementById('availDate')) document.getElementById('availDate').textContent = displayDates;
+  if (document.getElementById('availCategoria')) document.getElementById('availCategoria').textContent = cat || 'Tutte le Categorie';
+
+  if (typeof supabase !== 'undefined' && supabase) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session && session.user) {
+        const user = session.user;
+        const nameInput = document.getElementById('availName');
+        const emailInput = document.getElementById('availEmail');
+        
+        if (emailInput && user.email) {
+          emailInput.value = user.email;
+        }
+        if (nameInput && user.user_metadata && user.user_metadata.full_name) {
+          nameInput.value = user.user_metadata.full_name;
+        }
+      }
+    } catch(e) {
+      console.warn("Nessun utente loggato o errore:", e.message);
+    }
+  }
+
+  const modal = document.getElementById('availabilityModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeAvailabilityModal() {
+  const modal = document.getElementById('availabilityModal');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleAvailabilitySubmit(event) {
+  event.preventDefault();
+  
+  const name = document.getElementById('availName') ? document.getElementById('availName').value.trim() : '';
+  const phone = document.getElementById('availPhone').value.trim();
+  const email = document.getElementById('availEmail').value.trim();
+  const notes = document.getElementById('availNotes').value.trim();
+  
+  const luogo = document.getElementById('availLuogo').textContent;
+  const dates = document.getElementById('availDate').textContent;
+  const categoria = document.getElementById('availCategoria').textContent;
+
+  if (!name || !phone || !email) {
+    showToast("⚠️ Compila Nome, Telefono ed Email.");
+    return;
+  }
+
+  showToast("⏳ Invio richiesta di disponibilità in corso...");
+
+  const recipient = "info@itercars.com";
+
+  if (typeof supabase !== 'undefined' && supabase) {
+    try {
+      supabase.from('availability_requests').insert([{
+        name: name,
+        phone: phone,
+        email: email,
+        notes: notes,
+        location: luogo,
+        dates: dates,
+        category: categoria,
+        status: 'new'
+      }]).then(({ error }) => {
+         if (error) console.warn("Supabase log:", error.message);
+      });
+    } catch(e) { console.warn(e); }
+  }
+
+  const payload = {
+    _subject: `🚙 Nuova Richiesta Disponibilità Auto — ${categoria}`,
+    _template: "table",
+    _captcha: "false",
+    "Luogo di Ritiro": luogo,
+    "Date Richieste": dates,
+    "Categoria Veicolo": categoria,
+    "Nome Cliente": name,
+    "Telefono Cliente": phone,
+    "Email Cliente": email,
+    "Note Aggiuntive": notes || "Nessuna nota"
+  };
+
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (response.ok || result.success === "true") {
+      showToast("✅ Richiesta inviata con successo! Ti contatteremo a breve.");
+      closeAvailabilityModal();
+      event.target.reset();
+    } else {
+      throw new Error(result.message || "Errore invio formsubmit");
+    }
+  } catch (err) {
+    console.warn("Fallback su mailto:", err);
+    showToast("✅ Apertura client email in corso...");
+    const subjectText = encodeURIComponent(`Richiesta Disponibilità — ${categoria}`);
+    const bodyText = encodeURIComponent(
+      `Richiesta disponibilità da ITERCARS:\n\n• Luogo: ${luogo}\n• Date: ${dates}\n• Categoria: ${categoria}\n• Telefono: ${phone}\n• Email: ${email}\n• Note: ${notes}\n`
+    );
+    setTimeout(() => {
+      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
+      closeAvailabilityModal();
+      event.target.reset();
+    }, 1000);
+  }
+}
+
+window.openAvailabilityModal = openAvailabilityModal;
+window.closeAvailabilityModal = closeAvailabilityModal;
+window.handleAvailabilitySubmit = handleAvailabilitySubmit;
+
+/* ==========================================================================
+   SPECIFIC MODEL SEARCH LOGIC
+   ========================================================================== */
+function setupSpecificModels() {
+  const specificModelSelect = document.getElementById('searchSpecificModel');
+  if (specificModelSelect && typeof fleetData !== 'undefined') {
+    specificModelSelect.innerHTML = '<option value="">Seleziona un modello...</option>';
+    // Sort cars alphabetically avoiding duplicates
+    const uniqueCars = [];
+    const map = new Map();
+    for (const item of fleetData) {
+        if(!map.has(item.name)){
+            map.set(item.name, true);
+            uniqueCars.push({
+                name: item.name
+            });
+        }
+    }
+    const sortedCars = uniqueCars.sort((a, b) => a.name.localeCompare(b.name));
+    
+    sortedCars.forEach(car => {
+      const option = document.createElement('option');
+      option.value = car.name;
+      option.textContent = car.name;
+      specificModelSelect.appendChild(option);
+    });
+  }
+}
+
+function handleCategoryChange() {
+  const catSelect = document.getElementById('searchCategory');
+  const specificContainer = document.getElementById('specificModelContainer');
+  const searchGrid = document.querySelector('.search-grid');
+  
+  if (catSelect && specificContainer) {
+    if (catSelect.value === 'Specifico') {
+      specificContainer.style.display = 'block';
+      if (searchGrid) searchGrid.classList.add('has-specific');
+    } else {
+      specificContainer.style.display = 'none';
+      if (searchGrid) searchGrid.classList.remove('has-specific');
+    }
+  }
+}
+
+window.handleCategoryChange = handleCategoryChange;
+document.addEventListener('DOMContentLoaded', setupSpecificModels);
+
+/* ==========================================================================
+   AUTOCOMPLETE INDIRIZZI GLOBALE (PHOTON API)
+   ========================================================================== */
+function setupAddressAutocomplete(inputId, suggestionsId) {
+  const input = document.getElementById(inputId);
+  const suggestionsBox = document.getElementById(suggestionsId);
+  if (!input || !suggestionsBox) return;
+
+  let timeoutId;
+
+  input.addEventListener('input', function() {
+    clearTimeout(timeoutId);
+    const query = this.value.trim();
+    
+    if (query.length < 3) {
+      suggestionsBox.style.display = 'none';
+      return;
+    }
+
+    timeoutId = setTimeout(() => {
+      fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`)
+        .then(response => response.json())
+        .then(data => {
+          suggestionsBox.innerHTML = '';
+          if (data.features && data.features.length > 0) {
+            data.features.forEach(feature => {
+              const props = feature.properties;
+              const mainText = props.name || props.city || props.state;
+              if (!mainText) return;
+              
+              const addressParts = [];
+              if (props.city && props.city !== mainText) addressParts.push(props.city);
+              if (props.state && props.state !== mainText) addressParts.push(props.state);
+              if (props.country) addressParts.push(props.country);
+              const secondaryText = addressParts.join(', ');
+
+              const li = document.createElement('li');
+              li.innerHTML = `<strong>${mainText}</strong>${secondaryText ? `<span class="suggestion-secondary">${secondaryText}</span>` : ''}`;
+              
+              li.addEventListener('click', () => {
+                input.value = `${mainText}${secondaryText ? ', ' + secondaryText : ''}`;
+                suggestionsBox.style.display = 'none';
+              });
+              
+              suggestionsBox.appendChild(li);
+            });
+            suggestionsBox.style.display = 'block';
+          } else {
+            suggestionsBox.style.display = 'none';
+          }
+        })
+        .catch(err => {
+          console.error("Autocomplete error:", err);
+          suggestionsBox.style.display = 'none';
+        });
+    }, 300); // debounce 300ms
+  });
+
+  // Chiudi i suggerimenti se si clicca fuori
+  document.addEventListener('click', function(e) {
+    if (e.target !== input && e.target !== suggestionsBox) {
+      suggestionsBox.style.display = 'none';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  setupAddressAutocomplete('searchLocation', 'searchLocationSuggestions');
+  setupAddressAutocomplete('detailLocation', 'detailLocationSuggestions');
+  
+  // Handle Logo Animation Switch
+  const logoContainer = document.getElementById("navbarLogoContainer");
+  if (logoContainer) {
+    setTimeout(() => {
+      logoContainer.classList.remove("logo-animating");
+      logoContainer.classList.add("logo-idle");
+    }, 2500); // Wait for logoSlideIn animation to finish
+  }
+});
 

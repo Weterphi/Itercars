@@ -10,15 +10,16 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="index.css?v=14">
+  <link rel="stylesheet" href="index.css?v=25">
 </head>
 <body>
 
   <!-- ================= HEADER / NAVBAR ================= -->
   <header id="header">
     <div class="container nav-container">
-      <a href="#" class="logo" title="ITERCARS Luxury Supercar Rental">
-        <img src="logo_fallback.png?v=15" alt="ITERCARS Logo" class="navbar-logo-img">
+      <a href="#" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS Luxury Supercar Rental">
+        <img src="logo-wheel.png?v=1" alt="Wheel" class="navbar-logo-wheel">
+        <img src="logo-text.png?v=1" alt="ITERCARS" class="navbar-logo-text">
       </a>
 
       <ul class="nav-links">
@@ -73,7 +74,7 @@
     <section class="hero" id="home">
       <div class="container hero-content">
         <div class="hero-text">
-          <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.4); backdrop-filter: blur(8px); border-radius: 99px; margin-bottom: 20px; color: #34d399; font-size: 0.85rem; font-weight: 600;" data-i18n="hero.badge">
+          <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(0, 146, 70, 0.2); border: 1px solid rgba(0, 146, 70, 0.4); backdrop-filter: blur(8px); border-radius: 99px; margin-bottom: 20px; color: #2ecc71; font-size: 0.85rem; font-weight: 600;" data-i18n="hero.badge">
             <i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DI NOLEGGIO AUTO PREMIUM
           </div>
           <!-- Titolo e Sottotitolo rimossi come richiesto -->
@@ -97,20 +98,15 @@
     <div id="desktopSearchContainer">
       <section class="search-section" id="mainSearchSection">
         <div class="container">
-          <form class="search-box" id="searchForm" onsubmit="handleSearch(event)">
+          <form class="search-box" id="searchForm" onsubmit="openAvailabilityModal(event)">
             <div class="search-grid">
               
               <div class="form-group">
                   <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
                   <div class="input-wrapper">
                     <i class="ri-building-line"></i>
-                    <select class="form-control" id="searchLocation">
-                      <option value="" data-i18n="search.locAny">Qualsiasi Città / Aeroporto</option>
-                      <option value="Milano">Milano Centro / Linate / Malpensa</option>
-                      <option value="Roma">Roma Fiumicino / Via Veneto</option>
-                      <option value="Costa Smeralda">Porto Cervo (Costa Smeralda)</option>
-                      <option value="Monaco">Monte Carlo / Costa Azzurra</option>
-                    </select>
+                    <input type="text" class="form-control" id="searchLocation" placeholder="Città, aeroporto, via..." autocomplete="off">
+                    <ul id="searchLocationSuggestions" class="autocomplete-suggestions"></ul>
                   </div>
                 </div>
 
@@ -134,19 +130,30 @@
                 <label><i class="ri-car-line"></i> <span data-i18n="search.category">Categoria Auto</span></label>
                 <div class="input-wrapper">
                   <i class="ri-filter-3-line"></i>
-                  <select class="form-control" id="searchCategory">
+                  <select class="form-control" id="searchCategory" onchange="handleCategoryChange()">
                     <option value="tutti" data-i18n="search.catAll">Tutte le Categorie</option>
                     <option value="Supercar">Supercar</option>
-                    <option value="SUV">SUV di Lusso</option>
-                    <option value="Sportiva">Coupé & Sportive</option>
-                    <option value="Elettrica">Hypercar Elettriche</option>
+                    <option value="SUV Luxury">SUV Luxury</option>
+                    <option value="Sportiva">Sportiva</option>
+                    <option value="Cabriolet">Cabriolet</option>
+                    <option value="Specifico">Modello Specifico</option>
                   </select>
                 </div>
               </div>
 
-              <div style="padding-top: 20px;">
-                <button type="submit" class="btn btn-gold" style="width: 100%; height: 48px;">
-                  <i class="ri-search-line"></i> <span data-i18n="search.btn">Cerca Auto</span>
+              <div class="form-group" id="specificModelContainer" style="display: none;">
+                <label><i class="ri-car-fill"></i> <span>Seleziona Modello</span></label>
+                <div class="input-wrapper">
+                  <i class="ri-search-eye-line"></i>
+                  <select class="form-control" id="searchSpecificModel">
+                    <!-- Options populated via JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="search-btn-container" style="padding-top: 20px;">
+                <button type="submit" class="btn btn-white-green" style="width: 100%; height: 48px; font-weight: bold;">
+                  <i class="ri-search-line"></i> <span data-i18n="search.btn">Consulta Disponibilità</span>
                 </button>
               </div>
 
@@ -244,7 +251,7 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag" data-i18n="why.tag">I Nostri Vantaggi</span>
-        <h2 data-i18n="why.title">Perché Scegliere <span class="text-gold">ITERCARS</span></h2>
+        <h2 data-i18n="why.title">Perché Scegliere <span class="text-gradient">ITERCARS</span></h2>
         <p data-i18n="why.subtitle">Ridefiniamo il concetto di autonoleggio combinando flotta proprietaria di prim'ordine e accoglienza a 5 stelle.</p>
       </div>
 
@@ -257,7 +264,7 @@
 
         <div class="glass-card feature-box">
           <div class="feature-icon"><i class="ri-shield-check-fill"></i></div>
-          <h3 data-i18n="why.box2Title">Kasko Totale VIP</h3>
+          <h3 data-i18n="why.box2Title">Copertura Totale VIP</h3>
           <p data-i18n="why.box2Desc">Viaggia in assoluta serenità con franchigia zero e copertura assicurativa completa su tutti i nostri veicoli.</p>
         </div>
 
@@ -280,7 +287,7 @@
     <div class="container">
       <div class="section-header">
         <span class="section-tag">Esperienza Esclusiva</span>
-        <h2>I Nostri <span class="text-gold">Servizi VIP & Concierge</span></h2>
+        <h2>I Nostri <span class="text-gradient">Servizi VIP & Concierge</span></h2>
         <p>Molto più di un noleggio auto: un ecosistema lifestyle su misura progettato per garantire il massimo comfort, discrezione e rapidità.</p>
       </div>
 
@@ -295,7 +302,7 @@
         <!-- Card 2 -->
         <div class="glass-card vip-service-card">
           <div class="vip-service-icon"><i class="ri-shield-star-line"></i></div>
-          <h3 class="vip-service-title">Kasko VIP Franchigia Zero</h3>
+          <h3 class="vip-service-title">Assicurazione VIP Franchigia Zero</h3>
           <p class="vip-service-desc">Copertura assicurativa All-Risk totale inclusa in ogni prenotazione senza massimali bloccati su carta di credito e con anonimato garantito al 100% per celebrità.</p>
         </div>
 
@@ -362,7 +369,7 @@
 
       <!-- REGISTRATION VIEW -->
       <div id="registerFormBox" style="display: none;">
-        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gold"></i> Registrazione Membro VIP</h3>
+        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gradient"></i> Registrazione Membro VIP</h3>
         <p style="color: var(--text-muted); margin-bottom: 20px;">Crea il tuo profilo ITERCARS per sbloccare sconti riservati e supporto concierge.</p>
         
         <form onsubmit="handleRegister(event)" style="display: flex; flex-direction: column; gap: 14px;">
@@ -429,12 +436,12 @@
     <div class="modal-content" style="max-width: 680px; text-align: center;">
       <button class="close-modal" onclick="closeVipDashboardModal()"><i class="ri-close-line"></i></button>
       
-      <div style="width: 70px; height: 70px; background: rgba(16, 185, 129, 0.15); border: 2px solid var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 2.2rem; color: var(--accent-primary);">
+      <div style="width: 70px; height: 70px; background: rgba(0, 146, 70, 0.15); border: 2px solid var(--accent-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 2.2rem; color: var(--accent-primary);">
         <i class="ri-vip-crown-fill"></i>
       </div>
 
       <h3 style="font-size: 1.8rem; margin-bottom: 4px;" id="vipUserName">Benvenuto, Membro VIP</h3>
-      <span style="display: inline-block; background: rgba(245, 158, 11, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px;" id="vipUserLevel">Silver Member</span>
+      <span style="display: inline-block; background: rgba(245, 158, 11, 0.2); color: var(--accent-red); border: 1px solid var(--accent-red); padding: 4px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 20px;" id="vipUserLevel">Silver Member</span>
 
       <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: var(--radius-md); padding: 16px; text-align: left; margin-bottom: 20px; display: flex; flex-direction: column; gap: 10px;">
         <div style="display: flex; justify-content: space-between;">
@@ -447,13 +454,13 @@
         </div>
         <div style="display: flex; justify-content: space-between;">
           <span style="color: var(--text-muted);"><i class="ri-customer-service-2-line"></i> Linea Concierge prioritario:</span>
-          <strong style="color: var(--accent-gold);">24/7 H24</strong>
+          <strong style="color: var(--accent-red);">24/7 H24</strong>
         </div>
       </div>
 
       <!-- SEZIONE STORICO NOLEGGI & PAESI -->
       <div style="text-align: left; margin-bottom: 24px;">
-        <h4 style="font-size: 1.15rem; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+        <h4 style="font-size: 1.15rem; color: var(--accent-red); margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
           <span><i class="ri-history-line"></i> Storico Noleggi & Paesi Visitati</span>
           <span style="font-size: 0.8rem; background: rgba(255,255,255,0.08); padding: 2px 8px; border-radius: 12px; color: var(--text-muted);">Sync Live Supabase</span>
         </h4>
@@ -535,12 +542,12 @@
         </div>
 
         <!-- Preventivo Box -->
-        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+        <div style="background: rgba(0, 146, 70, 0.1); border: 1px solid rgba(0, 146, 70, 0.3); padding: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
           <div>
             <span style="font-size: 0.85rem; color: var(--text-muted); display: block;" data-i18n="modal.estimate">Stima Totale Preventivo:</span>
             <strong style="font-size: 1.4rem; color: var(--accent-primary);" id="totalPriceDisplay">€ 0</strong>
           </div>
-          <span style="font-size: 0.8rem; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 4px;" data-i18n="modal.kaskoInc">Kasko Inclusa</span>
+          <span style="font-size: 0.8rem; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 4px;" data-i18n="modal.kaskoInc">Assicurazione Inclusa</span>
         </div>
 
         <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; height: 50px; font-size: 1.05rem;">
@@ -556,7 +563,7 @@
       <div class="footer-grid">
         <div class="footer-col">
           <a href="#" class="logo" style="margin-bottom: 16px;" title="ITERCARS Luxury Supercar Rental">
-            <img src="logo_fallback.png?v=15" alt="ITERCARS Logo" class="footer-logo-img">
+            <img src="logo_tricolore.png?v=17" alt="ITERCARS Logo" class="footer-logo-img">
           </a>
           <p data-i18n="footer.desc">Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.</p>
           <div style="display: flex; gap: 12px; margin-top: 20px;">
@@ -591,7 +598,7 @@
           <h4 data-i18n="footer.col3Title">Sede Legale & Contatti</h4>
           <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
             <p><i class="ri-global-line text-gradient"></i> <strong>Sede Legale:</strong> Piattaforma Digitale Online</p>
-            <p><i class="ri-phone-fill text-gold"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
+            <p><i class="ri-phone-fill text-gradient"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
             <p><i class="ri-mail-send-fill text-gradient"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
             <p><i class="ri-customer-service-2-fill text-gradient"></i> <a href="mailto:supporto@itercars.com" style="color: inherit;">supporto@itercars.com</a></p>
           </div>
@@ -621,7 +628,7 @@
         <div class="bot-avatar"><i class="ri-vip-crown-fill"></i></div>
         <div>
           <h4 style="font-size: 1rem; color: #fff; margin: 0;">ITERCARS Concierge</h4>
-          <span style="font-size: 0.75rem; color: #34d399; display: flex; align-items: center; gap: 4px;">
+          <span style="font-size: 0.75rem; color: #2ecc71; display: flex; align-items: center; gap: 4px;">
             <span class="status-dot"></span> Assistente Online
           </span>
         </div>
@@ -643,7 +650,7 @@
           </a>
           
           <a href="mailto:info@itercars.com" class="bot-card-link">
-            <i class="ri-mail-fill" style="color: var(--accent-gold); font-size: 1.3rem;"></i>
+            <i class="ri-mail-fill" style="color: var(--accent-red); font-size: 1.3rem;"></i>
             <div>
               <strong>Lascia un'email</strong>
               <span>info@itercars.com</span>
@@ -661,10 +668,53 @@
     </form>
   </div>
 
+  <!-- Availability Request Modal -->
+  <div class="modal-overlay" id="availabilityModal">
+    <div class="glass-card modal-content" style="max-width: 500px;">
+      <button type="button" onclick="closeAvailabilityModal()" class="close-modal"><i class="ri-close-line"></i></button>
+      <div style="text-align: center; margin-bottom: 24px;">
+        <h3 style="font-size: 1.8rem; margin-bottom: 8px;">Richiesta Disponibilità</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Compila i tuoi contatti per ricevere la disponibilità esatta sui veicoli selezionati.</p>
+      </div>
+
+      <form onsubmit="handleAvailabilitySubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
+        <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); text-align: left;">
+          <p style="margin-bottom: 4px;"><strong>📍 Luogo:</strong> <span id="availLuogo"></span></p>
+          <p style="margin-bottom: 4px;"><strong>📅 Date:</strong> <span id="availDate"></span></p>
+          <p style="margin-bottom: 0;"><strong>🏎 Categoria:</strong> <span id="availCategoria"></span></p>
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label>Nome e Cognome *</label>
+          <input type="text" id="availName" class="form-control" required placeholder="Mario Rossi">
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label>Telefono / WhatsApp *</label>
+          <input type="tel" id="availPhone" class="form-control" required placeholder="+39 ...">
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label>Email *</label>
+          <input type="email" id="availEmail" class="form-control" required placeholder="La tua email">
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label>Note aggiuntive</label>
+          <textarea id="availNotes" class="form-control" rows="3" placeholder="Es. Richieste particolari, orari..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; height: 48px; margin-top: 10px;">
+          <i class="ri-send-plane-fill"></i> <span>Invia Richiesta</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Script JS Principale -->
-  <script src="app.js"></script>
+  <script src="app.js?v=17"></script>
   <script>
     function handleMobileSearch() {
       const searchSection = document.getElementById('mainSearchSection');
