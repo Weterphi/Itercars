@@ -776,25 +776,35 @@ header.scrolled .navbar-logo-text {
   }
 }
 
-.category-highlight-content .arrow-icon {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+.category-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 99px;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.category-action-btn i {
   color: var(--accent-red);
-  font-size: 1.4rem;
-  transition: var(--transition-fast);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
 }
 
-@media (min-width: 1200px) {
-  .category-highlight-content .arrow-icon {
-    bottom: 30px;
-    right: 30px;
-    font-size: 1.8rem;
-  }
+.category-highlight-card:hover .category-action-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.category-highlight-card:hover .arrow-icon {
-  transform: translateX(4px);
+.category-highlight-card:hover .category-action-btn i {
+  transform: translate(3px, -3px);
 }
 
 @media (max-width: 992px) {
