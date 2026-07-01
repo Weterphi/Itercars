@@ -12,7 +12,7 @@
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=36">
 </head>
-<body>
+<body class="fleet-page">
 
   <!-- ================= HEADER / NAVBAR ================= -->
   <header id="header">
@@ -67,287 +67,36 @@
 
   <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
   <div class="hero-bg-wrapper">
-    <video autoplay muted loop playsinline class="hero-bg-video">
-      <source src="aston-martin-video.mp4" type="video/mp4">
-    </video>
-    <div class="hero-bg-overlay"></div>
-    <section class="hero" id="home">
-      <div class="container hero-content">
+    <section class="hero" id="home" style="min-height: 40vh; padding-top: 150px; padding-bottom: 20px; align-items: center; background: url('aston-martin-video.mp4') no-repeat center center / cover;">
+      <div class="hero-bg-overlay" style="background: rgba(10, 14, 23, 0.7);"></div>
+      <div class="container hero-content" style="position: relative; z-index: 2;">
         <div class="hero-text">
-          <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; background: rgba(0, 146, 70, 0.2); border: 1px solid rgba(0, 146, 70, 0.4); backdrop-filter: blur(8px); border-radius: 99px; margin-bottom: 20px; color: #2ecc71; font-size: 0.85rem; font-weight: 600;" data-i18n="hero.badge">
-            <i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DI NOLEGGIO AUTO PREMIUM
-          </div>
-          <!-- Titolo e Sottotitolo rimossi come richiesto -->
-          
-          <div class="hero-btns">
-            <a href="fleet.html" class="btn btn-primary">
-              <span data-i18n="hero.btnDiscover">Scopri i Veicoli</span> <i class="ri-roadster-fill"></i>
-            </a>
-            <button onclick="openModal('Consulenza Preventivo VIP', 0)" class="btn btn-outline">
-              <span data-i18n="hero.btnQuote">Calcola Preventivo</span> <i class="ri-calculator-line"></i>
-            </button>
-          </div>
-
-          <!-- Le statistiche sono state spostate sotto le categorie -->
+          <h1 style="font-size: 3rem;">La Nostra Flotta</h1>
+          <p style="color: var(--text-muted);">Esplora la nostra collezione completa di veicoli esclusivi.</p>
         </div>
-
-        <!-- Sezione card VIP rimossa su richiesta dell'utente -->
       </div>
     </section>
 
-    <div id="desktopSearchContainer">
-      <section class="search-section" id="mainSearchSection">
-        <div class="container">
-          <form class="search-box" id="searchForm" onsubmit="openAvailabilityModal(event)">
-            <div class="search-grid">
-              
-              <div class="form-group">
-                  <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
-                  <div class="input-wrapper">
-                    <i class="ri-building-line"></i>
-                    <input type="text" class="form-control" id="searchLocation" placeholder="Città, aeroporto, via..." autocomplete="off">
-                    <ul id="searchLocationSuggestions" class="autocomplete-suggestions"></ul>
-                  </div>
-                </div>
-
-              <div class="form-group">
-                <label><i class="ri-calendar-event-line"></i> <span data-i18n="search.dateFrom">Data Ritiro</span></label>
-                <div class="input-wrapper">
-                  <i class="ri-calendar-2-line"></i>
-                  <input type="date" class="form-control" id="searchDateFrom" value="2026-07-01">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label><i class="ri-calendar-check-line"></i> <span data-i18n="search.dateTo">Data Riconsegna</span></label>
-                <div class="input-wrapper">
-                  <i class="ri-calendar-check-fill"></i>
-                  <input type="date" class="form-control" id="searchDateTo" value="2026-07-05">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label><i class="ri-car-line"></i> <span data-i18n="search.category">Categoria Auto</span></label>
-                <div class="input-wrapper">
-                  <i class="ri-filter-3-line"></i>
-                  <select class="form-control" id="searchCategory" onchange="handleCategoryChange()">
-                    <option value="tutti" data-i18n="search.catAll">Tutte le Categorie</option>
-                    <option value="Supercar">Supercar</option>
-                    <option value="SUV Luxury">SUV Luxury</option>
-                    <option value="Sportiva">Sportiva</option>
-                    <option value="Cabriolet">Cabriolet</option>
-                    <option value="Specifico">Modello Specifico</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group" id="specificModelContainer" style="display: none;">
-                <label><i class="ri-car-fill"></i> <span>Seleziona Modello</span></label>
-                <div class="input-wrapper">
-                  <i class="ri-search-eye-line"></i>
-                  <select class="form-control" id="searchSpecificModel">
-                    <!-- Options populated via JS -->
-                  </select>
-                </div>
-              </div>
-
-              <div class="search-btn-container" style="padding-top: 20px;">
-                <button type="submit" class="btn btn-white-green" style="width: 100%; height: 48px; font-weight: bold;">
-                  <i class="ri-search-line"></i> <span data-i18n="search.btn">Consulta Disponibilità</span>
-                </button>
-              </div>
-
-            </div>
-          </form>
-        </div>
-      </section>
+    <!-- Filter Pills -->
+    <div class="container" style="margin-top: 40px;">
+      <div class="filter-pills" id="fleetFilterPills">
+        <button class="btn btn-outline active" onclick="filterFleetPage('Tutti')">Tutti i Veicoli</button>
+        <button class="btn btn-outline" onclick="filterFleetPage('Supercar')">Supercar</button>
+        <button class="btn btn-outline" onclick="filterFleetPage('Cabrio')">Cabrio</button>
+        <button class="btn btn-outline" onclick="filterFleetPage('SUV')">SUV</button>
+        <button class="btn btn-outline" onclick="filterFleetPage('Sportiva')">Prestige</button>
+      </div>
     </div>
-  </div>
 
-  <!-- ================= FLEET / CATALOG SECTION ================= -->
-  <section class="fleet-section" id="flotta">
+    <!-- Cars Grid -->
     <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="fleet.tag">La Nostra Flotta</span>
-        <h2 data-i18n="fleet.title">Guidare l'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span></h2>
-        <p data-i18n="fleet.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.</p>
-      </div>
-    </div>
-
-    <div class="category-wide-container">
-      <div class="category-highlights">
-        <!-- Luxury -->
-        <div class="category-highlight-card" onclick="window.location.href='fleet.html?category=Supercar'">
-          <img src="maserati-mc20.jpg" alt="Luxury" class="category-highlight-img">
-          <div class="category-highlight-content">
-            <h3>Luxury</h3>
-            <p>Lusso vero, senza eguali</p>
-            <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
-              <i class="ri-arrow-right-up-line"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Cabrio -->
-        <div class="category-highlight-card" onclick="window.location.href='fleet.html?category=Cabrio'">
-          <img src="ferrari-812-gts.jpg" alt="Cabrio" class="category-highlight-img">
-          <div class="category-highlight-content">
-            <h3>Cabrio</h3>
-            <p>Guida a cielo aperto, emozioni senza limiti</p>
-            <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
-              <i class="ri-arrow-right-up-line"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- SUV -->
-        <div class="category-highlight-card" onclick="window.location.href='fleet.html?category=SUV'">
-          <img src="lamborghini-urus.jpg" alt="SUV" class="category-highlight-img">
-          <div class="category-highlight-content">
-            <h3>SUV</h3>
-            <p>Potenza e versatilità in ogni terreno</p>
-            <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
-              <i class="ri-arrow-right-up-line"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Prestige -->
-        <div class="category-highlight-card" onclick="window.location.href='fleet.html?category=Sportiva'">
-          <img src="audi-rs6.jpg" alt="Prestige" class="category-highlight-img">
-          <div class="category-highlight-content">
-            <h3>Prestige</h3>
-            <p>Prestazioni superiori senza compromessi</p>
-            <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
-              <i class="ri-arrow-right-up-line"></i>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STATISTICHE SPOSTATE SOTTO LE CATEGORIE -->
-    <div class="container" style="margin-top: 50px; margin-bottom: 30px;">
-      <div class="hero-stats" style="border-top: none; padding-top: 0; gap: 80px; justify-content: center; width: 100%;">
-        <div class="stat-item">
-          <h3>80+</h3>
-          <p data-i18n="hero.stat1">Supercar Esclusive</p>
-        </div>
-        <div class="stat-item">
-          <h3>24/7</h3>
-          <p data-i18n="hero.stat2">Concierge Dedicato</p>
-        </div>
-        <div class="stat-item">
-          <h3>100%</h3>
-          <p data-i18n="hero.stat3">Garanzia Modello</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <!-- Cars Grid (Grouped by Category) -->
       <div id="fleetGrid">
         <!-- Le auto verranno generate dinamicamente con JS -->
       </div>
     </div>
   </section>
 
-  <div id="mobileSearchContainer"></div>
 
-  <!-- ================= WHY CHOOSE US ================= -->
-  <section class="features-section" id="perche-noi">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag" data-i18n="why.tag">I Nostri Vantaggi</span>
-        <h2 data-i18n="why.title">Perché Scegliere <span class="text-gradient">ITERCARS</span></h2>
-        <p data-i18n="why.subtitle">Ridefiniamo il concetto di autonoleggio combinando flotta proprietaria di prim'ordine e accoglienza a 5 stelle.</p>
-      </div>
-
-      <div class="features-grid">
-        <div class="glass-card feature-box">
-          <div class="feature-icon"><i class="ri-vip-diamond-line"></i></div>
-          <h3 data-i18n="why.box1Title">Consegna Ovunque</h3>
-          <p data-i18n="why.box1Desc">Consegniamo la vettura direttamente al tuo hotel, villa privata o terminal jet privato con il nostro staff.</p>
-        </div>
-
-        <div class="glass-card feature-box">
-          <div class="feature-icon"><i class="ri-shield-check-fill"></i></div>
-          <h3 data-i18n="why.box2Title">Copertura Totale VIP</h3>
-          <p data-i18n="why.box2Desc">Viaggia in assoluta serenità con franchigia zero e copertura assicurativa completa su tutti i nostri veicoli.</p>
-        </div>
-
-        <div class="glass-card feature-box">
-          <div class="feature-icon"><i class="ri-customer-service-2-fill"></i></div>
-          <h3 data-i18n="why.box3Title">Concierge 24/7</h3>
-          <p data-i18n="why.box3Desc">Assistenza dedicata giorno e notte. Prenotazioni ristoranti, itinerari su misura e supporto tecnico immediato.</p>
-        </div>
-
-        <div class="glass-card feature-box">
-          <div class="feature-icon"><i class="ri-refresh-line"></i></div>
-          <h3 data-i18n="why.box4Title">Garanzia Modello</h3>
-          <p data-i18n="why.box4Desc">Nessuna sorpresa: riceverai esattamente la marca, il modello e la motorizzazione specificata al momento della prenotazione.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================= VIP SERVICES & CONCIERGE ================= -->
-  <section class="vip-services-section" id="servizi">
-    <div class="container">
-      <div class="section-header">
-        <span class="section-tag">Esperienza Esclusiva</span>
-        <h2>I Nostri <span class="text-gradient">Servizi VIP & Concierge</span></h2>
-        <p>Molto più di un noleggio auto: un ecosistema lifestyle su misura progettato per garantire il massimo comfort, discrezione e rapidità.</p>
-      </div>
-
-      <div class="vip-services-grid">
-        <!-- Card 1 -->
-        <div class="glass-card vip-service-card">
-          <div class="vip-service-icon"><i class="ri-flight-takeoff-line"></i></div>
-          <h3 class="vip-service-title">Consegna Door-to-Jet & Yacht</h3>
-          <p class="vip-service-desc">La vettura ti attende direttamente sulla pista del jet privato o al molo del tuo yacht. Zero file, check-in digitale su iPad completato dal nostro staff in 60 secondi.</p>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="glass-card vip-service-card">
-          <div class="vip-service-icon"><i class="ri-shield-star-line"></i></div>
-          <h3 class="vip-service-title">Assicurazione VIP Franchigia Zero</h3>
-          <p class="vip-service-desc">Copertura assicurativa All-Risk totale inclusa in ogni prenotazione senza massimali bloccati su carta di credito e con anonimato garantito al 100% per celebrità.</p>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="glass-card vip-service-card">
-          <div class="vip-service-icon"><i class="ri-customer-service-2-line"></i></div>
-          <h3 class="vip-service-title">Concierge Lifestyle H24</h3>
-          <p class="vip-service-desc">Assistente personale dedicato linea diretta per prenotare tavoli nei ristoranti stellati Michelin, accessi prioritari ai club esclusivi e biglietti per eventi mondani.</p>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="glass-card vip-service-card">
-          <div class="vip-service-icon"><i class="ri-user-star-line"></i></div>
-          <h3 class="vip-service-title">Chauffeur & Security Privata</h3>
-          <p class="vip-service-desc">Possibilità di richiedere autisti professionisti 5 stelle plurilingue o personale di scorta e protezione ravvicinata per eventi di rappresentanza e delegazioni diplomatiche.</p>
-        </div>
-
-        <!-- Card 5 -->
-        <div class="glass-card vip-service-card">
-          <div class="vip-service-icon"><i class="ri-time-line"></i></div>
-          <h3 class="vip-service-title">Assistenza Fly & Drive 60 min</h3>
-          <p class="vip-service-desc">In caso di imprevisto tecnico in qualsiasi località europea, garantiamo l'invio rapido di un mezzo sostitutivo di pari o superiore valore entro un massimo di 60 minuti.</p>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="glass-card vip-service-card">
-          <div class="vip-service-icon"><i class="ri-sound-module-line"></i></div>
-          <h3 class="vip-service-title">Setup Vettura Tailor-Made</h3>
-          <p class="vip-service-desc">Ogni auto viene preparata su misura prima della consegna con la tua playlist musicale preferita, temperatura interna ideale e bevande o Champagne di lusso nel frigobar.</p>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- ================= AUTHENTICATION MODAL (LOGIN / REGISTER) ================= -->
   <div class="modal-overlay" id="authModal">
@@ -595,10 +344,10 @@
         <div class="footer-col">
           <h4 data-i18n="footer.col1Title">Categorie Flotta</h4>
           <div class="footer-links">
-            <a href="fleet.html?category=Supercar">Supercar & Hypercar</a>
-            <a href="fleet.html?category=SUV">SUV di Lusso</a>
-            <a href="fleet.html?category=Sportiva">Coupé & Cabriolet</a>
-            <a href="fleet.html?category=Elettrica">Flotta Elettrica</a>
+            <a href="#flotta" onclick="filterFleet('Supercar', null)">Supercar & Hypercar</a>
+            <a href="#flotta" onclick="filterFleet('SUV', null)">SUV di Lusso</a>
+            <a href="#flotta" onclick="filterFleet('Sportiva', null)">Coupé & Cabriolet</a>
+            <a href="#flotta" onclick="filterFleet('Elettrica', null)">Flotta Elettrica</a>
           </div>
         </div>
 

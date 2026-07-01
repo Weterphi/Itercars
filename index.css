@@ -1817,3 +1817,41 @@ footer {
   background: var(--accent-gradient);
   border-radius: 2px;
 }
+
+/* Full screen mobile cards for Fleet Page */
+@media (max-width: 768px) {
+  body.fleet-page .fleet-grid {
+    gap: 0;
+  }
+  body.fleet-page .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  body.fleet-page .car-card {
+    height: 85vh;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid var(--border-glass);
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+  }
+  body.fleet-page .car-card > a {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  body.fleet-page .car-image-container {
+    height: auto;
+    flex-grow: 1;
+    border-radius: 0;
+  }
+  body.fleet-page .car-info {
+    flex-shrink: 0;
+    padding: 20px;
+    background: var(--bg-card);
+  }
+}

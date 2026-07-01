@@ -1041,12 +1041,49 @@ function filterFleet(category, btnElement) {
     }
     renderFleet(filtered);
     
-    // Scroll alla griglia
+    // Scroll alla griglia solo se siamo in home
     const grid = document.getElementById("fleetGrid");
-    if (grid) {
+    if (grid && !window.location.pathname.includes('fleet.html')) {
       grid.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }
+}
+
+function filterFleetPage(category) {
+  // Update URL without reloading
+  const newUrl = window.location.pathname + (category !== 'Tutti' ? '?category=' + category : '');
+  window.history.pushState({path:newUrl}, '', newUrl);
+
+  // Update pills
+  const pills = document.querySelectorAll('#fleetFilterPills .btn');
+  if (pills.length > 0) {
+    pills.forEach(btn => btn.classList.remove('active'));
+    pills.forEach(btn => {
+      if (btn.getAttribute('onclick').includes(category)) {
+        btn.classList.add('active');
+      }
+    });
+  }
+
+  // Filter and render
+  let filtered = [];
+  if (category === "Tutti" || category === "tutti") {
+    filtered = fleetData;
+  } else if (category === "SUV") {
+    filtered = fleetData.filter(car => car.category.includes("SUV"));
+  } else if (category === "Sportiva") {
+    filtered = fleetData.filter(car => car.category.includes("Sportiva") || car.category.includes("Berline"));
+  } else if (category === "Cabrio") {
+    filtered = fleetData.filter(car => car.category.includes("Cabriolet") || car.category.includes("Cabrio"));
+  } else if (category === "Elettrica") {
+    filtered = fleetData.filter(car => car.category.includes("Elettrica"));
+  } else if (category === "Supercar") {
+    filtered = fleetData.filter(car => car.category.includes("Supercar"));
+  } else {
+    filtered = fleetData.filter(car => car.category === category);
+  }
+  
+  renderFleet(filtered);
 }
 
 // Ricerca dalla barra di ricerca
@@ -1971,6 +2008,13 @@ document.addEventListener('DOMContentLoaded', () => {
       logoContainer.classList.remove("logo-animating");
       logoContainer.classList.add("logo-idle");
     }, 1200); // Wait for logoSlideIn animation to finish
+  }
+
+  // Inizializzazione per fleet.html
+  if (window.location.pathname.includes('fleet.html')) {
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get('category') || 'Tutti';
+    filterFleetPage(category);
   }
 });
 
