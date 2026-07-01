@@ -197,10 +197,30 @@ header.scrolled {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 800;
-  color: var(--text-main);
+  text-decoration: none;
+}
+
+.navbar-logo-img {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+  transition: transform var(--transition-fast), filter var(--transition-fast);
+}
+
+.logo:hover .navbar-logo-img {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(197, 160, 89, 0.45));
+}
+
+.footer-logo-img {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  transition: transform var(--transition-fast);
+}
+
+.logo:hover .footer-logo-img {
+  transform: scale(1.04);
 }
 
 .logo-icon {
@@ -1075,6 +1095,13 @@ footer {
 }
 
 @media (max-width: 991px) {
+  .navbar-logo-img {
+    height: 42px;
+  }
+  .footer-logo-img {
+    height: 50px;
+  }
+
   .mobile-menu-btn {
     display: inline-flex;
     padding: 10px 14px;
