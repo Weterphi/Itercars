@@ -237,27 +237,18 @@ header.scrolled {
   text-decoration: none;
 }
 
-.navbar-logo-wheel {
-  height: 60px;
-  width: auto;
+.navbar-logo-img {
+  width: 280px;
+  height: auto;
   object-fit: contain;
-  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform var(--transition-fast), filter var(--transition-fast);
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform var(--transition-fast), filter var(--transition-fast);
 }
 
-.navbar-logo-text {
-  height: 60px;
-  width: auto;
-  object-fit: contain;
-  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform var(--transition-fast), filter var(--transition-fast);
+header.scrolled .navbar-logo-img {
+  width: 200px;
 }
 
-header.scrolled .navbar-logo-wheel,
-header.scrolled .navbar-logo-text {
-  height: 42px;
-}
-
-.logo:hover .navbar-logo-wheel,
-.logo:hover .navbar-logo-text {
+.logo:hover .navbar-logo-img {
   transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
 }
@@ -273,23 +264,16 @@ header.scrolled .navbar-logo-text {
   100% { transform: translateX(0); opacity: 1; }
 }
 
-.logo-animating .navbar-logo-wheel {
-  animation: wheelFastSpin 1.2s cubic-bezier(0.05, 0.9, 0.1, 1) forwards;
+.logo-animating .navbar-logo-img {
+  animation: logoPulse 1.2s cubic-bezier(0.05, 0.9, 0.1, 1) forwards;
 }
 
-@keyframes wheelFastSpin {
-  0% { transform: rotate(-2880deg); }
-  100% { transform: rotate(0deg); }
+@keyframes logoPulse {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-.logo-idle .navbar-logo-wheel {
-  animation: wheelSlowSpin 20s linear infinite;
-}
-
-@keyframes wheelSlowSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+/* Idle animation removed for wide logo */
 
 .footer-logo-img {
   height: 65px;
@@ -1447,12 +1431,11 @@ footer {
   header {
     padding: 10px 0;
   }
-  .navbar-logo-wheel, .navbar-logo-text {
-    height: 38px;
+  .navbar-logo-img {
+    width: 200px;
   }
-  header.scrolled .navbar-logo-wheel,
-  header.scrolled .navbar-logo-text {
-    height: 30px;
+  header.scrolled .navbar-logo-img {
+    width: 150px;
   }
   .footer-logo-img {
     height: 80px;
@@ -1854,4 +1837,21 @@ footer {
     padding: 20px;
     background: var(--bg-card);
   }
+}
+
+/* Background Zoom Animation */
+@keyframes zoomBg {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.hero-animated-bg {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  animation: zoomBg 20s infinite alternate linear;
+  z-index: 0;
 }
