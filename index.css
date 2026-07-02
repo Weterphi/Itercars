@@ -46,12 +46,22 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
+}
+
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-main);
   line-height: 1.6;
   overflow-x: hidden;
+  width: 100%;
+  max-width: 100%;
+  position: relative;
   background-image: 
     radial-gradient(circle at 15% 20%, rgba(0, 146, 70, 0.08) 0%, transparent 40%),
     radial-gradient(circle at 85% 80%, rgba(206, 43, 55, 0.06) 0%, transparent 40%);
@@ -1564,10 +1574,10 @@ footer {
     padding: 10px 0;
   }
   .navbar-logo-img {
-    width: 200px;
+    width: 140px;
   }
   header.scrolled .navbar-logo-img {
-    width: 150px;
+    width: 110px;
   }
   .footer-logo-img {
     height: 80px;
