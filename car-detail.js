@@ -121,6 +121,19 @@ async function submitDetailBooking(event) {
     } catch(e) { console.warn(e); }
   }
 
+  // Trova il fornitore dell'auto
+  let providerInfo = {
+    name: "Stefano",
+    phone: "+393206144070",
+    website: "https://mfitalyluxuryrent.com/"
+  };
+  if (typeof fleetData !== 'undefined') {
+    const matchingCar = fleetData.find(c => c.name === carName);
+    if (matchingCar && matchingCar.provider && typeof window.providersData !== 'undefined') {
+      providerInfo = window.providersData[matchingCar.provider] || providerInfo;
+    }
+  }
+
   const payload = {
     _subject: `🚙 Nuova Prenotazione Auto (Da Pagina Dettaglio) — ${carName}`,
     _template: "table",
@@ -130,7 +143,8 @@ async function submitDetailBooking(event) {
     "Date Richieste": `${dateFrom} al ${dateTo}`,
     "Nome Cliente": name,
     "Telefono Cliente": phone,
-    "Email Cliente": email
+    "Email Cliente": email,
+    "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
   };
 
   try {
@@ -155,7 +169,7 @@ async function submitDetailBooking(event) {
     console.warn("Fallback su mailto:", err);
     const subjectText = encodeURIComponent(`Richiesta Prenotazione — ${carName}`);
     const bodyText = encodeURIComponent(
-      `Richiesta prenotazione da ITERCARS:\n\n• Veicolo: ${carName}\n• Luogo: ${location}\n• Date: ${dateFrom} al ${dateTo}\n• Nome: ${name}\n• Telefono: ${phone}\n• Email: ${email}\n`
+      `Richiesta prenotazione da ITERCARS:\n\n• Veicolo: ${carName}\n• Luogo: ${location}\n• Date: ${dateFrom} al ${dateTo}\n• Nome: ${name}\n• Telefono: ${phone}\n• Email: ${email}\n• Fornitore: ${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}\n`
     );
     setTimeout(() => {
       window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;

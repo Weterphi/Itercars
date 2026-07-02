@@ -811,7 +811,11 @@ function changeLanguage(lang, silent = false) {
     else if (text.includes("Elettr") || text.includes("Electr")) filterCat = "Elettrica";
   }
   
-  if (filterCat === "tutti") {
+  if (window.location.pathname.includes('fleet.html')) {
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get('category') || 'Tutti';
+    filterFleetPage(category);
+  } else if (filterCat === "tutti") {
     const container = document.getElementById("fleetContainer") || document.getElementById("fleetGrid");
     if (container) container.innerHTML = "";
   } else {
@@ -871,6 +875,25 @@ let fleetData = [
   { id: 54, name: "Porsche 911 992 Turbo S Cabriolet", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "330 KM/H", accel: "2.8s", hp: "650 CV" }, image: "porsche-911-turbo.png", badge: "Boxer 3.8L Biturbo" }
 ];
 
+// Registry of Fleet Providers (Fornitori)
+const providersData = {
+  "provider_1": {
+    name: "Stefano",
+    phone: "+393206144070",
+    website: "https://mfitalyluxuryrent.com/",
+    db_uuid: "11111111-1111-1111-1111-111111111111"
+  }
+};
+window.providersData = providersData;
+
+// Automatically assign provider_1 as default for all current cars in fleetData
+fleetData = fleetData.map(car => {
+  if (!car.provider) {
+    car.provider = "provider_1";
+  }
+  return car;
+});
+
 let currentSelectedCarPrice = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -903,7 +926,11 @@ async function loadFleetFromSupabase() {
     else if (text.includes("Elettr") || text.includes("Electr")) filterCat = "Elettrica";
   }
   
-  if (filterCat === "tutti") {
+  if (window.location.pathname.includes('fleet.html')) {
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get('category') || 'Tutti';
+    filterFleetPage(category);
+  } else if (filterCat === "tutti") {
     const container = document.getElementById("fleetContainer") || document.getElementById("fleetGrid");
     if (container) container.innerHTML = "";
   } else {
@@ -1208,6 +1235,14 @@ async function submitBooking(event) {
     vehicleId = foundCar.id;
   }
 
+  // Risolvi il fornitore dell'auto
+  const providerKey = foundCar && foundCar.provider ? foundCar.provider : "provider_1";
+  const providerInfo = (typeof providersData !== 'undefined' ? providersData[providerKey] : null) || {
+    name: "Stefano",
+    phone: "+393206144070",
+    website: "https://mfitalyluxuryrent.com/"
+  };
+
   // Salva la prenotazione su Supabase Database
   if (supabase) {
     try {
@@ -1234,6 +1269,35 @@ async function submitBooking(event) {
     } catch (err) {
       console.error("Errore connessione Supabase:", err);
     }
+  }
+
+  // Invia notifica email al gestore con i dettagli e il fornitore di flotta
+  const recipient = "info@itercars.com";
+  const payload = {
+    _subject: `🚙 Nuova Richiesta Noleggio (Da Modal) — ${carName}`,
+    _template: "table",
+    _captcha: "false",
+    "Veicolo Richiesto": carName,
+    "Giorni di Noleggio": days,
+    "Servizi Aggiuntivi": extraPrice > 0 ? `Selezionato (+€${extraPrice})` : "Nessuno",
+    "Stima Preventivo": `€ ${total}`,
+    "Nome Cliente": clientName,
+    "Telefono Cliente": clientPhone,
+    "Email Cliente": clientEmail,
+    "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
+  };
+
+  try {
+    await fetch(`https://formsubmit.co/ajax/${recipient}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn("Errore invio email FormSubmit:", err);
   }
 
   closeModal();
@@ -1779,17 +1843,29 @@ async function handleAvailabilitySubmit(event) {
     } catch(e) { console.warn(e); }
   }
 
+  // Risolvi il fornitore in base alla categoria o nome selezionato
+  let providerInfo = {
+    name: "Stefano",
+    phone: "+393206144070",
+    website: "https://mfitalyluxuryrent.com/"
+  };
+  const matchingCar = fleetData.find(c => categoria.toLowerCase().includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(categoria.toLowerCase()));
+  if (matchingCar && matchingCar.provider && typeof providersData !== 'undefined') {
+    providerInfo = providersData[matchingCar.provider] || providerInfo;
+  }
+
   const payload = {
     _subject: `🚙 Nuova Richiesta Disponibilità Auto — ${categoria}`,
     _template: "table",
     _captcha: "false",
     "Luogo di Ritiro": luogo,
     "Date Richieste": dates,
-    "Categoria Veicolo": categoria,
+    "Categoria/Modello": categoria,
     "Nome Cliente": name,
     "Telefono Cliente": phone,
     "Email Cliente": email,
-    "Note Aggiuntive": notes || "Nessuna nota"
+    "Note Aggiuntive": notes || "Nessuna nota",
+    "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
   };
 
   try {

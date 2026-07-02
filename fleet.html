@@ -10,7 +10,7 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="index.css?v=37">
+  <link rel="stylesheet" href="index.css?v=39">
 </head>
 <body class="fleet-page">
 
@@ -66,27 +66,29 @@
 
   <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
   <div class="hero-bg-wrapper">
-    <section class="hero" id="home" style="min-height: 65vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+    <section class="hero" id="home" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-bottom: 40px;">
       <div class="hero-animated-bg" style="background-image: url('fleet-hero-bg.jpg');"></div>
-      <div class="hero-bg-overlay" style="background: rgba(10, 14, 23, 0.6); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-      <div class="container hero-content" style="position: relative; z-index: 2; padding-top: 80px;">
-        <div class="hero-text text-center" style="text-align: center;">
-          <h1 style="font-size: 3.8rem; margin-bottom: 10px; text-shadow: 0 4px 20px rgba(0,0,0,0.8);">La Nostra Flotta</h1>
-          <p style="color: #e2e8f0; font-size: 1.25rem; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">Esplora la nostra collezione completa di veicoli esclusivi.</p>
+      <div class="hero-bg-overlay" style="background: rgba(10, 14, 23, 0.55); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+      <div class="container hero-content" style="position: relative; z-index: 2; padding-top: 90px; width: 100%;">
+        <div class="hero-text text-center" style="text-align: center; width: 100%;">
+          <h1 class="fleet-hero-title">La Nostra Flotta</h1>
+          <p class="fleet-hero-sub">Esplora la nostra collezione completa di veicoli esclusivi.</p>
+          
+          <div class="fleet-hero-filters-anim">
+            <div class="fleet-glass-filters" id="fleetFilterPills">
+              <button class="btn fleet-pill-btn active" onclick="filterFleetPage('Tutti')"><i class="ri-apps-2-line"></i> Tutti i Veicoli</button>
+              <button class="btn fleet-pill-btn" onclick="filterFleetPage('Supercar')"><i class="ri-roadster-fill"></i> Supercar</button>
+              <button class="btn fleet-pill-btn" onclick="filterFleetPage('Cabrio')"><i class="ri-sun-fill"></i> Cabrio</button>
+              <button class="btn fleet-pill-btn" onclick="filterFleetPage('SUV')"><i class="ri-shield-star-line"></i> SUV</button>
+              <button class="btn fleet-pill-btn" onclick="filterFleetPage('Sportiva')"><i class="ri-vip-crown-fill"></i> Prestige</button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+  </div>
 
-    <!-- Filter Pills -->
-    <div class="container" style="margin-top: 40px;">
-      <div class="filter-pills" id="fleetFilterPills">
-        <button class="btn btn-outline active" onclick="filterFleetPage('Tutti')">Tutti i Veicoli</button>
-        <button class="btn btn-outline" onclick="filterFleetPage('Supercar')">Supercar</button>
-        <button class="btn btn-outline" onclick="filterFleetPage('Cabrio')">Cabrio</button>
-        <button class="btn btn-outline" onclick="filterFleetPage('SUV')">SUV</button>
-        <button class="btn btn-outline" onclick="filterFleetPage('Sportiva')">Prestige</button>
-      </div>
-    </div>
+  <section class="fleet-page-content" style="position: relative; z-index: 5; padding-top: 20px;">
 
     <!-- Cars Grid -->
     <div class="container">
@@ -344,10 +346,10 @@
         <div class="footer-col">
           <h4 data-i18n="footer.col1Title">Categorie Flotta</h4>
           <div class="footer-links">
-            <a href="#flotta" onclick="filterFleet('Supercar', null)">Supercar & Hypercar</a>
-            <a href="#flotta" onclick="filterFleet('SUV', null)">SUV di Lusso</a>
-            <a href="#flotta" onclick="filterFleet('Sportiva', null)">Coupé & Cabriolet</a>
-            <a href="#flotta" onclick="filterFleet('Elettrica', null)">Flotta Elettrica</a>
+            <a href="javascript:void(0)" onclick="filterFleetPage('Supercar')">Supercar & Hypercar</a>
+            <a href="javascript:void(0)" onclick="filterFleetPage('SUV')">SUV di Lusso</a>
+            <a href="javascript:void(0)" onclick="filterFleetPage('Sportiva')">Coupé & Cabriolet</a>
+            <a href="javascript:void(0)" onclick="filterFleetPage('Elettrica')">Flotta Elettrica</a>
           </div>
         </div>
 
