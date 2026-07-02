@@ -345,6 +345,14 @@
 }
 
 @media (max-width: 768px) {
+  .car-detail-hero {
+    min-height: 40vh !important;
+    padding-top: 90px;
+    padding-bottom: 40px;
+  }
+  .car-detail-hero::before {
+    top: -5%; left: -5%; right: -5%; bottom: -5%;
+  }
   .presentation-image-container {
     height: 250px;
   }
