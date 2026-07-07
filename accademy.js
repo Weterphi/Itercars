@@ -123,7 +123,7 @@ function checkAuth() {
 
   if (params.get('submitted') === 'true') {
     setTimeout(() => {
-      showToast("✅ richiesta inviata correttamente");
+      showToast("✅ richiesta di accesso inviata con successo!");
     }, 500);
     if (window.history && window.history.replaceState) {
       window.history.replaceState({}, document.title, window.location.pathname);
@@ -136,12 +136,12 @@ function checkAuth() {
   const loginSection = document.getElementById('academyLoginSection');
   const dashboardSection = document.getElementById('academyDashboardSection');
   const presentationSection = document.getElementById('academyPresentationSection');
-  const requestAccessSection = document.getElementById('richiediAccessoSection');
+  const accessModal = document.getElementById('accessRequestModal');
 
   if (loggedUser) {
     if (loginSection) loginSection.style.display = 'none';
     if (presentationSection) presentationSection.style.display = 'none';
-    if (requestAccessSection) requestAccessSection.style.display = 'none';
+    if (accessModal) accessModal.classList.remove('active');
     if (dashboardSection) dashboardSection.style.display = 'block';
     
     const userSpan = document.getElementById('loggedUsername');
@@ -151,7 +151,7 @@ function checkAuth() {
   } else {
     if (loginSection) loginSection.style.display = 'block';
     if (presentationSection) presentationSection.style.display = 'block';
-    if (requestAccessSection) requestAccessSection.style.display = 'block';
+    if (accessModal) accessModal.classList.remove('active');
     if (dashboardSection) dashboardSection.style.display = 'none';
   }
 }
@@ -177,11 +177,11 @@ function loginAcademy(e) {
   const loginSection = document.getElementById('academyLoginSection');
   const dashboardSection = document.getElementById('academyDashboardSection');
   const presentationSection = document.getElementById('academyPresentationSection');
-  const requestAccessSection = document.getElementById('richiediAccessoSection');
+  const accessModal = document.getElementById('accessRequestModal');
   
   if (loginSection) loginSection.style.display = 'none';
   if (presentationSection) presentationSection.style.display = 'none';
-  if (requestAccessSection) requestAccessSection.style.display = 'none';
+  if (accessModal) accessModal.classList.remove('active');
   if (dashboardSection) {
     dashboardSection.style.display = 'block';
     dashboardSection.style.opacity = '0';
@@ -430,15 +430,29 @@ function showToast(message, isError = false) {
 }
 
 /* ==========================================================================
-   REQUEST ACCESS ON-PAGE FORM SUBMIT (CHIEDI ACCESSO)
+   REQUEST ACCESS MODAL & FORM SUBMIT (CHIEDI ACCESSO)
    ========================================================================== */
-function openAccessModal() {
-  const section = document.getElementById("richiediAccessoSection");
-  if (section) {
-    section.scrollIntoView({ behavior: "smooth" });
+function openAccessModal(event) {
+  if (event && event.preventDefault) event.preventDefault();
+  const modal = document.getElementById("accessRequestModal");
+  if (modal) {
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
   }
 }
 window.openAccessModal = openAccessModal;
+
+function closeAccessModal() {
+  const modal = document.getElementById("accessRequestModal");
+  if (modal) {
+    modal.classList.remove("active");
+    document.body.style.overflow = "auto";
+    setTimeout(() => {
+      resetRequestAccessFormView();
+    }, 300);
+  }
+}
+window.closeAccessModal = closeAccessModal;
 
 function handleAccessRequestSubmit(event) {
   const name = document.getElementById('accReqName') ? document.getElementById('accReqName').value.trim() : '';
@@ -459,7 +473,7 @@ function handleAccessRequestSubmit(event) {
   // L'invio POST nativo avviene in background dentro l'iframe invisibile (target="hiddenIframe")
   // Senza mai ricaricare la pagina o aprire siti esterni!
   setTimeout(() => {
-    showToast("✅ invio richiesta avvenuta con successo");
+    showToast("✅ richiesta di accesso inviata con successo!");
     const form = document.getElementById('requestAccessForm');
     const successBox = document.getElementById('requestAccessSuccessBox');
     if (form) {
