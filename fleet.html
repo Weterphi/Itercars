@@ -66,10 +66,12 @@
   </header>
 
   <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
-  <div class="hero-bg-wrapper">
-    <section class="hero" id="home" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; padding-bottom: 40px;">
-      <div class="hero-animated-bg" style="background-image: url('fleet-hero-bg.jpg');"></div>
-      <div class="hero-bg-overlay" style="background: linear-gradient(to bottom, rgba(10, 14, 23, 0) 0%, rgba(10, 14, 23, 0.15) 50%, rgba(10, 14, 23, 0.95) 100%); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+  <div class="hero-bg-wrapper" style="position: relative; overflow: hidden; background: #0a0e17 !important;">
+    <video autoplay muted="muted" loop playsinline class="hero-bg-video" id="fleetHeroVideo" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover;">
+      <source src="fleet-intro-video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-bg-overlay" style="background: linear-gradient(to bottom, rgba(10, 14, 23, 0.4) 0%, rgba(10, 14, 23, 0.7) 50%, rgba(10, 14, 23, 0.95) 100%); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+    <section class="hero" id="home" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; padding-bottom: 40px; background: transparent !important;">
       <div class="container hero-content" style="position: relative; z-index: 2; padding-top: 90px; width: 100%;">
         <div class="hero-text text-center" style="text-align: center; width: 100%;">
           <h1 class="fleet-hero-title">La Nostra Flotta</h1>

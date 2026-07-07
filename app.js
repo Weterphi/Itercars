@@ -2093,10 +2093,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Disattiva sempre l'audio dei video di background
-  const heroVid = document.getElementById('heroBgVideo') || document.querySelector('.hero-bg-video');
-  if (heroVid) {
-    heroVid.muted = true;
-    heroVid.volume = 0;
-  }
+  document.querySelectorAll('.hero-bg-video, video').forEach(vid => {
+    vid.muted = true;
+    vid.volume = 0;
+  });
 });
 
