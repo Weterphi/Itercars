@@ -459,7 +459,7 @@ function handleAccessRequestSubmit(event) {
   // L'invio POST nativo avviene in background dentro l'iframe invisibile (target="hiddenIframe")
   // Senza mai ricaricare la pagina o aprire siti esterni!
   setTimeout(() => {
-    showToast("✅ richiesta inviata con successo!");
+    showToast("✅ invio richiesta avvenuta con successo");
     const form = document.getElementById('requestAccessForm');
     const successBox = document.getElementById('requestAccessSuccessBox');
     if (form) {
@@ -469,7 +469,7 @@ function handleAccessRequestSubmit(event) {
     if (successBox) {
       successBox.style.display = 'block';
     }
-  }, 1000);
+  }, 500);
 
   return true;
 }
