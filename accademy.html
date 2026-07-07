@@ -11,7 +11,7 @@
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=41">
-  <link rel="stylesheet" href="accademy.css?v=5">
+  <link rel="stylesheet" href="accademy.css?v=6">
 </head>
 <body class="fleet-page">
 
@@ -230,8 +230,13 @@
 
             <!-- Lesson Details Card -->
             <div class="glass-card lesson-details-card">
-              <div class="lesson-header-row">
-                <h3 id="currentLessonTitle" class="font-heading">Lezione 1: Caricamento in corso...</h3>
+              <div class="lesson-header-row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+                  <h3 id="currentLessonTitle" class="font-heading" style="margin: 0; font-size: 1.5rem;">Lezione 1: Caricamento in corso...</h3>
+                  <a id="currentLessonPdfBtn" href="javascript:void(0)" onclick="downloadLessonPdf(event)" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.88rem; border-color: var(--accent-primary); color: #2ecc71; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; background: rgba(0, 146, 70, 0.1); box-shadow: 0 0 10px rgba(46,204,113,0.15);">
+                    <i class="ri-folder-zip-fill" style="font-size: 1.15rem; color: #2ecc71;"></i> <span>Cartella PDF</span>
+                  </a>
+                </div>
                 <div id="currentLessonStatusTag" class="lesson-status-tag tag-uncompleted">
                   <i class="ri-time-fill"></i> Da Superare
                 </div>
@@ -446,6 +451,6 @@
   </footer>
 
   <!-- JS -->
-  <script src="accademy.js?v=5"></script>
+  <script src="accademy.js?v=6"></script>
 </body>
 </html>

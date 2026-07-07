@@ -94,6 +94,8 @@ const courseLessons = [
 let unlockedLesson = 1;
 let currentLessonIndex = 0;
 let loggedUser = null;
+let maxWatchedTime = 0;
+let videoSecuritySetup = false;
 
 // Inizializzazione al caricamento del DOM
 document.addEventListener('DOMContentLoaded', () => {
@@ -228,6 +230,7 @@ function initCourse() {
   // Imposta la lezione corrente sull'ultima sbloccata (o la prima)
   currentLessonIndex = Math.min(unlockedLesson - 1, courseLessons.length - 1);
   
+  setupVideoSecurity();
   renderPlaylist();
   renderCurrentLesson();
   updateProgressBar();
@@ -283,6 +286,9 @@ function renderCurrentLesson() {
   const lesson = courseLessons[currentLessonIndex];
   if (!lesson) return;
 
+  maxWatchedTime = 0; // Resetta il tempo di visione per la nuova lezione selezionata
+  setupVideoSecurity();
+
   // Aggiorna video player
   const videoPlayer = document.getElementById('courseVideoPlayer');
   if (videoPlayer) {
@@ -323,11 +329,15 @@ function renderCurrentLesson() {
       completeBtn.style.background = 'rgba(255, 255, 255, 0.08)';
       completeBtn.style.border = '1px solid var(--border-glass)';
       completeBtn.style.boxShadow = 'none';
+      completeBtn.style.opacity = '1';
+      completeBtn.style.cursor = 'pointer';
     } else {
-      completeBtn.innerHTML = '<i class="ri-shield-check-fill"></i> Ho Superato Questa Lezione (Sblocca Successiva <i class="ri-arrow-right-line"></i>)';
-      completeBtn.style.background = 'var(--accent-gradient)';
-      completeBtn.style.border = 'none';
-      completeBtn.style.boxShadow = 'var(--glow-emerald)';
+      completeBtn.innerHTML = '<i class="ri-lock-2-fill"></i> Guarda il video fino alla conclusione per sbloccare la successiva';
+      completeBtn.style.background = 'rgba(0, 146, 70, 0.15)';
+      completeBtn.style.border = '1px solid rgba(0, 146, 70, 0.4)';
+      completeBtn.style.boxShadow = 'none';
+      completeBtn.style.opacity = '0.85';
+      completeBtn.style.cursor = 'not-allowed';
     }
   }
 
@@ -362,10 +372,17 @@ function selectLesson(index) {
 }
 
 // Completamento Lezione
-function completeLesson() {
+function completeLesson(autoCompleted = false) {
   const currentLessonNum = currentLessonIndex + 1;
 
   if (currentLessonNum === unlockedLesson) {
+    const videoPlayer = document.getElementById('courseVideoPlayer');
+    // Se l'utente clicca il pulsante manualmente prima della conclusione del video (meno del 98% visto)
+    if (!autoCompleted && videoPlayer && videoPlayer.duration > 0 && videoPlayer.currentTime < (videoPlayer.duration * 0.98)) {
+      showToast("⚠️ Sicurezza Academy: Devi guardare il video fino alla conclusione per sbloccare la lezione successiva!", true);
+      return;
+    }
+
     if (unlockedLesson < courseLessons.length) {
       unlockedLesson++;
       localStorage.setItem('itercars_academy_unlocked', unlockedLesson);
@@ -559,4 +576,66 @@ document.addEventListener("DOMContentLoaded", () => {
     v.volume = 0;
   });
 });
+
+/* ==========================================================================
+   SICUREZZA VIDEO & DOWNLOAD PDF MATERIALI
+   ========================================================================== */
+function setupVideoSecurity() {
+  const videoPlayer = document.getElementById('courseVideoPlayer');
+  if (!videoPlayer || videoSecuritySetup) return;
+  
+  videoSecuritySetup = true;
+
+  // Monitora il tempo massimo visualizzato e impedisci il seek in avanti se la lezione non è ancora superata
+  videoPlayer.addEventListener('timeupdate', () => {
+    const currentLessonNum = currentLessonIndex + 1;
+    if (currentLessonNum === unlockedLesson) {
+      if (!videoPlayer.seeking && videoPlayer.currentTime > maxWatchedTime) {
+        maxWatchedTime = videoPlayer.currentTime;
+      }
+    }
+  });
+
+  videoPlayer.addEventListener('seeking', () => {
+    const currentLessonNum = currentLessonIndex + 1;
+    // Se la lezione non è ancora stata superata, impedisci di mandare avanti oltre 2 secondi dal massimo visto
+    if (currentLessonNum === unlockedLesson) {
+      if (videoPlayer.currentTime > maxWatchedTime + 2) {
+        videoPlayer.currentTime = maxWatchedTime;
+        showToast("⚠️ Sicurezza Academy: Non puoi mandare avanti il video prima di averlo completato!", true);
+      }
+    }
+  });
+
+  // Al termine del video, sblocca automaticamente la lezione o abilita il completamento
+  videoPlayer.addEventListener('ended', () => {
+    const currentLessonNum = currentLessonIndex + 1;
+    if (currentLessonNum === unlockedLesson) {
+      showToast("🎉 Video concluso con successo! Sblocco della lezione in corso...");
+      const completeBtn = document.getElementById('completeLessonBtn');
+      if (completeBtn) {
+        completeBtn.innerHTML = '<i class="ri-shield-check-fill"></i> Video Concluso! Sblocca Successiva <i class="ri-arrow-right-line"></i>';
+        completeBtn.style.background = 'var(--accent-gradient)';
+        completeBtn.style.border = 'none';
+        completeBtn.style.boxShadow = 'var(--glow-emerald)';
+        completeBtn.style.opacity = '1';
+        completeBtn.style.cursor = 'pointer';
+      }
+      // Sblocca automaticamente
+      completeLesson(true);
+    }
+  });
+}
+window.setupVideoSecurity = setupVideoSecurity;
+
+function downloadLessonPdf(event) {
+  if (event && event.preventDefault) event.preventDefault();
+  const lesson = courseLessons[currentLessonIndex];
+  if (lesson && lesson.pdfUrl) {
+    window.open(lesson.pdfUrl, '_blank');
+  } else {
+    showToast(`📁 I file PDF e i documenti tecnici della Lezione ${lesson ? lesson.id : ''} saranno pronti per il download non appena caricati!`);
+  }
+}
+window.downloadLessonPdf = downloadLessonPdf;
 
