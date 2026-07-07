@@ -121,6 +121,15 @@ function checkAuth() {
     }
   }
 
+  if (params.get('submitted') === 'true') {
+    setTimeout(() => {
+      showToast("✅ richiesta inviata correttamente");
+    }, 500);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }
+
   loggedUser = localStorage.getItem('itercars_academy_user');
   unlockedLesson = parseInt(localStorage.getItem('itercars_academy_unlocked')) || 1;
 
@@ -434,6 +443,12 @@ window.openAccessModal = openAccessModal;
 async function handleAccessRequestSubmit(event) {
   event.preventDefault();
 
+  const redirectUrl = window.location.origin + window.location.pathname + "?submitted=true";
+  const nextInput = document.getElementById('formNextInput') || document.querySelector('input[name="_next"]');
+  if (nextInput) {
+    nextInput.value = redirectUrl;
+  }
+
   const name = document.getElementById('accReqName') ? document.getElementById('accReqName').value.trim() : '';
   const email = document.getElementById('accReqEmail') ? document.getElementById('accReqEmail').value.trim() : '';
   const phone = document.getElementById('accReqPhone') ? document.getElementById('accReqPhone').value.trim() : '';
@@ -453,6 +468,7 @@ async function handleAccessRequestSubmit(event) {
     _subject: `💎 Potenziale acquirente corso — ${name} (${age} anni)`,
     _template: "table",
     _captcha: "false",
+    _next: window.location.origin + window.location.pathname + "?submitted=true",
     "Tipo Candidatura": "Potenziale acquirente corso",
     "Nome e Cognome": name,
     "Email di Contatto": email,
