@@ -384,6 +384,7 @@ header.scrolled .navbar-logo-img {
   transform: translateX(-50%) translateY(-50%);
   z-index: 0;
   object-fit: cover;
+  filter: brightness(1.08) contrast(1.05);
 }
 
 .hero-bg-overlay {
@@ -392,8 +393,7 @@ header.scrolled .navbar-logo-img {
   left: 0;
   right: 0;
   bottom: 0;
-  /* Dark overlay to ensure white text is readable over bright smoke */
-  background: radial-gradient(circle at center, rgba(10, 14, 23, 0.4) 0%, rgba(10, 14, 23, 0.85) 100%);
+  background: radial-gradient(circle at center, rgba(10, 14, 23, 0.1) 0%, rgba(10, 14, 23, 0.45) 100%);
   z-index: 1;
 }
 
