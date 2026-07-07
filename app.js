@@ -855,11 +855,11 @@ let fleetData = [
   { id: 20, name: "Porsche Cayenne Coupé Turbo GT", category: "SUV Luxury", price: 0, rating: "5.0", specs: { speed: "300 KM/H", accel: "3.3s", hp: "640 CV" }, image: "porsche_cayenne.webp", badge: "V8 4.0L Biturbo" },
   { id: 21, name: "Porsche Macan GTS", category: "SUV Luxury", price: 0, rating: "4.8", specs: { speed: "272 KM/H", accel: "4.5s", hp: "440 CV" }, image: "porsche_macan.webp", badge: "V6 2.9L Biturbo" },
   // PRESTIGE (Sportiva)
+  { id: 26, name: "BMW M4 Competition", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "290 KM/H", accel: "3.5s", hp: "530 CV" }, image: "bmw_m4_competition.webp", badge: "L6 3.0L M TwinPower" },
   { id: 22, name: "Audi A5 Avant", category: "Sportiva", price: 0, rating: "4.8", specs: { speed: "250 KM/H", accel: "5.0s", hp: "367 CV" }, image: "audi_a5_avant.webp", badge: "V6 3.0L TFSI" },
   { id: 23, name: "Audi RS3", category: "Sportiva", price: 0, rating: "4.9", specs: { speed: "290 KM/H", accel: "3.8s", hp: "400 CV" }, image: "audi_rs3.webp", badge: "L5 2.5L TFSI" },
   { id: 24, name: "Audi RS5 Avant", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "250 KM/H", accel: "3.9s", hp: "450 CV" }, image: "audi_rs5_avant.webp", badge: "V6 2.9L TFSI" },
   { id: 25, name: "Audi RS6 Performance", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "305 KM/H", accel: "3.4s", hp: "630 CV" }, image: "audi_rs6_performance.webp", badge: "V8 4.0L TFSI" },
-  { id: 26, name: "BMW M4 Competition", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "290 KM/H", accel: "3.5s", hp: "530 CV" }, image: "bmw_m4_competition.webp", badge: "L6 3.0L M TwinPower" },
   { id: 27, name: "BMW M8 Competition Cabrio", category: "Sportiva", price: 0, rating: "4.9", specs: { speed: "305 KM/H", accel: "3.3s", hp: "625 CV" }, image: "bmw_m8_cabrio.webp", badge: "V8 4.4L M TwinPower" },
   { id: 28, name: "Porsche 718 Spyder", category: "Sportiva", price: 0, rating: "4.9", specs: { speed: "301 KM/H", accel: "4.4s", hp: "420 CV" }, image: "porsche_718_spyder.webp", badge: "Boxer 4.0L NA" },
   // CABRIO

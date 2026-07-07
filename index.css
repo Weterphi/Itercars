@@ -1333,6 +1333,9 @@ footer {
   .footer-grid {
     grid-template-columns: 1fr;
   }
+  .footer-logo-img {
+    height: 38px;
+  }
 }
 
 /* ==========================================================================
@@ -1580,7 +1583,7 @@ footer {
     width: 110px;
   }
   .footer-logo-img {
-    height: 80px;
+    height: 45px;
   }
 
   .mobile-menu-btn {
