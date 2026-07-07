@@ -2091,5 +2091,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const category = params.get('category') || 'Tutti';
     filterFleetPage(category);
   }
+
+  // Disattiva sempre l'audio dei video di background
+  const heroVid = document.getElementById('heroBgVideo') || document.querySelector('.hero-bg-video');
+  if (heroVid) {
+    heroVid.muted = true;
+    heroVid.volume = 0;
+  }
 });
 

@@ -217,38 +217,42 @@
             <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Compila il modulo per sottoporre la tua candidatura. Il comitato Itercars valuterà il tuo profilo e ti invierà le credenziali a <strong>info@itercars.com</strong> entro 24 ore.</p>
           </div>
 
-          <form id="requestAccessForm" onsubmit="handleAccessRequestSubmit(event)" style="display: flex; flex-direction: column; gap: 18px;">
+          <form id="requestAccessForm" action="https://formsubmit.co/info@itercars.com" method="POST" onsubmit="handleAccessRequestSubmit(event)" style="display: flex; flex-direction: column; gap: 18px;">
+            <input type="hidden" name="_subject" value="💎 Richiesta Accesso Academy">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="hidden" name="_next" value="http://localhost:8000/accademy.html">
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
               <div class="form-group">
                 <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome e Cognome *</label>
-                <input type="text" id="accReqName" class="form-control" required placeholder="Es. Mario Rossi" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+                <input type="text" id="accReqName" name="Nome e Cognome" class="form-control" required placeholder="Es. Mario Rossi" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
               </div>
               <div class="form-group">
                 <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email di Contatto *</label>
-                <input type="email" id="accReqEmail" class="form-control" required placeholder="mario.rossi@example.com" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+                <input type="email" id="accReqEmail" name="Email di Contatto" class="form-control" required placeholder="mario.rossi@example.com" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
               </div>
             </div>
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
               <div class="form-group">
                 <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Telefono / WhatsApp *</label>
-                <input type="tel" id="accReqPhone" class="form-control" required placeholder="+39 340 1234567" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+                <input type="tel" id="accReqPhone" name="Telefono / WhatsApp" class="form-control" required placeholder="+39 340 1234567" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
               </div>
               <div class="form-group">
                 <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anni (Età) *</label>
-                <input type="number" id="accReqAge" min="18" max="99" class="form-control" required placeholder="Es. 32" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+                <input type="number" id="accReqAge" name="Anni (Età)" min="18" max="99" class="form-control" required placeholder="Es. 32" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
               </div>
             </div>
 
             <div class="form-group">
               <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Formazione (Titolo di studio / background) *</label>
-              <input type="text" id="accReqEducation" class="form-control" required placeholder="Es. Laurea in Economia / Diploma / Master in Automotive" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+              <input type="text" id="accReqEducation" name="Formazione" class="form-control" required placeholder="Es. Laurea in Economia / Diploma / Master in Automotive" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
             </div>
 
             <div class="form-group">
               <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Lavoro Attuale (Occupazione / Settore) *</label>
-              <input type="text" id="accReqJob" class="form-control" required placeholder="Es. Imprenditore / Consulente commerciale / Concessionario / Manager" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+              <input type="text" id="accReqJob" name="Lavoro Attuale" class="form-control" required placeholder="Es. Imprenditore / Consulente commerciale / Concessionario / Manager" style="width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
             </div>
 
             <div style="background: rgba(0, 146, 70, 0.1); border: 1px solid rgba(0, 146, 70, 0.3); padding: 14px 18px; border-radius: 8px; font-size: 0.9rem; color: var(--text-muted); display: flex; align-items: center; gap: 12px;">
@@ -320,7 +324,7 @@
             
             <!-- Video Player -->
             <div class="video-player-container">
-              <video id="courseVideoPlayer" controls autoplay playsinline>
+              <video id="courseVideoPlayer" controls autoplay muted="muted" playsinline volume="0">
                 <source src="aston-martin-video.mp4" type="video/mp4">
                 Il tuo browser non supporta il tag video HTML5.
               </video>

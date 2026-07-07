@@ -254,6 +254,8 @@ function renderCurrentLesson() {
   // Aggiorna video player
   const videoPlayer = document.getElementById('courseVideoPlayer');
   if (videoPlayer) {
+    videoPlayer.muted = true;
+    videoPlayer.volume = 0;
     const currentSrc = videoPlayer.getAttribute('src');
     if (currentSrc !== lesson.video) {
       videoPlayer.src = lesson.video;
@@ -473,16 +475,35 @@ async function handleAccessRequestSubmit(event) {
       throw new Error(result.message || "Errore invio");
     }
   } catch (err) {
-    console.warn("Chiamata AJAX offline o bloccata, fallback elegante su mailto:", err);
-    showToast("✨ Candidatura pronta! Apertura client email per info@itercars.com...");
-    const subjectText = encodeURIComponent(`Richiesta Accesso Academy — ${name} (${age} anni)`);
-    const bodyText = encodeURIComponent(
-      `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
-    );
-    setTimeout(() => {
-      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
-    }, 1000);
+    console.warn("Chiamata AJAX FormSubmit fallita o form in attesa di prima attivazione, invio diretto al server FormSubmit:", err);
+    showToast("⏳ Invio diretto al server sicuro FormSubmit in corso...");
+    
+    const form = event.target || document.getElementById('requestAccessForm');
+    if (form && typeof form.submit === 'function') {
+      form.action = `https://formsubmit.co/${recipient}`;
+      form.method = "POST";
+      setTimeout(() => {
+        form.submit();
+      }, 500);
+    } else {
+      showToast("✨ Candidatura pronta! Apertura client email per info@itercars.com...");
+      const subjectText = encodeURIComponent(`Richiesta Accesso Academy — ${name} (${age} anni)`);
+      const bodyText = encodeURIComponent(
+        `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
+      );
+      setTimeout(() => {
+        window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
+      }, 1000);
+    }
   }
 }
 window.handleAccessRequestSubmit = handleAccessRequestSubmit;
+
+// Disattiva sempre l'audio di eventuali video all'avvio
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll("video").forEach(v => {
+    v.muted = true;
+    v.volume = 0;
+  });
+});
 
