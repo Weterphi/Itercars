@@ -118,6 +118,14 @@ document.addEventListener('DOMContentLoaded', () => {
       openAccessModal(e);
     });
   });
+
+  // Listener di sicurezza per tutti i pulsanti "Accedi all'Academy"
+  document.querySelectorAll('a[onclick*="openLoginModal"], button[onclick*="openLoginModal"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openLoginModal(e);
+    });
+  });
 });
 
 // Controlla se l'utente è loggato
@@ -141,15 +149,15 @@ function checkAuth() {
   loggedUser = localStorage.getItem('itercars_academy_user');
   unlockedLesson = parseInt(localStorage.getItem('itercars_academy_unlocked')) || 1;
 
-  const loginSection = document.getElementById('academyLoginSection');
+  const loginModal = document.getElementById('academyLoginModal');
   const dashboardSection = document.getElementById('academyDashboardSection');
   const presentationSection = document.getElementById('academyPresentationSection');
   const accessModal = document.getElementById('accessRequestModal');
 
   if (loggedUser) {
-    if (loginSection) loginSection.style.display = 'none';
+    if (loginModal) closeLoginModal();
     if (presentationSection) presentationSection.style.display = 'none';
-    if (accessModal) accessModal.classList.remove('active');
+    if (accessModal) closeAccessModal();
     if (dashboardSection) dashboardSection.style.display = 'block';
     
     const userSpan = document.getElementById('loggedUsername');
@@ -157,9 +165,9 @@ function checkAuth() {
 
     initCourse();
   } else {
-    if (loginSection) loginSection.style.display = 'block';
     if (presentationSection) presentationSection.style.display = 'block';
-    if (accessModal) accessModal.classList.remove('active');
+    if (loginModal) closeLoginModal();
+    if (accessModal) closeAccessModal();
     if (dashboardSection) dashboardSection.style.display = 'none';
   }
 }
@@ -182,14 +190,14 @@ function loginAcademy(e) {
   showToast(`✨ Benvenuto nell'Area Privata Academy, ${loggedUser}!`);
   
   // Transizione animata
-  const loginSection = document.getElementById('academyLoginSection');
+  const loginModal = document.getElementById('academyLoginModal');
   const dashboardSection = document.getElementById('academyDashboardSection');
   const presentationSection = document.getElementById('academyPresentationSection');
   const accessModal = document.getElementById('accessRequestModal');
   
-  if (loginSection) loginSection.style.display = 'none';
+  if (loginModal) closeLoginModal();
   if (presentationSection) presentationSection.style.display = 'none';
-  if (accessModal) accessModal.classList.remove('active');
+  if (accessModal) closeAccessModal();
   if (dashboardSection) {
     dashboardSection.style.display = 'block';
     dashboardSection.style.opacity = '0';
@@ -438,8 +446,35 @@ function showToast(message, isError = false) {
 }
 
 /* ==========================================================================
-   REQUEST ACCESS MODAL & FORM SUBMIT (CHIEDI ACCESSO)
+   LOGIN MODAL & ACCESS REQUEST MODALS
    ========================================================================== */
+function openLoginModal(event) {
+  if (event && event.preventDefault) event.preventDefault();
+  const modal = document.getElementById("academyLoginModal");
+  if (modal) {
+    modal.classList.add("active");
+    modal.style.display = "flex";
+    modal.style.opacity = "1";
+    modal.style.visibility = "visible";
+    modal.style.zIndex = "999999";
+    document.body.style.overflow = "hidden";
+  } else {
+    console.error("Errore: Finestra modale 'academyLoginModal' non trovata nel DOM.");
+  }
+}
+window.openLoginModal = openLoginModal;
+
+function closeLoginModal() {
+  const modal = document.getElementById("academyLoginModal");
+  if (modal) {
+    modal.classList.remove("active");
+    modal.style.opacity = "0";
+    modal.style.visibility = "hidden";
+    document.body.style.overflow = "auto";
+  }
+}
+window.closeLoginModal = closeLoginModal;
+
 function openAccessModal(event) {
   if (event && event.preventDefault) event.preventDefault();
   const modal = document.getElementById("accessRequestModal");

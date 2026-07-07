@@ -11,7 +11,7 @@
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=41">
-  <link rel="stylesheet" href="accademy.css?v=4">
+  <link rel="stylesheet" href="accademy.css?v=5">
 </head>
 <body class="fleet-page">
 
@@ -35,7 +35,7 @@
         <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
           <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
         </a>
-        <button class="btn btn-primary nav-area-btn" onclick="window.location.href='accademy.html'" title="Area Riservata VIP">
+        <button class="btn btn-primary nav-area-btn" onclick="if(localStorage.getItem('itercars_academy_user')){ window.location.hash='#dashboard'; location.reload(); } else { openLoginModal(event); }" title="Area Riservata VIP">
           <i class="ri-user-star-fill" style="font-size: 1.15rem;"></i> <span>Area VIP</span>
         </button>
       </div>
@@ -59,7 +59,7 @@
             Il settore del noleggio auto di lusso e servizi di lifestyle per clientela High-Net-Worth sta vivendo una crescita senza precedenti. Con il percorso formativo <strong>Itercars Academy</strong> avrai accesso ai protocolli operativi, alle strategie di intermediazione e alla telemetria proprietaria per generare fatturati elevati senza immobilizzare capitale proprio.
           </p>
           <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <a href="#academyLoginSection" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.1rem; box-shadow: var(--glow-emerald);">
+            <a href="javascript:void(0)" onclick="openLoginModal(event)" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.1rem; box-shadow: var(--glow-emerald); text-decoration: none;">
               <i class="ri-lock-unlock-fill"></i> <span>Accedi all'Academy</span>
             </a>
             <a href="javascript:void(0)" onclick="openAccessModal(event)" class="btn btn-outline" style="padding: 16px 36px; font-size: 1.1rem; border-color: var(--accent-primary); color: #2ecc71; text-decoration: none;">
@@ -163,51 +163,6 @@
         <div style="height: 1px; background: var(--border-glass); margin: 60px 0;"></div>
       </section>
 
-      <!-- ================= 1. LOGIN SECTION (SOLO LOGIN) ================= -->
-      <section id="academyLoginSection">
-        <div class="glass-card academy-login-container">
-          <div class="academy-login-header">
-            <i class="ri-shield-user-fill text-gradient"></i>
-            <h2 class="font-heading">Accesso Privilegiato <span class="text-gradient">Academy</span></h2>
-            <p>Inserisci le tue credenziali riservate per accedere all'area di formazione esclusiva per Partner e Fleet Manager.</p>
-          </div>
-
-          <form id="academyLoginForm">
-            <div class="login-form-group">
-              <label for="academyUsername">Nome Utente / ID Partner</label>
-              <div class="login-input-wrapper">
-                <i class="ri-user-star-line"></i>
-                <input type="text" id="academyUsername" placeholder="Es. admin / itercars_vip" required autocomplete="username">
-              </div>
-            </div>
-
-            <div class="login-form-group">
-              <label for="academyPassword">Password Riservata</label>
-              <div class="login-input-wrapper">
-                <i class="ri-lock-2-line"></i>
-                <input type="password" id="academyPassword" placeholder="••••••••••••" required autocomplete="current-password">
-              </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px; font-size: 1.05rem; padding: 16px;">
-              <i class="ri-login-circle-fill"></i> Accedi al Corso VIP (12 Lezioni)
-            </button>
-          </form>
-
-          <div class="login-notice">
-            <i class="ri-information-fill" style="font-size: 1.4rem; color: var(--accent-primary);"></i>
-            <span><strong>Nota di Sicurezza:</strong> L'accesso è strettamente riservato ai membri autorizzati. Non è disponibile un modulo di registrazione pubblica.</span>
-          </div>
-
-          <div style="text-align: center; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-glass);">
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 14px;">Non hai ancora le credenziali per la Masterclass VIP?</p>
-            <a href="javascript:void(0)" onclick="openAccessModal(event)" class="btn btn-outline" style="width: 100%; border-color: var(--accent-primary); color: #2ecc71; padding: 14px; display: inline-block; text-align: center; text-decoration: none;">
-              <i class="ri-user-add-fill"></i> <span>Chiedi Accesso (Invia Candidatura a info@itercars.com)</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
 
 
 
@@ -305,6 +260,53 @@
 
     </div>
   </main>
+
+  <!-- ================= LOGIN MODAL (ACCEDI ALL'ACADEMY) ================= -->
+  <div class="modal-overlay" id="academyLoginModal" onclick="if(event.target === this) closeLoginModal();" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
+    <div class="glass-card modal-content academy-login-container" style="max-width: 540px; padding: 40px; box-shadow: var(--shadow-lg), var(--glow-emerald); border: 1px solid rgba(0, 146, 70, 0.4); text-align: left; max-height: 90vh; overflow-y: auto; margin: 0;">
+      <button type="button" onclick="closeLoginModal()" class="close-modal"><i class="ri-close-line"></i></button>
+      
+      <div class="academy-login-header" style="text-align: center; margin-bottom: 24px;">
+        <i class="ri-shield-user-fill text-gradient" style="font-size: 3rem; display: block; margin-bottom: 10px;"></i>
+        <h2 class="font-heading" style="font-size: 2rem; margin-bottom: 8px;">Accesso Privilegiato <span class="text-gradient">Academy</span></h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">Inserisci le tue credenziali riservate per accedere all'area di formazione esclusiva per Partner e Fleet Manager.</p>
+      </div>
+
+      <form id="academyLoginForm">
+        <div class="login-form-group" style="margin-bottom: 18px;">
+          <label for="academyUsername" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome Utente / ID Partner</label>
+          <div class="login-input-wrapper" style="position: relative; display: flex; align-items: center;">
+            <i class="ri-user-star-line" style="position: absolute; left: 16px; color: #2ecc71; font-size: 1.2rem;"></i>
+            <input type="text" id="academyUsername" placeholder="Es. admin / itercars_vip" required autocomplete="username" style="width: 100%; padding: 14px 16px 14px 46px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+          </div>
+        </div>
+
+        <div class="login-form-group" style="margin-bottom: 24px;">
+          <label for="academyPassword" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password Riservata</label>
+          <div class="login-input-wrapper" style="position: relative; display: flex; align-items: center;">
+            <i class="ri-lock-2-line" style="position: absolute; left: 16px; color: #2ecc71; font-size: 1.2rem;"></i>
+            <input type="password" id="academyPassword" placeholder="••••••••••••" required autocomplete="current-password" style="width: 100%; padding: 14px 16px 14px 46px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 6px; font-size: 1.1rem; padding: 16px; box-shadow: var(--glow-emerald);">
+          <i class="ri-login-circle-fill"></i> <span>Accedi al Corso VIP (12 Lezioni)</span>
+        </button>
+      </form>
+
+      <div class="login-notice" style="margin-top: 22px; background: rgba(0, 146, 70, 0.1); border: 1px solid rgba(0, 146, 70, 0.3); padding: 12px 16px; border-radius: 8px; font-size: 0.88rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
+        <i class="ri-information-fill" style="font-size: 1.4rem; color: #2ecc71;"></i>
+        <span><strong>Nota di Sicurezza:</strong> L'accesso è strettamente riservato ai membri autorizzati.</span>
+      </div>
+
+      <div style="text-align: center; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border-glass);">
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;">Non hai ancora le credenziali per la Masterclass VIP?</p>
+        <a href="javascript:void(0)" onclick="closeLoginModal(); openAccessModal(event);" class="btn btn-outline" style="width: 100%; border-color: var(--accent-primary); color: #2ecc71; padding: 14px; display: inline-block; text-align: center; text-decoration: none;">
+          <i class="ri-user-add-fill"></i> <span>Chiedi Accesso (Invia Candidatura a info@itercars.com)</span>
+        </a>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= ACCESS REQUEST MODAL (CHIEDI ACCESSO) ================= -->
   <div class="modal-overlay" id="accessRequestModal" onclick="if(event.target === this) closeAccessModal();" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
@@ -444,6 +446,6 @@
   </footer>
 
   <!-- JS -->
-  <script src="accademy.js?v=4"></script>
+  <script src="accademy.js?v=5"></script>
 </body>
 </html>
