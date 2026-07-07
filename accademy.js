@@ -110,6 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (completeBtn) {
     completeBtn.addEventListener('click', completeLesson);
   }
+
+  // Listener di sicurezza per tutti i pulsanti "Chiedi Accesso"
+  document.querySelectorAll('a[onclick*="openAccessModal"], button[onclick*="openAccessModal"]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openAccessModal(e);
+    });
+  });
 });
 
 // Controlla se l'utente è loggato
@@ -437,6 +445,10 @@ function openAccessModal(event) {
   const modal = document.getElementById("accessRequestModal");
   if (modal) {
     modal.classList.add("active");
+    modal.style.display = "flex";
+    modal.style.opacity = "1";
+    modal.style.visibility = "visible";
+    modal.style.zIndex = "999999";
     document.body.style.overflow = "hidden";
   } else {
     console.error("Errore: Finestra modale 'accessRequestModal' non trovata nel DOM.");
@@ -448,6 +460,8 @@ function closeAccessModal() {
   const modal = document.getElementById("accessRequestModal");
   if (modal) {
     modal.classList.remove("active");
+    modal.style.opacity = "0";
+    modal.style.visibility = "hidden";
     document.body.style.overflow = "auto";
     setTimeout(() => {
       resetRequestAccessFormView();
