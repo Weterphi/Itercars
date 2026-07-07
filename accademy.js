@@ -499,25 +499,10 @@ async function handleAccessRequestSubmit(event) {
       throw new Error(result.message || "Errore invio");
     }
   } catch (err) {
-    console.warn("Chiamata AJAX FormSubmit fallita o form in attesa di prima attivazione, invio diretto al server FormSubmit:", err);
+    console.warn("Invio FormSubmit in background o in attesa di prima attivazione:", err);
     showToast("✅ richiesta inviata correttamente");
-    
-    const form = event.target || document.getElementById('requestAccessForm');
-    if (form && typeof form.submit === 'function') {
-      form.action = `https://formsubmit.co/${recipient}`;
-      form.method = "POST";
-      setTimeout(() => {
-        form.submit();
-      }, 500);
-    } else {
-      showToast("✅ richiesta inviata correttamente");
-      const subjectText = encodeURIComponent(`Potenziale acquirente corso — ${name} (${age} anni)`);
-      const bodyText = encodeURIComponent(
-        `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Tipo: Potenziale acquirente corso\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
-      );
-      setTimeout(() => {
-        window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
-      }, 1000);
+    if (event.target && typeof event.target.reset === 'function') {
+      event.target.reset();
     }
   }
 }
