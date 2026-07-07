@@ -209,7 +209,7 @@ function loginAcademy(e) {
 function logoutAcademy() {
   localStorage.removeItem('itercars_academy_user');
   loggedUser = null;
-  showToast('🔒 Hai effettuato il logout dall'Area Privata.');
+  showToast("🔒 Hai effettuato il logout dall'Area Privata.");
   checkAuth();
 }
 
