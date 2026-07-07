@@ -405,3 +405,91 @@ function showToast(message, isError = false) {
     toast.classList.remove('show');
   }, 4000);
 }
+
+/* ==========================================================================
+   REQUEST ACCESS MODAL & FORM SUBMIT (CHIEDI ACCESSO)
+   ========================================================================== */
+function openAccessModal() {
+  const modal = document.getElementById("requestAccessModal");
+  if (modal) {
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+}
+window.openAccessModal = openAccessModal;
+
+function closeAccessModal() {
+  const modal = document.getElementById("requestAccessModal");
+  if (modal) {
+    modal.classList.remove("active");
+    document.body.style.overflow = "auto";
+  }
+}
+window.closeAccessModal = closeAccessModal;
+
+async function handleAccessRequestSubmit(event) {
+  event.preventDefault();
+
+  const name = document.getElementById('accReqName') ? document.getElementById('accReqName').value.trim() : '';
+  const email = document.getElementById('accReqEmail') ? document.getElementById('accReqEmail').value.trim() : '';
+  const phone = document.getElementById('accReqPhone') ? document.getElementById('accReqPhone').value.trim() : '';
+  const age = document.getElementById('accReqAge') ? document.getElementById('accReqAge').value.trim() : '';
+  const education = document.getElementById('accReqEducation') ? document.getElementById('accReqEducation').value.trim() : '';
+  const job = document.getElementById('accReqJob') ? document.getElementById('accReqJob').value.trim() : '';
+
+  if (!name || !email || !phone || !age || !education || !job) {
+    showToast("⚠️ Per favore compila tutti i campi obbligatori!", true);
+    return;
+  }
+
+  const recipient = "info@itercars.com";
+  showToast("⏳ Invio richiesta di accesso VIP a info@itercars.com in corso...");
+
+  const payload = {
+    _subject: `💎 Richiesta Accesso Academy — ${name} (${age} anni)`,
+    _template: "table",
+    _captcha: "false",
+    "Nome e Cognome": name,
+    "Email di Contatto": email,
+    "Telefono / WhatsApp": phone,
+    "Anni (Età)": age,
+    "Formazione": education,
+    "Lavoro Attuale": job
+  };
+
+  try {
+    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (response.ok || result.success === "true") {
+      showToast("✨ Richiesta inviata con successo! Riceverai le credenziali da info@itercars.com.");
+      closeAccessModal();
+      if (event.target && typeof event.target.reset === 'function') {
+        event.target.reset();
+      }
+    } else {
+      throw new Error(result.message || "Errore invio");
+    }
+  } catch (err) {
+    console.warn("Chiamata AJAX offline o bloccata, fallback elegante su mailto:", err);
+    showToast("✨ Richiesta pronta! Apertura client email per info@itercars.com...");
+    const subjectText = encodeURIComponent(`Richiesta Accesso Academy — ${name} (${age} anni)`);
+    const bodyText = encodeURIComponent(
+      `Gentile Team Itercars,\n\nRichiesta di ammissione a Itercars Academy:\n\n• Nome e Cognome: ${name}\n• Email: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
+    );
+    setTimeout(() => {
+      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
+      closeAccessModal();
+    }, 1000);
+  }
+}
+window.handleAccessRequestSubmit = handleAccessRequestSubmit;
+
