@@ -435,7 +435,7 @@ async function handleAccessRequestSubmit(event) {
   const job = document.getElementById('accReqJob') ? document.getElementById('accReqJob').value.trim() : '';
 
   if (!name || !email || !phone || !age || !education || !job) {
-    showToast("⚠️ Per favore compila tutti i campi obbligatori!", true);
+    showToast("⚠️ Attenzione: Tutti i campi del modulo sono obbligatori! Non è possibile saltare alcuna voce.", true);
     return;
   }
 
@@ -443,9 +443,10 @@ async function handleAccessRequestSubmit(event) {
   showToast("⏳ Invio candidatura di accesso VIP a info@itercars.com in corso...");
 
   const payload = {
-    _subject: `💎 Richiesta Accesso Academy — ${name} (${age} anni)`,
+    _subject: `💎 Potenziale acquirente corso — ${name} (${age} anni)`,
     _template: "table",
     _captcha: "false",
+    "Tipo Candidatura": "Potenziale acquirente corso",
     "Nome e Cognome": name,
     "Email di Contatto": email,
     "Telefono / WhatsApp": phone,
@@ -487,9 +488,9 @@ async function handleAccessRequestSubmit(event) {
       }, 500);
     } else {
       showToast("✨ Candidatura pronta! Apertura client email per info@itercars.com...");
-      const subjectText = encodeURIComponent(`Richiesta Accesso Academy — ${name} (${age} anni)`);
+      const subjectText = encodeURIComponent(`Potenziale acquirente corso — ${name} (${age} anni)`);
       const bodyText = encodeURIComponent(
-        `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
+        `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Tipo: Potenziale acquirente corso\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
       );
       setTimeout(() => {
         window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;

@@ -214,11 +214,12 @@
           <div style="margin-bottom: 28px; text-align: center;">
             <span class="course-badge" style="margin-bottom: 12px; display: inline-block;">Candidatura Masterclass</span>
             <h3 style="font-size: 2.2rem; margin-bottom: 10px;"><i class="ri-shield-star-fill text-gradient"></i> Richiedi Accesso VIP all'Academy</h3>
-            <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Compila il modulo per sottoporre la tua candidatura. Il comitato Itercars valuterà il tuo profilo e ti invierà le credenziali a <strong>info@itercars.com</strong> entro 24 ore.</p>
+            <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Compila il modulo per sottoporre la tua candidatura. <strong style="color: #2ecc71;">Tutti i campi sono strettamente obbligatori e non è possibile saltare alcuna voce.</strong> Il comitato Itercars valuterà il tuo profilo e ti invierà le credenziali a <strong>info@itercars.com</strong> entro 24 ore.</p>
           </div>
 
           <form id="requestAccessForm" action="https://formsubmit.co/info@itercars.com" method="POST" onsubmit="handleAccessRequestSubmit(event)" style="display: flex; flex-direction: column; gap: 18px;">
-            <input type="hidden" name="_subject" value="💎 Richiesta Accesso Academy">
+            <input type="hidden" name="_subject" value="💎 Potenziale acquirente corso — Richiesta Accesso Academy">
+            <input type="hidden" name="Tipo Candidatura" value="Potenziale acquirente corso">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_next" value="http://localhost:8000/accademy.html">
