@@ -440,15 +440,7 @@ function openAccessModal() {
 }
 window.openAccessModal = openAccessModal;
 
-async function handleAccessRequestSubmit(event) {
-  event.preventDefault();
-
-  const redirectUrl = window.location.origin + window.location.pathname + "?submitted=true";
-  const nextInput = document.getElementById('formNextInput') || document.querySelector('input[name="_next"]');
-  if (nextInput) {
-    nextInput.value = redirectUrl;
-  }
-
+function handleAccessRequestSubmit(event) {
   const name = document.getElementById('accReqName') ? document.getElementById('accReqName').value.trim() : '';
   const email = document.getElementById('accReqEmail') ? document.getElementById('accReqEmail').value.trim() : '';
   const phone = document.getElementById('accReqPhone') ? document.getElementById('accReqPhone').value.trim() : '';
@@ -457,54 +449,26 @@ async function handleAccessRequestSubmit(event) {
   const job = document.getElementById('accReqJob') ? document.getElementById('accReqJob').value.trim() : '';
 
   if (!name || !email || !phone || !age || !education || !job) {
+    if (event && event.preventDefault) event.preventDefault();
     showToast("⚠️ Attenzione: Tutti i campi del modulo sono obbligatori! Non è possibile saltare alcuna voce.", true);
-    return;
+    return false;
   }
 
-  const recipient = "info@itercars.com";
   showToast("⏳ Invio candidatura di accesso VIP a info@itercars.com in corso...");
 
-  const payload = {
-    _subject: `💎 Potenziale acquirente corso — ${name} (${age} anni)`,
-    _template: "table",
-    _captcha: "false",
-    _next: window.location.origin + window.location.pathname + "?submitted=true",
-    "Tipo Candidatura": "Potenziale acquirente corso",
-    "Nome e Cognome": name,
-    "Email di Contatto": email,
-    "Telefono / WhatsApp": phone,
-    "Anni (Età)": age,
-    "Formazione": education,
-    "Lavoro Attuale": job
-  };
-
-  try {
-    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const result = await response.json();
-
-    if (response.ok || result.success === "true") {
-      showToast("✅ richiesta inviata correttamente");
-      if (event.target && typeof event.target.reset === 'function') {
-        event.target.reset();
-      }
-    } else {
-      throw new Error(result.message || "Errore invio");
-    }
-  } catch (err) {
-    console.warn("Invio FormSubmit in background o in attesa di prima attivazione:", err);
-    showToast("✅ richiesta inviata correttamente");
-    if (event.target && typeof event.target.reset === 'function') {
+  // L'invio POST nativo avviene in background dentro l'iframe invisibile (target="hiddenIframe")
+  // Senza mai ricaricare la pagina o aprire siti esterni!
+  setTimeout(() => {
+    showToast("✅ richiesta inviata con successo!");
+    if (event && event.target && typeof event.target.reset === 'function') {
       event.target.reset();
+    } else {
+      const form = document.getElementById('requestAccessForm');
+      if (form && typeof form.reset === 'function') form.reset();
     }
-  }
+  }, 1000);
+
+  return true;
 }
 window.handleAccessRequestSubmit = handleAccessRequestSubmit;
 

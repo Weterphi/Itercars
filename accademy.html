@@ -217,7 +217,8 @@
             <p style="color: var(--text-muted); font-size: 1rem; line-height: 1.6;">Compila il modulo per sottoporre la tua candidatura. <strong style="color: #2ecc71;">Tutti i campi sono strettamente obbligatori e non è possibile saltare alcuna voce.</strong> Il comitato Itercars valuterà il tuo profilo e ti invierà le credenziali a <strong>info@itercars.com</strong> entro 24 ore.</p>
           </div>
 
-          <form id="requestAccessForm" onsubmit="handleAccessRequestSubmit(event); return false;" style="display: flex; flex-direction: column; gap: 18px;">
+          <iframe name="hiddenIframe" id="hiddenIframe" style="display:none;"></iframe>
+          <form id="requestAccessForm" action="https://formsubmit.co/info@itercars.com" method="POST" target="hiddenIframe" onsubmit="return handleAccessRequestSubmit(event);" style="display: flex; flex-direction: column; gap: 18px;">
             <input type="hidden" name="_subject" value="💎 Potenziale acquirente corso — Richiesta Accesso Academy">
             <input type="hidden" name="Tipo Candidatura" value="Potenziale acquirente corso">
             <input type="hidden" name="_template" value="table">
