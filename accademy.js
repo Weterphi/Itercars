@@ -120,10 +120,12 @@ function checkAuth() {
   const loginSection = document.getElementById('academyLoginSection');
   const dashboardSection = document.getElementById('academyDashboardSection');
   const presentationSection = document.getElementById('academyPresentationSection');
+  const requestAccessSection = document.getElementById('richiediAccessoSection');
 
   if (loggedUser) {
     if (loginSection) loginSection.style.display = 'none';
     if (presentationSection) presentationSection.style.display = 'none';
+    if (requestAccessSection) requestAccessSection.style.display = 'none';
     if (dashboardSection) dashboardSection.style.display = 'block';
     
     const userSpan = document.getElementById('loggedUsername');
@@ -133,6 +135,7 @@ function checkAuth() {
   } else {
     if (loginSection) loginSection.style.display = 'block';
     if (presentationSection) presentationSection.style.display = 'block';
+    if (requestAccessSection) requestAccessSection.style.display = 'block';
     if (dashboardSection) dashboardSection.style.display = 'none';
   }
 }
@@ -158,9 +161,11 @@ function loginAcademy(e) {
   const loginSection = document.getElementById('academyLoginSection');
   const dashboardSection = document.getElementById('academyDashboardSection');
   const presentationSection = document.getElementById('academyPresentationSection');
+  const requestAccessSection = document.getElementById('richiediAccessoSection');
   
   if (loginSection) loginSection.style.display = 'none';
   if (presentationSection) presentationSection.style.display = 'none';
+  if (requestAccessSection) requestAccessSection.style.display = 'none';
   if (dashboardSection) {
     dashboardSection.style.display = 'block';
     dashboardSection.style.opacity = '0';
@@ -407,25 +412,15 @@ function showToast(message, isError = false) {
 }
 
 /* ==========================================================================
-   REQUEST ACCESS MODAL & FORM SUBMIT (CHIEDI ACCESSO)
+   REQUEST ACCESS ON-PAGE FORM SUBMIT (CHIEDI ACCESSO)
    ========================================================================== */
 function openAccessModal() {
-  const modal = document.getElementById("requestAccessModal");
-  if (modal) {
-    modal.classList.add("active");
-    document.body.style.overflow = "hidden";
+  const section = document.getElementById("richiediAccessoSection");
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
   }
 }
 window.openAccessModal = openAccessModal;
-
-function closeAccessModal() {
-  const modal = document.getElementById("requestAccessModal");
-  if (modal) {
-    modal.classList.remove("active");
-    document.body.style.overflow = "auto";
-  }
-}
-window.closeAccessModal = closeAccessModal;
 
 async function handleAccessRequestSubmit(event) {
   event.preventDefault();
@@ -443,7 +438,7 @@ async function handleAccessRequestSubmit(event) {
   }
 
   const recipient = "info@itercars.com";
-  showToast("⏳ Invio richiesta di accesso VIP a info@itercars.com in corso...");
+  showToast("⏳ Invio candidatura di accesso VIP a info@itercars.com in corso...");
 
   const payload = {
     _subject: `💎 Richiesta Accesso Academy — ${name} (${age} anni)`,
@@ -470,8 +465,7 @@ async function handleAccessRequestSubmit(event) {
     const result = await response.json();
 
     if (response.ok || result.success === "true") {
-      showToast("✨ Richiesta inviata con successo! Riceverai le credenziali da info@itercars.com.");
-      closeAccessModal();
+      showToast("✨ Candidatura inviata con successo! Riceverai esito da info@itercars.com.");
       if (event.target && typeof event.target.reset === 'function') {
         event.target.reset();
       }
@@ -480,14 +474,13 @@ async function handleAccessRequestSubmit(event) {
     }
   } catch (err) {
     console.warn("Chiamata AJAX offline o bloccata, fallback elegante su mailto:", err);
-    showToast("✨ Richiesta pronta! Apertura client email per info@itercars.com...");
+    showToast("✨ Candidatura pronta! Apertura client email per info@itercars.com...");
     const subjectText = encodeURIComponent(`Richiesta Accesso Academy — ${name} (${age} anni)`);
     const bodyText = encodeURIComponent(
-      `Gentile Team Itercars,\n\nRichiesta di ammissione a Itercars Academy:\n\n• Nome e Cognome: ${name}\n• Email: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
+      `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
     );
     setTimeout(() => {
       window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
-      closeAccessModal();
     }, 1000);
   }
 }
