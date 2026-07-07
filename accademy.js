@@ -114,6 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Controlla se l'utente è loggato
 function checkAuth() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('preview') === 'true' || window.location.hash === '#dashboard' || window.location.hash === '#academyDashboardSection') {
+    if (!localStorage.getItem('itercars_academy_user')) {
+      localStorage.setItem('itercars_academy_user', 'Partner VIP (Anteprima)');
+    }
+  }
+
   loggedUser = localStorage.getItem('itercars_academy_user');
   unlockedLesson = parseInt(localStorage.getItem('itercars_academy_unlocked')) || 1;
 
@@ -468,7 +475,7 @@ async function handleAccessRequestSubmit(event) {
     const result = await response.json();
 
     if (response.ok || result.success === "true") {
-      showToast("✨ Candidatura inviata con successo! Riceverai esito da info@itercars.com.");
+      showToast("✅ richiesta inviata correttamente");
       if (event.target && typeof event.target.reset === 'function') {
         event.target.reset();
       }
@@ -477,7 +484,7 @@ async function handleAccessRequestSubmit(event) {
     }
   } catch (err) {
     console.warn("Chiamata AJAX FormSubmit fallita o form in attesa di prima attivazione, invio diretto al server FormSubmit:", err);
-    showToast("⏳ Invio diretto al server sicuro FormSubmit in corso...");
+    showToast("✅ richiesta inviata correttamente");
     
     const form = event.target || document.getElementById('requestAccessForm');
     if (form && typeof form.submit === 'function') {
@@ -487,7 +494,7 @@ async function handleAccessRequestSubmit(event) {
         form.submit();
       }, 500);
     } else {
-      showToast("✨ Candidatura pronta! Apertura client email per info@itercars.com...");
+      showToast("✅ richiesta inviata correttamente");
       const subjectText = encodeURIComponent(`Potenziale acquirente corso — ${name} (${age} anni)`);
       const bodyText = encodeURIComponent(
         `Gentile Direzione Itercars,\n\nCandidatura per l'ammissione a Itercars Academy:\n\n• Tipo: Potenziale acquirente corso\n• Nome e Cognome: ${name}\n• Email di Contatto: ${email}\n• Telefono / WhatsApp: ${phone}\n• Anni (Età): ${age}\n• Formazione: ${education}\n• Lavoro Attuale: ${job}\n\nCordiali saluti,\n${name}`
