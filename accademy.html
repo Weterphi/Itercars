@@ -10,8 +10,8 @@
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS -->
-  <link rel="stylesheet" href="index.css?v=40">
-  <link rel="stylesheet" href="accademy.css?v=1">
+  <link rel="stylesheet" href="index.css?v=41">
+  <link rel="stylesheet" href="accademy.css?v=2">
 </head>
 <body class="fleet-page">
 
@@ -307,7 +307,7 @@
   </main>
 
   <!-- ================= ACCESS REQUEST MODAL (CHIEDI ACCESSO) ================= -->
-  <div class="modal-overlay" id="accessRequestModal">
+  <div class="modal-overlay" id="accessRequestModal" onclick="if(event.target === this) closeAccessModal();">
     <div class="glass-card modal-content" style="max-width: 720px; padding: 40px; box-shadow: var(--shadow-lg); border: 1px solid rgba(0, 146, 70, 0.3); text-align: left; max-height: 90vh; overflow-y: auto;">
       <button type="button" onclick="closeAccessModal()" class="close-modal"><i class="ri-close-line"></i></button>
       
@@ -443,6 +443,6 @@
   </footer>
 
   <!-- JS -->
-  <script src="accademy.js?v=1"></script>
+  <script src="accademy.js?v=2"></script>
 </body>
 </html>

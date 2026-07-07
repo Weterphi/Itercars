@@ -438,6 +438,8 @@ function openAccessModal(event) {
   if (modal) {
     modal.classList.add("active");
     document.body.style.overflow = "hidden";
+  } else {
+    console.error("Errore: Finestra modale 'accessRequestModal' non trovata nel DOM.");
   }
 }
 window.openAccessModal = openAccessModal;
