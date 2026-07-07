@@ -460,17 +460,32 @@ function handleAccessRequestSubmit(event) {
   // Senza mai ricaricare la pagina o aprire siti esterni!
   setTimeout(() => {
     showToast("✅ richiesta inviata con successo!");
-    if (event && event.target && typeof event.target.reset === 'function') {
-      event.target.reset();
-    } else {
-      const form = document.getElementById('requestAccessForm');
-      if (form && typeof form.reset === 'function') form.reset();
+    const form = document.getElementById('requestAccessForm');
+    const successBox = document.getElementById('requestAccessSuccessBox');
+    if (form) {
+      if (typeof form.reset === 'function') form.reset();
+      form.style.display = 'none';
+    }
+    if (successBox) {
+      successBox.style.display = 'block';
     }
   }, 1000);
 
   return true;
 }
 window.handleAccessRequestSubmit = handleAccessRequestSubmit;
+
+function resetRequestAccessFormView() {
+  const form = document.getElementById('requestAccessForm');
+  const successBox = document.getElementById('requestAccessSuccessBox');
+  if (form) {
+    form.style.display = 'flex';
+  }
+  if (successBox) {
+    successBox.style.display = 'none';
+  }
+}
+window.resetRequestAccessFormView = resetRequestAccessFormView;
 
 // Disattiva sempre l'audio di eventuali video all'avvio
 document.addEventListener("DOMContentLoaded", () => {
