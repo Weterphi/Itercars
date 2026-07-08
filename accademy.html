@@ -30,7 +30,7 @@
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=41">
-  <link rel="stylesheet" href="accademy.css?v=6">
+  <link rel="stylesheet" href="accademy.css?v=7">
 </head>
 <body class="fleet-page">
 
@@ -287,7 +287,7 @@
 
   <!-- ================= LOGIN MODAL (ACCEDI ALL'ACADEMY) ================= -->
   <div class="modal-overlay" id="academyLoginModal" onclick="if(event.target === this) closeLoginModal();" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
-    <div class="glass-card modal-content academy-login-container" style="max-width: 540px; padding: 40px; box-shadow: var(--shadow-lg), var(--glow-emerald); border: 1px solid rgba(0, 146, 70, 0.4); text-align: left; max-height: 90vh; overflow-y: auto; margin: 0;">
+    <div class="glass-card modal-content academy-login-container" style="box-shadow: var(--shadow-lg), var(--glow-emerald); border: 1px solid rgba(0, 146, 70, 0.4); text-align: left; max-height: 90vh; overflow-y: auto; margin: 0;">
       <button type="button" onclick="closeLoginModal()" class="close-modal"><i class="ri-close-line"></i></button>
       
       <div class="academy-login-header" style="text-align: center; margin-bottom: 24px;">
@@ -334,7 +334,7 @@
 
   <!-- ================= ACCESS REQUEST MODAL (CHIEDI ACCESSO) ================= -->
   <div class="modal-overlay" id="accessRequestModal" onclick="if(event.target === this) closeAccessModal();" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease;">
-    <div class="glass-card modal-content" style="max-width: 820px; padding: 36px 44px; box-shadow: var(--shadow-lg); border: 1px solid rgba(0, 146, 70, 0.3); text-align: left; max-height: 88vh; overflow-y: auto;">
+    <div class="glass-card modal-content access-request-container" style="box-shadow: var(--shadow-lg); border: 1px solid rgba(0, 146, 70, 0.3); text-align: left; max-height: 88vh; overflow-y: auto;">
       <button type="button" onclick="closeAccessModal()" class="close-modal"><i class="ri-close-line"></i></button>
       
       <div style="margin-bottom: 22px; text-align: center;">

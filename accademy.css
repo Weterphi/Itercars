@@ -744,7 +744,11 @@
     padding: 36px 44px !important;
     max-height: 88vh !important;
   }
-  
+  #academyLoginModal .modal-content {
+    max-width: 540px !important;
+    padding: 40px !important;
+    max-height: 90vh !important;
+  }
   .desktop-grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -752,10 +756,73 @@
   }
 }
 
+/* Mobile Adaptation per Modali Academy & Chiedi Accesso */
 @media (max-width: 767px) {
+  /* Modale overlay su mobile con margine e scroll ottimizzato */
+  #accessRequestModal,
+  #academyLoginModal {
+    padding: 12px !important;
+    align-items: flex-start !important;
+  }
+
+  /* Box contenuto del modale adatta per smartphone */
+  #accessRequestModal .modal-content,
+  #academyLoginModal .modal-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 24px 18px !important;
+    max-height: 88vh !important;
+    border-radius: 14px !important;
+    margin: auto 0 !important;
+  }
+
+  /* Titoli del form proporzionati per schermi piccoli */
+  #accessRequestModal h3,
+  #academyLoginModal h2 {
+    font-size: 1.45rem !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Sottotitoli e descrizioni concise e leggibili */
+  #accessRequestModal p,
+  #academyLoginModal p {
+    font-size: 0.88rem !important;
+    line-height: 1.45 !important;
+  }
+
+  /* Trasforma le griglie a 2 colonne in 1 colonna verticale su smartphone */
   .desktop-grid-2 {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  /* Campi input ad alta leggibilità (16px per evitare zoom automatico su iOS Safari) */
+  #accessRequestModal input,
+  #accessRequestModal select,
+  #accessRequestModal textarea,
+  #academyLoginModal input {
+    font-size: 16px !important;
+    padding: 12px 14px !important;
+    height: 48px !important;
+  }
+
+  /* Pulsante di chiusura (X) ben accessibile con il pollice */
+  #accessRequestModal .close-modal,
+  #academyLoginModal .close-modal {
+    top: 14px !important;
+    right: 14px !important;
+    width: 38px !important;
+    height: 38px !important;
+    font-size: 1.3rem !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  /* Pulsanti touch-friendly ampi e comodi */
+  #accessRequestModal button[type="submit"],
+  #academyLoginModal button[type="submit"] {
+    height: 52px !important;
+    font-size: 1rem !important;
+    padding: 12px !important;
   }
 }
