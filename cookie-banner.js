@@ -164,7 +164,7 @@
         </div>
       </div>
       <p class="cookie-banner-text">
-        Per offrire un'esperienza di navigazione <strong>White-Glove</strong> adatta ai nostri standard di lusso e per analizzare il traffico al fine di ottimizzare la flotta (tramite <strong>Google Analytics 4</strong>), utilizziamo cookie tecnici e analitici.
+        Per offrire un'esperienza di navigazione <strong>White-Glove</strong> adatta ai nostri standard di lusso e per analizzare il traffico al fine di ottimizzare la flotta (tramite <strong>Google Analytics 4 & Microsoft Clarity</strong>), utilizziamo cookie tecnici e analitici.
       </p>
       <div class="cookie-banner-buttons">
         <button id="btnCookieAccept" class="btn-cookie-accept"><i class="ri-check-line"></i> Accetta Tutto</button>
@@ -191,6 +191,9 @@
           'ad_personalization': 'granted'
         });
       }
+      if (typeof window.clarity === 'function') {
+        window.clarity('consent');
+      }
       closeBanner(banner);
       if (typeof showToast === 'function') {
         showToast("🔒 Preferenze salvate: Consento ai cookie analitici e di miglioramento servizi.");
@@ -207,6 +210,9 @@
           'ad_personalization': 'denied'
         });
       }
+      if (typeof window.clarity === 'function') {
+        window.clarity('consent', false);
+      }
       closeBanner(banner);
       if (typeof showToast === 'function') {
         showToast("🛡️ Preferenze salvate: Attivi solo i cookie tecnici essenziali.");
@@ -214,7 +220,7 @@
     });
 
     document.getElementById('btnCookiePolicy').addEventListener('click', () => {
-      alert("Informativa Privacy & Cookie Policy ITERCARS:\\n\\nIn conformità al Regolamento Europeo (GDPR), i dati raccolti tramite Google Analytics 4 vengono utilizzati in forma anonimizzata ed esclusivamente per fini statistici e di miglioramento del servizio di noleggio supercar e brokerage.\\n\\nPuoi modificare o revocare il tuo consenso in qualsiasi momento cancellando i dati di navigazione o cliccando su Cookie Policy nel footer.");
+      alert("Informativa Privacy & Cookie Policy ITERCARS:\\n\\nIn conformità al Regolamento Europeo (GDPR), i dati raccolti tramite Google Analytics 4 e Microsoft Clarity vengono utilizzati in forma anonimizzata ed esclusivamente per fini statistici e di miglioramento del servizio di noleggio supercar e brokerage.\\n\\nPuoi modificare o revocare il tuo consenso in qualsiasi momento cancellando i dati di navigazione o cliccando su Cookie Policy nel footer.");
     });
   }
 
