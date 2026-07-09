@@ -34,6 +34,7 @@ CREATE TABLE IF NOT EXISTS public.crm_leads (
     email TEXT,
     phone TEXT,
     vehicle_interest TEXT,
+    customer_type TEXT,
     notes TEXT,
     pipeline_status TEXT DEFAULT 'new',
     assigned_to TEXT

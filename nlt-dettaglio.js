@@ -183,7 +183,7 @@ const ConfigState = {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
-  let carId = params.get('id') || 'macan-48-3k';
+  let carId = params.get('id') || 'bmw-x3-48-3k';
   const paramModel = params.get('model');
   
   let found = null;
@@ -194,9 +194,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch(e) {}
 
   // 2. Se non in cache e connesso a Supabase, cerca live sul DB
-  if (!found && typeof window.supabaseClient !== 'undefined' && window.supabaseClient) {
+  if (!found && typeof window.supabase !== 'undefined' && window.supabase) {
     try {
-      let { data, error } = await window.supabaseClient
+      let { data, error } = await window.supabase
         .from('nlt_offers')
         .select(`
           id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
@@ -207,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .maybeSingle();
         
       if (!data) {
-        const res = await window.supabaseClient
+        const res = await window.supabase
           .from('nlt_offers')
           .select(`...`)
           .eq('vehicle_id', carId)
@@ -402,7 +402,7 @@ function calculateAndRenderPrice() {
   // Extract base car ID (remove any trailing suffixes like -36-4k from old logic if present)
   let baseCarId = c.id;
   if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
-  if (baseCarId === 'macan-48-3k') baseCarId = 'bmw-x3'; // Fallback just in case
+  if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3'; // Fallback just in case
 
   const rates = OFFICIAL_RATES[baseCarId];
   if (!rates) {
@@ -469,16 +469,34 @@ function calculateAndRenderPrice() {
 async function handleQuoteSubmit(event) {
   event.preventDefault();
   
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  const originalBtnText = submitBtn.innerHTML;
+  
+  // 1. Mostra la rotellina
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Generazione e invio in corso...';
+  
   const name = document.getElementById('quoteClientName').value;
   const email = document.getElementById('quoteClientEmail').value;
   const phone = document.getElementById('quoteClientPhone').value;
   const type = document.getElementById('quoteClientType').value;
   const c = ConfigState.car;
 
-  // Salva il lead e preventivo su Supabase se disponibile
-  if (typeof window.supabaseClient !== 'undefined' && window.supabaseClient) {
+  try {
+    // 2. Genera il PDF Nativo in background
+    let pdfBase64 = null;
     try {
-      await window.supabaseClient.from('crm_leads').insert([{
+      const doc = await generateNativePDF(c, name, email, phone, type);
+      const dataUri = doc.output('datauristring');
+      pdfBase64 = dataUri.split(',')[1];
+    } catch (pdfErr) {
+      console.error("Errore generazione PDF:", pdfErr);
+      alert("Errore generazione PDF: " + pdfErr.message);
+    }
+
+    // 3. Salva lead e invia mail tramite Supabase
+    if (typeof window.supabase !== 'undefined' && window.supabase) {
+      await window.supabase.from('crm_leads').insert([{
         first_name: name.split(' ')[0] || name,
         last_name: name.split(' ').slice(1).join(' ') || 'Cliente NLT',
         phone: phone,
@@ -487,12 +505,48 @@ async function handleQuoteSubmit(event) {
         pipeline_status: 'quote_sent',
         notes: `Preventivo configurato per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/m`
       }]);
-    } catch (e) {
-      console.log('Salvataggio lead in locale (Demo attiva)');
+
+      if (true) {
+        const emailPayload = {
+           email: email,
+           nome: name,
+           dettagli: `${c.brand} ${c.model} - ${ConfigState.durationMonths} Mesi, ${ConfigState.kmPerYear} km/anno, Anticipo €${ConfigState.depositAmount}`,
+           totale: ConfigState.finalMonthlyPrice,
+           pdfBase64: pdfBase64,
+           pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_')
+        };
+        const supabaseUrl = window.supabase.supabaseUrl;
+        const supabaseKey = window.supabase.supabaseKey;
+        
+        const rawRes = await fetch(`${supabaseUrl}/functions/v1/preventivo_itercars`, {
+           method: 'POST',
+           headers: {
+             'Content-Type': 'application/json',
+             'Authorization': `Bearer ${supabaseKey}`
+           },
+           body: JSON.stringify(emailPayload)
+        });
+        
+        if (!rawRes.ok) {
+           const errText = await rawRes.text();
+           console.error("Raw Error:", errText);
+           alert("Errore 422 Testo: " + errText);
+        }
+      }
     }
+
+    // 4. Mostra messaggio di successo
+    alert("✅ Preventivo inviato con successo alla tua email!");
+    
+  } catch (err) {
+    console.error("Errore durante l'invio:", err);
+    alert("Si è verificato un errore durante l'invio. Riprova.");
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalBtnText;
   }
 
-  // Costruzione e visualizzazione della scheda Preventivo Stampabile (PDF Ready)
+  // 5. Costruzione e visualizzazione della scheda Preventivo Stampabile (Stampa Classica)
   const previewBox = document.getElementById('officialQuoteContainer');
   if (previewBox) {
     previewBox.style.display = 'block';
@@ -579,12 +633,175 @@ async function handleQuoteSubmit(event) {
             <i class="ri-arrow-left-line"></i> Torna al Catalogo
           </a>
         </div>
-      `;
+      </div>
+    `;
     previewBox.scrollIntoView({ behavior: 'smooth' });
   }
 }
-
 function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
   const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n📅 Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/anno*\n💰 Anticipo: *€ ${deposit}*\n\n🔥 *Canone Calcolato: € ${price} / mese Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+
+/**
+ * Enterprise Mode PDF Generator (Native jsPDF)
+ * Disegna vettorialmente il PDF per evitare qualsiasi sfarfallio o ritaglio.
+ */
+async function generateNativePDF(c, name, email, phone, type) {
+  const jsPDF = window.jspdf ? window.jspdf.jsPDF : window.jsPDF;
+  if (!jsPDF) {
+    throw new Error("Libreria jsPDF non trovata.");
+  }
+
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 146, 70);
+  doc.setFontSize(22);
+  doc.text("PREVENTIVO UFFICIALE NLT", 15, 20);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Codice Pratica: IT-NLT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`, 15, 27);
+  doc.text(`Data Emissione: ${new Date().toLocaleDateString('it-IT')}`, 15, 32);
+
+  doc.setFillColor(240, 253, 244);
+  doc.setDrawColor(0, 146, 70);
+  doc.setLineWidth(0.5);
+  doc.roundedRect(145, 15, 50, 10, 2, 2, 'FD');
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(0, 146, 70);
+  doc.text("PRONTO DA FIRMARE", 149, 21.5);
+  doc.line(15, 38, 195, 38);
+
+  let specsY = 135;
+  let boxY = 165;
+  let finalY = 205;
+
+  try {
+    const img = new Image();
+    img.crossOrigin = "Anonymous";
+    img.src = c.image;
+    await new Promise((resolve) => {
+      img.onload = resolve;
+      img.onerror = resolve;
+    });
+    const targetW = 180;
+    const targetH = 100;
+    const imgRatio = img.width / img.height;
+    const boxRatio = targetW / targetH;
+    
+    let drawW, drawH;
+    if (imgRatio > boxRatio) {
+      drawW = targetW;
+      drawH = targetW / imgRatio;
+    } else {
+      drawH = targetH;
+      drawW = targetH * imgRatio;
+    }
+    
+    // Center inside the 180x100 bounding box
+    const drawX = ((210 - targetW) / 2) + ((targetW - drawW) / 2);
+    const drawY = 42 + ((targetH - drawH) / 2);
+    
+    doc.addImage(img, 'JPEG', drawX, drawY, drawW, drawH);
+    const finalH = targetH; // FORZATO RETTANGOLARE per layout
+    
+    // Calcoliamo le coordinate successive dinamicamente in base a quanto è alta l'immagine
+    specsY = 42 + finalH + 10;
+    boxY = specsY + 30;
+    finalY = boxY + 40;
+  } catch (e) {
+    console.log("Immagine non caricata nel PDF nativo:", e);
+  }
+
+  doc.setFillColor(249, 249, 249);
+  doc.setDrawColor(220, 220, 220);
+  doc.roundedRect(15, specsY, 180, 20, 2, 2, 'FD');
+  
+  const drawSpec = (label, value, x) => {
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(120, 120, 120);
+    doc.text(label, x, specsY + 5, { align: 'center' });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(0, 0, 0);
+    const splitValue = doc.splitTextToSize(value, 30);
+    doc.text(splitValue, x, specsY + 11, { align: 'center' });
+  };
+  
+  drawSpec("VELOCITÀ", c.speed || "N/A", 25);
+  drawSpec("0-100", c.accel || "N/A", 60);
+  drawSpec("POTENZA", c.hp || "N/A", 95);
+  drawSpec("MOTORE", c.fuel || "N/A", 138);
+  drawSpec("CAMBIO", c.transmission || "N/A", 182);
+
+  doc.setFillColor(249, 249, 249);
+  doc.roundedRect(15, boxY, 85, 30, 2, 2, 'FD');
+  doc.setFontSize(9);
+  doc.setTextColor(0, 146, 70);
+  doc.text("INTESTATARIO", 20, boxY + 7);
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 0);
+  doc.text(name, 20, boxY + 14);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(80, 80, 80);
+  doc.text(`${type}\n${email}\n${phone}`, 20, boxY + 20);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFillColor(249, 249, 249);
+  doc.roundedRect(110, boxY, 85, 30, 2, 2, 'FD');
+  doc.setFontSize(9);
+  doc.setTextColor(0, 146, 70);
+  doc.text("VETTURA SELEZIONATA", 115, boxY + 7);
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`${c.brand} ${c.model}`, 115, boxY + 14);
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(80, 80, 80);
+  const trimText = doc.splitTextToSize(c.trim || "", 75);
+  doc.text(trimText, 115, boxY + 20);
+
+  doc.setFillColor(240, 253, 244);
+  doc.setDrawColor(0, 146, 70);
+  doc.setLineWidth(1);
+  doc.roundedRect(15, finalY, 180, 35, 4, 4, 'FD');
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+  doc.setTextColor(50, 50, 50);
+  doc.text("CONFIGURAZIONE CONTRATTO NLT", 20, finalY + 10);
+  
+  doc.setFontSize(11);
+  doc.setTextColor(0, 0, 0);
+  const kaskoType = ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard';
+  doc.text(`Durata: ${ConfigState.durationMonths} Mesi   -   Km annui: ${ConfigState.kmPerYear.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(100, 100, 100);
+  doc.text(`Servizi: Kasko ${kaskoType}, Bollo, Manutenzione Ord/Str, RCA`, 20, finalY + 26);
+
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(9);
+  doc.setTextColor(100, 100, 100);
+  doc.text("CANONE MENSILE", 185, finalY + 10, { align: 'right' });
+  
+  doc.setFontSize(26);
+  doc.setTextColor(0, 146, 70);
+  doc.text(`€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`, 185, finalY + 22, { align: 'right' });
+  
+  doc.setFontSize(8);
+  doc.text("/mese (IVA esc.)", 185, finalY + 28, { align: 'right' });
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(8);
+  doc.setTextColor(150, 150, 150);
+  doc.text("Generato tramite piattaforma certificata ITERCARS Enterprise", 105, 280, { align: 'center' });
+
+  return doc;
 }
