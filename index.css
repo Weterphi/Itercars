@@ -1721,9 +1721,8 @@ footer {
     background-size: 130% 520px !important;
     background-repeat: no-repeat !important;
     background-color: #0a0e17 !important;
-    background-image: 
-      linear-gradient(180deg, rgba(10, 14, 23, 0.15) 0%, rgba(10, 14, 23, 0.20) 280px, rgba(10, 14, 23, 0.85) 420px, #0a0e17 520px),
-      url('hero-bg.jpg') !important;
+    background-image:
+      linear-gradient(180deg, rgba(10, 14, 23, 0.15) 0%, rgba(10, 14, 23, 0.20) 280px, rgba(10, 14, 23, 0.85) 420px, #0a0e17 520px) !important;
   }
 }
 
