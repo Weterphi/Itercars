@@ -1,0 +1,872 @@
+/* ==========================================================================
+   ITERCARS — NOLEGGIO LUNGO & BREVE TERMINE (NLT / NBT) CONTROLLER
+   Gestione interattiva listini mandante, filtri dinamici, calcolatore rata
+   in tempo reale e generazione preventivi 1-Click / Scoring.
+   ========================================================================== */
+
+// Stato globale dell'applicazione NLT/NBT
+const NltState = {
+  mode: 'NLT', // 'NLT' (Lungo Termine) oppure 'NBT' (Breve Termine)
+  maxBudget: 4000,
+  depositFilter: 'all', // 'all', '0', '3000', '5000'
+  durationFilter: 48, // 24, 36, 48, 60 mesi
+  categoryFilter: 'all',
+  visualCategory: 'all',
+  readyDeliveryOnly: false,
+  searchQuery: '',
+  offers: []
+};
+
+// Dati d'esempio (Seed/Offline Fallback) sincronizzati con lo schema Supabase nlt_offers
+const SAMPLE_OFFERS = [
+  {
+    id: 'bmw-s1-36-2k',
+    vehicle_id: 'bmw-01',
+    brand: 'BMW',
+    model: 'Serie 1',
+    trim: '118d MSport Automatico',
+    category: 'Sportiva',
+    fuel: 'Diesel ⛽',
+    transmission: 'Automatico 8M',
+    image: 'bmw_serie_1_msport.webp',
+    hp: '150 CV',
+    speed: '216 km/h',
+    accel: '8.3s',
+    readyDelivery: true,
+    deliveryWeeks: 2,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 60000,
+      deposit: 2000,
+      monthlyPrice: 390.00,
+      zeroDepositPrice: 446.00
+    },
+    variants: [
+      { duration: 6, deposit: 0, price: 650.00 },
+      { duration: 12, deposit: 0, price: 580.00 },
+      { duration: 24, deposit: 2000, price: 450.00 },
+      { duration: 36, deposit: 2000, price: 390.00 },
+      { duration: 36, deposit: 0, price: 446.00 }
+    ],
+    nbtDailyPrice: 80.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  },
+  {
+    id: 'bmw-x1-36-3k',
+    vehicle_id: 'bmw-02',
+    brand: 'BMW',
+    model: 'X1',
+    trim: 'sDrive18d xLine DCT',
+    category: 'SUV Luxury',
+    fuel: 'Diesel ⛽',
+    transmission: 'DCT 7M',
+    image: 'bmw_x1_xline.webp',
+    hp: '150 CV',
+    speed: '210 km/h',
+    accel: '8.9s',
+    readyDelivery: true,
+    deliveryWeeks: 3,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 60000,
+      deposit: 3000,
+      monthlyPrice: 460.00,
+      zeroDepositPrice: 543.00
+    },
+    variants: [
+      { duration: 6, deposit: 0, price: 750.00 },
+      { duration: 12, deposit: 0, price: 680.00 },
+      { duration: 24, deposit: 3000, price: 520.00 },
+      { duration: 36, deposit: 3000, price: 460.00 },
+      { duration: 36, deposit: 0, price: 543.00 }
+    ],
+    nbtDailyPrice: 110.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  },
+  {
+    id: 'bmw-s3t-36-35k',
+    vehicle_id: 'bmw-03',
+    brand: 'BMW',
+    model: 'Serie 3 Touring',
+    trim: '320d xDrive MSport',
+    category: 'Sportiva',
+    fuel: 'Diesel Mild-Hybrid ⚡',
+    transmission: 'Steptronic 8M',
+    image: 'bmw_serie_3_touring.webp',
+    hp: '190 CV',
+    speed: '230 km/h',
+    accel: '7.1s',
+    readyDelivery: true,
+    deliveryWeeks: 2,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 75000,
+      deposit: 3500,
+      monthlyPrice: 580.00,
+      zeroDepositPrice: 677.00
+    },
+    variants: [
+      { duration: 6, deposit: 0, price: 890.00 },
+      { duration: 12, deposit: 0, price: 820.00 },
+      { duration: 24, deposit: 3500, price: 660.00 },
+      { duration: 36, deposit: 3500, price: 580.00 },
+      { duration: 36, deposit: 0, price: 677.00 }
+    ],
+    nbtDailyPrice: 140.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  },
+  {
+    id: 'bmw-x3-36-4k',
+    vehicle_id: 'bmw-04',
+    brand: 'BMW',
+    model: 'X3',
+    trim: 'xDrive20d MSport Mild-Hybrid',
+    category: 'SUV Luxury',
+    fuel: 'Diesel Mild-Hybrid ⚡',
+    transmission: 'Steptronic xDrive',
+    image: 'bmw_x3_msport.webp',
+    hp: '190 CV',
+    speed: '213 km/h',
+    accel: '7.9s',
+    readyDelivery: true,
+    deliveryWeeks: 3,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 75000,
+      deposit: 4000,
+      monthlyPrice: 650.00,
+      zeroDepositPrice: 761.00
+    },
+    variants: [
+      { duration: 6, deposit: 0, price: 990.00 },
+      { duration: 12, deposit: 0, price: 920.00 },
+      { duration: 24, deposit: 4000, price: 740.00 },
+      { duration: 36, deposit: 4000, price: 650.00 },
+      { duration: 36, deposit: 0, price: 761.00 }
+    ],
+    nbtDailyPrice: 160.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  },
+  {
+    id: 'bmw-s5-36-5k',
+    vehicle_id: 'bmw-05',
+    brand: 'BMW',
+    model: 'Serie 5',
+    trim: '520d Mild Hybrid Eccelsa',
+    category: 'Supercar',
+    fuel: 'Diesel Mild-Hybrid ⚡',
+    transmission: 'Steptronic 8M',
+    image: 'bmw_serie_5_eccelsa.webp',
+    hp: '197 CV',
+    speed: '233 km/h',
+    accel: '7.3s',
+    readyDelivery: true,
+    deliveryWeeks: 3,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 60000,
+      deposit: 5000,
+      monthlyPrice: 790.00,
+      zeroDepositPrice: 929.00
+    },
+    variants: [
+      { duration: 12, deposit: 0, price: 1150.00 },
+      { duration: 24, deposit: 5000, price: 890.00 },
+      { duration: 36, deposit: 5000, price: 790.00 },
+      { duration: 36, deposit: 0, price: 929.00 }
+    ],
+    nbtDailyPrice: 220.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  },
+  {
+    id: 'bmw-x5-36-6k',
+    vehicle_id: 'bmw-06',
+    brand: 'BMW',
+    model: 'X5',
+    trim: 'xDrive30d MSport MHEV',
+    category: 'SUV Luxury',
+    fuel: 'Diesel MHEV ⚡',
+    transmission: 'Steptronic Sport xDrive',
+    image: 'bmw_x5_msport.webp',
+    hp: '298 CV',
+    speed: '233 km/h',
+    accel: '6.1s',
+    readyDelivery: true,
+    deliveryWeeks: 2,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 75000,
+      deposit: 6000,
+      monthlyPrice: 1050.00,
+      zeroDepositPrice: 1217.00
+    },
+    variants: [
+      { duration: 12, deposit: 0, price: 1450.00 },
+      { duration: 24, deposit: 6000, price: 1180.00 },
+      { duration: 36, deposit: 6000, price: 1050.00 },
+      { duration: 36, deposit: 0, price: 1217.00 }
+    ],
+    nbtDailyPrice: 290.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  },
+  {
+    id: 'bmw-i4-36-4k',
+    vehicle_id: 'bmw-07',
+    brand: 'BMW',
+    model: 'i4 Gran Coupé',
+    trim: 'eDrive40 Sport Elettrica',
+    category: 'Supercar',
+    fuel: 'Elettrico ⚡',
+    transmission: 'Automatico Single Speed',
+    image: 'bmw_i4_grancoupe.webp',
+    hp: '340 CV',
+    speed: '190 km/h',
+    accel: '5.7s',
+    readyDelivery: true,
+    deliveryWeeks: 3,
+    providerName: 'Mandante Ufficiale BMW',
+    baseOffer: {
+      duration: 36,
+      km: 60000,
+      deposit: 4000,
+      monthlyPrice: 570.00,
+      zeroDepositPrice: 681.00
+    },
+    variants: [
+      { duration: 6, deposit: 0, price: 890.00 },
+      { duration: 12, deposit: 0, price: 790.00 },
+      { duration: 24, deposit: 4000, price: 640.00 },
+      { duration: 36, deposit: 4000, price: 570.00 },
+      { duration: 36, deposit: 0, price: 681.00 }
+    ],
+    nbtDailyPrice: 190.00,
+    services: [
+      'Assicurazione Premium Kasko (Franchigie ridotte)',
+      'Manutenzione Ordinaria e Straordinaria BMW',
+      'Assistenza Stradale H24 ed Auto Sostitutiva',
+      'Tasse e Oneri Burocratici (Bollo e Messa su strada)',
+      'Gestione Pneumatici Estivi e Invernali'
+    ]
+  }
+];
+
+// Inizializzazione pagina
+document.addEventListener('DOMContentLoaded', async () => {
+  NltState.offers = SAMPLE_OFFERS.slice();
+  
+  // Tenta di caricare da Supabase se disponibile, altrimenti usa offline seed
+  await loadOffersFromDatabase();
+  
+  initFilterListeners();
+  renderOffersGrid();
+});
+
+// Caricamento dal DB (con fallback trasparente)
+async function loadOffersFromDatabase() {
+  if (typeof window.supabaseClient !== 'undefined' && window.supabaseClient) {
+    try {
+      const { data, error } = await window.supabaseClient
+        .from('nlt_offers')
+        .select(`
+          id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
+          vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
+          providers (name)
+        `)
+        .eq('is_active', true);
+        
+      if (!error && data && data.length > 0) {
+        console.log('✅ Caricate offerte NLT da Supabase DB:', data.length);
+        const mapped = data.map(o => {
+          const v = o.vehicles || {};
+          const pName = (o.providers && o.providers.name) ? o.providers.name : 'Mandante NLT';
+          const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
+          let servicesArr = ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Bollo e Messa su strada', 'Soccorso stradale H24 europea', 'Gestione sinistri e pneumatici'];
+          if (Array.isArray(o.services_included) && o.services_included.length > 0) {
+            servicesArr = o.services_included;
+          } else if (typeof o.services_included === 'string') {
+            try { servicesArr = JSON.parse(o.services_included); } catch(e){}
+          }
+          return {
+            id: o.id,
+            vehicle_id: v.id || o.vehicle_id,
+            brand: v.brand || 'Veicolo',
+            model: v.model || 'NLT',
+            trim: v.trim || 'Executive',
+            category: v.category || 'SUV Luxury',
+            fuel: v.fuel_type || 'Ibrido / Diesel',
+            transmission: v.transmission || 'Automatico',
+            image: v.image_url || 'category-suv.jpg',
+            hp: specsObj.hp || '300 CV',
+            speed: specsObj.speed || '240 km/h',
+            accel: specsObj.accel || '5.5s',
+            readyDelivery: !!o.is_ready_delivery,
+            deliveryWeeks: o.delivery_weeks || 4,
+            providerName: pName,
+            basePrice: Number(o.client_monthly_price) || 699,
+            baseDuration: o.duration_months || 48,
+            baseKm: o.km_per_year || 15000,
+            baseDeposit: Number(o.deposit_mandante) || 3000,
+            baseOffer: {
+              duration: o.duration_months || 48,
+              km: o.km_per_year || 15000,
+              deposit: Number(o.deposit_mandante) || 3000,
+              monthlyPrice: Number(o.client_monthly_price) || 699,
+              zeroDepositPrice: Math.round((Number(o.client_monthly_price) || 699) + ((Number(o.deposit_mandante) || 3000) / (o.duration_months || 48)))
+            },
+            variants: [
+              { duration: 36, deposit: Number(o.deposit_mandante) || 3000, price: Math.round((Number(o.client_monthly_price) || 699) * 1.06) },
+              { duration: 36, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) * 1.06 + ((Number(o.deposit_mandante) || 3000) / 36)) },
+              { duration: 48, deposit: Number(o.deposit_mandante) || 3000, price: Number(o.client_monthly_price) || 699 },
+              { duration: 48, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) + ((Number(o.deposit_mandante) || 3000) / 48)) },
+              { duration: 60, deposit: Number(o.deposit_mandante) || 3000, price: Math.round((Number(o.client_monthly_price) || 699) * 0.94) },
+              { duration: 60, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) * 0.94 + ((Number(o.deposit_mandante) || 3000) / 60)) }
+            ],
+            nbtDailyPrice: Number(v.daily_price) || Math.round((Number(o.client_monthly_price) || 699) / 4),
+            services: servicesArr
+          };
+        });
+        if (mapped.length > 0) {
+          const dbIds = new Set(mapped.map(o => o.id));
+          const extraBmw = SAMPLE_OFFERS.filter(o => !dbIds.has(o.id));
+          NltState.offers = [...mapped, ...extraBmw];
+        } else {
+          NltState.offers = SAMPLE_OFFERS.slice();
+        }
+      } else {
+        NltState.offers = SAMPLE_OFFERS.slice();
+      }
+    } catch (err) {
+      console.warn('⚠️ Fallback offline: utilizzo catalogo NLT ufficiale mandante.');
+      NltState.offers = SAMPLE_OFFERS.slice();
+    }
+  } else {
+    NltState.offers = SAMPLE_OFFERS.slice();
+  }
+
+  // Normalizzazione campi base per garantire immediato e perfetto aggancio in nlt-dettaglio.js
+  NltState.offers.forEach(o => {
+    if (o.basePrice === undefined && o.baseOffer?.monthlyPrice !== undefined) o.basePrice = Number(o.baseOffer.monthlyPrice);
+    if (o.baseDuration === undefined && o.baseOffer?.duration !== undefined) o.baseDuration = Number(o.baseOffer.duration);
+    if (o.baseKm === undefined && o.baseOffer?.km !== undefined) o.baseKm = Number(o.baseOffer.km);
+    if (o.baseDeposit === undefined && o.baseOffer?.deposit !== undefined) o.baseDeposit = Number(o.baseOffer.deposit);
+  });
+
+  window.lastLoadedOffers = NltState.offers;
+  try { localStorage.setItem('itercars_nlt_cache', JSON.stringify(NltState.offers)); } catch(e){}
+}
+
+// Switch tra Lungo Termine (NLT) e Breve Termine (NBT)
+function setRentalMode(mode) {
+  NltState.mode = mode;
+  
+  const nltBtn = document.getElementById('modeBtnNLT');
+  const nbtBtn = document.getElementById('modeBtnNBT');
+  const heroTitle = document.getElementById('nltHeroTitle');
+  const heroSub = document.getElementById('nltHeroSub');
+  const filterDurationGroup = document.getElementById('filterDurationGroup');
+  const filterDepositGroup = document.getElementById('filterDepositGroup');
+  
+  if (mode === 'NLT') {
+    if (nltBtn) nltBtn.classList.add('active-mode');
+    if (nbtBtn) nbtBtn.classList.remove('active-mode');
+    if (heroTitle) heroTitle.innerHTML = `Noleggio Auto <span class="text-gradient">Lungo Termine (NLT)</span>`;
+    if (heroSub) heroSub.textContent = `Canone fisso tutto incluso: Assicurazione Kasko, Manutenzione, Bollo e Soccorso 24/7 compresi.`;
+    if (filterDurationGroup) filterDurationGroup.style.display = 'flex';
+    if (filterDepositGroup) filterDepositGroup.style.display = 'flex';
+  } else {
+    if (nbtBtn) nbtBtn.classList.add('active-mode');
+    if (nltBtn) nltBtn.classList.remove('active-mode');
+    if (heroTitle) heroTitle.innerHTML = `Noleggio Auto <span class="text-gradient">Breve Termine (NBT)</span>`;
+    if (heroSub) heroSub.textContent = `Noleggia da 1 a 30 giorni con consegna VIP al tuo hotel, villa o terminal jet privato.`;
+    if (filterDurationGroup) filterDurationGroup.style.display = 'none';
+    if (filterDepositGroup) filterDepositGroup.style.display = 'none';
+  }
+  
+  renderOffersGrid();
+}
+
+// Inizializza i filtri della barra
+function initFilterListeners() {
+  const budgetSlider = document.getElementById('budgetSlider');
+  const budgetValueDisplay = document.getElementById('budgetValueDisplay');
+  
+  if (budgetSlider) {
+    budgetSlider.addEventListener('input', (e) => {
+      NltState.maxBudget = parseInt(e.target.value, 10);
+      if (budgetValueDisplay) {
+        budgetValueDisplay.textContent = NltState.maxBudget >= 4000 ? 'Illimitato 💎' : `fino a € ${NltState.maxBudget}/mese`;
+      }
+      renderOffersGrid();
+    });
+  }
+
+  const searchInput = document.getElementById('nltSearchInput');
+  const heroSearchInput = document.getElementById('heroSearchInput');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      NltState.searchQuery = e.target.value.toLowerCase().trim();
+      if (heroSearchInput) heroSearchInput.value = e.target.value;
+      renderOffersGrid();
+    });
+  }
+
+  if (heroSearchInput) {
+    heroSearchInput.addEventListener('input', (e) => {
+      NltState.searchQuery = e.target.value.toLowerCase().trim();
+      if (searchInput) searchInput.value = e.target.value;
+      renderOffersGrid();
+    });
+
+    heroSearchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        triggerHeroSearch();
+      }
+    });
+  }
+}
+
+function triggerHeroSearch() {
+  const heroInput = document.getElementById('heroSearchInput');
+  if (heroInput) {
+    NltState.searchQuery = heroInput.value.toLowerCase().trim();
+    const searchInput = document.getElementById('nltSearchInput');
+    if (searchInput) searchInput.value = heroInput.value;
+    renderOffersGrid();
+  }
+  const gridSection = document.getElementById('nltGrid');
+  if (gridSection) {
+    gridSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function setDepositFilter(val, btnElem) {
+  NltState.depositFilter = val;
+  document.querySelectorAll('.filter-pill-deposit').forEach(el => el.classList.remove('active'));
+  if (btnElem) btnElem.classList.add('active');
+  renderOffersGrid();
+}
+
+function setDurationFilter(val, btnElem) {
+  NltState.durationFilter = parseInt(val, 10);
+  document.querySelectorAll('.filter-pill-duration').forEach(el => el.classList.remove('active'));
+  if (btnElem) btnElem.classList.add('active');
+  renderOffersGrid();
+}
+
+function setCategoryFilter(val, btnElem) {
+  NltState.categoryFilter = val;
+  document.querySelectorAll('.filter-pill-category').forEach(el => el.classList.remove('active'));
+  if (btnElem) btnElem.classList.add('active');
+  renderOffersGrid();
+}
+
+function setVisualCategory(val, btnElem) {
+  NltState.visualCategory = val;
+  document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
+  if (btnElem) btnElem.classList.add('active');
+  renderOffersGrid();
+}
+
+function toggleReadyDelivery(btnElem) {
+  NltState.readyDeliveryOnly = !NltState.readyDeliveryOnly;
+  if (btnElem) btnElem.classList.toggle('active', NltState.readyDeliveryOnly);
+  renderOffersGrid();
+}
+
+// Trova la variante prezzo per una card specifica in base alla durata/anticipo scelti
+function getCardPrice(offer, duration, depositMode) {
+  if (NltState.mode === 'NBT') {
+    return { price: offer.nbtDailyPrice, label: '€ / giorno', details: 'Noleggio Breve (1-30 gg)' };
+  }
+  
+  // Cerchiamo nelle varianti della vettura
+  const targetDuration = duration || NltState.durationFilter;
+  let targetDeposit = 3000;
+  if (depositMode === '0' || NltState.depositFilter === '0') targetDeposit = 0;
+  else if (depositMode === '5000' || NltState.depositFilter === '5000') targetDeposit = 5000;
+  else if (NltState.depositFilter === '3000') targetDeposit = 3000;
+  
+  const match = offer.variants.find(v => v.duration === targetDuration && (targetDeposit === 0 ? v.deposit === 0 : v.deposit > 0));
+  if (match) {
+    return {
+      price: match.price,
+      label: '€ / mese (IVA esclusa)',
+      details: `${match.duration} mesi — Anticipo € ${match.deposit.toLocaleString('it-IT')} — 15.000 km/anno`
+    };
+  }
+  
+  return {
+    price: offer.baseOffer.monthlyPrice,
+    label: '€ / mese (Tutto Incluso)',
+    details: `${offer.baseOffer.duration} mesi — Anticipo € ${offer.baseOffer.deposit.toLocaleString('it-IT')}`
+  };
+}
+
+// Generazione dinamica della griglia
+function renderOffersGrid() {
+  const grid = document.getElementById('nltGrid');
+  const countDisplay = document.getElementById('offersCountText');
+  if (!grid) return;
+  
+  // Filtraggio
+  const filtered = NltState.offers.filter(offer => {
+    // Ricerca testuale
+    if (NltState.searchQuery) {
+      const full = `${offer.brand} ${offer.model} ${offer.trim} ${offer.category}`.toLowerCase();
+      if (!full.includes(NltState.searchQuery)) return false;
+    }
+    // Visual Category Pills
+    if (NltState.visualCategory !== 'all') {
+      if (NltState.visualCategory === 'Elettrico') {
+        if (!offer.fuel.toLowerCase().includes('elettric') && !offer.trim.toLowerCase().includes('elettric')) return false;
+      } else if (NltState.visualCategory === 'ready') {
+        if (!offer.readyDelivery) return false;
+      } else if (offer.category !== NltState.visualCategory) {
+        return false;
+      }
+    }
+    // Categoria standard (se era attiva)
+    if (NltState.categoryFilter !== 'all' && offer.category !== NltState.categoryFilter) {
+      return false;
+    }
+    // Pronta Consegna
+    if (NltState.readyDeliveryOnly && !offer.readyDelivery) {
+      return false;
+    }
+    // Budget
+    const priceInfo = getCardPrice(offer);
+    if (NltState.mode === 'NLT' && priceInfo.price > NltState.maxBudget && NltState.maxBudget < 4000) {
+      return false;
+    }
+    return true;
+  });
+
+  if (countDisplay) {
+    countDisplay.textContent = filtered.length;
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div class="glass-card" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+        <i class="ri-search-eye-line" style="font-size: 3.5rem; color: var(--accent-primary); margin-bottom: 16px; display: block;"></i>
+        <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Nessuna vettura corrisponde ai filtri selezionati</h3>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 24px;">Prova ad aumentare il budget mensile, a selezionare un anticipo diverso o a rimuovere il filtro Pronta Consegna.</p>
+        <button class="btn btn-outline" onclick="resetAllFilters()"><i class="ri-refresh-line"></i> Resetta tutti i filtri</button>
+      </div>
+    `;
+    return;
+  }
+
+  try { localStorage.setItem('itercars_nlt_cache', JSON.stringify(NltState.offers)); } catch(e){}
+
+  grid.innerHTML = filtered.map(offer => {
+    const priceInfo = getCardPrice(offer);
+    const badgeText = offer.readyDelivery 
+      ? `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${offer.deliveryWeeks} sett.)</span>`
+      : `<span class="card-badge badge-custom"><i class="ri-time-line"></i> Ordine su Misura (${offer.deliveryWeeks} sett.)</span>`;
+      
+    const depositZeroTag = offer.variants.some(v => v.deposit === 0)
+      ? `<span class="card-badge badge-zero"><i class="ri-flashlight-fill"></i> Anticipo Zero Disponibile</span>` : '';
+
+    return `
+      <div class="glass-card nlt-card" id="card-${offer.id}">
+        <div class="nlt-card-img-wrapper">
+          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
+          <div class="nlt-card-badges">
+            ${badgeText}
+            ${depositZeroTag}
+          </div>
+          <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${offer.providerName}</div>
+        </div>
+
+        <div class="nlt-card-body">
+          <div class="nlt-card-header">
+            <span class="nlt-brand-tag">${offer.brand}</span>
+            <h3 class="nlt-model-title">${offer.model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${offer.trim}</small></h3>
+          </div>
+
+          <!-- Specifiche Veloci -->
+          <div class="nlt-specs-row">
+            <span><i class="ri-speed-up-line"></i> ${offer.hp}</span>
+            <span><i class="ri-dashboard-2-line"></i> ${offer.accel} (0-100)</span>
+            <span><i class="ri-gas-station-line"></i> ${offer.fuel}</span>
+            <span><i class="ri-settings-4-line"></i> ${offer.transmission}</span>
+          </div>
+
+          <!-- Interruttore Rapido Mesi & Anticipo dentro la card (Solo in NLT) -->
+          ${NltState.mode === 'NLT' ? `
+          <div class="card-interactive-selector">
+            <div class="card-selector-label">Scegli Configurazione Rata:</div>
+            <div class="card-duration-tabs">
+              <button class="card-tab ${NltState.durationFilter === 36 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 36, 'default', event)">36 Mesi</button>
+              <button class="card-tab ${NltState.durationFilter === 48 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, 'default', event)">48 Mesi</button>
+              <button class="card-tab ${NltState.depositFilter === '0' ? 'active-zero' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, '0', event)">⚡ 0€ Anticipo</button>
+            </div>
+          </div>
+          ` : ''}
+
+          <!-- Box Rata Finale / Prezzo -->
+          <div class="nlt-price-box" id="price-box-${offer.id}">
+            <div class="nlt-price-num text-gradient">€ <span id="price-num-${offer.id}">${priceInfo.price.toLocaleString('it-IT')}</span></div>
+            <div class="nlt-price-label">${priceInfo.label}</div>
+            <div class="nlt-price-details" id="price-details-${offer.id}">${priceInfo.details}</div>
+          </div>
+
+          <!-- Elenco Servizi Inclusi -->
+          <div class="nlt-services-list">
+            ${offer.services.slice(0, 3).map(s => `<div><i class="ri-checkbox-circle-fill text-green"></i> <span>${s}</span></div>`).join('')}
+            <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 2px;">+ Bollo, Gestione Pratiche & Assistenza H24</div>
+          </div>
+
+          <!-- Pulsanti d'Azione -->
+          <div class="nlt-card-actions">
+            <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
+            </a>
+            <button type="button" class="btn btn-outline" onclick="openWhatsAppForCard('${offer.id}')" title="Contatta su WhatsApp" style="padding: 12px 14px; color: #2ecc71; border-color: rgba(46, 204, 113, 0.4);">
+              <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+// Calcolo istantaneo all'interno della singola card con animazione di ricalcolo
+function updateSingleCardPrice(offerId, duration, depositMode, event) {
+  const offer = NltState.offers.find(o => o.id === offerId);
+  if (!offer) return;
+
+  // Evidenzia bottone cliccato
+  const parentTabs = event.target.closest('.card-duration-tabs');
+  if (parentTabs) {
+    parentTabs.querySelectorAll('.card-tab').forEach(b => b.classList.remove('active', 'active-zero'));
+    if (depositMode === '0') event.target.classList.add('active-zero');
+    else event.target.classList.add('active');
+  }
+
+  const priceInfo = getCardPrice(offer, duration, depositMode);
+  const numElem = document.getElementById(`price-num-${offerId}`);
+  const detailsElem = document.getElementById(`price-details-${offerId}`);
+  const boxElem = document.getElementById(`price-box-${offerId}`);
+
+  if (numElem && detailsElem && boxElem) {
+    boxElem.style.transform = 'scale(0.96)';
+    boxElem.style.opacity = '0.5';
+    setTimeout(() => {
+      numElem.textContent = priceInfo.price.toLocaleString('it-IT');
+      detailsElem.textContent = priceInfo.details;
+      boxElem.style.transform = 'scale(1.03)';
+      boxElem.style.opacity = '1';
+      setTimeout(() => boxElem.style.transform = 'none', 180);
+    }, 120);
+  }
+}
+
+function resetAllFilters() {
+  NltState.maxBudget = 4000;
+  NltState.depositFilter = 'all';
+  NltState.durationFilter = 48;
+  NltState.categoryFilter = 'all';
+  NltState.visualCategory = 'all';
+  NltState.readyDeliveryOnly = false;
+  NltState.searchQuery = '';
+  
+  const heroSearchInput = document.getElementById('heroSearchInput');
+  if (heroSearchInput) heroSearchInput.value = '';
+  const searchInput = document.getElementById('nltSearchInput');
+  if (searchInput) searchInput.value = '';
+  
+  document.querySelectorAll('.category-pill').forEach((el, idx) => {
+    if (idx === 0) el.classList.add('active');
+    else el.classList.remove('active');
+  });
+  
+  renderOffersGrid();
+}
+
+// Modale Preventivo 1-Click & Dossier Scoring
+function openQuoteModal(offerId) {
+  const offer = NltState.offers.find(o => o.id === offerId);
+  if (!offer) return;
+  
+  const priceInfo = getCardPrice(offer);
+  
+  const modal = document.getElementById('quoteModal');
+  const title = document.getElementById('quoteModalCarTitle');
+  const subtitle = document.getElementById('quoteModalCarTrim');
+  const priceDisplay = document.getElementById('quoteModalPriceText');
+  const detailsDisplay = document.getElementById('quoteModalDetailsText');
+  const imgElem = document.getElementById('quoteModalImg');
+  const hiddenId = document.getElementById('quoteHiddenOfferId');
+
+  if (title) title.textContent = `${offer.brand} ${offer.model}`;
+  if (subtitle) subtitle.textContent = `${offer.trim} • Listino ${offer.providerName}`;
+  if (priceDisplay) priceDisplay.innerHTML = `€ ${priceInfo.price.toLocaleString('it-IT')} <small style="font-size: 0.9rem; font-weight: 400; color: var(--text-muted);">${priceInfo.label}</small>`;
+  if (detailsDisplay) detailsDisplay.textContent = priceInfo.details;
+  if (imgElem) imgElem.src = offer.image;
+  if (hiddenId) hiddenId.value = offer.id;
+
+  // Anteprima servizi nella modale
+  const sList = document.getElementById('quoteModalServicesList');
+  if (sList) {
+    sList.innerHTML = offer.services.map(s => `
+      <div style="display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-main);">
+        <i class="ri-check-double-fill text-green" style="font-size: 1.1rem;"></i> <span>${s}</span>
+      </div>
+    `).join('');
+  }
+
+  if (modal) {
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+  }
+}
+
+function closeQuoteModal() {
+  const modal = document.getElementById('quoteModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
+}
+
+// Invio modulo per generazione immediata PDF o invio pratica su Supabase
+async function handleGeneratePDFSubmit(event) {
+  event.preventDefault();
+  const name = document.getElementById('quoteClientName').value;
+  const email = document.getElementById('quoteClientEmail').value;
+  const phone = document.getElementById('quoteClientPhone').value;
+  const type = document.getElementById('quoteClientType').value;
+  const offerId = document.getElementById('quoteHiddenOfferId').value;
+  
+  const offer = NltState.offers.find(o => o.id === offerId);
+  const priceInfo = getCardPrice(offer);
+
+  // Salva il lead su Supabase crm_leads se connesso
+  if (typeof window.supabaseClient !== 'undefined' && window.supabaseClient) {
+    try {
+      await window.supabaseClient.from('crm_leads').insert([{
+        first_name: name.split(' ')[0] || name,
+        last_name: name.split(' ').slice(1).join(' ') || 'Cliente NLT',
+        phone: phone,
+        email: email,
+        customer_type: type,
+        pipeline_status: 'quote_sent',
+        notes: `Preventivo per ${offer.brand} ${offer.model} - Canone ${priceInfo.price} €/mese`
+      }]);
+    } catch (e) {
+      console.log('Salvataggio lead su DB non critico in demo locale.');
+    }
+  }
+
+  // Visualizza l'anteprima del preventivo stampabile su schermo (Emissione PDF 1-Click)
+  const previewBox = document.getElementById('quotePdfPreviewBox');
+  if (previewBox) {
+    previewBox.style.display = 'block';
+    previewBox.innerHTML = `
+      <div style="background: #0b0f19; border: 2px solid var(--accent-primary); border-radius: 14px; padding: 24px; text-align: left; position: relative; overflow: hidden; margin-top: 16px; animation: fadeIn 0.3s ease;">
+        <div style="position: absolute; top: -20px; right: -20px; width: 120px; height: 120px; background: rgba(0, 146, 70, 0.15); border-radius: 50%; filter: blur(30px);"></div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 12px; margin-bottom: 16px;">
+          <div>
+            <span style="color: var(--accent-primary); font-weight: 800; font-size: 1.1rem;"><i class="ri-vip-crown-fill"></i> ITERCARS PREVENTIVO UFFICIALE</span>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Codice Offerta: ${offer.baseOffer ? 'IT-NLT-2026-88' : 'IT-NBT-2026'} • Data: ${new Date().toLocaleDateString('it-IT')}</div>
+          </div>
+          <span style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 700;">PRONTO DA FIRMARE</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; font-size: 0.9rem;">
+          <div>
+            <strong style="color: var(--text-muted); display: block; font-size: 0.8rem;">INTESTAZIONE CLIENTE:</strong>
+            <span style="color: #fff; font-weight: 700;">${name}</span> (${type})<br>
+            <span style="color: var(--text-muted);">${email} • ${phone}</span>
+          </div>
+          <div>
+            <strong style="color: var(--text-muted); display: block; font-size: 0.8rem;">VETTURA SELEZIONATA:</strong>
+            <span style="color: #fff; font-weight: 700;">${offer.brand} ${offer.model}</span><br>
+            <span style="color: var(--text-muted);">${offer.trim}</span>
+          </div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.4); border: 1px solid var(--border-glass); border-radius: 10px; padding: 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Configurazione: ${priceInfo.details}</span>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--accent-primary);">€ ${priceInfo.price.toLocaleString('it-IT')} <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">${priceInfo.label}</small></div>
+          </div>
+          <div style="text-align: right; font-size: 0.8rem; color: #2ecc71;">
+            ✔ Assicurazione Kasko VIP<br>✔ Bollo & Manutenzione<br>✔ Consegna Garantita
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button type="button" class="btn btn-primary" onclick="window.print()" style="flex: 1; height: 44px; font-size: 0.95rem;">
+            <i class="ri-printer-line"></i> Stampa / Salva in PDF
+          </button>
+          <button type="button" class="btn btn-outline" onclick="sendQuoteViaWhatsApp('${phone}', '${offer.brand} ${offer.model}', '${priceInfo.price}')" style="flex: 1; height: 44px; font-size: 0.95rem; border-color: #2ecc71; color: #2ecc71;">
+            <i class="ri-whatsapp-line"></i> Ricevi PDF su WhatsApp
+          </button>
+        </div>
+      </div>
+    `;
+    previewBox.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function sendQuoteViaWhatsApp(phone, carName, price) {
+  const msg = `Ciao ITERCARS, ho generato il preventivo online per *${carName}* al canone di *€ ${price}/mese Tutto Incluso*. Vorrei ricevere la conferma per avviare la prenotazione!`;
+  window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+function openWhatsAppForCard(offerId) {
+  const offer = NltState.offers.find(o => o.id === offerId);
+  if (!offer) return;
+  const priceInfo = getCardPrice(offer);
+  const msg = `Ciao ITERCARS Concierge! Vorrei maggiori informazioni sul Noleggio Lungo Termine per *${offer.brand} ${offer.model} (${offer.trim})* con canone esposto a *€ ${priceInfo.price}/mese*. È disponibile in pronta consegna?`;
+  window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
+}

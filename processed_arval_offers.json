@@ -1,0 +1,112 @@
+[
+  {
+    "provider_code": "arval",
+    "provider_id": "a1111111-1111-1111-1111-111111111111",
+    "offer_code": "ARV-Q3-MAC-36-15-0",
+    "vehicle": {
+      "brand": "Porsche",
+      "model": "Macan",
+      "trim": "4 Electric 408 CV AWD",
+      "category": "SUV Luxury",
+      "fuel": "Elettrico ⚡",
+      "image_url": "porsche_macan.webp"
+    },
+    "contract": {
+      "duration_months": 36,
+      "km_per_year": 15000,
+      "deposit_mandante": 0.0,
+      "mandante_monthly_net": 890.0,
+      "broker_markup_monthly": 49.0,
+      "client_monthly_price": 939.0,
+      "is_ready_delivery": true
+    }
+  },
+  {
+    "provider_code": "arval",
+    "provider_id": "a1111111-1111-1111-1111-111111111111",
+    "offer_code": "ARV-Q3-MAC-36-15-3",
+    "vehicle": {
+      "brand": "Porsche",
+      "model": "Macan",
+      "trim": "4 Electric 408 CV AWD",
+      "category": "SUV Luxury",
+      "fuel": "Elettrico ⚡",
+      "image_url": "porsche_macan.webp"
+    },
+    "contract": {
+      "duration_months": 36,
+      "km_per_year": 15000,
+      "deposit_mandante": 3000.0,
+      "mandante_monthly_net": 790.0,
+      "broker_markup_monthly": 49.0,
+      "client_monthly_price": 839.0,
+      "is_ready_delivery": true
+    }
+  },
+  {
+    "provider_code": "arval",
+    "provider_id": "a1111111-1111-1111-1111-111111111111",
+    "offer_code": "ARV-Q3-MAC-48-15-0",
+    "vehicle": {
+      "brand": "Porsche",
+      "model": "Macan",
+      "trim": "4 Electric 408 CV AWD",
+      "category": "SUV Luxury",
+      "fuel": "Elettrico ⚡",
+      "image_url": "porsche_macan.webp"
+    },
+    "contract": {
+      "duration_months": 48,
+      "km_per_year": 15000,
+      "deposit_mandante": 0.0,
+      "mandante_monthly_net": 810.0,
+      "broker_markup_monthly": 49.0,
+      "client_monthly_price": 859.0,
+      "is_ready_delivery": true
+    }
+  },
+  {
+    "provider_code": "arval",
+    "provider_id": "a1111111-1111-1111-1111-111111111111",
+    "offer_code": "ARV-Q3-STE-48-15-0",
+    "vehicle": {
+      "brand": "Alfa Romeo",
+      "model": "Stelvio Veloce",
+      "trim": "2.2 Turbo Diesel 210 CV Q4 Automatico",
+      "category": "SUV Luxury",
+      "fuel": "Diesel Q4",
+      "image_url": "category-suv.jpg"
+    },
+    "contract": {
+      "duration_months": 48,
+      "km_per_year": 15000,
+      "deposit_mandante": 0.0,
+      "mandante_monthly_net": 560.0,
+      "broker_markup_monthly": 49.0,
+      "client_monthly_price": 609.0,
+      "is_ready_delivery": true
+    }
+  },
+  {
+    "provider_code": "arval",
+    "provider_id": "a1111111-1111-1111-1111-111111111111",
+    "offer_code": "ARV-Q3-STE-48-15-3",
+    "vehicle": {
+      "brand": "Alfa Romeo",
+      "model": "Stelvio Veloce",
+      "trim": "2.2 Turbo Diesel 210 CV Q4 Automatico",
+      "category": "SUV Luxury",
+      "fuel": "Diesel Q4",
+      "image_url": "category-suv.jpg"
+    },
+    "contract": {
+      "duration_months": 48,
+      "km_per_year": 15000,
+      "deposit_mandante": 3000.0,
+      "mandante_monthly_net": 480.0,
+      "broker_markup_monthly": 49.0,
+      "client_monthly_price": 529.0,
+      "is_ready_delivery": true
+    }
+  }
+]

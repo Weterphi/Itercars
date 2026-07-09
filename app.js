@@ -24,7 +24,7 @@ const langFlags = {
 const translations = {
   it: {
     "nav.home": "Home",
-    "nav.fleet": "La Flotta",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Perché Noi",
     "nav.vip": "Servizi VIP",
     "nav.contacts": "Contatti",
@@ -49,7 +49,7 @@ const translations = {
     "search.category": "Categoria Auto",
     "search.catAll": "Tutte le Categorie",
     "search.btn": "Consulta Disponibilità",
-    "fleet.tag": "La Nostra Flotta",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Guidare l\'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span>',
     "fleet.subtitle": "Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.",
     "filter.all": "Tutti i Modelli",
@@ -76,7 +76,7 @@ const translations = {
     "modal.kaskoInc": "Assicurazione Inclusa",
     "modal.btnConfirm": "Conferma Richiesta Prenotazione",
     "footer.desc": "Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.",
-    "footer.col1Title": "Categorie Flotta",
+    "footer.col1Title": "Categorie Luxury Car",
     "footer.col2Title": "Link Utili",
     "footer.linkConditions": "Condizioni di Noleggio",
     "footer.linkFaq": "FAQ & Supporto",
@@ -95,7 +95,7 @@ const translations = {
   },
   en: {
     "nav.home": "Home",
-    "nav.fleet": "The Fleet",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Why Us",
     "nav.vip": "VIP Services",
     "nav.contacts": "Contact",
@@ -120,7 +120,7 @@ const translations = {
     "search.category": "Car Category",
     "search.catAll": "All Categories",
     "search.btn": "Search Cars",
-    "fleet.tag": "Our Fleet",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Selected Vehicles for <span class="text-gradient">Pure Emotions</span>',
     "fleet.subtitle": "Choose the perfect model for your next business trip, exclusive weekend, or special event.",
     "filter.all": "All Models",
@@ -147,7 +147,7 @@ const translations = {
     "modal.kaskoInc": "Insurance Included",
     "modal.btnConfirm": "Confirm Booking Request",
     "footer.desc": "The benchmark marketplace for renting luxury, sports, and exclusive cars in Italy and Europe. Powered by passion and design.",
-    "footer.col1Title": "Fleet Categories",
+    "footer.col1Title": "Luxury Car Categories",
     "footer.col2Title": "Useful Links",
     "footer.linkConditions": "Rental Conditions",
     "footer.linkFaq": "FAQ & Support",
@@ -166,7 +166,7 @@ const translations = {
   },
   es: {
     "nav.home": "Inicio",
-    "nav.fleet": "La Flota",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Por Qué Nosotros",
     "nav.vip": "Servicios VIP",
     "nav.contacts": "Contacto",
@@ -191,7 +191,7 @@ const translations = {
     "search.category": "Categoría",
     "search.catAll": "Todas las Categorías",
     "search.btn": "Buscar Coches",
-    "fleet.tag": "Nuestra Flota",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Vehículos Seleccionados para <span class="text-gradient">Emociones Puras</span>',
     "fleet.subtitle": "Elige el modelo perfecto para tu próximo viaje de negocios, fin de semana exclusivo o evento especial.",
     "filter.all": "Todos los Modelos",
@@ -237,7 +237,7 @@ const translations = {
   },
   fr: {
     "nav.home": "Accueil",
-    "nav.fleet": "La Flotte",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Pourquoi Nous",
     "nav.vip": "Services VIP",
     "nav.contacts": "Contact",
@@ -262,7 +262,7 @@ const translations = {
     "search.category": "Catégorie",
     "search.catAll": "Toutes Catégories",
     "search.btn": "Rechercher",
-    "fleet.tag": "Notre Flotte",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Véhicules Sélectionnés pour des <span class="text-gradient">Émotions Pures</span>',
     "fleet.subtitle": "Choisissez le modèle parfait pour votre prochain voyage d'affaires, week-end exclusif ou événement spécial.",
     "filter.all": "Tous les Modèles",
@@ -308,7 +308,7 @@ const translations = {
   },
   de: {
     "nav.home": "Startseite",
-    "nav.fleet": "Fahrzeugflotte",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Warum Wir",
     "nav.vip": "VIP-Service",
     "nav.contacts": "Kontakt",
@@ -333,7 +333,7 @@ const translations = {
     "search.category": "Fahrzeugkategorie",
     "search.catAll": "Alle Kategorien",
     "search.btn": "Fahrzeug Suchen",
-    "fleet.tag": "Unsere Flotte",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Ausgewählte Fahrzeuge für <span class="text-gradient">Reine Emotionen</span>',
     "fleet.subtitle": "Wählen Sie das perfekte Modell für Ihre nächste Geschäftsreise, ein exklusives Wochenende oder ein besonderes Event.",
     "filter.all": "Alle Modelle",
@@ -379,7 +379,7 @@ const translations = {
   },
   ru: {
     "nav.home": "Главная",
-    "nav.fleet": "Автопарк",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Преимущества",
     "nav.vip": "VIP Сервис",
     "nav.contacts": "Контакты",
@@ -404,7 +404,7 @@ const translations = {
     "search.category": "Категория",
     "search.catAll": "Все Категории",
     "search.btn": "Найти Автомобиль",
-    "fleet.tag": "Наш Автопарк",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Отборные Автомобили для <span class="text-gradient">Чистых Эмоций</span>',
     "fleet.subtitle": "Выберите идеальную модель для деловой поездки, эксклюзивного уикенда или особого мероприятия.",
     "filter.all": "Все Модели",
@@ -450,7 +450,7 @@ const translations = {
   },
   zh: {
     "nav.home": "首页",
-    "nav.fleet": "尊享车队",
+    "nav.fleet": "Luxury Car",
     "nav.why": "为什么选择我们",
     "nav.vip": "VIP 服务",
     "nav.contacts": "联系方式",
@@ -475,7 +475,7 @@ const translations = {
     "search.category": "车型类别",
     "search.catAll": "全部类别",
     "search.btn": "搜索车辆",
-    "fleet.tag": "我们的车队",
+    "fleet.tag": "Luxury Car",
     "fleet.title": '精选座驾 为<span class="text-gradient">纯粹激情</span>而生',
     "fleet.subtitle": "为您接下来的商务差旅、尊享周末或特殊活动选择最完美的座驾。",
     "filter.all": "全部车型",
@@ -521,7 +521,7 @@ const translations = {
   },
   ar: {
     "nav.home": "الرئيسية",
-    "nav.fleet": "أسطولنا",
+    "nav.fleet": "Luxury Car",
     "nav.why": "لماذا نحن",
     "nav.vip": "خدمات VIP",
     "nav.contacts": "اتصل بنا",
@@ -546,7 +546,7 @@ const translations = {
     "search.category": "فئة السيارة",
     "search.catAll": "جميع الفئات",
     "search.btn": "ابحث عن سيارة",
-    "fleet.tag": "أسطولنا الفاخر",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'سيارات مختارة من أجل <span class="text-gradient">عواطف خالصة</span>',
     "fleet.subtitle": "اختر الموديل المثالي لرحلة عملك القادمة، عطلة نهاية أسبوع حصرية أو حدث خاص.",
     "filter.all": "جميع الموديلات",
@@ -592,7 +592,7 @@ const translations = {
   },
   ja: {
     "nav.home": "ホーム",
-    "nav.fleet": "車両ラインナップ",
+    "nav.fleet": "Luxury Car",
     "nav.why": "選ばれる理由",
     "nav.vip": "VIPサービス",
     "nav.contacts": "お問い合わせ",
@@ -617,7 +617,7 @@ const translations = {
     "search.category": "カテゴリー",
     "search.catAll": "すべてのカテゴリー",
     "search.btn": "車両を検索",
-    "fleet.tag": "ラインナップ",
+    "fleet.tag": "Luxury Car",
     "fleet.title": '純粋な感動を呼ぶ <span class="text-gradient">厳選された名車たち</span>',
     "fleet.subtitle": "次のビジネス出張、特別な週末、または記念イベントに最適なモデルをお選びください。",
     "filter.all": "すべてのモデル",
@@ -663,7 +663,7 @@ const translations = {
   },
   pt: {
     "nav.home": "Início",
-    "nav.fleet": "A Frota",
+    "nav.fleet": "Luxury Car",
     "nav.why": "Por Que Nós",
     "nav.vip": "Serviços VIP",
     "nav.contacts": "Contato",
@@ -688,7 +688,7 @@ const translations = {
     "search.category": "Categoria",
     "search.catAll": "Todas as Categorias",
     "search.btn": "Buscar Carros",
-    "fleet.tag": "Nossa Frota",
+    "fleet.tag": "Luxury Car",
     "fleet.title": 'Veículos Selecionados para <span class="text-gradient">Emoções Puras</span>',
     "fleet.subtitle": "Escolha o modelo perfeito para sua próxima viagem de negócios, fim de semana exclusivo ou evento especial.",
     "filter.all": "Todos os Modelos",
@@ -875,6 +875,7 @@ let fleetData = [
   { id: 54, name: "Porsche 911 992 Turbo S Cabriolet", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "330 KM/H", accel: "2.8s", hp: "650 CV" }, image: "porsche-911-turbo.webp", badge: "Boxer 3.8L Biturbo" }
 ];
 
+
 // Registry of Fleet Providers (Fornitori)
 const providersData = {
   "provider_1": {
@@ -900,7 +901,8 @@ document.addEventListener("DOMContentLoaded", () => {
   changeLanguage(currentLang, true);
   setupScrollListener();
   if (typeof initAuthListener === 'function') initAuthListener();
-  if (typeof loadFleetFromSupabase === 'function') loadFleetFromSupabase();
+  // se non vogliamo caricare dati mock dal DB, disabilitiamo:
+  // if (typeof loadFleetFromSupabase === 'function') loadFleetFromSupabase();
   
   const navBtn = document.getElementById("navAreaBtn");
   if (navBtn) {
@@ -912,10 +914,59 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 async function loadFleetFromSupabase() {
-  // Caricamento da database disabilitato temporaneamente per mostrare solo i veicoli personalizzati
-  console.log("ℹ️ Caricamento Supabase disabilitato: mostra solo i veicoli locali di ITERCARS.");
-  
-  // Forza il rendering della flotta basato sui dati locali configurati
+  if (typeof supabase !== 'undefined' && supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('vehicles')
+        .select('*')
+        .eq('is_active', true);
+
+      if (!error && data && data.length > 0) {
+        console.log("✅ Caricata flotta da Supabase DB:", data.length, "veicoli");
+        const mappedCars = data.map(v => {
+          let specsObj = {};
+          if (typeof v.specs === 'string') {
+            try { specsObj = JSON.parse(v.specs); } catch(e){}
+          } else if (v.specs) {
+            specsObj = v.specs;
+          }
+          const fullName = v.name || (v.brand ? `${v.brand} ${v.model}` : 'Veicolo Itercars');
+          return {
+            id: v.id,
+            db_id: v.id,
+            name: fullName,
+            brand: v.brand || '',
+            model: v.model || '',
+            trim: v.trim || '',
+            category: v.category || 'SUV Luxury',
+            price: Number(v.daily_price) || 0,
+            rating: String(v.rating || "5.0"),
+            specs: {
+              speed: specsObj.speed || '250 km/h',
+              accel: specsObj.accel || '4.5s',
+              hp: specsObj.hp || '400 CV'
+            },
+            image: v.image_url || 'category-suv.jpg',
+            badge: v.badge || (v.fuel_type ? `${v.fuel_type} - ${v.transmission || 'Auto'}` : 'Esclusiva ✨'),
+            provider: v.provider_id || "provider_1"
+          };
+        });
+
+        if (mappedCars.length > 0) {
+          const dbIds = new Set(mappedCars.map(c => String(c.id)));
+          const extraBmw = fleetData.filter(c => !dbIds.has(String(c.id)));
+          fleetData = [...mappedCars, ...extraBmw];
+          try { localStorage.setItem('itercars_fleet_cache', JSON.stringify(fleetData)); } catch(e){}
+        }
+      }
+    } catch (err) {
+      console.warn("⚠️ Query Supabase fallita o offline. Utilizzo catalogo locale di fallback.");
+    }
+  }
+
+  try { localStorage.setItem('itercars_fleet_cache', JSON.stringify(fleetData)); } catch(e){}
+
+  // Forza il rendering della flotta basato sui dati configurati o dal DB
   const activeBtn = document.querySelector(".pill-btn.active");
   let filterCat = "tutti";
   if (activeBtn) {
@@ -957,11 +1008,14 @@ function renderFleet(cars) {
   }
 
   // Group cars by category
-  const categories = ["Supercar", "SUV Luxury", "Cabriolet", "Berline e Sportive"];
+  const categories = ["Supercar", "SUV Luxury", "Sportiva", "Cabriolet", "Berline e Sportive", "Luxury"];
   let html = "";
 
   categories.forEach(cat => {
-    const catCars = cars.filter(car => car.category === cat);
+    const catCars = cars.filter(car => {
+      if (cat === "Berline e Sportive") return car.category === "Berline e Sportive" || car.category === "Berline" || (car.category === "Sportiva" && !cars.some(c => c.category === "Sportiva" && categories.indexOf("Sportiva") < categories.indexOf("Berline e Sportive")));
+      return car.category === cat;
+    });
     if (catCars.length > 0) {
       html += `
         <div class="fleet-category-section">
@@ -999,7 +1053,7 @@ function renderCarCard(car, dict) {
   const cleanBadge = (car.badge || '').replace(/[\u1F600-\u1F64F\u1F300-\u1F5FF\u1F680-\u1F6FF\u1F1E6-\u1F1FF\u2600-\u26FF\u2700-\u27BF]/g, '').trim();
   return `
     <div class="glass-card car-card">
-      <a href="car-detail.html?v=4&car=${encodeURIComponent(car.name)}" style="display: block; position: relative;">
+      <a href="car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}" style="display: block; position: relative;">
         <div class="car-image-container">
           <span class="car-badge">${cleanBadge}</span>
           <span class="car-rating"><i class="ri-star-fill"></i> ${car.rating}</span>
@@ -1032,7 +1086,7 @@ function renderCarCard(car, dict) {
             <span class="price-period">${car.price === 0 ? "" : dict["dynamic.perDay"]}</span>
           </div>
           
-          <a href="car-detail.html?car=${encodeURIComponent(car.name)}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; display: flex; gap: 8px; align-items: center;">
+          <a href="car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; display: flex; gap: 8px; align-items: center;">
             <span>${dict["dynamic.book"]}</span> <i class="ri-arrow-right-up-line"></i>
           </a>
         </div>
@@ -1399,6 +1453,7 @@ function resetNavAreaButton() {
 }
 
 function openAuthModal() {
+  closeVipDashboardModal();
   if (currentUser) {
     openVipDashboardModal();
   } else {
@@ -1579,8 +1634,10 @@ function closeVipDashboardModal() {
 
 async function handleLogout() {
   if (supabase) {
-    await supabase.auth.signOut();
+    try { await supabase.auth.signOut(); } catch(e) {}
   }
+  currentUser = null;
+  resetNavAreaButton();
   closeVipDashboardModal();
   showToast("👋 Disconnessione effettuata");
 }
@@ -1828,6 +1885,22 @@ async function handleAvailabilitySubmit(event) {
 
   if (typeof supabase !== 'undefined' && supabase) {
     try {
+      // Inserisce in bookings per piena coerenza con la tabella principale NBT
+      supabase.from('bookings').insert([{
+        vehicle_name: categoria || 'Richiesta Disponibilità',
+        client_name: name,
+        client_phone: phone,
+        client_email: email,
+        pickup_location: luogo || null,
+        rental_days: 1,
+        total_price: 0,
+        status: 'pending'
+      }]).then(({ error }) => {
+         if (error) console.warn("Errore salvataggio disponibilità in bookings:", error.message);
+         else console.log("✅ Richiesta disponibilità salvata in bookings!");
+      });
+
+      // Retrocompatibilità su availability_requests
       supabase.from('availability_requests').insert([{
         name: name,
         phone: phone,
@@ -1837,9 +1910,7 @@ async function handleAvailabilitySubmit(event) {
         dates: dates,
         category: categoria,
         status: 'new'
-      }]).then(({ error }) => {
-         if (error) console.warn("Supabase log:", error.message);
-      });
+      }]).then(() => {});
     } catch(e) { console.warn(e); }
   }
 

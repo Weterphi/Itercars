@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    const savedConsent = localStorage.getItem('itercars_cookie_consent');
+    const isGranted = savedConsent === 'accepted' ? 'granted' : 'denied';
+    gtag('consent', 'default', {
+      'analytics_storage': isGranted,
+      'ad_storage': isGranted,
+      'ad_user_data': isGranted,
+      'ad_personalization': isGranted
+    });
+
+    gtag('config', 'G-H6JBRXTWJL');
+  </script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xj5lxydl3i");
+    if (localStorage.getItem('itercars_cookie_consent') === 'accepted') {
+      window.clarity('consent');
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configura Vettura NLT — ITERCARS</title>
+  <meta name="description" content="Configura durata mesi, chilometraggio e anticipo per la tua nuova auto in Noleggio Lungo Termine All-Inclusive. Genera preventivo ufficiale.">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="index.css?v=40">
+  <link rel="stylesheet" href="nlt-dettaglio.css?v=3">
+</head>
+<body style="background: #06060c; color: #fff; margin: 0; padding: 0;">
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS Luxury Supercar Rental">
+        <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
+      </a>
+
+            <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="noleggio-lungo-termine.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Lungo Termine</a></li>
+        <li><a href="fleet.html" data-i18n="nav.fleet">Luxury Car</a></li>
+        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> Accademy</a></li>
+        <li><a href="index.html#contatti" data-i18n="nav.contacts">Contatti</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
+          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
+        </a>
+        <a href="noleggio-lungo-termine.html" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
+          <i class="ri-arrow-left-line"></i> <span>Torna al Catalogo</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= DETTAGLIO & CONFIGURATORE NLT ================= -->
+  <section class="nlt-detail-header">
+    <div class="container">
+      
+      <!-- Breadcrumb -->
+      <div class="nlt-breadcrumb" id="nltBreadcrumb">
+        <a href="noleggio-lungo-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NLT</a> 
+        <i class="ri-arrow-right-s-line"></i> <span>Porsche</span> 
+        <i class="ri-arrow-right-s-line"></i> <strong>Macan</strong>
+      </div>
+
+      <div class="nlt-detail-grid">
+        
+        <!-- ================= COLONNA SINISTRA: VETRINA & SPECIFICHE ================= -->
+        <div class="detail-main-box">
+          
+          <!-- Box Immagine -->
+          <div class="detail-image-wrapper">
+            <img id="detailMainImg" src="porsche_macan.webp" alt="Vettura" class="detail-image" onerror="this.src='category-suv.jpg'">
+            <div style="position: absolute; bottom: 14px; left: 14px; display: flex; gap: 10px; z-index: 2;" id="detailBadgeContainer">
+              <span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>
+            </div>
+          </div>
+
+          <!-- Titolo & Mandante -->
+          <div style="background: rgba(15, 20, 32, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
+              <div>
+                <span id="detailBrand" style="color: var(--accent-primary); font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">PORSCHE</span>
+                <h1 id="detailModel" style="font-size: 2.4rem; font-weight: 900; margin: 4px 0;">Macan</h1>
+                <p id="detailTrim" style="font-size: 1.1rem; color: var(--text-muted); margin: 0;">4 Electric 408 CV AWD</p>
+              </div>
+              <div id="detailProvider" style="background: rgba(0, 146, 70, 0.15); border: 1px solid rgba(0, 146, 70, 0.35); padding: 8px 16px; border-radius: 12px; font-size: 0.85rem; color: #fff;">
+                <i class="ri-shield-star-fill text-green"></i> Listino Mandante: <strong>Arval Italia</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specifiche Tecniche Veloci -->
+          <div class="detail-specs-grid">
+            <div class="detail-spec-card">
+              <i class="ri-speed-up-line"></i>
+              <span class="label">Velocità Max</span>
+              <span class="value" id="detailSpeed">220 km/h</span>
+            </div>
+            <div class="detail-spec-card">
+              <i class="ri-dashboard-2-line"></i>
+              <span class="label">0-100 km/h</span>
+              <span class="value" id="detailAccel">5.2s</span>
+            </div>
+            <div class="detail-spec-card">
+              <i class="ri-flashlight-fill"></i>
+              <span class="label">Potenza</span>
+              <span class="value" id="detailHp">408 CV</span>
+            </div>
+            <div class="detail-spec-card">
+              <i class="ri-gas-station-line"></i>
+              <span class="label">Alimentazione</span>
+              <span class="value" id="detailFuel">Elettrico ⚡</span>
+            </div>
+            <div class="detail-spec-card">
+              <i class="ri-settings-4-line"></i>
+              <span class="label">Cambio</span>
+              <span class="value" id="detailTrans">Automatico</span>
+            </div>
+          </div>
+
+          <!-- Spiegazione I 6 Pilastri del Canone Tutto Compreso -->
+          <div class="included-pillars-box">
+            <h3><i class="ri-shield-check-fill" style="color: #2ecc71;"></i> Cosa è Sempre Incluso nel Canone Mensile:</h3>
+            
+            <div class="pillars-list">
+              <div class="pillar-item">
+                <i class="ri-shield-user-fill"></i>
+                <div>
+                  <h4>Copertura RCA & Kasko Integrale</h4>
+                  <p>Tutela completa contro danni accidentali, furto, incendio, atti vandalici ed eventi atmosferici. Senza pensieri.</p>
+                </div>
+              </div>
+
+              <div class="pillar-item">
+                <i class="ri-tools-fill"></i>
+                <div>
+                  <h4>Manutenzione Ordinaria & Straordinaria</h4>
+                  <p>Tutti i tagliandi, cambi olio, usura freni e riparazioni guasti meccanici eseguiti nelle officine ufficiali della casa madre.</p>
+                </div>
+              </div>
+
+              <div class="pillar-item">
+                <i class="ri-bank-card-fill"></i>
+                <div>
+                  <h4>Bollo & Messa su Strada</h4>
+                  <p>Tassa di proprietà annuale e immatricolazione interamente gestite e pagate dal mandante per tutta la durata del contratto.</p>
+                </div>
+              </div>
+
+              <div class="pillar-item">
+                <i class="ri-car-washing-fill"></i>
+                <div>
+                  <h4>Soccorso Stradale H24 + Vettura Sostitutiva</h4>
+                  <p>Assistenza attiva 24/7 in tutta Europa con recupero del mezzo e auto di cortesia garantita entro 60 minuti.</p>
+                </div>
+              </div>
+
+              <div class="pillar-item">
+                <i class="ri-disc-line"></i>
+                <div>
+                  <h4>Gestione Pneumatici Premium</h4>
+                  <p>Sostituzione stagionale treno gomme estive ed invernali di marca premium, compreso stoccaggio e convergenza.</p>
+                </div>
+              </div>
+
+              <div class="pillar-item">
+                <i class="ri-customer-service-2-fill"></i>
+                <div>
+                  <h4>Consulente ITERCARS Dedicato</h4>
+                  <p>Un unico referente VIP a tua disposizione per tutta la durata del noleggio per pratiche, sinistri e rinnovi.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ================= COLONNA DESTRA: CONFIGURATORE STICKY & PREVENTIVO ================= -->
+        <div class="detail-sidebar">
+          <div class="configurator-widget">
+            
+            <h2>
+              <span><i class="ri-sound-module-fill" style="color: #2ecc71;"></i> Configura Contratto</span>
+              <span style="font-size: 0.8rem; background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 6px; font-weight: 600;">All-Inclusive</span>
+            </h2>
+
+            <!-- Box Canone Live -->
+            <div class="live-price-box" id="livePriceBox">
+              <div class="live-price-label">Canone Mensile Calcolato:</div>
+              <div class="live-price-number" id="liveMonthlyPrice">€ 764</div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: #fff;">al mese (IVA esclusa) • Tutto Compreso</div>
+              <div class="live-price-summary" id="liveConfigSummary">
+                <strong>48 Mesi</strong> • <strong>15.000 Km/anno</strong> • Anticipo <strong>€ 3.000</strong>
+              </div>
+            </div>
+
+            <!-- STEP 1: DURATA MESI -->
+            <div class="config-section">
+              <div class="config-section-title"><i class="ri-calendar-schedule-line"></i> 1. Durata Contratto (Mesi)</div>
+              <div class="config-options-grid-3" id="configDurationGroup">
+                <button type="button" class="config-option-btn" data-value="6" onclick="setConfigDuration(6, this)">6 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Mid-Term</small></button>
+                <button type="button" class="config-option-btn" data-value="12" onclick="setConfigDuration(12, this)">12 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Annuale</small></button>
+                <button type="button" class="config-option-btn" data-value="24" onclick="setConfigDuration(24, this)">24 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Biennale</small></button>
+                <button type="button" class="config-option-btn active" data-value="36" onclick="setConfigDuration(36, this)">36 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:#2ecc71">Consigliato</small></button>
+              </div>
+            </div>
+
+            <!-- STEP 2: CHILOMETRI ANNUI -->
+            <div class="config-section">
+              <div class="config-section-title"><i class="ri-road-map-line"></i> 2. Chilometri Compresi per Anno</div>
+              <div class="config-options-grid" id="configKmGroup">
+                <button type="button" class="config-option-btn" data-value="10000" onclick="setConfigKm(10000, this)">10.000 Km</button>
+                <button type="button" class="config-option-btn active" data-value="15000" onclick="setConfigKm(15000, this)">15.000 Km</button>
+                <button type="button" class="config-option-btn" data-value="20000" onclick="setConfigKm(20000, this)">20.000 Km</button>
+                <button type="button" class="config-option-btn" data-value="25000" onclick="setConfigKm(25000, this)">25.000 Km</button>
+                <button type="button" class="config-option-btn" data-value="30000" onclick="setConfigKm(30000, this)">30.000 Km</button>
+              </div>
+            </div>
+
+            <!-- STEP 3: ANTICIPO INIZIALE -->
+            <div class="config-section">
+              <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Anticipo Iniziale / Permuta</div>
+              <div class="config-options-grid" id="configDepositGroup">
+                <button type="button" class="config-option-btn" data-value="0" onclick="setConfigDeposit(0, this)" style="border-color: rgba(245, 158, 11, 0.5); color: #f59e0b;">⚡ 0€ Anticipo</button>
+                <button type="button" class="config-option-btn" data-value="2500" onclick="setConfigDeposit(2500, this)">€ 2.500</button>
+                <button type="button" class="config-option-btn active" data-value="3000" onclick="setConfigDeposit(3000, this)">€ 3.000</button>
+                <button type="button" class="config-option-btn" data-value="5000" onclick="setConfigDeposit(5000, this)">€ 5.000</button>
+                <button type="button" class="config-option-btn" data-value="7500" onclick="setConfigDeposit(7500, this)">€ 7.500</button>
+              </div>
+            </div>
+
+            <!-- STEP 4: OPZIONE FRANCHIGIA KASKO -->
+            <div class="config-section">
+              <div class="config-section-title"><i class="ri-shield-star-line"></i> 4. Opzione Franchigia Assicurativa</div>
+              <div class="config-options-grid" id="configKaskoGroup">
+                <button type="button" class="config-option-btn active" data-value="standard" onclick="setConfigKasko('standard', this)">Standard (500€)</button>
+                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">🛡️ Franchigia Zero 0€ (+€35/m)</button>
+              </div>
+            </div>
+
+            <!-- STEP 5: FORM PER EMISSIONE PREVENTIVO -->
+            <form class="quote-form" onsubmit="handleQuoteSubmit(event)">
+              <div class="config-section-title" style="margin-bottom: 2px;"><i class="ri-file-pdf-line"></i> 5. Dati per Emissione Preventivo PDF</div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <input type="text" id="quoteClientName" class="form-control" required placeholder="Nome e Cognome *" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.88rem;">
+                </div>
+                <div>
+                  <select id="quoteClientType" class="form-control" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.88rem;">
+                    <option value="Privato">Privato</option>
+                    <option value="Partita IVA">Partita IVA / Ditta</option>
+                    <option value="Azienda SRL/SPA">Azienda SRL / SPA</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                  <input type="tel" id="quoteClientPhone" class="form-control" required placeholder="Telefono / WhatsApp *" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.88rem;">
+                </div>
+                <div>
+                  <input type="email" id="quoteClientEmail" class="form-control" required placeholder="Email *" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.88rem;">
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%; height: 52px; font-size: 1.1rem; font-weight: 800; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>Genera Preventivo</span> <i class="ri-file-pdf-fill" style="font-size: 1.3rem;"></i>
+              </button>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONTENITORE PREVENTIVO GENERATO AL VOLO (Si apre dopo il click) -->
+      <div id="officialQuoteContainer" style="display: none; padding-bottom: 40px;"></div>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer id="contatti" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 50px; background: #040509;">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="margin-bottom: 16px;" title="ITERCARS Luxury Supercar Rental">
+            <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="footer-logo-img">
+          </a>
+          <p data-i18n="footer.desc">Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.</p>
+        </div>
+
+        <div class="footer-col">
+          <h4>Noleggio & Brokerage</h4>
+          <div class="footer-links">
+            <a href="noleggio-lungo-termine.html">Noleggio Lungo Termine (NLT)</a>
+            <a href="noleggio-lungo-termine.html?mode=NBT">Noleggio Breve Termine (NBT)</a>
+            <a href="fleet.html">Catalogo Luxury Car</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Link Utili</h4>
+          <div class="footer-links">
+            <a href="index.html">Home Marketplace</a>
+            <a href="accademy.html">ITERCARS Academy</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4>Contatti & Concierge</h4>
+          <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
+            <p><i class="ri-phone-fill text-gradient"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
+            <p><i class="ri-mail-send-fill text-gradient"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NLT Multi-Mandante & NBT.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Supabase JS SDK & App Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=21"></script>
+  <script src="nlt-dettaglio.js?v=7"></script>
+  <script src="cookie-banner.js?v=1"></script>
+</body>
+</html>

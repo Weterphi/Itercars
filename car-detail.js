@@ -2,7 +2,7 @@
    CAR DETAIL LOGIC
    ========================================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   // Parsing the URL parameter
   const urlParams = new URLSearchParams(window.location.search);
   const carNameParam = urlParams.get('car');
@@ -13,8 +13,52 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Find the car in fleetData (which is loaded from app.js)
-  const car = fleetData.find(c => c.name === carNameParam);
+  // Find the car in fleetData (which is loaded from app.js) or localStorage or Supabase
+  let car = fleetData.find(c => c.name === carNameParam || String(c.id) === String(carNameParam) || String(c.db_id) === String(carNameParam) || c.name.toLowerCase().includes(carNameParam.toLowerCase()));
+
+  if (!car) {
+    try {
+      const cached = JSON.parse(localStorage.getItem('itercars_fleet_cache') || '[]');
+      car = cached.find(c => c.name === carNameParam || String(c.id) === String(carNameParam) || String(c.db_id) === String(carNameParam) || c.name.toLowerCase().includes(carNameParam.toLowerCase()));
+    } catch(e) {}
+  }
+
+  if (!car && typeof supabase !== 'undefined' && supabase) {
+    try {
+      const { data } = await supabase.from('vehicles').select('*').or(`name.ilike."%${carNameParam}%",id.eq."${carNameParam}"`).maybeSingle();
+      if (data) {
+        const specsObj = typeof data.specs === 'string' ? JSON.parse(data.specs) : (data.specs || { speed: "240 km/h", accel: "5.5s", hp: "300 CV" });
+        let featArr = ["Navigatore Pro", "Cambio Automatico", "Sensori Park", "Cerchi in Lega"];
+        if (Array.isArray(data.features)) featArr = data.features;
+        else if (typeof data.features === 'string') { try { featArr = JSON.parse(data.features); } catch(e){} }
+        car = {
+          id: data.id,
+          name: data.name || "Veicolo Premium",
+          category: data.category || "Luxury",
+          rating: data.rating || "5.0",
+          price: Number(data.daily_price) || 0,
+          image: data.image_url || "category-suv.jpg",
+          badge: data.badge || "🔥 TOP CLASS",
+          specs: specsObj,
+          features: featArr
+        };
+      }
+    } catch(e) {}
+  }
+
+  if (!car && carNameParam) {
+    car = {
+      id: urlParams.get('id') || carNameParam,
+      name: carNameParam,
+      category: urlParams.get('cat') || "Luxury",
+      rating: "5.0",
+      price: Number(urlParams.get('price')) || 0,
+      image: urlParams.get('img') || "category-suv.jpg",
+      badge: "🔥 ESCLUSIVA",
+      specs: { speed: "240 km/h", accel: "5.5s", hp: "300 CV" },
+      features: ["Navigatore Pro", "Cambio Automatico", "Sensori Park", "Cerchi in Lega"]
+    };
+  }
 
   if (!car) {
     // Car not found
@@ -106,6 +150,24 @@ async function submitDetailBooking(event) {
   
   if (typeof supabase !== 'undefined' && supabase) {
     try {
+      // Inserisce nella tabella principale bookings (NBT)
+      supabase.from('bookings').insert([{
+        vehicle_name: carName,
+        client_name: name,
+        client_phone: phone,
+        client_email: email,
+        pickup_location: location,
+        pickup_date: dateFrom || null,
+        return_date: dateTo || null,
+        rental_days: 1,
+        total_price: 0,
+        status: 'pending'
+      }]).then(({ error }) => {
+         if (error) console.warn("Errore salvataggio bookings:", error.message);
+         else console.log("✅ Prenotazione salvata in bookings (NBT)");
+      });
+
+      // Retrocompatibilità su availability_requests
       supabase.from('availability_requests').insert([{
         name: name,
         phone: phone,
@@ -115,9 +177,7 @@ async function submitDetailBooking(event) {
         dates: `${dateFrom} al ${dateTo}`,
         category: `Modello: ${carName}`,
         status: 'new'
-      }]).then(({ error }) => {
-         if (error) console.warn("Supabase log:", error.message);
-      });
+      }]).then(() => {});
     } catch(e) { console.warn(e); }
   }
 

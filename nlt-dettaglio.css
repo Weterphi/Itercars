@@ -1,0 +1,393 @@
+/* ==========================================================================
+   ITERCARS — DETTAGLIO VEICOLO & CONFIGURATORE NLT STYLES
+   Layout 2 colonne con Sticky Box di Configurazione, Glassmorphism
+   ========================================================================== */
+
+.nlt-detail-header {
+  padding-top: 120px;
+  padding-bottom: 24px;
+}
+
+.nlt-breadcrumb {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.nlt-detail-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr;
+  gap: 40px;
+  margin-bottom: 80px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .nlt-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Colonna Sinistra: Vetrina Vettura */
+.detail-main-box {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.detail-image-wrapper {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: #080a12;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.detail-image {
+  width: 100%;
+  max-height: 440px;
+  object-fit: cover;
+  display: block;
+}
+
+.detail-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .detail-specs-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.detail-spec-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.detail-spec-card i {
+  font-size: 1.5rem;
+  color: var(--accent-primary);
+}
+
+.detail-spec-card .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.detail-spec-card .value {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* Elenco I 6 Pilastri All-Inclusive */
+.included-pillars-box {
+  background: rgba(15, 20, 32, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+}
+
+.included-pillars-box h3 {
+  font-size: 1.35rem;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pillars-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .pillars-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pillar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pillar-item i {
+  font-size: 1.4rem;
+  color: #2ecc71;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.pillar-item h4 {
+  font-size: 0.95rem;
+  margin: 0 0 4px 0;
+  color: #fff;
+}
+
+.pillar-item p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Colonna Destra: Sticky Configuratore NLT */
+.detail-sidebar {
+  position: sticky;
+  top: 110px;
+}
+
+.configurator-widget {
+  background: rgba(11, 15, 25, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  backdrop-filter: blur(24px);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.configurator-widget h2 {
+  font-size: 1.5rem;
+  margin: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.config-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.config-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.config-options-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.config-options-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.config-option-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  flex: 1;
+  min-width: 80px;
+}
+
+.config-option-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.config-option-btn.active {
+  background: rgba(0, 146, 70, 0.25);
+  border-color: var(--accent-primary);
+  color: #2ecc71;
+  box-shadow: 0 0 15px rgba(0, 146, 70, 0.35);
+}
+
+/* Box Rata Live in Cima/Fondo alla Side */
+.live-price-box {
+  background: rgba(0, 146, 70, 0.12);
+  border: 2px solid var(--accent-primary);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+  box-shadow: 0 10px 30px rgba(0, 146, 70, 0.25);
+}
+
+.live-price-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.live-price-number {
+  font-size: 2.6rem;
+  font-weight: 950;
+  color: #2ecc71;
+  line-height: 1.1;
+  margin: 6px 0;
+}
+
+.live-price-summary {
+  font-size: 0.82rem;
+  color: #fff;
+  margin-top: 6px;
+}
+
+/* Form preventivo rapido */
+.quote-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+}
+
+
+/* ==========================================================================
+   STAMPA PREVENTIVO PDF
+   ========================================================================== */
+
+
+/* ==========================================================================
+   STAMPA PREVENTIVO PDF
+   ========================================================================== */
+@media print {
+  /* Disabilita completamente il layout della pagina per non lasciare pagine vuote */
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* Nascondi tutto */
+  body > * {
+    display: none !important;
+  }
+
+  /* Mostra SOLO la section che contiene il preventivo */
+  body > section.nlt-detail-header {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  /* All'interno della section, nascondi container e flexbox vari tranne il preventivo */
+  .nlt-breadcrumb, .nlt-detail-grid {
+    display: none !important;
+  }
+
+  #officialQuoteContainer {
+    display: block !important;
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    page-break-inside: avoid;
+  }
+  
+  /* Forza la visualizzazione di immagini */
+  img {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    display: block !important;
+    max-width: 100% !important;
+  }
+
+  /* Override degli stili scuri inline */
+  .quote-result-card {
+    background: #fff !important;
+    color: #000 !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Testi neri */
+  #officialQuoteContainer div,
+  #officialQuoteContainer span,
+  #officialQuoteContainer strong {
+    color: #000 !important;
+  }
+  
+  /* Colori d'accento */
+  #officialQuoteContainer span[style*="color: var(--accent-primary)"],
+  #officialQuoteContainer span[style*="color: #2ecc71"],
+  #officialQuoteContainer div[style*="color: #2ecc71"] {
+    color: #009246 !important;
+  }
+
+  /* Sfondi leggeri */
+  #officialQuoteContainer > div > div[style*="background: rgba(255,255,255,0.03)"] {
+    background: #f9f9f9 !important;
+    border: 1px solid #ccc !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  #officialQuoteContainer > div > div[style*="background: rgba(0, 146, 70, 0.14)"] {
+    background: #f0fdf4 !important;
+    border: 2px solid #009246 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Rimuovi ombre */
+  #officialQuoteContainer > div > div[style*="filter: blur"] {
+    display: none !important;
+  }
+
+  /* Nascondi bottoni */
+  #officialQuoteContainer .btn,
+  #officialQuoteContainer button,
+  #officialQuoteContainer a {
+    display: none !important;
+  }
+  
+  @page {
+    margin: 1cm;
+    size: auto;
+  }
+}

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITERCARS — CRM & Brokerage Backoffice Console</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="crm-admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+  <!-- ADMIN LOGIN GATE OVERLAY -->
+  <div class="admin-auth-overlay active" id="adminAuthOverlay">
+    <div class="admin-auth-box">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <img src="logo_tricolore.png" alt="ITERCARS" style="height: 52px; margin-bottom: 12px;" onerror="this.src='logo-text.png'" />
+        <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">Accesso Riservato Console</h2>
+        <p style="color: var(--text-muted); font-size: 0.88rem; margin-top: 6px;">Inserisci le tue credenziali da Broker o Amministratore</p>
+      </div>
+
+      <form onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="form-group" style="text-align: left;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email Amministratore</label>
+          <input type="email" id="adminEmailInput" required class="admin-input" placeholder="ceotoribio@itercars.com"  />
+        </div>
+
+        <div class="form-group" style="text-align: left;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password Riservata</label>
+          <input type="password" id="adminPasswordInput" required class="admin-input" placeholder="••••••••••••"  />
+        </div>
+
+        <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 50px; font-size: 1.05rem; margin-top: 8px;">
+          <i class="ri-shield-keyhole-line"></i> Sblocca Console Broker
+        </button>
+      </form>
+
+      <div style="margin-top: 20px; padding-top: 16px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 0.78rem; color: var(--text-muted); text-align: center;">
+        🛡️ Protezione di Sicurezza RLS • Connessione Supabase 256-bit
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER / BRAND NAVBAR -->
+  <header class="crm-header">
+    <div class="crm-brand">
+      <img src="logo_tricolore.png" alt="ITERCARS Logo" onerror="this.src='logo-text.png'" />
+      <div class="crm-title">
+        <h1>ITERCARS BROKER CONSOLE</h1>
+        <span>Multi-Mandante CRM & Pipeline Engine</span>
+      </div>
+    </div>
+    <div class="crm-header-actions">
+      <div id="connectionStatus" style="font-size: 0.85rem; display: flex; align-items: center; gap: 6px; background: rgba(46, 204, 113, 0.1); color: #2ecc71; padding: 6px 12px; border-radius: 20px; font-weight: 700;">
+        <span style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #2ecc71;"></span>
+        SUPABASE DB CONNESSO
+      </div>
+      <button class="btn-header btn-header-outline" onclick="loadAllCrmData()">
+        <i class="ri-refresh-line"></i> Aggiorna Dati
+      </button>
+      <button class="btn-header btn-header-primary" onclick="openNewLeadModal()">
+        <i class="ri-add-line"></i> + Nuovo Lead CRM
+      </button>
+      <button class="btn-header btn-header-outline" onclick="adminLogout()" style="border-color: rgba(239, 68, 68, 0.4); color: #ef4444;" title="Esci">
+        <i class="ri-logout-box-r-line"></i> Esci
+      </button>
+    </div>
+  </header>
+
+  <!-- KPI REAL-TIME STATS BAR -->
+  <section class="kpi-section">
+    <div class="kpi-card">
+      <div class="kpi-info">
+        <h3>Nuovi Lead In Qualifica</h3>
+        <div class="kpi-value" id="kpiNewLeads">0 <small>oggi</small></div>
+      </div>
+      <div class="kpi-icon icon-blue"><i class="ri-user-follow-fill"></i></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-info">
+        <h3>Valore Pipeline Attiva</h3>
+        <div class="kpi-value" id="kpiPipelineValue">€ 0 <small>/ mese</small></div>
+      </div>
+      <div class="kpi-icon icon-green"><i class="ri-line-chart-line"></i></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-info">
+        <h3>Istruttorie Documenti</h3>
+        <div class="kpi-value" id="kpiDocsPending">0 <small>in verifica</small></div>
+      </div>
+      <div class="kpi-icon icon-gold"><i class="ri-folder-shield-2-fill"></i></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-info">
+        <h3>Contratti Firmati</h3>
+        <div class="kpi-value" id="kpiContractsWon">0 <small>questo mese</small></div>
+      </div>
+      <div class="kpi-icon icon-purple"><i class="ri-award-fill"></i></div>
+    </div>
+  </section>
+
+  <!-- TABS NAVIGATION -->
+  <nav class="crm-tabs">
+    <button class="tab-btn active" onclick="switchTab('kanbanTab', this)">
+      <i class="ri-kanban-view"></i> Pipeline Kanban Lead NLT <span class="tab-badge" id="badgeLeadsCount">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('bookingsTab', this)">
+      <i class="ri-car-line"></i> Prenotazioni Breve Termine NBT <span class="tab-badge" id="badgeBookingsCount">0</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('compareTab', this)">
+      <i class="ri-scales-3-line"></i> Comparatore Mandanti & Preventivi 1-Click
+    </button>
+    <button class="tab-btn" onclick="switchTab('docsTab', this)">
+      <i class="ri-file-text-line"></i> Dossier Delibera Credito <span class="tab-badge" id="badgeDocsCount">0</span>
+    </button>
+  </nav>
+
+  <!-- TAB 1: KANBAN BOARD -->
+  <div class="tab-pane active" id="kanbanTab">
+    <div class="kanban-board">
+      
+      <!-- Colonna 1: Nuovi Lead -->
+      <div class="kanban-column" data-status="new_lead">
+        <div class="kanban-header">
+          <div class="kanban-title"><i class="ri-flashlight-fill text-blue" style="color: #3498db;"></i> 1. Nuovi Lead</div>
+          <span class="col-badge" id="countColNew">0</span>
+        </div>
+        <div class="kanban-cards" id="cardsColNew">
+          <!-- Caricamento dinamico dal DB via JS -->
+        </div>
+      </div>
+
+      <!-- Colonna 2: Contattati / Preventivo Inviato -->
+      <div class="kanban-column" data-status="quote_sent">
+        <div class="kanban-header">
+          <div class="kanban-title"><i class="ri-chat-check-fill text-gold" style="color: #f1c40f;"></i> 2. Preventivo Inviato</div>
+          <span class="col-badge" id="countColQuote">0</span>
+        </div>
+        <div class="kanban-cards" id="cardsColQuote"></div>
+      </div>
+
+      <!-- Colonna 3: Raccolta Documenti -->
+      <div class="kanban-column" data-status="docs_requested">
+        <div class="kanban-header">
+          <div class="kanban-title"><i class="ri-folder-open-fill text-purple" style="color: #9b59b6;"></i> 3. Istruttoria Credito</div>
+          <span class="col-badge" id="countColDocs">0</span>
+        </div>
+        <div class="kanban-cards" id="cardsColDocs"></div>
+      </div>
+
+      <!-- Colonna 4: Approvato Mandante -->
+      <div class="kanban-column" data-status="approved_by_provider">
+        <div class="kanban-header">
+          <div class="kanban-title"><i class="ri-shield-check-fill text-green" style="color: #2ecc71;"></i> 4. Approvato Mandante</div>
+          <span class="col-badge" id="countColApproved">0</span>
+        </div>
+        <div class="kanban-cards" id="cardsColApproved"></div>
+      </div>
+
+      <!-- Colonna 5: Contratto Firmato -->
+      <div class="kanban-column" data-status="contract_signed">
+        <div class="kanban-header">
+          <div class="kanban-title"><i class="ri-vip-crown-fill text-gold" style="color: #f1c40f;"></i> 5. Contratto Firmato</div>
+          <span class="col-badge" id="countColSigned">0</span>
+        </div>
+        <div class="kanban-cards" id="cardsColSigned"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 2: PRENOTAZIONI NBT (bookings) -->
+  <div class="tab-pane" id="bookingsTab">
+    <div class="data-table-container">
+      <div class="data-table-toolbar">
+        <div style="font-weight: 800; font-size: 1.1rem;"><i class="ri-car-washing-fill" style="color: var(--accent-green);"></i> Prenotazioni Flotta Breve Termine & Richieste VIP</div>
+        <div class="search-input-wrapper">
+          <i class="ri-search-line"></i>
+          <input type="text" placeholder="Cerca per cliente o veicolo..." onkeyup="filterBookingsTable(this.value)" />
+        </div>
+      </div>
+      <div style="overflow-x: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Data Richiesta</th>
+              <th>Veicolo Richiesto</th>
+              <th>Nome Cliente</th>
+              <th>Contatti (Tel / Email)</th>
+              <th>Ritiro & Date</th>
+              <th>Stato</th>
+              <th>Azioni Rapide</th>
+            </tr>
+          </thead>
+          <tbody id="bookingsTableBody">
+            <!-- Caricamento dinamico da public.bookings -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: COMPARATORE MULTI-MANDANTE -->
+  <div class="tab-pane" id="compareTab">
+    <div class="compare-grid">
+      
+      <!-- Control Panel -->
+      <div class="compare-control-panel">
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; color: var(--accent-green); display: flex; align-items: center; gap: 8px;">
+          <i class="ri-equalizer-fill"></i> Filtri Comparazione Mandanti
+        </h3>
+        
+        <div class="control-group">
+          <label>Seleziona Vettura da Confrontare</label>
+          <select id="compareSelectCar" onchange="runComparison()">
+            <option value="porsche-macan">Porsche Macan 4 Electric (SUV Luxury)</option>
+            <option value="audi-rs6">Audi RS6 Performance 630 CV (Sportiva)</option>
+            <option value="bmw-m4">BMW M4 Competition xDrive Coupé (Sportiva)</option>
+            <option value="mercedes-g63">Mercedes-Benz Classe G 63 AMG (SUV VIP)</option>
+            <option value="ferrari-purosangue">Ferrari Purosangue V12 725 CV (Supercar)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Durata Contratto</label>
+          <select id="compareSelectDuration" onchange="runComparison()">
+            <option value="36">36 Mesi</option>
+            <option value="48" selected>48 Mesi</option>
+            <option value="60">60 Mesi</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Chilometri Annui</label>
+          <select id="compareSelectKm" onchange="runComparison()">
+            <option value="10000">10.000 Km/anno</option>
+            <option value="15000" selected>15.000 Km/anno</option>
+            <option value="20000">20.000 Km/anno</option>
+            <option value="30000">30.000 Km/anno</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label>Anticipo Versato dal Cliente (€)</label>
+          <input type="number" id="compareInputDeposit" value="3000" step="500" onchange="runComparison()" />
+        </div>
+
+        <div class="control-group">
+          <label>Markup Broker Itercars (€/mese)</label>
+          <input type="number" id="compareInputMarkup" value="45" step="5" onchange="runComparison()" style="border-color: #2ecc71; font-weight: 800; color: #2ecc71;" />
+          <small style="color: var(--text-muted); display: block; margin-top: 4px;">Il ricarico viene aggiunto al canone netto mandante</small>
+        </div>
+
+        <button class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 48px; font-size: 1rem; margin-top: 10px;" onclick="runComparison()">
+          <i class="ri-refresh-line"></i> Ricalcola Listini
+        </button>
+      </div>
+
+      <!-- Results Grid -->
+      <div>
+        <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+          <i class="ri-trophy-line text-gold"></i> Risultati Comparazione Listini in Tempo Reale
+        </h3>
+        <div class="compare-results" id="compareResultsContainer">
+          <!-- Popolato dal JS -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TAB 4: DOSSIER DELIBERA CREDITO -->
+  <div class="tab-pane" id="docsTab">
+    <div class="data-table-container" style="padding: 24px;">
+      <h3 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; color: #fff;">
+        <i class="ri-folder-shield-2-fill text-gold"></i> Istruttorie e Documenti Caricati per Delibera (`crm_documents`)
+      </h3>
+      <div id="docsOverviewContainer">
+        <!-- Visualizzatore dossier per lead -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DOSSIER E SCORING -->
+  <div class="modal-overlay" id="dossierModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h2 style="font-size: 1.3rem; font-weight: 800;" id="modalClientTitle">Dossier Cliente: Mario Rossi</h2>
+          <span style="color: var(--text-muted); font-size: 0.88rem;" id="modalClientSub">Privato • Macan 48m/15k</span>
+        </div>
+        <button onclick="closeDossierModal()" style="background: transparent; border: none; color: #fff; font-size: 1.5rem; cursor: pointer;"><i class="ri-close-line"></i></button>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h4 style="color: var(--accent-green); font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px;">Checklist Documentazione Delibera</h4>
+        <div class="doc-check-list" id="modalDocChecklist">
+          <!-- Elementi checklist -->
+        </div>
+      </div>
+
+      <div style="background: rgba(255, 255, 255, 0.03); padding: 18px; border-radius: 14px; border: 1px solid var(--border-glass); margin-bottom: 24px;">
+        <h4 style="color: #fff; font-size: 0.9rem; margin-bottom: 10px;">Note Operative Broker</h4>
+        <textarea id="modalLeadNotes" rows="3" style="width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: #fff; font-family: var(--font-main);"></textarea>
+        <button class="btn-header btn-header-outline" style="margin-top: 10px;" onclick="saveLeadNotes()"><i class="ri-save-line"></i> Salva Note</button>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-glass); padding-top: 20px;">
+        <select id="modalStatusSelect" style="background: rgba(0,0,0,0.5); border: 1px solid var(--accent-green); color: #fff; padding: 10px 14px; border-radius: 10px; font-weight: 700;">
+          <option value="new_lead">Sposta in: 1. Nuovo Lead</option>
+          <option value="quote_sent">Sposta in: 2. Preventivo Inviato</option>
+          <option value="docs_requested">Sposta in: 3. Istruttoria Credito</option>
+          <option value="approved_by_provider">Sposta in: 4. Approvato Mandante</option>
+          <option value="contract_signed">Sposta in: 5. Contratto Firmato</option>
+        </select>
+        <button class="btn-header btn-header-primary" onclick="updateLeadStatusFromModal()"><i class="ri-check-double-line"></i> Aggiorna Stato Funnel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="crm-admin.js?v=2"></script>
+</body>
+</html>

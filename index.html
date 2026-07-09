@@ -51,13 +51,12 @@
         <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
       </a>
 
-      <ul class="nav-links">
-        <li><a href="#home" class="active" data-i18n="nav.home">Home</a></li>
-        <li><a href="fleet.html" data-i18n="nav.fleet">La Flotta</a></li>
-        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> Academy</a></li>
-        <li><a href="#perche-noi" data-i18n="nav.why">Perché Noi</a></li>
-        <li><a href="#servizi" data-i18n="nav.vip">Servizi VIP</a></li>
-        <li><a href="#contatti" data-i18n="nav.contacts">Contatti</a></li>
+            <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="noleggio-lungo-termine.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Lungo Termine</a></li>
+        <li><a href="fleet.html" data-i18n="nav.fleet">Luxury Car</a></li>
+        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> Accademy</a></li>
+        <li><a href="index.html#contatti" data-i18n="nav.contacts">Contatti</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -198,7 +197,7 @@
   <section class="fleet-section" id="flotta">
     <div class="container">
       <div class="section-header">
-        <span class="section-tag" data-i18n="fleet.tag">La Nostra Flotta</span>
+        <span class="section-tag" data-i18n="fleet.tag">Luxury Car</span>
         <h2 data-i18n="fleet.title">Guidare l'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span></h2>
         <p data-i18n="fleet.subtitle">Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.</p>
       </div>
@@ -213,7 +212,7 @@
             <h3>Luxury</h3>
             <p>Lusso vero, senza eguali</p>
             <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
+              <span>Sfoglia le Luxury Car</span>
               <i class="ri-arrow-right-up-line"></i>
             </div>
           </div>
@@ -226,7 +225,7 @@
             <h3>Cabrio</h3>
             <p>Guida a cielo aperto, emozioni senza limiti</p>
             <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
+              <span>Sfoglia le Luxury Car</span>
               <i class="ri-arrow-right-up-line"></i>
             </div>
           </div>
@@ -239,7 +238,7 @@
             <h3>SUV</h3>
             <p>Potenza e versatilità in ogni terreno</p>
             <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
+              <span>Sfoglia le Luxury Car</span>
               <i class="ri-arrow-right-up-line"></i>
             </div>
           </div>
@@ -252,7 +251,7 @@
             <h3>Prestige</h3>
             <p>Prestazioni superiori senza compromessi</p>
             <div class="category-action-btn">
-              <span>Sfoglia la flotta</span>
+              <span>Sfoglia le Luxury Car</span>
               <i class="ri-arrow-right-up-line"></i>
             </div>
           </div>
@@ -491,7 +490,7 @@
           <strong id="vipUserEmail" style="color: var(--text-main);">email@dominio.com</strong>
         </div>
         <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--text-muted);"><i class="ri-discount-percent-line"></i> Sconto flotta riservato:</span>
+          <span style="color: var(--text-muted);"><i class="ri-discount-percent-line"></i> Sconto Luxury Car riservato:</span>
           <strong style="color: var(--accent-primary);">5% Attivo</strong>
         </div>
         <div style="display: flex; justify-content: space-between;">
@@ -623,22 +622,25 @@
         </div>
 
         <div class="footer-col">
-          <h4 data-i18n="footer.col1Title">Categorie Flotta</h4>
+          <h4 data-i18n="footer.col1Title">Categorie Luxury Car</h4>
           <div class="footer-links">
             <a href="fleet.html?category=Supercar">Supercar & Hypercar</a>
             <a href="fleet.html?category=SUV">SUV di Lusso</a>
             <a href="fleet.html?category=Sportiva">Coupé & Cabriolet</a>
-            <a href="fleet.html?category=Elettrica">Flotta Elettrica</a>
+            <a href="fleet.html?category=Elettrica">Luxury Car Elettriche</a>
           </div>
         </div>
 
         <div class="footer-col">
           <h4 data-i18n="footer.col2Title">Link Utili</h4>
           <div class="footer-links">
+            <a href="index.html#perche-noi">Perché Noi</a>
+            <a href="index.html#servizi">Servizi VIP</a>
             <a href="#home" data-i18n="nav.home">Chi Siamo</a>
             <a href="#perche-noi" data-i18n="footer.linkConditions">Condizioni di Noleggio</a>
             <a href="#" data-i18n="footer.linkFaq">FAQ & Supporto</a>
             <a href="partners.html" data-i18n="footer.linkPartner">Lavora con noi / Partner</a>
+            <a href="crm-admin.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-shield-keyhole-line"></i> Console Broker CRM</a>
           </div>
         </div>
 
@@ -762,7 +764,7 @@
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Script JS Principale -->
-  <script src="app.js?v=21"></script>
+  <script src="app.js?v=24"></script>
   <script>
     function handleMobileSearch() {
       const searchSection = document.getElementById('mainSearchSection');
