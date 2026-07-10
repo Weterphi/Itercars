@@ -611,11 +611,12 @@ async function handleAdminLogin(event) {
     return;
   }
 
-  // BYPASS: Consente l'accesso diretto per facilitare lo sviluppo/visualizzazione
-  const isMasterAccount = true; 
-
-  if (isMasterAccount) {
-    unlockConsoleSuccess(email || 'admin@itercars.com');
+  // BYPASS RIMOSSO: Accesso consentito solo al CEO
+  if (email.toLowerCase() === 'ceotoribio@itercars.com' && pass === 'Samana2026!') {
+    unlockConsoleSuccess(email);
+    return;
+  } else {
+    alert("❌ Accesso negato.\n\nSolo l'amministratore (ceotoribio@itercars.com) è autorizzato ad accedere.");
     return;
   }
 
