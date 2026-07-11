@@ -260,149 +260,110 @@
       <!-- UPLOAD GRID -->
       <div class="upload-grid" id="dropzonesGrid">
         
-        <!-- CARD 1: CARTA D'IDENTITÀ -->
-        <div class="doc-card-container" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <strong style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px;">
-                <i class="ri-id-card-line" style="color: #2ecc71; font-size: 1.4rem;"></i> 1. Documento d'Identità
-              </strong>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4;">
-              Carta d'identità in corso di validità o Passaporto. Scegli se caricare un file PDF unico oppure le foto JPG separate di Fronte e Retro.
-            </p>
-
-            <!-- FORMAT TOGGLE -->
-            <div style="display: flex; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.08);">
-              <button type="button" class="format-toggle-btn active" id="btn_format_id_pdf" onclick="switchDocFormat('id', 'pdf')" style="flex: 1; padding: 8px 10px; border: none; background: #2ecc71; color: #000; font-weight: 800; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">📄 PDF Unico</button>
-              <button type="button" class="format-toggle-btn" id="btn_format_id_dual" onclick="switchDocFormat('id', 'dual')" style="flex: 1; padding: 8px 10px; border: none; background: transparent; color: #fff; font-weight: 700; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">📸 Foto JPG (Fronte/Retro)</button>
-            </div>
+        <!-- DROPZONE 1: CARTA D'IDENTITÀ (COMPATTA CON MINI TOGGLE) -->
+        <div class="upload-dropzone" id="dz_id_card" style="position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+          <!-- MINI TOGGLE DISCRETO IN ALTO -->
+          <div style="display: flex; justify-content: center; gap: 4px; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+            <button type="button" class="mini-format-btn active" id="btn_mini_id_pdf" onclick="selectMiniFormat(event, 'id', 'pdf')" style="flex: 1; background: #2ecc71; color: #000; font-size: 0.75rem; font-weight: 800; padding: 4px 8px; border-radius: 7px; border: none; cursor: pointer;">📄 PDF Unico</button>
+            <button type="button" class="mini-format-btn" id="btn_mini_id_dual" onclick="selectMiniFormat(event, 'id', 'dual')" style="flex: 1; background: transparent; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 7px; border: none; cursor: pointer;">📸 Foto (Fronte/Retro)</button>
           </div>
 
-          <!-- CONTAINER PDF UNICO -->
-          <div id="view_id_pdf">
-            <div class="upload-dropzone sub-dropzone" id="dz_id_card" onclick="triggerFileInput('file_id_card')" style="min-height: 145px; margin: 0; border-style: dashed; border-width: 2px;">
-              <input type="file" id="file_id_card" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_id_card', 'carta_identita', 'dz_id_card')">
-              <div class="dropzone-icon" style="margin-bottom: 8px;"><i class="ri-file-pdf-2-line" style="font-size: 2.2rem; color: #2ecc71;"></i></div>
-              <strong style="font-size: 0.95rem; display: block; margin-bottom: 2px;">Carica PDF Unico</strong>
-              <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Formato .pdf (Max 10MB)</span>
-              <div class="doc-status-badge" id="status_dz_id_card">Clicca o trascina il file PDF</div>
-            </div>
+          <!-- VISTA PDF COMPATTA -->
+          <div id="mini_view_id_pdf" onclick="triggerFileInput('file_id_card')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;">
+            <input type="file" id="file_id_card" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_id_card', 'carta_identita', 'status_dz_id_card')">
+            <div class="dropzone-icon" style="margin-bottom: 8px;"><i class="ri-id-card-line"></i></div>
+            <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">1. Documento d'Identità</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Carta d'identità in corso di validità o Passaporto (.pdf).</p>
+            <div class="doc-status-badge" id="status_dz_id_card">Clicca o trascina il file PDF</div>
           </div>
 
-          <!-- CONTAINER DUAL FRONTE & RETRO -->
-          <div id="view_id_dual" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="upload-dropzone sub-dropzone" id="dz_id_fronte" onclick="triggerFileInput('file_id_fronte')" style="min-height: 145px; margin: 0; padding: 14px; border-style: dashed;">
-              <input type="file" id="file_id_fronte" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_id_fronte', 'carta_identita_fronte', 'dz_id_fronte')">
-              <i class="ri-image-add-line" style="font-size: 1.8rem; color: #2ecc71; display: block; margin-bottom: 6px;"></i>
-              <strong style="font-size: 0.88rem; display: block;">Foto Fronte</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">JPG / PNG</span>
-              <div class="doc-status-badge" id="status_dz_id_fronte" style="font-size: 0.72rem; padding: 4px 6px;">Carica Fronte</div>
+          <!-- VISTA DUAL COMPATTA (FRONTE & RETRO) -->
+          <div id="mini_view_id_dual" style="display: none; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1;">
+            <div class="mini-sub-box" onclick="triggerFileInput('file_id_fronte')" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <input type="file" id="file_id_fronte" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_id_fronte', 'carta_identita_fronte', 'status_id_fronte_badge')">
+              <i class="ri-image-add-line" style="font-size: 1.6rem; color: #2ecc71; margin-bottom: 4px;"></i>
+              <strong style="font-size: 0.85rem; color: #fff; display: block;">Foto Fronte</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">JPG / PNG</span>
+              <div class="doc-status-badge" id="status_id_fronte_badge" style="font-size: 0.7rem; padding: 3px 6px;">Carica Fronte</div>
             </div>
-            <div class="upload-dropzone sub-dropzone" id="dz_id_retro" onclick="triggerFileInput('file_id_retro')" style="min-height: 145px; margin: 0; padding: 14px; border-style: dashed;">
-              <input type="file" id="file_id_retro" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_id_retro', 'carta_identita_retro', 'dz_id_retro')">
-              <i class="ri-image-add-line" style="font-size: 1.8rem; color: #2ecc71; display: block; margin-bottom: 6px;"></i>
-              <strong style="font-size: 0.88rem; display: block;">Foto Retro</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">JPG / PNG</span>
-              <div class="doc-status-badge" id="status_dz_id_retro" style="font-size: 0.72rem; padding: 4px 6px;">Carica Retro</div>
+            <div class="mini-sub-box" onclick="triggerFileInput('file_id_retro')" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <input type="file" id="file_id_retro" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_id_retro', 'carta_identita_retro', 'status_id_retro_badge')">
+              <i class="ri-image-add-line" style="font-size: 1.6rem; color: #2ecc71; margin-bottom: 4px;"></i>
+              <strong style="font-size: 0.85rem; color: #fff; display: block;">Foto Retro</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">JPG / PNG</span>
+              <div class="doc-status-badge" id="status_id_retro_badge" style="font-size: 0.7rem; padding: 3px 6px;">Carica Retro</div>
             </div>
           </div>
         </div>
 
-        <!-- CARD 2: PATENTE DI GUIDA -->
-        <div class="doc-card-container" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <strong style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px;">
-                <i class="ri-steering-2-line" style="color: #2ecc71; font-size: 1.4rem;"></i> 2. Patente di Guida
-              </strong>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4;">
-              Patente B del conducente o del rappresentante legale. Scegli se caricare un file PDF o le foto JPG separate di Fronte e Retro.
-            </p>
-
-            <!-- FORMAT TOGGLE -->
-            <div style="display: flex; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.08);">
-              <button type="button" class="format-toggle-btn active" id="btn_format_pat_pdf" onclick="switchDocFormat('pat', 'pdf')" style="flex: 1; padding: 8px 10px; border: none; background: #2ecc71; color: #000; font-weight: 800; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">📄 PDF Unico</button>
-              <button type="button" class="format-toggle-btn" id="btn_format_pat_dual" onclick="switchDocFormat('pat', 'dual')" style="flex: 1; padding: 8px 10px; border: none; background: transparent; color: #fff; font-weight: 700; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">📸 Foto JPG (Fronte/Retro)</button>
-            </div>
+        <!-- DROPZONE 2: PATENTE DI GUIDA (COMPATTA CON MINI TOGGLE) -->
+        <div class="upload-dropzone" id="dz_driving_license" style="position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+          <!-- MINI TOGGLE DISCRETO IN ALTO -->
+          <div style="display: flex; justify-content: center; gap: 4px; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+            <button type="button" class="mini-format-btn active" id="btn_mini_pat_pdf" onclick="selectMiniFormat(event, 'pat', 'pdf')" style="flex: 1; background: #2ecc71; color: #000; font-size: 0.75rem; font-weight: 800; padding: 4px 8px; border-radius: 7px; border: none; cursor: pointer;">📄 PDF Unico</button>
+            <button type="button" class="mini-format-btn" id="btn_mini_pat_dual" onclick="selectMiniFormat(event, 'pat', 'dual')" style="flex: 1; background: transparent; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 7px; border: none; cursor: pointer;">📸 Foto (Fronte/Retro)</button>
           </div>
 
-          <!-- CONTAINER PDF UNICO -->
-          <div id="view_pat_pdf">
-            <div class="upload-dropzone sub-dropzone" id="dz_driving_license" onclick="triggerFileInput('file_driving_license')" style="min-height: 145px; margin: 0; border-style: dashed; border-width: 2px;">
-              <input type="file" id="file_driving_license" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_driving_license', 'patente', 'dz_driving_license')">
-              <div class="dropzone-icon" style="margin-bottom: 8px;"><i class="ri-file-pdf-2-line" style="font-size: 2.2rem; color: #2ecc71;"></i></div>
-              <strong style="font-size: 0.95rem; display: block; margin-bottom: 2px;">Carica PDF Unico</strong>
-              <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Formato .pdf (Max 10MB)</span>
-              <div class="doc-status-badge" id="status_dz_driving_license">Clicca o trascina il file PDF</div>
-            </div>
+          <!-- VISTA PDF COMPATTA -->
+          <div id="mini_view_pat_pdf" onclick="triggerFileInput('file_driving_license')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;">
+            <input type="file" id="file_driving_license" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_driving_license', 'patente', 'status_dz_driving_license')">
+            <div class="dropzone-icon" style="margin-bottom: 8px;"><i class="ri-steering-2-line"></i></div>
+            <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">2. Patente di Guida</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Patente B di chi condurrà il mezzo (.pdf).</p>
+            <div class="doc-status-badge" id="status_dz_driving_license">Clicca o trascina il file PDF</div>
           </div>
 
-          <!-- CONTAINER DUAL FRONTE & RETRO -->
-          <div id="view_pat_dual" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="upload-dropzone sub-dropzone" id="dz_pat_fronte" onclick="triggerFileInput('file_pat_fronte')" style="min-height: 145px; margin: 0; padding: 14px; border-style: dashed;">
-              <input type="file" id="file_pat_fronte" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_pat_fronte', 'patente_fronte', 'dz_pat_fronte')">
-              <i class="ri-image-add-line" style="font-size: 1.8rem; color: #2ecc71; display: block; margin-bottom: 6px;"></i>
-              <strong style="font-size: 0.88rem; display: block;">Foto Fronte</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">JPG / PNG</span>
-              <div class="doc-status-badge" id="status_dz_pat_fronte" style="font-size: 0.72rem; padding: 4px 6px;">Carica Fronte</div>
+          <!-- VISTA DUAL COMPATTA (FRONTE & RETRO) -->
+          <div id="mini_view_pat_dual" style="display: none; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1;">
+            <div class="mini-sub-box" onclick="triggerFileInput('file_pat_fronte')" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <input type="file" id="file_pat_fronte" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_pat_fronte', 'patente_fronte', 'status_pat_fronte_badge')">
+              <i class="ri-image-add-line" style="font-size: 1.6rem; color: #2ecc71; margin-bottom: 4px;"></i>
+              <strong style="font-size: 0.85rem; color: #fff; display: block;">Foto Fronte</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">JPG / PNG</span>
+              <div class="doc-status-badge" id="status_pat_fronte_badge" style="font-size: 0.7rem; padding: 3px 6px;">Carica Fronte</div>
             </div>
-            <div class="upload-dropzone sub-dropzone" id="dz_pat_retro" onclick="triggerFileInput('file_pat_retro')" style="min-height: 145px; margin: 0; padding: 14px; border-style: dashed;">
-              <input type="file" id="file_pat_retro" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_pat_retro', 'patente_retro', 'dz_pat_retro')">
-              <i class="ri-image-add-line" style="font-size: 1.8rem; color: #2ecc71; display: block; margin-bottom: 6px;"></i>
-              <strong style="font-size: 0.88rem; display: block;">Foto Retro</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">JPG / PNG</span>
-              <div class="doc-status-badge" id="status_dz_pat_retro" style="font-size: 0.72rem; padding: 4px 6px;">Carica Retro</div>
+            <div class="mini-sub-box" onclick="triggerFileInput('file_pat_retro')" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <input type="file" id="file_pat_retro" accept=".jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_pat_retro', 'patente_retro', 'status_pat_retro_badge')">
+              <i class="ri-image-add-line" style="font-size: 1.6rem; color: #2ecc71; margin-bottom: 4px;"></i>
+              <strong style="font-size: 0.85rem; color: #fff; display: block;">Foto Retro</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">JPG / PNG</span>
+              <div class="doc-status-badge" id="status_pat_retro_badge" style="font-size: 0.7rem; padding: 3px 6px;">Carica Retro</div>
             </div>
           </div>
         </div>
 
-        <!-- CARD 3: DOCUMENTAZIONE REDDITUALE / BUSTE PAGA -->
-        <div class="doc-card-container" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-              <strong style="font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 8px;" id="incomeDocTitle">
-                <i class="ri-file-paper-2-line" style="color: #2ecc71; font-size: 1.4rem;"></i> 3. Ultime 2 Buste Paga
-              </strong>
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4;" id="incomeDocDesc">
-              Ultime due buste paga complete oppure Ultimo CUD / Modello 730 / Bilancio. Scegli se caricare 1 file unico o le 2 Buste Paga separate.
-            </p>
-
-            <!-- FORMAT TOGGLE -->
-            <div style="display: flex; background: rgba(0,0,0,0.5); border-radius: 10px; padding: 4px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.08);">
-              <button type="button" class="format-toggle-btn active" id="btn_format_inc_pdf" onclick="switchDocFormat('inc', 'pdf')" style="flex: 1; padding: 8px 10px; border: none; background: #2ecc71; color: #000; font-weight: 800; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">📄 PDF / CUD Unico</button>
-              <button type="button" class="format-toggle-btn" id="btn_format_inc_dual" onclick="switchDocFormat('inc', 'dual')" style="flex: 1; padding: 8px 10px; border: none; background: transparent; color: #fff; font-weight: 700; border-radius: 8px; font-size: 0.82rem; cursor: pointer; transition: all 0.2s;">📑 2 File (Busta 1 e 2)</button>
-            </div>
+        <!-- DROPZONE 3: DOCUMENTAZIONE REDDITUALE (COMPATTA CON MINI TOGGLE) -->
+        <div class="upload-dropzone" id="dz_income_doc" style="position: relative; display: flex; flex-direction: column; justify-content: space-between;">
+          <!-- MINI TOGGLE DISCRETO IN ALTO -->
+          <div style="display: flex; justify-content: center; gap: 4px; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+            <button type="button" class="mini-format-btn active" id="btn_mini_inc_pdf" onclick="selectMiniFormat(event, 'inc', 'pdf')" style="flex: 1; background: #2ecc71; color: #000; font-size: 0.75rem; font-weight: 800; padding: 4px 8px; border-radius: 7px; border: none; cursor: pointer;">📄 PDF / CUD Unico</button>
+            <button type="button" class="mini-format-btn" id="btn_mini_inc_dual" onclick="selectMiniFormat(event, 'inc', 'dual')" style="flex: 1; background: transparent; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 7px; border: none; cursor: pointer;">📑 2 File (Busta 1/2)</button>
           </div>
 
-          <!-- CONTAINER PDF UNICO -->
-          <div id="view_inc_pdf">
-            <div class="upload-dropzone sub-dropzone" id="dz_income_doc" onclick="triggerFileInput('file_income_doc')" style="min-height: 145px; margin: 0; border-style: dashed; border-width: 2px;">
-              <input type="file" id="file_income_doc" accept=".pdf,.jpg,.png" style="display: none;" onchange="handleFileSelected('file_income_doc', 'documento_reddituale', 'dz_income_doc')">
-              <div class="dropzone-icon" style="margin-bottom: 8px;"><i class="ri-file-text-line" style="font-size: 2.2rem; color: #2ecc71;"></i></div>
-              <strong style="font-size: 0.95rem; display: block; margin-bottom: 2px;">Carica Documento Unico</strong>
-              <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-bottom: 6px;">PDF / JPG / PNG (Max 10MB)</span>
-              <div class="doc-status-badge" id="status_dz_income_doc">Clicca o trascina il file</div>
-            </div>
+          <!-- VISTA PDF COMPATTA -->
+          <div id="mini_view_inc_pdf" onclick="triggerFileInput('file_income_doc')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;">
+            <input type="file" id="file_income_doc" accept=".pdf,.jpg,.png" style="display: none;" onchange="handleFileSelected('file_income_doc', 'documento_reddituale', 'status_dz_income_doc')">
+            <div class="dropzone-icon" style="margin-bottom: 8px;"><i class="ri-file-paper-2-line"></i></div>
+            <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;" id="incomeDocTitle">3. Ultime 2 Buste Paga</strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;" id="incomeDocDesc">Ultime 2 buste paga complete oppure Ultimo CUD / 730.</p>
+            <div class="doc-status-badge" id="status_dz_income_doc">Clicca o trascina il file</div>
           </div>
 
-          <!-- CONTAINER DUAL BUSTA PAGA 1 & 2 -->
-          <div id="view_inc_dual" style="display: none; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div class="upload-dropzone sub-dropzone" id="dz_inc_1" onclick="triggerFileInput('file_inc_1')" style="min-height: 145px; margin: 0; padding: 14px; border-style: dashed;">
-              <input type="file" id="file_inc_1" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_inc_1', 'busta_paga_1', 'dz_inc_1')">
-              <i class="ri-file-list-3-line" style="font-size: 1.8rem; color: #2ecc71; display: block; margin-bottom: 6px;"></i>
-              <strong style="font-size: 0.88rem; display: block;">Busta Paga 1</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Recente (PDF/JPG)</span>
-              <div class="doc-status-badge" id="status_dz_inc_1" style="font-size: 0.72rem; padding: 4px 6px;">Carica BP 1</div>
+          <!-- VISTA DUAL COMPATTA (BUSTA PAGA 1 & 2) -->
+          <div id="mini_view_inc_dual" style="display: none; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1;">
+            <div class="mini-sub-box" onclick="triggerFileInput('file_inc_1')" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <input type="file" id="file_inc_1" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_inc_1', 'busta_paga_1', 'status_inc_1_badge')">
+              <i class="ri-file-list-3-line" style="font-size: 1.6rem; color: #2ecc71; margin-bottom: 4px;"></i>
+              <strong style="font-size: 0.85rem; color: #fff; display: block;">Busta Paga 1</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">Recente (PDF/JPG)</span>
+              <div class="doc-status-badge" id="status_inc_1_badge" style="font-size: 0.7rem; padding: 3px 6px;">Carica BP 1</div>
             </div>
-            <div class="upload-dropzone sub-dropzone" id="dz_inc_2" onclick="triggerFileInput('file_inc_2')" style="min-height: 145px; margin: 0; padding: 14px; border-style: dashed;">
-              <input type="file" id="file_inc_2" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_inc_2', 'busta_paga_2', 'dz_inc_2')">
-              <i class="ri-file-list-3-line" style="font-size: 1.8rem; color: #2ecc71; display: block; margin-bottom: 6px;"></i>
-              <strong style="font-size: 0.88rem; display: block;">Busta Paga 2</strong>
-              <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 6px;">Precedente (PDF/JPG)</span>
-              <div class="doc-status-badge" id="status_dz_inc_2" style="font-size: 0.72rem; padding: 4px 6px;">Carica BP 2</div>
+            <div class="mini-sub-box" onclick="triggerFileInput('file_inc_2')" style="background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.2); border-radius: 12px; padding: 12px 6px; text-align: center; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+              <input type="file" id="file_inc_2" accept=".pdf,.jpg,.jpeg,.png" style="display: none;" onchange="handleFileSelected('file_inc_2', 'busta_paga_2', 'status_inc_2_badge')">
+              <i class="ri-file-list-3-line" style="font-size: 1.6rem; color: #2ecc71; margin-bottom: 4px;"></i>
+              <strong style="font-size: 0.85rem; color: #fff; display: block;">Busta Paga 2</strong>
+              <span style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 8px;">Precedente (PDF/JPG)</span>
+              <div class="doc-status-badge" id="status_inc_2_badge" style="font-size: 0.7rem; padding: 3px 6px;">Carica BP 2</div>
             </div>
           </div>
         </div>

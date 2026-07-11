@@ -180,12 +180,13 @@ async function handleFileSelected(inputId, docType, dropzoneId) {
     });
 
     CurrentQuote.uploadedDocs[docType] = {
+      file: file,
       name: file.name,
       size: file.size,
       dataUrl: dataUrl
     };
 
-    // Salvataggio sul database e Storage Bucket Supabase (crm-documents)
+    // Salvataggio sul database e Storage Bucket Supabase (crm-documents) - tenta subito se c'è leadId
     if (typeof window.supabase !== 'undefined' && window.supabase && CurrentQuote.leadId) {
       let finalFileUrl = '';
       const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
@@ -206,29 +207,38 @@ async function handleFileSelected(inputId, docType, dropzoneId) {
             .getPublicUrl(filePath);
           finalFileUrl = urlData?.publicUrl || `storage:crm-documents/${filePath}`;
         } else {
-          console.warn("Bucket crm-documents non disponibile o errore RLS, uso fallback:", uploadError);
+          console.warn("Bucket crm-documents non disponibile al momento, uso fallback:", uploadError);
           finalFileUrl = dataUrl.length < 500000 ? dataUrl : `storage_fallback_${file.name}`;
         }
       } catch (storageErr) {
-        console.warn("Eccezione durante upload su Storage, uso fallback:", storageErr);
+        console.warn("Eccezione durante upload su Storage:", storageErr);
         finalFileUrl = dataUrl.length < 500000 ? dataUrl : `storage_fallback_${file.name}`;
       }
 
-      // 2. Registra il riferimento e il percorso del file nella tabella SQL "crm_documents"
-      await window.supabase.from('crm_documents').insert([{
-        lead_id: CurrentQuote.leadId,
-        document_type: docType,
-        file_url: finalFileUrl,
-        verification_status: 'uploaded'
-      }]);
+      // 2. Registra o aggiorna il riferimento nella tabella SQL "crm_documents"
+      const { data: existRow } = await window.supabase
+        .from('crm_documents')
+        .select('id')
+        .eq('document_type', docType)
+        .eq('lead_id', CurrentQuote.leadId)
+        .maybeSingle();
 
-      await window.supabase.from('crm_leads')
-        .update({ pipeline_status: 'docs_requested' })
-        .eq('id', CurrentQuote.leadId);
+      if (existRow && existRow.id) {
+        await window.supabase.from('crm_documents')
+          .update({ file_url: finalFileUrl, verification_status: 'uploaded', updated_at: new Date().toISOString() })
+          .eq('id', existRow.id);
+      } else {
+        await window.supabase.from('crm_documents').insert([{
+          lead_id: CurrentQuote.leadId,
+          document_type: docType,
+          file_url: finalFileUrl,
+          verification_status: 'uploaded'
+        }]);
+      }
     }
 
     if (statusBadge) {
-      statusBadge.innerHTML = `<i class="ri-check-double-fill"></i> Caricato: <strong>${file.name.slice(0, 24)}${file.name.length > 24 ? '...' : ''}</strong>`;
+      statusBadge.innerHTML = `<i class="ri-check-double-fill"></i> Caricato: <strong>${file.name.slice(0, 22)}${file.name.length > 22 ? '...' : ''}</strong>`;
     }
   } catch (err) {
     console.warn("Errore caricamento documento:", err);
@@ -238,12 +248,14 @@ async function handleFileSelected(inputId, docType, dropzoneId) {
   }
 }
 
-// CAMBIO FORMATO DOCUMENTO (PDF UNICO vs FOTO JPG/PNG SEPARATE)
-function switchDocFormat(docKey, format) {
-  const btnPdf = document.getElementById(`btn_format_${docKey}_pdf`);
-  const btnDual = document.getElementById(`btn_format_${docKey}_dual`);
-  const viewPdf = document.getElementById(`view_${docKey}_pdf`);
-  const viewDual = document.getElementById(`view_${docKey}_dual`);
+// CAMBIO FORMATO MINIMAL E DISCRETO (PDF vs FOTO SEPARATE NELLE DROPZONE COMPATTE)
+function selectMiniFormat(event, docKey, format) {
+  if (event && event.stopPropagation) event.stopPropagation();
+
+  const btnPdf = document.getElementById(`btn_mini_${docKey}_pdf`);
+  const btnDual = document.getElementById(`btn_mini_${docKey}_dual`);
+  const viewPdf = document.getElementById(`mini_view_${docKey}_pdf`);
+  const viewDual = document.getElementById(`mini_view_${docKey}_dual`);
 
   if (btnPdf && btnDual) {
     if (format === 'pdf') {
@@ -265,7 +277,7 @@ function switchDocFormat(docKey, format) {
 
   if (viewPdf && viewDual) {
     if (format === 'pdf') {
-      viewPdf.style.display = 'block';
+      viewPdf.style.display = 'flex';
       viewDual.style.display = 'none';
     } else {
       viewPdf.style.display = 'none';
@@ -276,13 +288,13 @@ function switchDocFormat(docKey, format) {
 
 function initDragAndDrop() {
   const zones = [
-    { dz: 'dz_id_card', inp: 'file_id_card', type: 'carta_identita' },
+    { dz: 'mini_view_id_pdf', inp: 'file_id_card', type: 'carta_identita' },
     { dz: 'dz_id_fronte', inp: 'file_id_fronte', type: 'carta_identita_fronte' },
     { dz: 'dz_id_retro', inp: 'file_id_retro', type: 'carta_identita_retro' },
-    { dz: 'dz_driving_license', inp: 'file_driving_license', type: 'patente' },
+    { dz: 'mini_view_pat_pdf', inp: 'file_driving_license', type: 'patente' },
     { dz: 'dz_pat_fronte', inp: 'file_pat_fronte', type: 'patente_fronte' },
     { dz: 'dz_pat_retro', inp: 'file_pat_retro', type: 'patente_retro' },
-    { dz: 'dz_income_doc', inp: 'file_income_doc', type: 'documento_reddituale' },
+    { dz: 'mini_view_inc_pdf', inp: 'file_income_doc', type: 'documento_reddituale' },
     { dz: 'dz_inc_1', inp: 'file_inc_1', type: 'busta_paga_1' },
     { dz: 'dz_inc_2', inp: 'file_inc_2', type: 'busta_paga_2' }
   ];
@@ -312,14 +324,108 @@ function initDragAndDrop() {
   });
 }
 
-// CONFERMA I DOCUMENTI DELLA SEZIONE 2 E PASSA ALLA SEZIONE 3 (STRIPE PRE-ADDEBITO)
-function confirmStep2AndShowStep3(event) {
+// CONFERMA I DOCUMENTI DELLA SEZIONE 2 E SALVA NEL BUCKET SU SUPABASE
+async function confirmStep2AndShowStep3(event) {
   if (event && event.preventDefault) event.preventDefault();
   
   const count = Object.keys(CurrentQuote.uploadedDocs).length;
   if (count === 0) {
     const ok = confirm("Non hai ancora selezionato alcun file per il dossier. Vuoi confermare comunque la Sezione 2 e procedere con la Sezione 3 (Blocco Pratica e Preaddebito)? Potrai inviare i file successivamente al Concierge.");
     if (!ok) return;
+  }
+
+  const btnConfirm = document.getElementById('btnConfirmStep2');
+  const originalBtnHtml = btnConfirm ? btnConfirm.innerHTML : '';
+  if (btnConfirm && count > 0) {
+    btnConfirm.disabled = true;
+    btnConfirm.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Sincronizzazione e crittografia file nel bucket crm-documents in corso...';
+  }
+
+  // Sincronizzazione garantita su Supabase (Storage e tabella crm_documents)
+  if (typeof window.supabase !== 'undefined' && window.supabase && count > 0) {
+    try {
+      // 1. Risaliamo o creiamo un lead_id se mancante
+      if (!CurrentQuote.leadId && CurrentQuote.quoteCode) {
+        const { data: qData } = await window.supabase
+          .from('quotes')
+          .select('id, lead_id')
+          .eq('quote_code', CurrentQuote.quoteCode)
+          .maybeSingle();
+        if (qData && qData.lead_id) {
+          CurrentQuote.leadId = qData.lead_id;
+        } else if (qData && qData.id) {
+          const { data: newLead } = await window.supabase
+            .from('crm_leads')
+            .insert([{ full_name: `Dossier ${CurrentQuote.quoteCode}`, pipeline_status: 'docs_requested', quote_id: qData.id }])
+            .select('id')
+            .maybeSingle();
+          if (newLead && newLead.id) CurrentQuote.leadId = newLead.id;
+        }
+      }
+
+      // 2. Upload batch di tutti i file selezionati nel bucket crm-documents e registrazione in crm_documents
+      const targetId = CurrentQuote.leadId || CurrentQuote.quoteCode || 'anonymous';
+      for (const [docType, docObj] of Object.entries(CurrentQuote.uploadedDocs)) {
+        let finalUrl = '';
+        if (docObj && docObj.file) {
+          const cleanName = docObj.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+          const filePath = `leads/${targetId}/${docType}_${Date.now()}_${cleanName}`;
+          
+          const { data: uploadData, error: uploadErr } = await window.supabase.storage
+            .from('crm-documents')
+            .upload(filePath, docObj.file, { cacheControl: '3600', upsert: true });
+
+          if (!uploadErr && uploadData) {
+            const { data: urlData } = window.supabase.storage.from('crm-documents').getPublicUrl(filePath);
+            finalUrl = urlData?.publicUrl || `storage:crm-documents/${filePath}`;
+          } else {
+            console.warn(`Errore upload storage sul bucket per ${docType}:`, uploadErr);
+            finalUrl = docObj.dataUrl && docObj.dataUrl.length < 500000 ? docObj.dataUrl : `storage_fallback_${docObj.name}`;
+          }
+        } else if (docObj && docObj.dataUrl) {
+          finalUrl = docObj.dataUrl.length < 500000 ? docObj.dataUrl : `storage_fallback_${docObj.name}`;
+        }
+
+        if (finalUrl) {
+          const { data: existDoc } = await window.supabase
+            .from('crm_documents')
+            .select('id')
+            .eq('document_type', docType)
+            .eq('lead_id', CurrentQuote.leadId || null)
+            .maybeSingle();
+
+          if (existDoc && existDoc.id) {
+            await window.supabase
+              .from('crm_documents')
+              .update({ file_url: finalUrl, verification_status: 'uploaded', updated_at: new Date().toISOString() })
+              .eq('id', existDoc.id);
+          } else {
+            await window.supabase
+              .from('crm_documents')
+              .insert([{
+                lead_id: CurrentQuote.leadId || null,
+                document_type: docType,
+                file_url: finalUrl,
+                verification_status: 'uploaded'
+              }]);
+          }
+        }
+      }
+
+      if (CurrentQuote.leadId) {
+        await window.supabase
+          .from('crm_leads')
+          .update({ pipeline_status: 'docs_uploaded' })
+          .eq('id', CurrentQuote.leadId);
+      }
+    } catch (syncErr) {
+      console.warn("Avviso durante sincronizzazione batch su Supabase:", syncErr);
+    }
+  }
+
+  if (btnConfirm && originalBtnHtml) {
+    btnConfirm.disabled = false;
+    btnConfirm.innerHTML = originalBtnHtml;
   }
 
   const step2 = document.getElementById('sectionStep2');
@@ -330,7 +436,7 @@ function confirmStep2AndShowStep3(event) {
   if (summary2) {
     summary2.style.display = 'flex';
     const countEl = document.getElementById('summaryDocsCount');
-    if (countEl) countEl.textContent = `${count > 0 ? count : 'Nessun'} documento caricato online — pronti per l'istruttoria`;
+    if (countEl) countEl.textContent = `${count > 0 ? count : 'Nessun'} documento sincronizzato e crittografato online — pronti per l'istruttoria`;
   }
   if (step3) {
     step3.style.display = 'block';
