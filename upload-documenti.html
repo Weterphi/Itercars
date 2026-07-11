@@ -211,6 +211,29 @@
       padding: 30px;
       text-align: center;
     }
+    /* navigation arrows styling */
+    .nav-arrows {
+      position: fixed;
+      top: 50%;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none; /* allow clicks only on buttons */
+      z-index: 1000;
+    }
+    .nav-arrow {
+      background: rgba(0,0,0,0.4);
+      border: none;
+      color: #fff;
+      padding: 12px;
+      margin: 0 20px;
+      border-radius: 50%;
+      cursor: pointer;
+      pointer-events: all; /* re‑enable click */
+      transition: background 0.2s;
+    }
+    .nav-arrow:hover { background: rgba(0,0,0,0.6); }
     @media (max-width: 640px) {
       .stepper-bar {
         flex-direction: column;
@@ -222,25 +245,16 @@
 </head>
 <body>
 
-  <!-- ================= HEADER / NAVBAR ================= -->
-  <header id="header">
-    <div class="container nav-container">
-      <a href="index.html" class="logo logo-animating" title="ITERCARS Luxury Supercar Rental">
-        <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="noleggio-lungo-termine.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Lungo Termine</a></li>
-        <li><a href="noleggio-breve-termine.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-car-fill"></i> Breve Termine</a></li>
-        <li><a href="fleet.html">Luxury Car</a></li>
-      </ul>
-      <div class="nav-actions">
-        <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn">
-          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
-        </a>
-      </div>
-    </div>
-  </header>
+  <!-- Hide full header/navigation menu -->
+  <style>
+    #header { display: none; }
+  </style>
+
+  <!-- Navigation arrows overlay -->
+  <div class="nav-arrows">
+    <button id="prevBtn" class="nav-arrow" title="Indietro"><i class="ri-arrow-left-s-line" style="font-size:2rem;"></i></button>
+    <button id="nextBtn" class="nav-arrow" title="Avanti"><i class="ri-arrow-right-s-line" style="font-size:2rem;"></i></button>
+  </div>
 
   <!-- ================= MAIN CONTENT ================= -->
   <main class="upload-container">
@@ -271,7 +285,7 @@
         <div style="font-size: 0.92rem; color: var(--text-muted);" id="uploadQuoteInfo">Codice Preventivo: <strong id="uploadQuoteCodeDisplay">---</strong></div>
       </div>
       <div style="text-align: right; background: rgba(0, 146, 70, 0.15); border: 1px solid rgba(0, 146, 70, 0.4); padding: 16px 24px; border-radius: 16px;">
-        <span style="font-size: 0.8rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Canone Configurato</span>
+        <span style="font-size: 0.8rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Fee Trattenuta Pratica</span>
         <div style="font-size: 1.8rem; font-weight: 900; color: #2ecc71; line-height: 1.1;" id="uploadQuotePriceDisplay">€ ---</div>
       </div>
     </div>
@@ -532,5 +546,20 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js?v=21"></script>
   <script src="upload-documenti.js?v=1"></script>
+
+  <!-- Arrow navigation script -->
+  <script>
+    document.getElementById('prevBtn').addEventListener('click', () => history.back());
+    // Replace '#NEXT_PAGE#' with the actual URL of the next step if needed.
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      const nextUrl = '#NEXT_PAGE#';
+      if (nextUrl && nextUrl !== '#NEXT_PAGE#') {
+        window.location.href = nextUrl;
+      } else {
+        // fallback: go forward in history if possible
+        history.forward();
+      }
+    });
+  </script>
 </body>
 </html>
