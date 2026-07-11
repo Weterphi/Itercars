@@ -598,7 +598,7 @@ async function handleQuoteSubmit(event) {
   submitBtn.disabled = false;
   submitBtn.innerHTML = '✅ Preventivo Generato!';
 
-  # 2. Avvia in background senza bloccare l'interfaccia il salvataggio DB, Stripe e l'invio mail!
+  // 2. Avvia in background senza bloccare l'interfaccia il salvataggio DB, Stripe e l'invio mail!
   (async () => {
     try {
       let pdfBase64 = null;
