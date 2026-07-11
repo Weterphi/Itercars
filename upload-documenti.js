@@ -185,12 +185,40 @@ async function handleFileSelected(inputId, docType, dropzoneId) {
       dataUrl: dataUrl
     };
 
-    // Salvataggio sul database Supabase (crm_documents e aggiornamento crm_leads)
+    // Salvataggio sul database e Storage Bucket Supabase (crm-documents)
     if (typeof window.supabase !== 'undefined' && window.supabase && CurrentQuote.leadId) {
+      let finalFileUrl = '';
+      const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+      const filePath = `leads/${CurrentQuote.leadId}/${docType}_${Date.now()}_${cleanName}`;
+
+      try {
+        // 1. Carica il file binario effettivo sul bucket di Supabase Storage "crm-documents"
+        const { data: uploadData, error: uploadError } = await window.supabase.storage
+          .from('crm-documents')
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: true
+          });
+
+        if (!uploadError && uploadData) {
+          const { data: urlData } = window.supabase.storage
+            .from('crm-documents')
+            .getPublicUrl(filePath);
+          finalFileUrl = urlData?.publicUrl || `storage:crm-documents/${filePath}`;
+        } else {
+          console.warn("Bucket crm-documents non disponibile o errore RLS, uso fallback:", uploadError);
+          finalFileUrl = dataUrl.length < 500000 ? dataUrl : `storage_fallback_${file.name}`;
+        }
+      } catch (storageErr) {
+        console.warn("Eccezione durante upload su Storage, uso fallback:", storageErr);
+        finalFileUrl = dataUrl.length < 500000 ? dataUrl : `storage_fallback_${file.name}`;
+      }
+
+      // 2. Registra il riferimento e il percorso del file nella tabella SQL "crm_documents"
       await window.supabase.from('crm_documents').insert([{
         lead_id: CurrentQuote.leadId,
         document_type: docType,
-        file_url: dataUrl.length < 500000 ? dataUrl : `uploaded_file_${file.name}`,
+        file_url: finalFileUrl,
         verification_status: 'uploaded'
       }]);
 
