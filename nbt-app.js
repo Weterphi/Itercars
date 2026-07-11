@@ -52,7 +52,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-s1-36-2k',
 
-    vehicle_id: 'bmw-01',
+    vehicle_id: '7bfd5090-602b-4a21-abe9-9b7a1a69d5e5',
 
     brand: 'BMW',
 
@@ -130,7 +130,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-x1-36-3k',
 
-    vehicle_id: 'bmw-02',
+    vehicle_id: '74c10e2f-0b73-44d1-bd02-2a560e6b43e5',
 
     brand: 'BMW',
 
@@ -208,7 +208,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-s3t-36-35k',
 
-    vehicle_id: 'bmw-03',
+    vehicle_id: 'e9a6c3c8-261f-4a23-b20a-090ff2682849',
 
     brand: 'BMW',
 
@@ -286,7 +286,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-x3-36-4k',
 
-    vehicle_id: 'bmw-04',
+    vehicle_id: '0bdf55e4-abe5-4c2e-a34e-7e04ca5c1ecf',
 
     brand: 'BMW',
 
@@ -364,7 +364,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-s5-36-5k',
 
-    vehicle_id: 'bmw-05',
+    vehicle_id: '7a9619bf-5c20-44ef-8368-3ee629e8773d',
 
     brand: 'BMW',
 
@@ -440,7 +440,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-x5-36-6k',
 
-    vehicle_id: 'bmw-06',
+    vehicle_id: 'f9ca5557-6685-4608-b991-bbc22513c68b',
 
     brand: 'BMW',
 
@@ -516,7 +516,7 @@ const SAMPLE_OFFERS = [
 
     id: 'bmw-i4-36-4k',
 
-    vehicle_id: 'bmw-07',
+    vehicle_id: 'e41813c3-6193-4dbc-98a2-29cecf60b26c',
 
     brand: 'BMW',
 
@@ -1486,7 +1486,7 @@ function renderOffersGrid() {
 
           <div class="nbt-card-actions">
 
-            <a href="nbt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="nbt-dettaglio.html?id=${offer.id}&vid=${offer.vehicle_id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
 
               <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
 

@@ -254,6 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!found && paramModel) {
     found = {
       id: carId,
+      vehicle_id: params.get('vid') || null,
       brand: params.get('brand') || 'BMW',
       model: paramModel,
       trim: params.get('trim') || 'Executive M Sport',
@@ -508,7 +509,7 @@ async function handleQuoteSubmit(event) {
         email: email,
         customer_type: type,
         pipeline_status: 'quote_sent',
-        interested_offer_id: c.id && c.id.length === 36 ? c.id : null,
+        interested_offer_id: null, // NBT uses vehicle_id, avoid FK to nlt_offers
         interested_vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
         notes: `Preventivo configurato per ${c.brand} ${c.model}: ${ConfigState.durationDays}m/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/m`
       }]).select();
@@ -522,7 +523,7 @@ async function handleQuoteSubmit(event) {
         quote_code: quoteCode,
         lead_id: newLeadId,
         vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
-        offer_id: c.id && c.id.length === 36 ? c.id : null,
+        offer_id: null, // NBT uses vehicle_id, avoid FK to nlt_offers
         selected_duration_months: ConfigState.durationDays,
         selected_km_per_year: ConfigState.kmDailyLimit,
         selected_deposit: ConfigState.depositAmount,
@@ -652,12 +653,12 @@ async function handleQuoteSubmit(event) {
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-          <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 50px; font-size: 1rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <i class="ri-printer-line" style="font-size: 1.3rem;"></i> Stampa / Scarica PDF
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <button type="button" class="btn btn-primary" onclick="window.payQuoteStripe('${quoteCode}', event)" style="height: 50px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #635bff, #00d4ff); border: none; display: flex; align-items: center; justify-content: center; gap: 8px; grid-column: span 2;">
+            <i class="ri-bank-card-line" style="font-size: 1.3rem;"></i> Paga Acconto e Prenota Vettura
           </button>
-          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationDays}', '${ConfigState.kmDailyLimit}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}')" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i> Invia su WhatsApp
+          <button type="button" class="btn btn-outline" onclick="window.print()" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="ri-printer-line" style="font-size: 1.3rem;"></i> Scarica PDF
           </button>
           <a href="noleggio-breve-termine.html" class="btn btn-outline" style="height: 50px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
             <i class="ri-arrow-left-line"></i> Torna al Catalogo
@@ -834,4 +835,42 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.text("Generato tramite piattaforma certificata ITERCARS Enterprise", 105, 280, { align: 'center' });
 
   return doc;
+}
+
+window.payQuoteStripe = async function(quoteCode, event) {
+  const btn = event.currentTarget;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Connessione a Stripe...';
+  btn.disabled = true;
+
+  try {
+    const supabaseUrl = window.supabase.supabaseUrl;
+    const supabaseKey = window.supabase.supabaseKey;
+
+    const res = await fetch(`${supabaseUrl}/functions/v1/stripe-checkout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${supabaseKey}`
+      },
+      body: JSON.stringify({ quoteCode })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || "Errore sconosciuto da Stripe");
+    }
+
+    const { checkoutUrl } = await res.json();
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    } else {
+      throw new Error("URL di checkout non restituito");
+    }
+  } catch (error) {
+    console.error("Errore Checkout Stripe:", error);
+    alert("Errore durante la connessione al sistema di pagamento: " + error.message);
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  }
 }
