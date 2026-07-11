@@ -238,11 +238,53 @@ async function handleFileSelected(inputId, docType, dropzoneId) {
   }
 }
 
+// CAMBIO FORMATO DOCUMENTO (PDF UNICO vs FOTO JPG/PNG SEPARATE)
+function switchDocFormat(docKey, format) {
+  const btnPdf = document.getElementById(`btn_format_${docKey}_pdf`);
+  const btnDual = document.getElementById(`btn_format_${docKey}_dual`);
+  const viewPdf = document.getElementById(`view_${docKey}_pdf`);
+  const viewDual = document.getElementById(`view_${docKey}_dual`);
+
+  if (btnPdf && btnDual) {
+    if (format === 'pdf') {
+      btnPdf.classList.add('active');
+      btnPdf.style.background = '#2ecc71';
+      btnPdf.style.color = '#000';
+      btnDual.classList.remove('active');
+      btnDual.style.background = 'transparent';
+      btnDual.style.color = '#fff';
+    } else {
+      btnDual.classList.add('active');
+      btnDual.style.background = '#2ecc71';
+      btnDual.style.color = '#000';
+      btnPdf.classList.remove('active');
+      btnPdf.style.background = 'transparent';
+      btnPdf.style.color = '#fff';
+    }
+  }
+
+  if (viewPdf && viewDual) {
+    if (format === 'pdf') {
+      viewPdf.style.display = 'block';
+      viewDual.style.display = 'none';
+    } else {
+      viewPdf.style.display = 'none';
+      viewDual.style.display = 'grid';
+    }
+  }
+}
+
 function initDragAndDrop() {
   const zones = [
     { dz: 'dz_id_card', inp: 'file_id_card', type: 'carta_identita' },
+    { dz: 'dz_id_fronte', inp: 'file_id_fronte', type: 'carta_identita_fronte' },
+    { dz: 'dz_id_retro', inp: 'file_id_retro', type: 'carta_identita_retro' },
     { dz: 'dz_driving_license', inp: 'file_driving_license', type: 'patente' },
-    { dz: 'dz_income_doc', inp: 'file_income_doc', type: 'documento_reddituale' }
+    { dz: 'dz_pat_fronte', inp: 'file_pat_fronte', type: 'patente_fronte' },
+    { dz: 'dz_pat_retro', inp: 'file_pat_retro', type: 'patente_retro' },
+    { dz: 'dz_income_doc', inp: 'file_income_doc', type: 'documento_reddituale' },
+    { dz: 'dz_inc_1', inp: 'file_inc_1', type: 'busta_paga_1' },
+    { dz: 'dz_inc_2', inp: 'file_inc_2', type: 'busta_paga_2' }
   ];
 
   zones.forEach(z => {
