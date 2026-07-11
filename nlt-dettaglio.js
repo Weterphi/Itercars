@@ -404,10 +404,29 @@ function calculateAndRenderPrice() {
   if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
   if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3'; // Fallback just in case
 
-  const rates = OFFICIAL_RATES[baseCarId];
+  let rates = OFFICIAL_RATES[baseCarId];
   if (!rates) {
-     console.error("No official rates for", baseCarId);
-     return;
+    // Fallback intelligente per Modello (se l'ID è un nuovo UUID del database)
+    const modelStr = (c.model || '').toLowerCase();
+    if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['32226fdb-ba8c-4e46-8e21-e303e0a0fe3d'];
+    else if (modelStr.includes('x1')) rates = OFFICIAL_RATES['ccaa728f-9b2d-4480-9f1c-76d7c97ccc79'];
+    else if (modelStr.includes('serie 3')) rates = OFFICIAL_RATES['e3f556d9-8c52-43fd-9d81-ffb9c1551928'];
+    else if (modelStr.includes('x3')) rates = OFFICIAL_RATES['1933cb66-5804-45ef-b997-8e038059f0b4'];
+    else if (modelStr.includes('serie 5')) rates = OFFICIAL_RATES['3b99316f-29bb-4392-86d3-98cc6e77485d'];
+    else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['f4c1e663-a663-4fba-81c1-8ed424caf0ba'];
+    else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['efce36a9-41fc-4285-a167-4badbcbbb2c6'];
+
+    // Se ancora non trovato, genera una tabella di canoni dinamica basata sul prezzo base
+    if (!rates) {
+      const base = Number(c.basePrice) || 699;
+      rates = {
+        6: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.6), extraKmPrice: 0.18 },
+        12: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.45), extraKmPrice: 0.16 },
+        24: { baseKm: 20000, deposit: 3000, price: Math.round(base * 1.15), extraKmPrice: 0.15 },
+        36: { baseKm: 20000, deposit: 3000, price: Math.round(base), extraKmPrice: 0.14 },
+        48: { baseKm: 20000, deposit: 3000, price: Math.round(base * 0.92), extraKmPrice: 0.12 }
+      };
+    }
   }
 
   // Fallback to closest available duration if exact not available (e.g. 6m for X5 doesn't exist)

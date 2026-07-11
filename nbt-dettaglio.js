@@ -234,9 +234,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           readyDelivery: !!data.is_ready_delivery,
           deliveryWeeks: data.delivery_weeks || 4,
           providerName: (data.providers && data.providers.name) ? data.providers.name : 'Mandante NBT',
+          nbtDailyPrice: Number(data.daily_price) || (data.vehicles && data.vehicles.daily_price ? Number(data.vehicles.daily_price) : null) || 85,
           basePrice: Number(data.client_monthly_price) || 699,
-          baseDuration: data.duration_months || 48,
-          baseKm: data.km_per_year || 15000,
+          baseDuration: 7,
+          baseKm: 150,
           baseDeposit: Number(data.deposit_mandante) || 3000
         };
       }
@@ -284,9 +285,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (found.baseDeposit === undefined && found.baseOffer?.deposit !== undefined) found.baseDeposit = Number(found.baseOffer.deposit);
 
     ConfigState.car = found;
-    ConfigState.durationDays = found.baseDuration || 36;
-    ConfigState.kmDailyLimit = found.baseKm || 60000;
-    ConfigState.depositAmount = found.baseDeposit !== undefined ? found.baseDeposit : 2000;
+    ConfigState.durationDays = (found.baseDuration && found.baseDuration <= 30) ? found.baseDuration : 7;
+    ConfigState.kmDailyLimit = (found.baseKm && found.baseKm <= 500) ? found.baseKm : 150;
+    ConfigState.depositAmount = found.baseDeposit !== undefined ? found.baseDeposit : 3000;
   }
   
   renderCarDetails();
@@ -426,8 +427,19 @@ function calculateAndRenderPrice() {
   const c = ConfigState.car;
   if (!c) return;
 
-  // Prezzo base giornaliero (preso dai dati o calcolato dal mensile)
-  let baseDailyPrice = c.nbtDailyPrice || (c.basePrice ? c.basePrice / 30 : 50);
+  // Ricava prezzo base giornaliero da DB, oggetto o modello
+  let baseDailyPrice = c.nbtDailyPrice;
+  if (!baseDailyPrice) {
+    const modelStr = (c.model || '').toLowerCase();
+    if (modelStr.includes('serie 1') || modelStr.includes('118')) baseDailyPrice = 80;
+    else if (modelStr.includes('x1')) baseDailyPrice = 95;
+    else if (modelStr.includes('serie 3')) baseDailyPrice = 110;
+    else if (modelStr.includes('x3')) baseDailyPrice = 125;
+    else if (modelStr.includes('serie 5')) baseDailyPrice = 150;
+    else if (modelStr.includes('x5')) baseDailyPrice = 200;
+    else if (modelStr.includes('i4')) baseDailyPrice = 180;
+    else baseDailyPrice = c.basePrice ? Math.max(c.basePrice / 10, 75) : 85;
+  }
 
   // Calcolo prezzo per i giorni selezionati
   let price = baseDailyPrice * ConfigState.durationDays;
