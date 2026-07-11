@@ -4,7 +4,7 @@
    con ricalcolo live del canone e generazione Preventivo PDF Ufficiale.
    ========================================================================== */
 
-const BROKER_MARGIN = 1.15; // +15% per il broker
+const BROKER_MARGIN = 1.0; // Ricarico gestito da backend e preventivo puro
 
 const OFFICIAL_RATES = {
   'bmw-s1': {
@@ -499,6 +499,16 @@ async function handleQuoteSubmit(event) {
   const c = ConfigState.car;
   const quoteCode = `IT-NBT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
+  localStorage.setItem('itercars_last_quote_code', quoteCode);
+  localStorage.setItem('itercars_last_quote', JSON.stringify({
+    quote_code: quoteCode,
+    final_monthly_price: ConfigState.finalMonthlyPrice,
+    carTitle: `${c.brand} ${c.model}`,
+    selected_duration_months: ConfigState.durationDays,
+    selected_deposit: ConfigState.depositAmount,
+    crm_leads: { first_name: name, email: email, customer_type: type }
+  }));
+
   // 1. Visualizza SUBITO la scheda Preventivo Ufficiale senza bloccare la pagina!
   const previewBox = document.getElementById('officialQuoteContainer');
   if (previewBox) {
@@ -580,8 +590,8 @@ async function handleQuoteSubmit(event) {
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <button type="button" class="btn btn-primary" onclick="window.payQuoteStripe('${quoteCode}', event)" style="height: 50px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #635bff, #00d4ff); border: none; display: flex; align-items: center; justify-content: center; gap: 8px; grid-column: span 2;">
-            <i class="ri-bank-card-line" style="font-size: 1.3rem;"></i> Paga Acconto e Prenota Vettura
+          <button type="button" class="btn btn-primary" onclick="window.acceptQuoteAndRedirect('${quoteCode}', event)" style="height: 52px; font-size: 1.05rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; display: flex; align-items: center; justify-content: center; gap: 8px; grid-column: span 2; box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);">
+            <i class="ri-folder-upload-fill" style="font-size: 1.35rem;"></i> Accetta Preventivo e Carica Documenti
           </button>
           <button type="button" class="btn btn-outline" onclick="window.print()" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <i class="ri-printer-line" style="font-size: 1.3rem;"></i> Scarica PDF
@@ -883,7 +893,16 @@ window.payQuoteStripe = async function(quoteCode, event) {
   } catch (error) {
     console.error("Errore Checkout Stripe:", error);
     alert("Errore durante la connessione al sistema di pagamento: " + error.message);
-    btn.disabled = false;
     btn.innerHTML = originalText;
   }
 }
+
+window.acceptQuoteAndRedirect = function(quoteCode, event) {
+    if (event && event.currentTarget) {
+        event.currentTarget.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Apertura Dossier Documenti...';
+        event.currentTarget.disabled = true;
+    }
+    setTimeout(() => {
+        window.location.href = `upload-documenti.html?code=${quoteCode}`;
+    }, 250);
+};

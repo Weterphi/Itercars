@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    const savedConsent = localStorage.getItem('itercars_cookie_consent');
+    const isGranted = savedConsent === 'accepted' ? 'granted' : 'denied';
+    gtag('consent', 'default', {
+      'analytics_storage': isGranted,
+      'ad_storage': isGranted,
+      'ad_user_data': isGranted,
+      'ad_personalization': isGranted
+    });
+
+    gtag('config', 'G-H6JBRXTWJL');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pratica Inviata con Successo — ITERCARS</title>
+  <meta name="description" content="I tuoi documenti sono stati ricevuti e la fee è prenotata. Esito delibera in 48 ore lavorative.">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="index.css?v=40">
+  <link rel="icon" type="image/png" href="logo.png">
+  <style>
+    body {
+      background: #06060c;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main, 'Inter', -apple-system, sans-serif);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .success-container {
+      max-width: 720px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .success-card {
+      background: linear-gradient(145deg, rgba(15, 20, 32, 0.95), rgba(8, 12, 20, 0.98));
+      border: 2px solid #2ecc71;
+      border-radius: 24px;
+      padding: 48px 36px;
+      box-shadow: 0 20px 60px rgba(46, 204, 113, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+    .check-icon-box {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: rgba(46, 204, 113, 0.15);
+      border: 2px solid #2ecc71;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 28px;
+      animation: pulseGreen 2s infinite;
+    }
+    .check-icon-box i {
+      font-size: 3.2rem;
+      color: #2ecc71;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
+      70% { box-shadow: 0 0 0 20px rgba(46, 204, 113, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+    }
+    .main-message-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 28px 0;
+    }
+    .quote-badge {
+      display: inline-block;
+      background: rgba(46, 204, 113, 0.18);
+      color: #2ecc71;
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= HEADER ================= -->
+  <header id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo logo-animating" title="ITERCARS Luxury Supercar Rental">
+        <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="noleggio-lungo-termine.html">Lungo Termine</a></li>
+        <li><a href="noleggio-breve-termine.html">Breve Termine</a></li>
+        <li><a href="fleet.html">Luxury Car</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn">
+          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= SUCCESS CARD ================= -->
+  <main class="success-container">
+    <div class="success-card">
+      
+      <!-- ICON -->
+      <div class="check-icon-box">
+        <i class="ri-shield-check-fill"></i>
+      </div>
+
+      <!-- BADGE -->
+      <div class="quote-badge">
+        <i class="ri-checkbox-circle-fill"></i> PRATICA IN DELIBERA • CODICE: <span id="successQuoteCodeDisplay">---</span>
+      </div>
+
+      <!-- TITLE -->
+      <h1 style="font-size: 2.2rem; font-weight: 900; margin: 0 0 16px; line-height: 1.2;">
+        Pratica Inviata con Successo!
+      </h1>
+
+      <!-- EXACT REQUESTED MESSAGE -->
+      <div class="main-message-box">
+        <p style="font-size: 1.25rem; font-weight: 800; color: #fff; margin: 0; line-height: 1.5; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+          "Documenti ricevuti e fee prenotata. Stiamo inviando la pratica per l'approvazione finale. Entro 48h riceverai l'esito."
+        </p>
+      </div>
+
+      <!-- STATUS BREAKDOWN -->
+      <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 32px;">
+        Il nostro dipartimento istruttorio ha preso in carico il tuo dossier. I documenti di identità e reddituali sono attualmente in fase di verifica informatica presso l'istituto di credito / mandante ufficiale.<br>
+        In caso di esito positivo della delibera, verrai contattato dal tuo Concierge personale per la firma telematica del contratto di noleggio e la pianificazione della consegna.
+      </p>
+
+      <!-- ACTION BUTTONS -->
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <a href="https://api.whatsapp.com/send?phone=393755942143&text=Ciao%20ITERCARS!%20Ho%20appena%20completato%20l'upload%20dei%20documenti%20e%20pagato%20la%20fee%20per%20la%20pratica." target="_blank" class="btn btn-primary" style="height: 52px; padding: 0 28px; font-size: 1.05rem; font-weight: 800; background: #25d366; border: none; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i> <span>Contatta Concierge su WhatsApp</span>
+        </a>
+        <a href="noleggio-lungo-termine.html" class="btn btn-outline" style="height: 52px; padding: 0 28px; font-size: 1.05rem; font-weight: 800; border-color: rgba(255,255,255,0.2); color: #fff; display: inline-flex; align-items: center; gap: 8px;">
+          <i class="ri-arrow-left-line"></i> <span>Torna al Catalogo</span>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer style="border-top: 1px solid rgba(255,255,255,0.08); padding: 36px 0; background: #040509; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+    <div class="container">
+      <p style="margin-bottom: 6px;">&copy; 2026 ITERCARS Marketplace — Tutela Privacy & Trasparenza Contrattuale</p>
+      <p>Servizio Clienti H24: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a></p>
+    </div>
+  </footer>
+
+  <!-- Supabase JS SDK & App Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="app.js?v=21"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const quoteCode = params.get('quote_code') || params.get('code') || localStorage.getItem('itercars_last_quote_code') || 'PREV-2026-VIP';
+      
+      const codeDisplay = document.getElementById('successQuoteCodeDisplay');
+      if (codeDisplay) codeDisplay.textContent = quoteCode;
+
+      // Aggiornamento automatico stato CRM se connesso a Supabase
+      if (typeof window.supabase !== 'undefined' && window.supabase && quoteCode) {
+        try {
+          const { data: quote, error } = await window.supabase
+            .from('quotes')
+            .select('id, lead_id, status')
+            .eq('quote_code', quoteCode)
+            .maybeSingle();
+
+          if (!error && quote) {
+            await window.supabase
+              .from('quotes')
+              .update({ status: 'paid' })
+              .eq('id', quote.id);
+
+            if (quote.lead_id) {
+              await window.supabase
+                .from('crm_leads')
+                .update({ pipeline_status: 'scoring_pending' })
+                .eq('id', quote.lead_id);
+            }
+          }
+        } catch(e) {
+          console.warn("Aggiornamento stato CRM in background non completato:", e);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

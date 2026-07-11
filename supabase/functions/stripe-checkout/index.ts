@@ -136,7 +136,7 @@ serve(async (req) => {
       ],
       mode: "payment",
       // Redirect URLS (questi possono essere personalizzati)
-      success_url: `${req.headers.get("origin") || "http://localhost:8000"}/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: `${req.headers.get("origin") || "http://localhost:8000"}/success.html?session_id={CHECKOUT_SESSION_ID}&quote_code=${quote.quote_code}`,
       cancel_url: `${req.headers.get("origin") || "http://localhost:8000"}/noleggio-lungo-termine.html`,
       metadata: {
         quote_id: quote.id,
