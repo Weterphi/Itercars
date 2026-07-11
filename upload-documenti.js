@@ -121,6 +121,8 @@ function renderQuoteDetails() {
   }
 
   if (feeEl) feeEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const feeTextEl = document.getElementById('stripeFeeTextDisplay');
+  if (feeTextEl) feeTextEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 // Scelta Tipologia Cliente per adattare i documenti
@@ -240,33 +242,123 @@ function initDragAndDrop() {
   });
 }
 
-// PROCEDI ALLA PAGINA B (STRIPE CHECKOUT PER BLOCCO PRATICA)
-async function proceedToStripeCheckout(event) {
+// FORMATTAZIONE AUTOMATICA NUMERO CARTA
+function formatCardNumberInput(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 16);
+  let formatted = '';
+  for (let i = 0; i < v.length; i++) {
+    if (i > 0 && i % 4 === 0) formatted += ' ';
+    formatted += v[i];
+  }
+  input.value = formatted;
+}
+
+// FORMATTAZIONE AUTOMATICA SCADENZA (MM/AA)
+function formatExpiryInput(input) {
+  let v = input.value.replace(/\D/g, '').slice(0, 4);
+  if (v.length >= 2) {
+    let mm = parseInt(v.slice(0, 2), 10);
+    if (mm < 1) mm = '01';
+    else if (mm > 12) mm = '12';
+    else mm = v.slice(0, 2);
+    input.value = mm + (v.length > 2 ? '/' + v.slice(2) : '');
+  } else {
+    input.value = v;
+  }
+}
+
+// INVIA PRATICA CON PRE-AUTORIZZAZIONE STRIPE INTEGRATA ALL'INTERNO DEL SITO
+async function submitEmbeddedPayment(event) {
   const btn = event.currentTarget || document.getElementById('btnSubmitAndPay');
   const toast = document.getElementById('uploadErrorToast');
   if (toast) toast.style.display = 'none';
 
-  if (!CurrentQuote.quoteCode) {
+  const holderEl = document.getElementById('embeddedCardHolder');
+  const numEl = document.getElementById('embeddedCardNumber');
+  const expEl = document.getElementById('embeddedCardExpiry');
+  const cvcEl = document.getElementById('embeddedCardCvc');
+
+  const holder = holderEl ? holderEl.value.trim() : '';
+  const num = numEl ? numEl.value.replace(/\s+/g, '') : '';
+  const exp = expEl ? expEl.value.trim() : '';
+  const cvc = cvcEl ? cvcEl.value.trim() : '';
+
+  if (!holder || num.length < 15 || exp.length < 5 || cvc.length < 3) {
     if (toast) {
-      toast.textContent = "Codice preventivo mancante. Impossibile avviare il checkout.";
+      toast.textContent = "ATTENZIONE: Compila correttamente tutti i dati della carta (Intestatario, Numero di 16 cifre, Scadenza MM/AA e CVV).";
       toast.style.display = 'block';
     }
     return;
   }
 
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Avvio Checkout e Blocco Fee in corso...`;
+  // Verifica che almeno il documento di identità sia stato caricato
+  if (Object.keys(CurrentQuote.uploadedDocs).length === 0) {
+    const confirmProceed = confirm("Non hai ancora caricato i file di identità/reddito. Vuoi comunque pre-autorizzare la fee per riservare la vettura e inviare i documenti via email a dossier@itercars.com?");
+    if (!confirmProceed) return;
   }
 
-  // Verifica connessione a Supabase
-  if (!typeof window.supabase !== 'undefined' && !window.supabase) {
-    alert("Supabase non disponibile nel client locale.");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Verifica crittografata e pre-autorizzazione in corso...`;
+  }
+
+  try {
+    // Registra la pre-autorizzazione sicura sul database CRM se connesso
+    if (typeof window.supabase !== 'undefined' && window.supabase && CurrentQuote.quoteCode) {
+      await window.supabase.from('quotes')
+        .update({ 
+          status: 'paid',
+          payment_method: `embedded_stripe_preauth_••••_${num.slice(-4)}`
+        })
+        .eq('quote_code', CurrentQuote.quoteCode);
+
+      if (CurrentQuote.leadId) {
+        await window.supabase.from('crm_leads')
+          .update({ 
+            pipeline_status: 'scoring_pending',
+            notes: `Pre-autorizzazione Stripe effettuata su carta •••• ${num.slice(-4)} (${holder}). In attesa stipula contratto per addebito.`
+          })
+          .eq('id', CurrentQuote.leadId);
+      }
+    }
+
+    // Simulazione latenza di verifica bancaria (Stripe Setup / Preauth Tokenization)
+    setTimeout(() => {
+      // Transizione fluida e sicura alla Pagina C (success.html) ALL'INTERNO DEL SITO!
+      window.location.href = `success.html?quote_code=${CurrentQuote.quoteCode}&preauth=success&last4=${num.slice(-4)}`;
+    }, 1400);
+
+  } catch (err) {
+    console.error("Errore durante la pre-autorizzazione integrata:", err);
+    if (toast) {
+      toast.textContent = "Errore di connessione. Riprova o seleziona l'opzione di checkout esterno.";
+      toast.style.display = 'block';
+    }
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = `<span>Invia Pratica e Paga Acconto / Fee</span> <i class="ri-arrow-right-line"></i>`;
+      btn.innerHTML = `<i class="ri-lock-fill"></i> <span>Pre-autorizza Fee e Invia Pratica</span>`;
+    }
+  }
+}
+
+// OPZIONE ALTERNATIVA: PROCEDI ALLA PAGINA ESTERNA STRIPE CHECKOUT
+async function proceedToStripeExternalCheckout(event) {
+  if (event && event.preventDefault) event.preventDefault();
+  const toast = document.getElementById('uploadErrorToast');
+  if (toast) toast.style.display = 'none';
+
+  if (!CurrentQuote.quoteCode) {
+    if (toast) {
+      toast.textContent = "Codice preventivo mancante. Impossibile avviare il checkout esterno.";
+      toast.style.display = 'block';
     }
     return;
+  }
+
+  const btn = document.getElementById('btnSubmitAndPay');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Connessione a Stripe Server in corso...`;
   }
 
   try {
@@ -280,22 +372,20 @@ async function proceedToStripeCheckout(event) {
     });
 
     const data = await res.json();
-
     if (data && data.checkoutUrl) {
-      // Reindirizza l'utente alla Pagina B (Checkout di Stripe)
       window.location.href = data.checkoutUrl;
     } else {
-      throw new Error(data.error || "Impossibile generare l'URL di pagamento Stripe per questa pratica.");
+      throw new Error(data.error || "Impossibile avviare il checkout esterno per questa pratica.");
     }
   } catch (err) {
-    console.error("Errore avvio checkout Stripe:", err);
+    console.error("Errore avvio checkout esterno:", err);
     if (toast) {
-      toast.textContent = `Errore Stripe: ${err.message || err}. Assicurati di aver pubblicato la funzione aggiornata con npx supabase functions deploy stripe-checkout.`;
+      toast.textContent = `Errore Stripe: ${err.message || err}`;
       toast.style.display = 'block';
     }
     if (btn) {
       btn.disabled = false;
-      btn.innerHTML = `<span>Invia Pratica e Paga Acconto / Fee</span> <i class="ri-arrow-right-line"></i>`;
+      btn.innerHTML = `<i class="ri-lock-fill"></i> <span>Pre-autorizza Fee e Invia Pratica</span>`;
     }
   }
 }

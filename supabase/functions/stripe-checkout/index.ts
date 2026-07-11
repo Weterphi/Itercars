@@ -135,6 +135,14 @@ serve(async (req) => {
         },
       ],
       mode: "payment",
+      payment_intent_data: {
+        capture_method: "manual", // Preaddebito: blocca i soldi senza prelevarli fino alla stipula
+        metadata: {
+          quote_id: quote.id,
+          quote_code: quote.quote_code,
+          note: "Pre-autorizzazione fee istruttoria. Prelevato solo a delibera e stipula contratto."
+        }
+      },
       // Redirect URLS (questi possono essere personalizzati)
       success_url: `${req.headers.get("origin") || "http://localhost:8000"}/success.html?session_id={CHECKOUT_SESSION_ID}&quote_code=${quote.quote_code}`,
       cancel_url: `${req.headers.get("origin") || "http://localhost:8000"}/noleggio-lungo-termine.html`,
