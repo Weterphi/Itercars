@@ -360,7 +360,7 @@ async function confirmStep2AndShowStep3(event) {
   const originalBtnHtml = btnConfirm ? btnConfirm.innerHTML : '';
   if (btnConfirm && count > 0) {
     btnConfirm.disabled = true;
-    btnConfirm.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Sincronizzazione e crittografia file nel bucket crm-documents in corso...';
+    btnConfirm.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Caricamento dei documenti in corso...';
   }
 
   // Sincronizzazione garantita su Supabase (Storage e tabella crm_documents)
