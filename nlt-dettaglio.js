@@ -4,7 +4,7 @@
    con ricalcolo live del canone e generazione Preventivo PDF Ufficiale.
    ========================================================================== */
 
-const BROKER_MARGIN = 1.15; // +15% per il broker
+const BROKER_MARGIN = 1.0; // Rimosso doppio ricarico (+15%), le tariffe base e il backend hanno già il margine calcolato
 
 const OFFICIAL_RATES = {
   '32226fdb-ba8c-4e46-8e21-e303e0a0fe3d': {
@@ -461,8 +461,7 @@ function calculateAndRenderPrice() {
     price += 35.00;
   }
 
-  // 4. APPLICARE IL MARGINE BROKER (15%) - solo sul canone calcolato senza Kasko extra o incluso Kasko extra?
-  // Di solito si ricarica tutto.
+  // 4. APPLICAZIONE MARGINE (impostato a 1.0 per evitare il doppio ricarico sul canone già ricaricato in fase di ingestione)
   price = price * BROKER_MARGIN;
 
   ConfigState.finalMonthlyPrice = Math.round(price);

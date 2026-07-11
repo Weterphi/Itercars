@@ -77,23 +77,41 @@ serve(async (req) => {
 
     } else {
       // LOGICA LUNGO TERMINE (NLT)
-      let markupValue = 45.00;
+      // Il calcolo della provvigione / acconto di avvio pratica si effettua sul preventivo generato:
+      // 1. Si prendono le prime 2 mensilità (final_monthly_price * 2)
+      // 2. Si applica la percentuale corrispettiva in base alla rata mensile (<= 350€ -> 15%, <= 800€ -> 12%, > 800€ -> 10%)
+      const monthlyPrice = Number(quote.final_monthly_price) || 0;
 
-      if (quote.offer_id) {
-        const { data: offer, error: offerError } = await supabase
-          .from("nlt_offers")
-          .select("broker_markup_monthly")
-          .eq("id", quote.offer_id)
-          .single();
-          
-        if (!offerError && offer && offer.broker_markup_monthly) {
-          markupValue = Number(offer.broker_markup_monthly);
+      if (monthlyPrice > 0) {
+        const twoMonths = monthlyPrice * 2;
+        let rate = 0.15;
+        if (monthlyPrice <= 350) {
+          rate = 0.15;
+        } else if (monthlyPrice <= 800) {
+          rate = 0.12;
+        } else {
+          rate = 0.10;
         }
+        feeAmount = Math.round(twoMonths * rate * 100) / 100;
+      } else {
+        // Fallback se final_monthly_price non è disponibile nel record quote
+        let markupValue = 45.00;
+        if (quote.offer_id) {
+          const { data: offer, error: offerError } = await supabase
+            .from("nlt_offers")
+            .select("broker_markup_monthly")
+            .eq("id", quote.offer_id)
+            .single();
+            
+          if (!offerError && offer && offer.broker_markup_monthly) {
+            markupValue = Number(offer.broker_markup_monthly);
+          }
+        }
+        feeAmount = markupValue * 2;
       }
 
-      feeAmount = markupValue * 2;
       productName = `Acconto Pratica NLT (Rif. ${quote.quote_code})`;
-      productDesc = `Fee di avvio pratica per noleggio a lungo termine`;
+      productDesc = `Acconto avvio pratica NLT (${monthlyPrice > 0 ? `Canone preventivo: €${monthlyPrice}/mese` : 'Avvio pratica'})`;
     }
 
     if (feeAmount <= 0) {
