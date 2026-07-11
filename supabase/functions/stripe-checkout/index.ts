@@ -19,7 +19,7 @@ serve(async (req) => {
   }
 
   try {
-    const { quoteCode } = await req.json();
+    const { quoteCode, uiMode } = await req.json();
     if (!quoteCode) {
       throw new Error("Missing quoteCode");
     }
@@ -143,9 +143,10 @@ serve(async (req) => {
           note: "Pre-autorizzazione fee istruttoria. Prelevato solo a delibera e stipula contratto."
         }
       },
-      // Redirect URLS (questi possono essere personalizzati)
-      success_url: `${req.headers.get("origin") || "http://localhost:8000"}/success.html?session_id={CHECKOUT_SESSION_ID}&quote_code=${quote.quote_code}`,
-      cancel_url: `${req.headers.get("origin") || "http://localhost:8000"}/noleggio-lungo-termine.html`,
+      ui_mode: uiMode === "embedded" ? "embedded" : undefined,
+      return_url: uiMode === "embedded" ? `${req.headers.get("origin") || "http://localhost:8000"}/success.html?session_id={CHECKOUT_SESSION_ID}&quote_code=${quote.quote_code}` : undefined,
+      success_url: uiMode === "embedded" ? undefined : `${req.headers.get("origin") || "http://localhost:8000"}/success.html?session_id={CHECKOUT_SESSION_ID}&quote_code=${quote.quote_code}`,
+      cancel_url: uiMode === "embedded" ? undefined : `${req.headers.get("origin") || "http://localhost:8000"}/noleggio-lungo-termine.html`,
       metadata: {
         quote_id: quote.id,
         quote_code: quote.quote_code
@@ -153,7 +154,12 @@ serve(async (req) => {
     });
 
     return new Response(
-      JSON.stringify({ checkoutUrl: session.url }),
+      JSON.stringify({ 
+        checkoutUrl: session.url,
+        clientSecret: session.client_secret,
+        sessionId: session.id,
+        publishableKey: Deno.env.get("STRIPE_PUBLISHABLE_KEY_LIVE") || Deno.env.get("STRIPE_PUBLISHABLE_KEY") || ""
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

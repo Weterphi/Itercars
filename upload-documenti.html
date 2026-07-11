@@ -334,7 +334,13 @@
         </div>
       </div>
 
-      <!-- EMBEDDED STRIPE CARD FORM -->
+      <!-- CONTAINER PER STRIPE EMBEDDED CHECKOUT UFFICIALE (Se attivo via API) -->
+      <div id="stripeEmbeddedLoading" style="display: none; color: #2ecc71; font-weight: 700; margin: 20px 0; font-size: 1.05rem;">
+        <i class="ri-loader-4-line ri-spin"></i> Connessione diretta e sicura a Stripe Server (PCI-DSS) in corso...
+      </div>
+      <div id="stripeOfficialEmbeddedBox" style="margin: 20px auto; max-width: 600px; display: none; background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);"></div>
+
+      <!-- EMBEDDED STRIPE CARD FORM (Fallback / Preauth Istruttoria) -->
       <div class="embedded-card-form" id="embeddedCardForm" style="background: rgba(10, 14, 22, 0.9); border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 28px; max-width: 600px; margin: 0 auto 28px; text-align: left; box-shadow: 0 16px 40px rgba(0,0,0,0.6);">
         
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 14px;">

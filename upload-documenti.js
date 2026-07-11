@@ -265,6 +265,7 @@ function confirmStep2AndShowStep3(event) {
   if (step3) {
     step3.style.display = 'block';
     step3.scrollIntoView({ behavior: 'smooth' });
+    initOfficialStripeEmbedded();
   }
 
   // Aggiorna la Stepper Bar in alto
@@ -278,6 +279,51 @@ function confirmStep2AndShowStep3(event) {
   }
   if (sNum2) sNum2.innerHTML = '<i class="ri-check-line"></i>';
   if (sItem3) sItem3.classList.add('active');
+}
+
+let stripeEmbeddedCheckoutInstance = null;
+
+// INIZIALIZZAZIONE STRIPE EMBEDDED CHECKOUT UFFICIALE (PCI-DSS)
+async function initOfficialStripeEmbedded() {
+  if (stripeEmbeddedCheckoutInstance) return;
+  if (!typeof window.supabase !== 'undefined' && !window.supabase) return;
+
+  const loadingEl = document.getElementById('stripeEmbeddedLoading');
+  const officialBox = document.getElementById('stripeOfficialEmbeddedBox');
+  const fallbackForm = document.getElementById('embeddedCardForm');
+
+  if (loadingEl) loadingEl.style.display = 'block';
+
+  try {
+    const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${window.supabase.supabaseKey}`
+      },
+      body: JSON.stringify({ quoteCode: CurrentQuote.quoteCode, uiMode: 'embedded' })
+    });
+
+    const data = await res.json();
+    if (loadingEl) loadingEl.style.display = 'none';
+
+    if (data && data.clientSecret && data.publishableKey && typeof Stripe !== 'undefined') {
+      const stripe = Stripe(data.publishableKey);
+      stripeEmbeddedCheckoutInstance = await stripe.initEmbeddedCheckout({
+        clientSecret: data.clientSecret
+      });
+      if (officialBox && fallbackForm) {
+        officialBox.style.display = 'block';
+        fallbackForm.style.display = 'none';
+        stripeEmbeddedCheckoutInstance.mount('#stripeOfficialEmbeddedBox');
+      }
+    } else {
+      console.info("Stripe Embedded API (clientSecret/publishableKey) non restituita dal cloud o in test locale: mantengo attivo il modulo di pre-autorizzazione manuale integrato.");
+    }
+  } catch (err) {
+    if (loadingEl) loadingEl.style.display = 'none';
+    console.warn("Connessione a Stripe Embedded fallita, utilizzo modulo manuale integrato:", err);
+  }
 }
 
 // MODIFICA I DOCUMENTI (TORNA ALLA SEZIONE 2)
