@@ -39,13 +39,15 @@ PROVIDERS_CONFIG = {
 
 def calculate_client_price(net_price: float, markup_type: str, markup_val: float) -> tuple[float, float]:
     """
-    Calcola il ricarico del broker e il canone finale per il cliente.
+    Calcola il ricarico del broker (a scaglioni) e il canone finale per il cliente.
     Ritorna: (broker_markup_monthly, client_monthly_price)
     """
-    if markup_type == "percentage":
-        markup = round(net_price * (markup_val / 100.0), 2)
+    if net_price <= 350:
+        markup = round(net_price * 0.15, 2)
+    elif net_price <= 800:
+        markup = round(net_price * 0.12, 2)
     else:
-        markup = round(markup_val, 2)
+        markup = round(net_price * 0.10, 2)
     
     client_price = round(net_price + markup, 2)
     return markup, client_price

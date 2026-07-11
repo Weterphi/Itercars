@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ITERCARS — DETTAGLIO VEICOLO & CONFIGURATORE NLT MULTI-MANDANTE
+   ITERCARS — DETTAGLIO VEICOLO & CONFIGURATORE NBT MULTI-MANDANTE
    Gestione completa delle opzioni di noleggio (Mesi, Km, Anticipo, Franchigia)
    con ricalcolo live del canone e generazione Preventivo PDF Ufficiale.
    ========================================================================== */
@@ -7,41 +7,41 @@
 const BROKER_MARGIN = 1.15; // +15% per il broker
 
 const OFFICIAL_RATES = {
-  '32226fdb-ba8c-4e46-8e21-e303e0a0fe3d': {
+  'bmw-s1': {
     6: { baseKm: 20000, deposit: 0, price: 650, extraKmPrice: 0.16 },
     12: { baseKm: 20000, deposit: 0, price: 580, extraKmPrice: 0.15 },
     24: { baseKm: 20000, deposit: 2000, price: 450, extraKmPrice: 0.14 },
     36: { baseKm: 20000, deposit: 2000, price: 390, extraKmPrice: 0.12 }
   },
-  'ccaa728f-9b2d-4480-9f1c-76d7c97ccc79': {
+  'bmw-x1': {
     6: { baseKm: 20000, deposit: 0, price: 750, extraKmPrice: 0.18 },
     12: { baseKm: 20000, deposit: 0, price: 680, extraKmPrice: 0.16 },
     24: { baseKm: 20000, deposit: 3000, price: 520, extraKmPrice: 0.15 },
     36: { baseKm: 20000, deposit: 3000, price: 460, extraKmPrice: 0.14 }
   },
-  'e3f556d9-8c52-43fd-9d81-ffb9c1551928': {
+  'bmw-s3t': {
     6: { baseKm: 30000, deposit: 0, price: 890, extraKmPrice: 0.20 },
     12: { baseKm: 25000, deposit: 0, price: 820, extraKmPrice: 0.18 },
     24: { baseKm: 25000, deposit: 3500, price: 660, extraKmPrice: 0.16 },
     36: { baseKm: 25000, deposit: 3500, price: 580, extraKmPrice: 0.15 }
   },
-  '1933cb66-5804-45ef-b997-8e038059f0b4': {
+  'bmw-x3': {
     6: { baseKm: 30000, deposit: 0, price: 990, extraKmPrice: 0.22 },
     12: { baseKm: 25000, deposit: 0, price: 920, extraKmPrice: 0.20 },
     24: { baseKm: 25000, deposit: 4000, price: 740, extraKmPrice: 0.18 },
     36: { baseKm: 25000, deposit: 4000, price: 650, extraKmPrice: 0.16 }
   },
-  '3b99316f-29bb-4392-86d3-98cc6e77485d': {
+  'bmw-s5': {
     12: { baseKm: 20000, deposit: 0, price: 1150, extraKmPrice: 0.25 },
     24: { baseKm: 20000, deposit: 5000, price: 890, extraKmPrice: 0.22 },
     36: { baseKm: 20000, deposit: 5000, price: 790, extraKmPrice: 0.20 }
   },
-  'f4c1e663-a663-4fba-81c1-8ed424caf0ba': {
+  'bmw-x5': {
     12: { baseKm: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28 },
     24: { baseKm: 25000, deposit: 6000, price: 1180, extraKmPrice: 0.25 },
     36: { baseKm: 25000, deposit: 6000, price: 1050, extraKmPrice: 0.22 }
   },
-  'efce36a9-41fc-4285-a167-4badbcbbb2c6': {
+  'bmw-i4': {
     6: { baseKm: 20000, deposit: 0, price: 890, extraKmPrice: 0.20 },
     12: { baseKm: 20000, deposit: 0, price: 790, extraKmPrice: 0.18 },
     24: { baseKm: 20000, deposit: 4000, price: 640, extraKmPrice: 0.16 },
@@ -174,8 +174,8 @@ const SAMPLE_DETAIL_OFFERS = [
 // Stato della configurazione attiva per l'auto corrente
 const ConfigState = {
   car: null,
-  durationMonths: 48,
-  kmPerYear: 15000,
+  durationDays: 7,
+  kmDailyLimit: 150,
   depositAmount: 3000,
   kaskoFranchigia: 'standard', // 'standard' (500€) oppure 'zero' (0€)
   finalMonthlyPrice: 0
@@ -187,9 +187,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const paramModel = params.get('model');
   
   let found = null;
-  // 1. Tenta da cache locale salvata da nlt-app.js (cerca per id, vehicle_id o model esatto)
+  // 1. Tenta da cache locale salvata da nbt-app.js (cerca per id, vehicle_id o model esatto)
   try {
-    const cached = JSON.parse(localStorage.getItem('itercars_nlt_cache') || '[]');
+    const cached = JSON.parse(localStorage.getItem('itercars_nbt_cache') || '[]');
     found = cached.find(o => String(o.id) === String(carId) || String(o.vehicle_id) === String(carId) || (paramModel && String(o.model).toLowerCase() === String(paramModel).toLowerCase()));
   } catch(e) {}
 
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!found && typeof window.supabase !== 'undefined' && window.supabase) {
     try {
       let { data, error } = await window.supabase
-        .from('nlt_offers')
+        .from('nbt_offers')
         .select(`
           id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
           vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
       if (!data) {
         const res = await window.supabase
-          .from('nlt_offers')
+          .from('nbt_offers')
           .select(`...`)
           .eq('vehicle_id', carId)
           .maybeSingle();
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           id: data.id,
           vehicle_id: v.id || data.vehicle_id,
           brand: v.brand || 'Veicolo',
-          model: v.model || 'NLT',
+          model: v.model || 'NBT',
           trim: v.trim || 'Executive',
           category: v.category || 'SUV Luxury',
           fuel: v.fuel_type || 'Ibrido / Diesel',
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           accel: specsObj.accel || '5.5s',
           readyDelivery: !!data.is_ready_delivery,
           deliveryWeeks: data.delivery_weeks || 4,
-          providerName: (data.providers && data.providers.name) ? data.providers.name : 'Mandante NLT',
+          providerName: (data.providers && data.providers.name) ? data.providers.name : 'Mandante NBT',
           basePrice: Number(data.client_monthly_price) || 699,
           baseDuration: data.duration_months || 48,
           baseKm: data.km_per_year || 15000,
@@ -283,8 +283,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (found.baseDeposit === undefined && found.baseOffer?.deposit !== undefined) found.baseDeposit = Number(found.baseOffer.deposit);
 
     ConfigState.car = found;
-    ConfigState.durationMonths = found.baseDuration || 36;
-    ConfigState.kmPerYear = found.baseKm || 60000;
+    ConfigState.durationDays = found.baseDuration || 36;
+    ConfigState.kmDailyLimit = found.baseKm || 60000;
     ConfigState.depositAmount = found.baseDeposit !== undefined ? found.baseDeposit : 2000;
   }
   
@@ -296,12 +296,12 @@ function renderCarDetails() {
   const c = ConfigState.car;
   if (!c) return;
   
-  document.title = `${c.brand} ${c.model} (${c.trim}) — Configura NLT | ITERCARS`;
+  document.title = `${c.brand} ${c.model} (${c.trim}) — Configura NBT | ITERCARS`;
   
   // Breadcrumb & Titoli
   const breadcrumb = document.getElementById('nltBreadcrumb');
   if (breadcrumb) {
-    breadcrumb.innerHTML = `<a href="noleggio-lungo-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NLT</a> <i class="ri-arrow-right-s-line"></i> <span>${c.brand}</span> <i class="ri-arrow-right-s-line"></i> <strong>${c.model}</strong>`;
+    breadcrumb.innerHTML = `<a href="noleggio-breve-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NBT</a> <i class="ri-arrow-right-s-line"></i> <span>${c.brand}</span> <i class="ri-arrow-right-s-line"></i> <strong>${c.model}</strong>`;
   }
   
   const brandElem = document.getElementById('detailBrand');
@@ -339,8 +339,8 @@ function renderCarDetails() {
   if (transEl) transEl.textContent = c.transmission;
   
   // Sincronizza i selettori attivi nella GUI
-  syncActiveButtons('configDurationGroup', ConfigState.durationMonths);
-  syncActiveButtons('configKmGroup', ConfigState.kmPerYear);
+  syncActiveButtons('configDurationGroup', ConfigState.durationDays);
+  syncActiveButtons('configKmGroup', ConfigState.kmDailyLimit);
   syncActiveButtons('configDepositGroup', ConfigState.depositAmount);
 }
 
@@ -354,8 +354,36 @@ function syncActiveButtons(containerId, value) {
 }
 
 // Scelta Durata Contratto
-function setConfigDuration(months, btnElem) {
-  ConfigState.durationMonths = Number(months);
+function setConfigDuration(days, btnElem) {
+  ConfigState.durationDays = Number(days);
+  if (btnElem) {
+    btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
+    btnElem.classList.add('active');
+    
+    const customInput = document.getElementById('customDurationInput');
+    if (customInput) customInput.value = ''; // clear custom input
+  }
+  calculateAndRenderPrice();
+}
+
+function handleCustomDuration(val) {
+  let days = parseInt(val);
+  if (isNaN(days) || days <= 0) return;
+  
+  ConfigState.durationDays = days;
+  
+  // deselect preset buttons
+  const group = document.getElementById('configDurationGroup');
+  if (group) {
+    group.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
+  }
+  
+  calculateAndRenderPrice();
+}
+
+// Scelta Chilometraggio Annuo
+function setConfigKmDaily(km, btnElem) {
+  ConfigState.kmDailyLimit = Number(km);
   if (btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
@@ -363,9 +391,8 @@ function setConfigDuration(months, btnElem) {
   calculateAndRenderPrice();
 }
 
-// Scelta Chilometraggio Annuo
-function setConfigKm(km, btnElem) {
-  ConfigState.kmPerYear = Number(km);
+function obsolete_setConfigKm(km, btnElem) {
+  ConfigState.kmDailyLimit = Number(km);
   if (btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
@@ -393,61 +420,38 @@ function setConfigKasko(type, btnElem) {
   calculateAndRenderPrice();
 }
 
-// Motore di calcolo finanziario tariffa NLT in tempo reale
+// Motore di calcolo finanziario tariffa NBT in tempo reale
 function calculateAndRenderPrice() {
   const c = ConfigState.car;
   if (!c) return;
+
+  // Prezzo base giornaliero (preso dai dati o calcolato dal mensile)
+  let baseDailyPrice = c.nbtDailyPrice || (c.basePrice ? c.basePrice / 30 : 50);
+
+  // Calcolo prezzo per i giorni selezionati
+  let price = baseDailyPrice * ConfigState.durationDays;
   
-  // Find official rates for this car
-  // Extract base car ID (remove any trailing suffixes like -36-4k from old logic if present)
-  let baseCarId = c.id;
-  if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
-  if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3'; // Fallback just in case
-
-  const rates = OFFICIAL_RATES[baseCarId];
-  if (!rates) {
-     console.error("No official rates for", baseCarId);
-     return;
+  if (ConfigState.kmDailyLimit === 100) {
+      price *= 0.9;
+  } else if (ConfigState.kmDailyLimit === 200) {
+      price *= 1.15;
+  } else if (ConfigState.kmDailyLimit === 99999) {
+      price *= 1.4;
   }
 
-  // Fallback to closest available duration if exact not available (e.g. 6m for X5 doesn't exist)
-  let dur = ConfigState.durationMonths;
-  if (!rates[dur]) {
-      // Find closest duration
-      let available = Object.keys(rates).map(Number);
-      dur = available.reduce((prev, curr) => Math.abs(curr - dur) < Math.abs(prev - dur) ? curr : prev);
-      ConfigState.durationMonths = dur;
-      syncActiveButtons('configDurationGroup', dur);
-  }
-
-  const rateInfo = rates[dur];
-  let price = rateInfo.price; // This is the pure Mandante base price
-
-  // 1. Aggiustamento Chilometri (if user selects different km/year)
-  const kmDeltaYearly = ConfigState.kmPerYear - rateInfo.baseKm;
-  if (kmDeltaYearly !== 0) {
-      // Delta is applied per month, so Costo Km Extra applies to total km diff per year? No, the extra cost in the file is usually per km total.
-      // Or we can just use the rate per km for every km extra per year divided by 12?
-      // "Costo Km Extra": 0.16/km. This is typically charged at end of contract for each km over limit.
-      // But we can approximate monthly increase: kmDeltaYearly * extraKmPrice / 12
-      price += (kmDeltaYearly * rateInfo.extraKmPrice) / 12;
-  }
-
-  // 2. Aggiustamento Anticipo (if user selects different deposit than the base for this duration)
-  const depositDelta = rateInfo.deposit - ConfigState.depositAmount;
-  price += (depositDelta / dur);
-
-  // 3. Supplemento Kasko Franchigia Zero (+ € 35 / mese)
+  // Aggiustamento in base al deposito (es. sconto giornaliero se deposito alto)
+  // Per ora manteniamo il prezzo base, ma possiamo fare logiche avanzate.
+  
+  // Supplemento Kasko Franchigia Zero (+ € 15 / giorno)
   if (ConfigState.kaskoFranchigia === 'zero') {
-    price += 35.00;
+    price += 15.00 * ConfigState.durationDays;
   }
 
-  // 4. APPLICARE IL MARGINE BROKER (15%) - solo sul canone calcolato senza Kasko extra o incluso Kasko extra?
-  // Di solito si ricarica tutto.
+  // Margine Broker
   price = price * BROKER_MARGIN;
 
-  ConfigState.finalMonthlyPrice = Math.round(price);
-
+  ConfigState.finalMonthlyPrice = Math.round(price); // usiamo la stessa variabile per compatibilità col PDF
+  
   const priceDisplay = document.getElementById('liveMonthlyPrice');
   const summaryDisplay = document.getElementById('liveConfigSummary');
   const boxElem = document.getElementById('livePriceBox');
@@ -456,12 +460,12 @@ function calculateAndRenderPrice() {
     boxElem.style.transform = 'scale(0.97)';
     boxElem.style.opacity = '0.6';
     setTimeout(() => {
-      priceDisplay.textContent = `€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`;
-      summaryDisplay.innerHTML = `<strong>${ConfigState.durationMonths} Mesi</strong> • <strong>${ConfigState.kmPerYear.toLocaleString('it-IT')} Km/anno</strong> • Anticipo <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
-      boxElem.style.transform = 'scale(1.02)';
+      priceDisplay.innerHTML = `€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')} <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Totale</small>`;
+      summaryDisplay.innerHTML = `<strong>${ConfigState.durationDays} Giorni</strong> • Deposito Cauzionale <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
+      
+      boxElem.style.transform = 'scale(1)';
       boxElem.style.opacity = '1';
-      setTimeout(() => boxElem.style.transform = 'none', 160);
-    }, 110);
+    }, 150);
   }
 }
 
@@ -481,7 +485,7 @@ async function handleQuoteSubmit(event) {
   const phone = document.getElementById('quoteClientPhone').value;
   const type = document.getElementById('quoteClientType').value;
   const c = ConfigState.car;
-  const quoteCode = `IT-NLT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+  const quoteCode = `IT-NBT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
   try {
     // 2. Genera il PDF Nativo in background
@@ -499,14 +503,14 @@ async function handleQuoteSubmit(event) {
     if (typeof window.supabase !== 'undefined' && window.supabase) {
       const { data: leadData, error: leadErr } = await window.supabase.from('crm_leads').insert([{
         first_name: name.split(' ')[0] || name,
-        last_name: name.split(' ').slice(1).join(' ') || 'Cliente NLT',
+        last_name: name.split(' ').slice(1).join(' ') || 'Cliente NBT',
         phone: phone,
         email: email,
         customer_type: type,
         pipeline_status: 'quote_sent',
         interested_offer_id: c.id && c.id.length === 36 ? c.id : null,
         interested_vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
-        notes: `Preventivo configurato per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/m`
+        notes: `Preventivo configurato per ${c.brand} ${c.model}: ${ConfigState.durationDays}m/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/m`
       }]).select();
 
       let newLeadId = null;
@@ -514,13 +518,13 @@ async function handleQuoteSubmit(event) {
         newLeadId = leadData[0].id;
       }
 
-      const { error: quoteInsertError } = await window.supabase.from('quotes').insert([{
+      await window.supabase.from('quotes').insert([{
         quote_code: quoteCode,
         lead_id: newLeadId,
         vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
         offer_id: c.id && c.id.length === 36 ? c.id : null,
-        selected_duration_months: ConfigState.durationMonths,
-        selected_km_per_year: ConfigState.kmPerYear,
+        selected_duration_months: ConfigState.durationDays,
+        selected_km_per_year: ConfigState.kmDailyLimit,
         selected_deposit: ConfigState.depositAmount,
         final_monthly_price: ConfigState.finalMonthlyPrice,
         services_snapshot: {
@@ -531,17 +535,12 @@ async function handleQuoteSubmit(event) {
         },
         status: 'sent'
       }]);
-      
-      if (quoteInsertError) {
-          console.error("Errore salvataggio quote su DB:", quoteInsertError);
-          alert("Attenzione: Impossibile salvare il preventivo a database (errore DB).");
-      }
 
       if (true) {
         const emailPayload = {
            email: email,
            nome: name,
-           dettagli: `${c.brand} ${c.model} - ${ConfigState.durationMonths} Mesi, ${ConfigState.kmPerYear} km/anno, Anticipo €${ConfigState.depositAmount}`,
+           dettagli: `${c.brand} ${c.model} - ${ConfigState.durationDays} Giorni, ${ConfigState.kmDailyLimit} km/giorno, Anticipo €${ConfigState.depositAmount}`,
            totale: ConfigState.finalMonthlyPrice,
            pdfBase64: pdfBase64,
            pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_')
@@ -588,7 +587,7 @@ async function handleQuoteSubmit(event) {
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 16px; margin-bottom: 24px; flex-wrap: wrap; gap: 14px;">
           <div>
             <img src="logo_tricolore.png" style="height: 30px; margin-bottom: 6px;" alt="Itercars Logo"><br>
-            <span style="color: var(--accent-primary); font-weight: 800; font-size: 1.25rem; letter-spacing: 1px;"><i class="ri-vip-crown-fill"></i> ITERCARS — PREVENTIVO UFFICIALE NLT</span>
+            <span style="color: var(--accent-primary); font-weight: 800; font-size: 1.25rem; letter-spacing: 1px;"><i class="ri-vip-crown-fill"></i> ITERCARS — PREVENTIVO UFFICIALE NBT</span>
             <div style="font-size: 0.88rem; color: var(--text-muted); margin-top: 4px;">Codice Pratica: <strong>${quoteCode}</strong> • Data Emissione: ${new Date().toLocaleDateString('it-IT')}</div>
           </div>
           <span style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800;">PRONTO DA FIRMARE / BLOCCA TARIFFA</span>
@@ -638,42 +637,39 @@ async function handleQuoteSubmit(event) {
 
         <div style="background: rgba(0, 146, 70, 0.14); border: 1px solid rgba(0, 146, 70, 0.4); border-radius: 14px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
           <div>
-            <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Configurazione Contratto NLT</span>
+            <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Configurazione Contratto NBT</span>
             <div style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 4px;">
-              Durata: <span style="color: #2ecc71;">${ConfigState.durationMonths} Mesi</span> • 
-              Km compresi: <span style="color: #2ecc71;">${ConfigState.kmPerYear.toLocaleString('it-IT')} km/anno</span> • 
+              Durata: <span style="color: #2ecc71;">${ConfigState.durationDays} Giorni</span> • 
+              Km compresi: <span style="color: #2ecc71;">${ConfigState.kmDailyLimit.toLocaleString('it-IT')} km/giorno</span> • 
               Anticipo: <span style="color: #2ecc71;">€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</span>
             </div>
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Kasko Integral ${ConfigState.kaskoFranchigia === 'zero' ? '(Franchigia Zero 0€)' : '(Franchigia Standard)'} + Bollo & Manutenzione H24</div>
           </div>
 
           <div style="text-align: right;">
-            <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Canone Mensile Tutto Incluso</span>
-            <div style="font-size: 2.2rem; font-weight: 900; color: #2ecc71; line-height: 1;">€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')} <small style="font-size: 0.9rem; font-weight: 400; color: #fff;">/mese (IVA esc.)</small></div>
+            <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Canone Totale Tutto Incluso</span>
+            <div style="font-size: 2.2rem; font-weight: 900; color: #2ecc71; line-height: 1;">€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')} <small style="font-size: 0.9rem; font-weight: 400; color: #fff;">Totale (IVA esc.)</small></div>
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-<button type="button" class="btn btn-primary" onclick="payQuoteStripe('${quoteCode}', event)" style="height: 50px; font-size: 1rem; font-weight: 800; background: linear-gradient(135deg, #635bff, #00d4ff); border: none; display: flex; align-items: center; justify-content: center; gap: 8px; grid-column: span 2;">
-<i class="ri-bank-card-line" style="font-size: 1.3rem;"></i> Paga Acconto e Prenota Vettura
-</button>
-<button type="button" class="btn btn-primary" onclick="window.print()" style="height: 50px; font-size: 1rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
-<i class="ri-printer-line" style="font-size: 1.3rem;"></i> Stampa / Scarica PDF
-</button>
-<button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationMonths}', '${ConfigState.kmPerYear}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}')" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
-<i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i> Invia su WhatsApp
-</button>
-<a href="noleggio-lungo-termine.html" class="btn btn-outline" style="height: 50px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; grid-column: span 2;">
-<i class="ri-arrow-left-line"></i> Torna al Catalogo
-</a>
-</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+          <button type="button" class="btn btn-primary" onclick="window.print()" style="height: 50px; font-size: 1rem; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="ri-printer-line" style="font-size: 1.3rem;"></i> Stampa / Scarica PDF
+          </button>
+          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationDays}', '${ConfigState.kmDailyLimit}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}')" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i> Invia su WhatsApp
+          </button>
+          <a href="noleggio-breve-termine.html" class="btn btn-outline" style="height: 50px; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+            <i class="ri-arrow-left-line"></i> Torna al Catalogo
+          </a>
+        </div>
       </div>
     `;
     previewBox.scrollIntoView({ behavior: 'smooth' });
   }
 }
 function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
-  const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n📅 Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/anno*\n💰 Anticipo: *€ ${deposit}*\n\n🔥 *Canone Calcolato: € ${price} / mese Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
+  const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n📅 Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/giorno*\n💰 Anticipo: *€ ${deposit}*\n\n🔥 *Canone Calcolato: € ${price} / periodo Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -692,11 +688,11 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 146, 70);
   doc.setFontSize(22);
-  doc.text("PREVENTIVO UFFICIALE NLT", 15, 20);
+  doc.text("PREVENTIVO UFFICIALE NBT", 15, 20);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
   doc.setTextColor(100, 100, 100);
-  doc.text(`Codice Pratica: ${quoteCode || 'IT-NLT-0000'}`, 15, 27);
+  doc.text(`Codice Pratica: ${quoteCode || 'IT-NBT-0000'}`, 15, 27);
   doc.text(`Data Emissione: ${new Date().toLocaleDateString('it-IT')}`, 15, 32);
 
   doc.setFillColor(240, 253, 244);
@@ -808,12 +804,12 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(50, 50, 50);
-  doc.text("CONFIGURAZIONE CONTRATTO NLT", 20, finalY + 10);
+  doc.text("CONFIGURAZIONE CONTRATTO NBT", 20, finalY + 10);
   
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
   const kaskoType = ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard';
-  doc.text(`Durata: ${ConfigState.durationMonths} Mesi   -   Km annui: ${ConfigState.kmPerYear.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
+  doc.text(`Durata: ${ConfigState.durationDays} Giorni   -   Km giornalieri: ${ConfigState.kmDailyLimit.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
   
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
@@ -823,14 +819,14 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
-  doc.text("CANONE MENSILE", 185, finalY + 10, { align: 'right' });
+  doc.text("CANONE TOTALE", 185, finalY + 10, { align: 'right' });
   
   doc.setFontSize(26);
   doc.setTextColor(0, 146, 70);
   doc.text(`€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`, 185, finalY + 22, { align: 'right' });
   
   doc.setFontSize(8);
-  doc.text("/mese (IVA esc.)", 185, finalY + 28, { align: 'right' });
+  doc.text("Totale (IVA esc.)", 185, finalY + 28, { align: 'right' });
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
@@ -838,43 +834,4 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.text("Generato tramite piattaforma certificata ITERCARS Enterprise", 105, 280, { align: 'center' });
 
   return doc;
-}
-
-
-async function payQuoteStripe(quoteCode, event) {
-    if(!window.supabase || !window.supabase.supabaseUrl) {
-        alert("Servizio Stripe non ancora attivo in questo ambiente locale (Supabase mancante).");
-        return;
-    }
-    
-    try {
-        const btn = event.currentTarget;
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Preparazione Checkout...';
-        btn.disabled = true;
-
-        const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${window.supabase.supabaseKey}`
-            },
-            body: JSON.stringify({ quoteCode })
-        });
-        
-        const data = await res.json();
-        
-        if (data.checkoutUrl) {
-            window.location.href = data.checkoutUrl;
-        } else {
-            alert('Errore Stripe: ' + (data.error || 'Impossibile avviare il checkout'));
-            btn.innerHTML = originalHtml;
-            btn.disabled = false;
-        }
-    } catch(err) {
-        console.error(err);
-        alert('Errore di rete con Stripe.');
-        event.currentTarget.innerHTML = '<i class="ri-bank-card-line" style="font-size: 1.3rem;"></i> Paga Acconto e Prenota Vettura';
-        event.currentTarget.disabled = false;
-    }
 }

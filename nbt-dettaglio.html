@@ -32,15 +32,15 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configura Vettura NLT — ITERCARS</title>
-  <meta name="description" content="Configura durata mesi, chilometraggio e anticipo per la tua nuova auto in Noleggio Lungo Termine All-Inclusive. Genera preventivo ufficiale.">
+  <title>Configura Vettura NBT — ITERCARS</title>
+  <meta name="description" content="Configura durata mesi, chilometraggio e anticipo per la tua nuova auto in Noleggio Breve Termine All-Inclusive. Genera preventivo ufficiale.">
   
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=40">
-  <link rel="stylesheet" href="nlt-dettaglio.css?v=3">
+  <link rel="stylesheet" href="nbt-dettaglio.css?v=3">
   <link rel="icon" type="image/png" href="logo.png">
 </head>
 <body style="background: #06060c; color: #fff; margin: 0; padding: 0;">
@@ -65,25 +65,25 @@
         <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
           <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
         </a>
-        <a href="noleggio-lungo-termine.html" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
+        <a href="noleggio-breve-termine.html" class="btn btn-primary" style="display: flex; align-items: center; gap: 6px;">
           <i class="ri-arrow-left-line"></i> <span>Torna al Catalogo</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- ================= DETTAGLIO & CONFIGURATORE NLT ================= -->
-  <section class="nlt-detail-header">
+  <!-- ================= DETTAGLIO & CONFIGURATORE NBT ================= -->
+  <section class="nbt-detail-header">
     <div class="container">
       
       <!-- Breadcrumb -->
-      <div class="nlt-breadcrumb" id="nltBreadcrumb">
-        <a href="noleggio-lungo-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NLT</a> 
+      <div class="nbt-breadcrumb" id="nltBreadcrumb">
+        <a href="noleggio-breve-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NBT</a> 
         <i class="ri-arrow-right-s-line"></i> <span>Porsche</span> 
         <i class="ri-arrow-right-s-line"></i> <strong>Serie X</strong>
       </div>
 
-      <div class="nlt-detail-grid">
+      <div class="nbt-detail-grid">
         
         <!-- ================= COLONNA SINISTRA: VETRINA & SPECIFICHE ================= -->
         <div class="detail-main-box">
@@ -141,7 +141,7 @@
 
           <!-- Spiegazione I 6 Pilastri del Canone Tutto Compreso -->
           <div class="included-pillars-box">
-            <h3><i class="ri-shield-check-fill" style="color: #2ecc71;"></i> Cosa è Sempre Incluso nel Canone Mensile:</h3>
+            <h3><i class="ri-shield-check-fill" style="color: #2ecc71;"></i> Cosa è Sempre Incluso nel Canone Totale:</h3>
             
             <div class="pillars-list">
               <div class="pillar-item">
@@ -207,40 +207,46 @@
 
             <!-- Box Canone Live -->
             <div class="live-price-box" id="livePriceBox">
-              <div class="live-price-label">Canone Mensile Calcolato:</div>
+              <div class="live-price-label">Totale Calcolato:</div>
               <div class="live-price-number" id="liveMonthlyPrice">€ 764</div>
-              <div style="font-size: 0.85rem; font-weight: 700; color: #fff;">al mese (IVA esclusa) • Tutto Compreso</div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: #fff;">per il periodo (IVA esclusa) • Tutto Compreso</div>
               <div class="live-price-summary" id="liveConfigSummary">
-                <strong>48 Mesi</strong> • <strong>15.000 Km/anno</strong> • Anticipo <strong>€ 3.000</strong>
+                <strong>48 Mesi</strong> • <strong>15.000 Km/giorno</strong> • Anticipo <strong>€ 3.000</strong>
               </div>
             </div>
 
-            <!-- STEP 1: DURATA MESI -->
+            <!-- STEP 1: DURATA GIORNI -->
             <div class="config-section">
-              <div class="config-section-title"><i class="ri-calendar-schedule-line"></i> 1. Durata Contratto (Mesi)</div>
+              <div class="config-section-title"><i class="ri-calendar-schedule-line"></i> 1. Durata Contratto (Giorni)</div>
               <div class="config-options-grid-3" id="configDurationGroup">
-                <button type="button" class="config-option-btn" data-value="6" onclick="setConfigDuration(6, this)">6 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Mid-Term</small></button>
-                <button type="button" class="config-option-btn" data-value="12" onclick="setConfigDuration(12, this)">12 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Annuale</small></button>
-                <button type="button" class="config-option-btn" data-value="24" onclick="setConfigDuration(24, this)">24 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Biennale</small></button>
-                <button type="button" class="config-option-btn active" data-value="36" onclick="setConfigDuration(36, this)">36 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:#2ecc71">Consigliato</small></button>
+                <button type="button" class="config-option-btn" data-value="1" onclick="setConfigDuration(1, this)">1 Giorno</button>
+                <button type="button" class="config-option-btn" data-value="3" onclick="setConfigDuration(3, this)">3 Giorni</button>
+                <button type="button" class="config-option-btn active" data-value="7" onclick="setConfigDuration(7, this)">7 Giorni<br><small style="font-weight: 400; font-size:0.7rem; color:#2ecc71">Settimana</small></button>
+                <button type="button" class="config-option-btn" data-value="14" onclick="setConfigDuration(14, this)">14 Giorni</button>
+                <button type="button" class="config-option-btn" data-value="30" onclick="setConfigDuration(30, this)">30 Giorni<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Mese</small></button>
+              </div>
+              <div style="margin-top: 12px; display: flex; align-items: center; gap: 10px;">
+                <label for="customDurationInput" style="font-size: 0.85rem; color: var(--text-muted);">Oppure inserisci giorni:</label>
+                <input type="number" id="customDurationInput" min="1" max="180" placeholder="Es. 4" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; width: 100px;" oninput="handleCustomDuration(this.value)">
               </div>
             </div>
 
-            <!-- STEP 2: CHILOMETRI ANNUI -->
+            
+
+                        <!-- STEP 1.5: LIMITE KM GIORNALIERI -->
             <div class="config-section">
-              <div class="config-section-title"><i class="ri-road-map-line"></i> 2. Chilometri Compresi per Anno</div>
-              <div class="config-options-grid" id="configKmGroup">
-                <button type="button" class="config-option-btn" data-value="10000" onclick="setConfigKm(10000, this)">10.000 Km</button>
-                <button type="button" class="config-option-btn active" data-value="15000" onclick="setConfigKm(15000, this)">15.000 Km</button>
-                <button type="button" class="config-option-btn" data-value="20000" onclick="setConfigKm(20000, this)">20.000 Km</button>
-                <button type="button" class="config-option-btn" data-value="25000" onclick="setConfigKm(25000, this)">25.000 Km</button>
-                <button type="button" class="config-option-btn" data-value="30000" onclick="setConfigKm(30000, this)">30.000 Km</button>
+              <div class="config-section-title"><i class="ri-road-map-line"></i> 2. Limite Km Giornalieri</div>
+              <div class="config-options-grid" id="configKmDailyGroup">
+                <button type="button" class="config-option-btn" data-value="100" onclick="setConfigKmDaily(100, this)">100 Km/g</button>
+                <button type="button" class="config-option-btn active" data-value="150" onclick="setConfigKmDaily(150, this)">150 Km/g</button>
+                <button type="button" class="config-option-btn" data-value="200" onclick="setConfigKmDaily(200, this)">200 Km/g</button>
+                <button type="button" class="config-option-btn" data-value="99999" onclick="setConfigKmDaily(99999, this)">Illimitati</button>
               </div>
             </div>
 
-            <!-- STEP 3: ANTICIPO INIZIALE -->
+            <!-- STEP 3: DEPOSITO CAUZIONALE -->
             <div class="config-section">
-              <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Anticipo Iniziale / Permuta</div>
+              <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Deposito Cauzionale</div>
               <div class="config-options-grid" id="configDepositGroup">
                 <button type="button" class="config-option-btn" data-value="0" onclick="setConfigDeposit(0, this)" style="border-color: rgba(245, 158, 11, 0.5); color: #f59e0b;">⚡ 0€ Anticipo</button>
                 <button type="button" class="config-option-btn" data-value="2500" onclick="setConfigDeposit(2500, this)">€ 2.500</button>
@@ -315,8 +321,8 @@
         <div class="footer-col">
           <h4>Noleggio & Brokerage</h4>
           <div class="footer-links">
-            <a href="noleggio-lungo-termine.html">Noleggio Lungo Termine (NLT)</a>
             <a href="noleggio-breve-termine.html">Noleggio Breve Termine (NBT)</a>
+            <a href="noleggio-breve-termine.html?mode=NBT">Noleggio Breve Termine (NBT)</a>
             <a href="fleet.html">Catalogo Luxury Car</a>
           </div>
         </div>
@@ -339,7 +345,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NLT Multi-Mandante & NBT.</p>
+        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NBT Multi-Mandante & NBT.</p>
       </div>
     </div>
   </footer>
@@ -349,7 +355,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="app.js?v=21"></script>
-  <script src="nlt-dettaglio.js?v=7"></script>
+  <script src="nbt-dettaglio.js?v=7"></script>
   <script src="cookie-banner.js?v=1"></script>
 </body>
 </html>

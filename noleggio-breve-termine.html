@@ -32,23 +32,23 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITERCARS — Noleggio Lungo Termine & Breve Termine | Catalogo Multi-Mandante</title>
-  <meta name="description" content="Noleggio Lungo Termine e Breve Termine di auto di lusso, sportive ed elettriche. Canone tutto incluso: Assicurazione Kasko, Manutenzione e Bollo. Offerte Pronta Consegna anche ad Anticipo Zero.">
+  <title>ITERCARS — Noleggio Breve Termine & Breve Termine | Catalogo Multi-Mandante</title>
+  <meta name="description" content="Noleggio Breve Termine e Breve Termine di auto di lusso, sportive ed elettriche. Canone tutto incluso: Assicurazione Kasko, Manutenzione e Bollo. Offerte Pronta Consegna anche ad Anticipo Zero.">
   
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=40">
-  <link rel="stylesheet" href="nlt.css?v=1">
+  <link rel="stylesheet" href="nbt.css?v=1">
 
   <style>
-    .nlt-mobile-video { display: none !important; }
-    .nlt-desktop-video { display: block !important; }
-    .hero.nlt-hero { background: transparent !important; }
+    .nbt-mobile-video { display: none !important; }
+    .nbt-desktop-video { display: block !important; }
+    .hero.nbt-hero { background: transparent !important; }
     @media (max-width: 768px) {
-      .nlt-mobile-video { display: block !important; }
-      .nlt-desktop-video { display: none !important; }
+      .nbt-mobile-video { display: block !important; }
+      .nbt-desktop-video { display: none !important; }
     }
   </style>
   <link rel="icon" type="image/png" href="logo.png">
@@ -101,14 +101,14 @@
 
   <!-- ================= HERO DUAL MODE SWITCHER ================= -->
       <div class="hero-bg-wrapper" style="position: relative; overflow: hidden; background: #06060c;">
-    <video autoplay muted loop playsinline class="hero-bg-video nlt-desktop-video" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
-      <source src="desktop_nlt_bg.mp4" type="video/mp4">
+    <video autoplay muted loop playsinline class="hero-bg-video nbt-desktop-video" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
+      <source src="desktop_nbt_bg.mp4" type="video/mp4">
     </video>
-    <video autoplay muted loop playsinline class="hero-bg-video nlt-mobile-video" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
+    <video autoplay muted loop playsinline class="hero-bg-video nbt-mobile-video" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
       <source src="brruu.mp4" type="video/mp4">
     </video>
     <div class="hero-bg-overlay" style="background: linear-gradient(to bottom, rgba(6, 6, 12, 0) 0%, rgba(6, 6, 12, 0.4) 60%, #06060c 100%); position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-    <section class="hero nlt-hero" style="padding-top: 160px; padding-bottom: 70px; text-align: center; position: relative; z-index: 2;">
+    <section class="hero nbt-hero" style="padding-top: 160px; padding-bottom: 70px; text-align: center; position: relative; z-index: 2;">
     <div class="container hero-content" style="max-width: 1200px; width: 100%;">
       <div class="hero-text text-center" style="width: 100%;">
       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: rgba(0, 146, 70, 0.2); border: 1px solid rgba(0, 146, 70, 0.45); border-radius: 99px; margin-top: 20px; margin-bottom: 16px; color: #2ecc71; font-size: 0.85rem; font-weight: 700;">
@@ -116,7 +116,7 @@
       </div>
 
       <h1 style="font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 950; line-height: 1.1; margin-bottom: 14px;" id="nltHeroTitle">
-        Auto <span class="text-gradient">NLT / NBT</span>
+        Auto <span class="text-gradient">NBT / NBT</span>
       </h1>
       
 
@@ -191,8 +191,8 @@
         </button>
       </div>
 
-      <div class="nlt-grid" id="nltGrid">
-        <!-- Vetture generate dinamicamente via nlt-app.js -->
+      <div class="nbt-grid" id="nbtGrid">
+        <!-- Vetture generate dinamicamente via nbt-app.js -->
       </div>
     </div>
   </section>
@@ -220,7 +220,7 @@
         </div>
         <div style="text-align: right;">
           <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Canone Calcolato:</span>
-          <div id="quoteModalPriceText" style="font-size: 1.6rem; font-weight: 900; color: #2ecc71;">€ 764 / mese <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Tutto Incluso</small></div>
+          <div id="quoteModalPriceText" style="font-size: 1.6rem; font-weight: 900; color: #2ecc71;">€ 150 / giorno <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Tutto Incluso</small></div>
         </div>
       </div>
 
@@ -296,8 +296,8 @@
         <div class="footer-col">
           <h4>Noleggio & Brokerage</h4>
           <div class="footer-links">
-            <a href="noleggio-lungo-termine.html">Noleggio Lungo Termine (NLT)</a>
             <a href="noleggio-breve-termine.html">Noleggio Breve Termine (NBT)</a>
+            <a href="noleggio-breve-termine.html?mode=NBT">Noleggio Breve Termine (NBT)</a>
             <a href="fleet.html">Catalogo Luxury Car</a>
             <a href="partners.html">Diventa Partner / Mandante</a>
           </div>
@@ -322,7 +322,7 @@
       </div>
 
       <div class="footer-bottom">
-        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NLT Multi-Mandante & NBT.</p>
+        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NBT Multi-Mandante & NBT.</p>
         <div style="display: flex; gap: 20px;">
           <a href="#">Privacy Policy</a>
           <a href="#">Termini di Servizio</a>
@@ -386,7 +386,7 @@
   <!-- Supabase JS SDK & App Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js?v=21"></script>
-  <script src="nlt-app.js?v=1"></script>
+  <script src="nbt-app.js?v=1"></script>
   <script src="cookie-banner.js?v=1"></script>
 </body>
 </html>

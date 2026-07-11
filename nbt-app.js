@@ -1,6 +1,6 @@
 /* ==========================================================================
 
-   ITERCARS — NOLEGGIO LUNGO & BREVE TERMINE (NLT / NBT) CONTROLLER
+   ITERCARS — NOLEGGIO LUNGO & BREVE TERMINE (NBT / NBT) CONTROLLER
 
    Gestione interattiva listini mandante, filtri dinamici, calcolatore rata
 
@@ -10,11 +10,11 @@
 
 
 
-// Stato globale dell'applicazione NLT/NBT
+// Stato globale dell'applicazione NBT/NBT
 
-const NltState = {
+const NbtState = {
 
-  mode: 'NLT', // 'NLT' (Lungo Termine) oppure 'NBT' (Breve Termine)
+  mode: 'NBT', // 'NBT' (Breve Termine) oppure 'NBT' (Breve Termine)
 
   maxBudget: 4000,
 
@@ -44,15 +44,15 @@ const NltState = {
 
 
 
-// Dati d'esempio (Seed/Offline Fallback) sincronizzati con lo schema Supabase nlt_offers
+// Dati d'esempio (Seed/Offline Fallback) sincronizzati con lo schema Supabase nbt_offers
 
 const SAMPLE_OFFERS = [
 
   {
 
-    id: '32226fdb-ba8c-4e46-8e21-e303e0a0fe3d',
+    id: 'bmw-s1-36-2k',
 
-    vehicle_id: '7bfd5090-602b-4a21-abe9-9b7a1a69d5e5',
+    vehicle_id: 'bmw-01',
 
     brand: 'BMW',
 
@@ -128,9 +128,9 @@ const SAMPLE_OFFERS = [
 
   {
 
-    id: 'ccaa728f-9b2d-4480-9f1c-76d7c97ccc79',
+    id: 'bmw-x1-36-3k',
 
-    vehicle_id: '74c10e2f-0b73-44d1-bd02-2a560e6b43e5',
+    vehicle_id: 'bmw-02',
 
     brand: 'BMW',
 
@@ -206,9 +206,9 @@ const SAMPLE_OFFERS = [
 
   {
 
-    id: 'e3f556d9-8c52-43fd-9d81-ffb9c1551928',
+    id: 'bmw-s3t-36-35k',
 
-    vehicle_id: 'e9a6c3c8-261f-4a23-b20a-090ff2682849',
+    vehicle_id: 'bmw-03',
 
     brand: 'BMW',
 
@@ -284,9 +284,9 @@ const SAMPLE_OFFERS = [
 
   {
 
-    id: '1933cb66-5804-45ef-b997-8e038059f0b4',
+    id: 'bmw-x3-36-4k',
 
-    vehicle_id: '0bdf55e4-abe5-4c2e-a34e-7e04ca5c1ecf',
+    vehicle_id: 'bmw-04',
 
     brand: 'BMW',
 
@@ -362,9 +362,9 @@ const SAMPLE_OFFERS = [
 
   {
 
-    id: '3b99316f-29bb-4392-86d3-98cc6e77485d',
+    id: 'bmw-s5-36-5k',
 
-    vehicle_id: '7a9619bf-5c20-44ef-8368-3ee629e8773d',
+    vehicle_id: 'bmw-05',
 
     brand: 'BMW',
 
@@ -438,9 +438,9 @@ const SAMPLE_OFFERS = [
 
   {
 
-    id: 'f4c1e663-a663-4fba-81c1-8ed424caf0ba',
+    id: 'bmw-x5-36-6k',
 
-    vehicle_id: 'f9ca5557-6685-4608-b991-bbc22513c68b',
+    vehicle_id: 'bmw-06',
 
     brand: 'BMW',
 
@@ -514,9 +514,9 @@ const SAMPLE_OFFERS = [
 
   {
 
-    id: 'efce36a9-41fc-4285-a167-4badbcbbb2c6',
+    id: 'bmw-i4-36-4k',
 
-    vehicle_id: 'e41813c3-6193-4dbc-98a2-29cecf60b26c',
+    vehicle_id: 'bmw-07',
 
     brand: 'BMW',
 
@@ -598,7 +598,7 @@ const SAMPLE_OFFERS = [
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  NltState.offers = SAMPLE_OFFERS.slice();
+  NbtState.offers = SAMPLE_OFFERS.slice();
 
   
 
@@ -626,7 +626,7 @@ async function loadOffersFromDatabase() {
 
       const { data, error } = await window.supabase
 
-        .from('nlt_offers')
+        .from('nbt_offers')
 
         .select(`
 
@@ -644,13 +644,13 @@ async function loadOffersFromDatabase() {
 
       if (!error && data && data.length > 0) {
 
-        console.log('✅ Caricate offerte NLT da Supabase DB:', data.length);
+        console.log('✅ Caricate offerte NBT da Supabase DB:', data.length);
 
         const mapped = data.map(o => {
 
           const v = o.vehicles || {};
 
-          const pName = (o.providers && o.providers.name) ? o.providers.name : 'Mandante NLT';
+          const pName = (o.providers && o.providers.name) ? o.providers.name : 'Mandante NBT';
 
           const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
 
@@ -674,7 +674,7 @@ async function loadOffersFromDatabase() {
 
             brand: v.brand || 'Veicolo',
 
-            model: v.model || 'NLT',
+            model: v.model || 'NBT',
 
             trim: v.trim || 'Executive',
 
@@ -750,39 +750,39 @@ async function loadOffersFromDatabase() {
 
           const extraBmw = SAMPLE_OFFERS.filter(o => !dbIds.has(o.id));
 
-          NltState.offers = [...mapped, ...extraBmw];
+          NbtState.offers = [...mapped, ...extraBmw];
 
         } else {
 
-          NltState.offers = SAMPLE_OFFERS.slice();
+          NbtState.offers = SAMPLE_OFFERS.slice();
 
         }
 
       } else {
 
-        NltState.offers = SAMPLE_OFFERS.slice();
+        NbtState.offers = SAMPLE_OFFERS.slice();
 
       }
 
     } catch (err) {
 
-      console.warn('⚠️ Fallback offline: utilizzo catalogo NLT ufficiale mandante.');
+      console.warn('⚠️ Fallback offline: utilizzo catalogo NBT ufficiale mandante.');
 
-      NltState.offers = SAMPLE_OFFERS.slice();
+      NbtState.offers = SAMPLE_OFFERS.slice();
 
     }
 
   } else {
 
-    NltState.offers = SAMPLE_OFFERS.slice();
+    NbtState.offers = SAMPLE_OFFERS.slice();
 
   }
 
 
 
-  // Normalizzazione campi base per garantire immediato e perfetto aggancio in nlt-dettaglio.js
+  // Normalizzazione campi base per garantire immediato e perfetto aggancio in nbt-dettaglio.js
 
-  NltState.offers.forEach(o => {
+  NbtState.offers.forEach(o => {
 
     if (o.basePrice === undefined && o.baseOffer?.monthlyPrice !== undefined) o.basePrice = Number(o.baseOffer.monthlyPrice);
 
@@ -796,23 +796,23 @@ async function loadOffersFromDatabase() {
 
 
 
-  window.lastLoadedOffers = NltState.offers;
+  window.lastLoadedOffers = NbtState.offers;
 
-  try { localStorage.setItem('itercars_nlt_cache', JSON.stringify(NltState.offers)); } catch(e){}
+  try { localStorage.setItem('itercars_nbt_cache', JSON.stringify(NbtState.offers)); } catch(e){}
 
 }
 
 
 
-// Switch tra Lungo Termine (NLT) e Breve Termine (NBT)
+// Switch tra Breve Termine (NBT) e Breve Termine (NBT)
 
 function setRentalMode(mode) {
 
-  NltState.mode = mode;
+  NbtState.mode = mode;
 
   
 
-  const nltBtn = document.getElementById('modeBtnNLT');
+  const nltBtn = document.getElementById('modeBtnNBT');
 
   const nbtBtn = document.getElementById('modeBtnNBT');
 
@@ -826,13 +826,13 @@ function setRentalMode(mode) {
 
   
 
-  if (mode === 'NLT') {
+  if (mode === 'NBT') {
 
     if (nltBtn) nltBtn.classList.add('active-mode');
 
     if (nbtBtn) nbtBtn.classList.remove('active-mode');
 
-    if (heroTitle) heroTitle.innerHTML = `Noleggio Auto <span class="text-gradient">Lungo Termine (NLT)</span>`;
+    if (heroTitle) heroTitle.innerHTML = `Noleggio Auto <span class="text-gradient">Breve Termine (NBT)</span>`;
 
     if (heroSub) heroSub.textContent = `Canone fisso tutto incluso: Assicurazione Kasko, Manutenzione, Bollo e Soccorso 24/7 compresi.`;
 
@@ -878,10 +878,10 @@ function initFilterListeners() {
 
     budgetSlider.addEventListener('input', (e) => {
       const val = parseInt(e.target.value, 10);
-      NltState.maxBudget = isNaN(val) ? 999999 : val;
+      NbtState.maxBudget = isNaN(val) ? 999999 : val;
       if (budgetValueDisplay) {
 
-        budgetValueDisplay.textContent = NltState.maxBudget >= 4000 ? 'Illimitato' : `fino a € ${NltState.maxBudget}/mese`;
+        budgetValueDisplay.textContent = NbtState.maxBudget >= 4000 ? 'Illimitato' : `fino a € ${NbtState.maxBudget}/giorno`;
 
       }
 
@@ -903,10 +903,10 @@ function initFilterListeners() {
 
     anticipoSlider.addEventListener('input', (e) => {
       const val = parseInt(e.target.value, 10);
-      NltState.maxAnticipo = isNaN(val) ? 999999 : val;
+      NbtState.maxAnticipo = isNaN(val) ? 999999 : val;
       if (anticipoValueDisplay) {
 
-        anticipoValueDisplay.textContent = NltState.maxAnticipo >= 15000 ? 'Qualsiasi' : `fino a € ${NltState.maxAnticipo}`;
+        anticipoValueDisplay.textContent = NbtState.maxAnticipo >= 15000 ? 'Qualsiasi' : `fino a € ${NbtState.maxAnticipo}`;
 
       }
 
@@ -924,7 +924,7 @@ function initFilterListeners() {
 
     filterMarca.addEventListener('change', (e) => {
 
-      NltState.brandFilter = e.target.value;
+      NbtState.brandFilter = e.target.value;
 
       renderOffersGrid();
 
@@ -940,7 +940,7 @@ function initFilterListeners() {
 
     filterTipologia.addEventListener('change', (e) => {
 
-      NltState.categoryFilter = e.target.value;
+      NbtState.categoryFilter = e.target.value;
 
       renderOffersGrid();
 
@@ -956,7 +956,7 @@ function initFilterListeners() {
 
     filterAlimentazione.addEventListener('change', (e) => {
 
-      NltState.fuelFilter = e.target.value;
+      NbtState.fuelFilter = e.target.value;
 
       renderOffersGrid();
 
@@ -972,7 +972,7 @@ function initFilterListeners() {
 
     filterCambio.addEventListener('change', (e) => {
 
-      NltState.transmissionFilter = e.target.value;
+      NbtState.transmissionFilter = e.target.value;
 
       renderOffersGrid();
 
@@ -992,7 +992,7 @@ function initFilterListeners() {
 
     searchInput.addEventListener('input', (e) => {
 
-      NltState.searchQuery = e.target.value.toLowerCase().trim();
+      NbtState.searchQuery = e.target.value.toLowerCase().trim();
 
       if (heroSearchInput) heroSearchInput.value = e.target.value;
 
@@ -1008,7 +1008,7 @@ function initFilterListeners() {
 
     heroSearchInput.addEventListener('input', (e) => {
 
-      NltState.searchQuery = e.target.value.toLowerCase().trim();
+      NbtState.searchQuery = e.target.value.toLowerCase().trim();
 
       if (searchInput) searchInput.value = e.target.value;
 
@@ -1042,7 +1042,7 @@ function triggerHeroSearch() {
 
   if (heroInput) {
 
-    NltState.searchQuery = heroInput.value.toLowerCase().trim();
+    NbtState.searchQuery = heroInput.value.toLowerCase().trim();
 
     const searchInput = document.getElementById('nltSearchInput');
 
@@ -1052,7 +1052,7 @@ function triggerHeroSearch() {
 
   }
 
-  const gridSection = document.getElementById('nltGrid');
+  const gridSection = document.getElementById('nbtGrid');
 
   if (gridSection) {
 
@@ -1066,7 +1066,7 @@ function triggerHeroSearch() {
 
 function setDepositFilter(val, btnElem) {
 
-  NltState.depositFilter = val;
+  NbtState.depositFilter = val;
 
   document.querySelectorAll('.filter-pill-deposit').forEach(el => el.classList.remove('active'));
 
@@ -1080,7 +1080,7 @@ function setDepositFilter(val, btnElem) {
 
 function setDurationFilter(val, btnElem) {
 
-  NltState.durationFilter = parseInt(val, 10);
+  NbtState.durationFilter = parseInt(val, 10);
 
   document.querySelectorAll('.filter-pill-duration').forEach(el => el.classList.remove('active'));
 
@@ -1094,7 +1094,7 @@ function setDurationFilter(val, btnElem) {
 
 function setCategoryFilter(val, btnElem) {
 
-  NltState.categoryFilter = val;
+  NbtState.categoryFilter = val;
 
   document.querySelectorAll('.filter-pill-category').forEach(el => el.classList.remove('active'));
 
@@ -1108,7 +1108,7 @@ function setCategoryFilter(val, btnElem) {
 
 function setVisualCategory(val, btnElem) {
 
-  NltState.visualCategory = val;
+  NbtState.visualCategory = val;
 
   document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
 
@@ -1122,9 +1122,9 @@ function setVisualCategory(val, btnElem) {
 
 function toggleReadyDelivery(btnElem) {
 
-  NltState.readyDeliveryOnly = !NltState.readyDeliveryOnly;
+  NbtState.readyDeliveryOnly = !NbtState.readyDeliveryOnly;
 
-  if (btnElem) btnElem.classList.toggle('active', NltState.readyDeliveryOnly);
+  if (btnElem) btnElem.classList.toggle('active', NbtState.readyDeliveryOnly);
 
   renderOffersGrid();
 
@@ -1136,25 +1136,26 @@ function toggleReadyDelivery(btnElem) {
 
 function getCardPrice(offer, duration, depositMode) {
 
-  if (NltState.mode === 'NBT') {
+  if (NbtState.mode === 'NBT') {
+    const days = duration || 1;
+    const price = offer.nbtDailyPrice * days;
+    return { price: price, label: ' Totale (IVA esc.)', details: `${days} ${days === 1 ? "Giorno" : "Giorni"} • Deposito €3.000` };
+}
 
-    return { price: offer.nbtDailyPrice, label: '€ / giorno', details: 'Noleggio Breve (1-30 gg)' };
-
-  }
 
   
 
   // Cerchiamo nelle varianti della vettura
 
-  const targetDuration = duration || NltState.durationFilter;
+  const targetDuration = duration || NbtState.durationFilter;
 
   let targetDeposit = 3000;
 
-  if (depositMode === '0' || NltState.depositFilter === '0') targetDeposit = 0;
+  if (depositMode === '0' || NbtState.depositFilter === '0') targetDeposit = 0;
 
-  else if (depositMode === '5000' || NltState.depositFilter === '5000') targetDeposit = 5000;
+  else if (depositMode === '5000' || NbtState.depositFilter === '5000') targetDeposit = 5000;
 
-  else if (NltState.depositFilter === '3000') targetDeposit = 3000;
+  else if (NbtState.depositFilter === '3000') targetDeposit = 3000;
 
   
 
@@ -1166,7 +1167,7 @@ function getCardPrice(offer, duration, depositMode) {
 
       price: match.price,
 
-      label: '€ / mese (IVA esclusa)',
+      label: '€ / giorno (IVA esclusa)',
 
       details: `${match.duration} mesi — Anticipo € ${match.deposit.toLocaleString('it-IT')} — 15.000 km/anno`
 
@@ -1180,7 +1181,7 @@ function getCardPrice(offer, duration, depositMode) {
 
     price: offer.baseOffer.monthlyPrice,
 
-    label: '€ / mese (Tutto Incluso)',
+    label: '€ / giorno (Tutto Incluso)',
 
     details: `${offer.baseOffer.duration} mesi — Anticipo € ${offer.baseOffer.deposit.toLocaleString('it-IT')}`
 
@@ -1194,7 +1195,7 @@ function getCardPrice(offer, duration, depositMode) {
 
 function renderOffersGrid() {
 
-  const grid = document.getElementById('nltGrid');
+  const grid = document.getElementById('nbtGrid');
 
   const countDisplay = document.getElementById('offersCountText');
 
@@ -1204,27 +1205,27 @@ function renderOffersGrid() {
 
   // Filtraggio
 
-  const filtered = NltState.offers.filter(offer => {
+  const filtered = NbtState.offers.filter(offer => {
 
     // Ricerca testuale
 
-    if (NltState.searchQuery) {
+    if (NbtState.searchQuery) {
 
       const full = `${offer.brand} ${offer.model} ${offer.trim} ${offer.category}`.toLowerCase();
 
-      if (!full.includes(NltState.searchQuery)) return false;
+      if (!full.includes(NbtState.searchQuery)) return false;
 
     }
 
     // Dropdowns
 
-    const brandF = NltState.brandFilter || 'all';
+    const brandF = NbtState.brandFilter || 'all';
 
     if (brandF !== 'all' && offer.brand !== brandF) return false;
 
 
 
-    const fuelF = (NltState.fuelFilter || 'all').toLowerCase();
+    const fuelF = (NbtState.fuelFilter || 'all').toLowerCase();
 
     if (fuelF !== 'all') {
 
@@ -1248,7 +1249,7 @@ function renderOffersGrid() {
 
 
 
-    const transF = (NltState.transmissionFilter || 'all').toLowerCase();
+    const transF = (NbtState.transmissionFilter || 'all').toLowerCase();
 
     if (transF !== 'all') {
 
@@ -1258,7 +1259,7 @@ function renderOffersGrid() {
 
 
 
-    const catF = NltState.categoryFilter || 'all';
+    const catF = NbtState.categoryFilter || 'all';
 
     if (catF !== 'all' && !offer.category.includes(catF)) return false;
 
@@ -1266,17 +1267,17 @@ function renderOffersGrid() {
 
     // Visual Category Pills
 
-    if (NltState.visualCategory !== 'all') {
+    if (NbtState.visualCategory !== 'all') {
 
-      if (NltState.visualCategory === 'Elettrico') {
+      if (NbtState.visualCategory === 'Elettrico') {
 
         if (!offer.fuel.toLowerCase().includes('elettric') && !offer.trim.toLowerCase().includes('elettric')) return false;
 
-      } else if (NltState.visualCategory === 'ready') {
+      } else if (NbtState.visualCategory === 'ready') {
 
         if (!offer.readyDelivery) return false;
 
-      } else if (offer.category !== NltState.visualCategory) {
+      } else if (offer.category !== NbtState.visualCategory) {
 
         return false;
 
@@ -1286,7 +1287,7 @@ function renderOffersGrid() {
 
     // Pronta Consegna
 
-    if (NltState.readyDeliveryOnly && !offer.readyDelivery) {
+    if (NbtState.readyDeliveryOnly && !offer.readyDelivery) {
 
       return false;
 
@@ -1298,7 +1299,7 @@ function renderOffersGrid() {
 
     // Budget
 
-    if (NltState.mode === 'NLT' && priceInfo.price > NltState.maxBudget && NltState.maxBudget < 4000) {
+    if (NbtState.mode === 'NBT' && priceInfo.price > NbtState.maxBudget && NbtState.maxBudget < 4000) {
 
       return false;
 
@@ -1310,17 +1311,17 @@ function renderOffersGrid() {
 
     let targetDeposit = 3000;
 
-    if (NltState.depositFilter === '0') targetDeposit = 0;
+    if (NbtState.depositFilter === '0') targetDeposit = 0;
 
-    else if (NltState.depositFilter === '5000') targetDeposit = 5000;
+    else if (NbtState.depositFilter === '5000') targetDeposit = 5000;
 
-    const match = offer.variants.find(v => v.duration === NltState.durationFilter && (targetDeposit === 0 ? v.deposit === 0 : v.deposit > 0));
+    const match = offer.variants.find(v => v.duration === NbtState.durationFilter && (targetDeposit === 0 ? v.deposit === 0 : v.deposit > 0));
 
     const activeDeposit = match ? match.deposit : currentDeposit;
 
 
 
-    if (NltState.mode === 'NLT' && activeDeposit > NltState.maxAnticipo && NltState.maxAnticipo < 15000) {
+    if (NbtState.mode === 'NBT' && activeDeposit > NbtState.maxAnticipo && NbtState.maxAnticipo < 15000) {
 
       return false;
 
@@ -1352,7 +1353,7 @@ function renderOffersGrid() {
 
         <h3 style="font-size: 1.5rem; margin-bottom: 8px;">Nessuna vettura corrisponde ai filtri selezionati</h3>
 
-        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 24px;">Prova ad aumentare il budget mensile, a selezionare un anticipo diverso o a rimuovere il filtro Pronta Consegna.</p>
+        <p style="color: var(--text-muted); max-width: 500px; margin: 0 auto 24px;">Prova ad aumentare il budget giornaliero, a selezionare un anticipo diverso o a rimuovere il filtro Pronta Consegna.</p>
 
         <button class="btn btn-outline" onclick="resetAllFilters()"><i class="ri-refresh-line"></i> Resetta tutti i filtri</button>
 
@@ -1366,7 +1367,7 @@ function renderOffersGrid() {
 
 
 
-  try { localStorage.setItem('itercars_nlt_cache', JSON.stringify(NltState.offers)); } catch(e){}
+  try { localStorage.setItem('itercars_nbt_cache', JSON.stringify(NbtState.offers)); } catch(e){}
 
 
 
@@ -1390,13 +1391,13 @@ function renderOffersGrid() {
 
     return `
 
-      <div class="glass-card nlt-card" id="card-${offer.id}">
+      <div class="glass-card nbt-card" id="card-${offer.id}">
 
-        <div class="nlt-card-img-wrapper">
+        <div class="nbt-card-img-wrapper">
 
-          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
+          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nbt-card-img" onerror="this.src='category-suv.jpg'">
 
-          <div class="nlt-card-badges">
+          <div class="nbt-card-badges">
 
             ${badgeText}
 
@@ -1404,19 +1405,19 @@ function renderOffersGrid() {
 
           </div>
 
-          <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${offer.providerName}</div>
+          <div class="nbt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${offer.providerName}</div>
 
         </div>
 
 
 
-        <div class="nlt-card-body">
+        <div class="nbt-card-body">
 
-          <div class="nlt-card-header">
+          <div class="nbt-card-header">
 
-            <span class="nlt-brand-tag">${offer.brand}</span>
+            <span class="nbt-brand-tag">${offer.brand}</span>
 
-            <h3 class="nlt-model-title">${offer.model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${offer.trim}</small></h3>
+            <h3 class="nbt-model-title">${offer.model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${offer.trim}</small></h3>
 
           </div>
 
@@ -1424,7 +1425,7 @@ function renderOffersGrid() {
 
           <!-- Specifiche Veloci -->
 
-          <div class="nlt-specs-row">
+          <div class="nbt-specs-row">
 
             <span><i class="ri-speed-up-line"></i> ${offer.hp}</span>
 
@@ -1438,25 +1439,18 @@ function renderOffersGrid() {
 
 
 
-          <!-- Interruttore Rapido Mesi & Anticipo dentro la card (Solo in NLT) -->
+          <!-- Interruttore Rapido Mesi & Anticipo dentro la card (Solo in NBT) -->
 
-          ${NltState.mode === 'NLT' ? `
+          ${NbtState.mode === 'NBT' ? `
 
           <div class="card-interactive-selector">
-
-            <div class="card-selector-label">Scegli Configurazione Rata:</div>
-
-            <div class="card-duration-tabs">
-
-              <button class="card-tab ${NltState.durationFilter === 36 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 36, 'default', event)">36 Mesi</button>
-
-              <button class="card-tab ${NltState.durationFilter === 48 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, 'default', event)">48 Mesi</button>
-
-              <button class="card-tab ${NltState.depositFilter === '0' ? 'active-zero' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, '0', event)">⚡ 0€ Anticipo</button>
-
-            </div>
-
-          </div>
+<div class="card-selector-label">Scegli Durata Noleggio:</div>
+<div class="card-duration-tabs">
+<button class="card-tab active" onclick="updateSingleCardPrice('${offer.id}', 1, 'default', event)">1 Giorno</button>
+<button class="card-tab" onclick="updateSingleCardPrice('${offer.id}', 2, 'default', event)">2 Giorni</button>
+<button class="card-tab" onclick="updateSingleCardPrice('${offer.id}', 5, 'default', event)">5 Giorni</button>
+</div>
+</div>
 
           ` : ''}
 
@@ -1464,13 +1458,13 @@ function renderOffersGrid() {
 
           <!-- Box Rata Finale / Prezzo -->
 
-          <div class="nlt-price-box" id="price-box-${offer.id}">
+          <div class="nbt-price-box" id="price-box-${offer.id}">
 
-            <div class="nlt-price-num text-gradient">€ <span id="price-num-${offer.id}">${priceInfo.price.toLocaleString('it-IT')}</span></div>
+            <div class="nbt-price-num text-gradient">€ <span id="price-num-${offer.id}">${priceInfo.price.toLocaleString('it-IT')}</span></div>
 
-            <div class="nlt-price-label">${priceInfo.label}</div>
+            <div class="nbt-price-label">${priceInfo.label}</div>
 
-            <div class="nlt-price-details" id="price-details-${offer.id}">${priceInfo.details}</div>
+            <div class="nbt-price-details" id="price-details-${offer.id}">${priceInfo.details}</div>
 
           </div>
 
@@ -1478,7 +1472,7 @@ function renderOffersGrid() {
 
           <!-- Elenco Servizi Inclusi -->
 
-          <div class="nlt-services-list">
+          <div class="nbt-services-list">
 
             ${offer.services.slice(0, 3).map(s => `<div><i class="ri-checkbox-circle-fill text-green"></i> <span>${s}</span></div>`).join('')}
 
@@ -1490,9 +1484,9 @@ function renderOffersGrid() {
 
           <!-- Pulsanti d'Azione -->
 
-          <div class="nlt-card-actions">
+          <div class="nbt-card-actions">
 
-            <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="nbt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
 
               <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
 
@@ -1522,7 +1516,7 @@ function renderOffersGrid() {
 
 function updateSingleCardPrice(offerId, duration, depositMode, event) {
 
-  const offer = NltState.offers.find(o => o.id === offerId);
+  const offer = NbtState.offers.find(o => o.id === offerId);
 
   if (!offer) return;
 
@@ -1582,27 +1576,27 @@ function updateSingleCardPrice(offerId, duration, depositMode, event) {
 
 function resetAllFilters() {
 
-  NltState.maxBudget = 4000;
+  NbtState.maxBudget = 4000;
 
-  NltState.maxAnticipo = 15000;
+  NbtState.maxAnticipo = 15000;
 
-  NltState.brandFilter = 'all';
+  NbtState.brandFilter = 'all';
 
-  NltState.fuelFilter = 'all';
+  NbtState.fuelFilter = 'all';
 
-  NltState.transmissionFilter = 'all';
+  NbtState.transmissionFilter = 'all';
 
-  NltState.depositFilter = 'all';
+  NbtState.depositFilter = 'all';
 
-  NltState.durationFilter = 48;
+  NbtState.durationFilter = 48;
 
-  NltState.categoryFilter = 'all';
+  NbtState.categoryFilter = 'all';
 
-  NltState.visualCategory = 'all';
+  NbtState.visualCategory = 'all';
 
-  NltState.readyDeliveryOnly = false;
+  NbtState.readyDeliveryOnly = false;
 
-  NltState.searchQuery = '';
+  NbtState.searchQuery = '';
 
   
 
@@ -1656,7 +1650,7 @@ function resetAllFilters() {
 
 function openQuoteModal(offerId) {
 
-  const offer = NltState.offers.find(o => o.id === offerId);
+  const offer = NbtState.offers.find(o => o.id === offerId);
 
   if (!offer) return;
 
@@ -1762,7 +1756,7 @@ async function handleGeneratePDFSubmit(event) {
 
   
 
-  const offer = NltState.offers.find(o => o.id === offerId);
+  const offer = NbtState.offers.find(o => o.id === offerId);
 
   const priceInfo = getCardPrice(offer);
 
@@ -1778,7 +1772,7 @@ async function handleGeneratePDFSubmit(event) {
 
         first_name: name.split(' ')[0] || name,
 
-        last_name: name.split(' ').slice(1).join(' ') || 'Cliente NLT',
+        last_name: name.split(' ').slice(1).join(' ') || 'Cliente NBT',
 
         phone: phone,
 
@@ -1790,7 +1784,7 @@ async function handleGeneratePDFSubmit(event) {
 
         pipeline_status: 'quote_sent',
 
-        notes: `Preventivo per ${offer.brand} ${offer.model} - Canone ${priceInfo.price} €/mese`
+        notes: `Preventivo per ${offer.brand} ${offer.model} - Canone ${priceInfo.price} €/giorno`
 
       }]);
 
@@ -1830,7 +1824,7 @@ async function handleGeneratePDFSubmit(event) {
 
             <span style="color: var(--accent-primary); font-weight: 800; font-size: 1.1rem;"><i class="ri-vip-crown-fill"></i> ITERCARS PREVENTIVO UFFICIALE</span>
 
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Codice Offerta: ${offer.baseOffer ? 'IT-NLT-2026-88' : 'IT-NBT-2026'} • Data: ${new Date().toLocaleDateString('it-IT')}</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Codice Offerta: ${offer.baseOffer ? 'IT-NBT-2026-88' : 'IT-NBT-2026'} • Data: ${new Date().toLocaleDateString('it-IT')}</div>
 
           </div>
 
@@ -1915,7 +1909,7 @@ async function handleGeneratePDFSubmit(event) {
 
 
 async function downloadInstantPDF(offerId) {
-  const offer = NltState.offers.find(o => o.id === offerId);
+  const offer = NbtState.offers.find(o => o.id === offerId);
   if (!offer) return;
   const priceInfo = getCardPrice(offer);
   
@@ -1934,11 +1928,11 @@ async function downloadInstantPDF(offerId) {
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 146, 70);
   doc.setFontSize(22);
-  doc.text("PREVENTIVO UFFICIALE NLT", 15, 20);
+  doc.text("PREVENTIVO UFFICIALE NBT", 15, 20);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(10);
   doc.setTextColor(100, 100, 100);
-  doc.text(`Codice Pratica: IT-NLT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`, 15, 27);
+  doc.text(`Codice Pratica: IT-NBT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`, 15, 27);
   doc.text(`Data Emissione: ${new Date().toLocaleDateString('it-IT')}`, 15, 32);
 
   doc.setFillColor(240, 253, 244);
@@ -2052,7 +2046,7 @@ ${phone}`, 20, boxY + 20);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(50, 50, 50);
-  doc.text("CONFIGURAZIONE CONTRATTO NLT", 20, finalY + 10);
+  doc.text("CONFIGURAZIONE CONTRATTO NBT", 20, finalY + 10);
   
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
@@ -2066,14 +2060,14 @@ ${phone}`, 20, boxY + 20);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
-  doc.text("CANONE MENSILE", 185, finalY + 10, { align: 'right' });
+  doc.text("CANONE GIORNALIERO", 185, finalY + 10, { align: 'right' });
   
   doc.setFontSize(26);
   doc.setTextColor(0, 146, 70);
   doc.text(`€ ${priceInfo.price.toLocaleString('it-IT')}`, 185, finalY + 22, { align: 'right' });
   
   doc.setFontSize(8);
-  doc.text("/mese (IVA esc.)", 185, finalY + 28, { align: 'right' });
+  doc.text("/giorno (IVA esc.)", 185, finalY + 28, { align: 'right' });
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
@@ -2088,13 +2082,13 @@ ${phone}`, 20, boxY + 20);
 
 function openWhatsAppForCard(offerId) {
 
-  const offer = NltState.offers.find(o => o.id === offerId);
+  const offer = NbtState.offers.find(o => o.id === offerId);
 
   if (!offer) return;
 
   const priceInfo = getCardPrice(offer);
 
-  const msg = `Ciao ITERCARS Concierge! Vorrei maggiori informazioni sul Noleggio Lungo Termine per *${offer.brand} ${offer.model} (${offer.trim})* con canone esposto a *€ ${priceInfo.price}/mese*. È disponibile in pronta consegna?`;
+  const msg = `Ciao ITERCARS Concierge! Vorrei maggiori informazioni sul Noleggio Breve Termine per *${offer.brand} ${offer.model} (${offer.trim})* con canone esposto a *€ ${priceInfo.price}/giorno*. È disponibile in pronta consegna?`;
 
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
 
