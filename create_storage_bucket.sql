@@ -17,10 +17,7 @@ ON CONFLICT (id) DO UPDATE SET
   file_size_limit = EXCLUDED.file_size_limit,
   allowed_mime_types = EXCLUDED.allowed_mime_types;
 
--- 2. Abilita Row Level Security (RLS) sugli oggetti di storage
-ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
-
--- 3. Policy di INSERT (Consente ai clienti/client web di caricare file nel proprio dossier)
+-- 2. Policy di INSERT (Consente ai clienti/client web di caricare file nel proprio dossier)
 DROP POLICY IF EXISTS "Allow Uploads to CRM Documents" ON storage.objects;
 CREATE POLICY "Allow Uploads to CRM Documents"
 ON storage.objects FOR INSERT
