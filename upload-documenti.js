@@ -159,16 +159,31 @@ function triggerFileInput(inputId) {
   if (inp) inp.click();
 }
 
-async function handleFileSelected(inputId, docType, dropzoneId) {
+async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
   const inp = document.getElementById(inputId);
-  const dz = document.getElementById(dropzoneId);
-  const statusBadge = document.getElementById(`status_${dropzoneId}`);
-
   if (!inp || !inp.files || inp.files.length === 0) return;
   const file = inp.files[0];
 
-  if (dz) dz.classList.add('uploaded');
-  if (statusBadge) statusBadge.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Caricamento in corso...`;
+  // Risolvi in modo intelligente sia il badge di stato che il contenitore (dropzone o mini-sub-box)
+  let statusBadge = document.getElementById(dropzoneOrBadgeId);
+  if (!statusBadge || !statusBadge.classList.contains('doc-status-badge')) {
+    statusBadge = document.getElementById(`status_${dropzoneOrBadgeId}`) || document.getElementById(dropzoneOrBadgeId);
+  }
+  const parentBox = inp.closest('.upload-dropzone') || inp.closest('.mini-sub-box') || document.getElementById(dropzoneOrBadgeId.replace('status_', ''));
+
+  if (parentBox && parentBox.classList) {
+    parentBox.classList.add('uploaded');
+    parentBox.style.borderColor = '#2ecc71';
+    parentBox.style.background = 'rgba(46, 204, 113, 0.08)';
+  }
+
+  if (statusBadge) {
+    statusBadge.style.background = 'rgba(46, 204, 113, 0.25)';
+    statusBadge.style.color = '#2ecc71';
+    statusBadge.style.borderColor = '#2ecc71';
+    statusBadge.style.fontWeight = 'bold';
+    statusBadge.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Elaborazione in corso...`;
+  }
 
   try {
     // Converti il file in base64 per salvataggio immediato in crm_documents (o storage Supabase)
@@ -238,12 +253,19 @@ async function handleFileSelected(inputId, docType, dropzoneId) {
     }
 
     if (statusBadge) {
-      statusBadge.innerHTML = `<i class="ri-check-double-fill"></i> Caricato: <strong>${file.name.slice(0, 22)}${file.name.length > 22 ? '...' : ''}</strong>`;
+      statusBadge.style.background = 'rgba(46, 204, 113, 0.25)';
+      statusBadge.style.color = '#2ecc71';
+      statusBadge.style.borderColor = '#2ecc71';
+      statusBadge.style.fontWeight = '800';
+      statusBadge.innerHTML = `<i class="ri-check-double-fill" style="color: #2ecc71; font-size: 1.15em;"></i> Caricato: <strong>${file.name.slice(0, 20)}${file.name.length > 20 ? '...' : ''}</strong>`;
     }
   } catch (err) {
     console.warn("Errore caricamento documento:", err);
     if (statusBadge) {
-      statusBadge.innerHTML = `<i class="ri-error-warning-fill" style="color: #ff5e5e;"></i> Errore lettura file. Riprova.`;
+      statusBadge.style.background = 'rgba(255, 94, 94, 0.2)';
+      statusBadge.style.color = '#ff5e5e';
+      statusBadge.style.borderColor = '#ff5e5e';
+      statusBadge.innerHTML = `<i class="ri-error-warning-fill"></i> Errore lettura file. Riprova.`;
     }
   }
 }
