@@ -242,6 +242,70 @@ function initDragAndDrop() {
   });
 }
 
+// CONFERMA I DOCUMENTI DELLA SEZIONE 2 E PASSA ALLA SEZIONE 3 (STRIPE PRE-ADDEBITO)
+function confirmStep2AndShowStep3(event) {
+  if (event && event.preventDefault) event.preventDefault();
+  
+  const count = Object.keys(CurrentQuote.uploadedDocs).length;
+  if (count === 0) {
+    const ok = confirm("Non hai ancora selezionato alcun file per il dossier. Vuoi confermare comunque la Sezione 2 e procedere con la Sezione 3 (Blocco Pratica e Preaddebito)? Potrai inviare i file successivamente al Concierge.");
+    if (!ok) return;
+  }
+
+  const step2 = document.getElementById('sectionStep2');
+  const summary2 = document.getElementById('sectionStep2Summary');
+  const step3 = document.getElementById('embeddedCheckoutSection');
+  
+  if (step2) step2.style.display = 'none';
+  if (summary2) {
+    summary2.style.display = 'flex';
+    const countEl = document.getElementById('summaryDocsCount');
+    if (countEl) countEl.textContent = `${count > 0 ? count : 'Nessun'} documento caricato online — pronti per l'istruttoria`;
+  }
+  if (step3) {
+    step3.style.display = 'block';
+    step3.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Aggiorna la Stepper Bar in alto
+  const sItem2 = document.getElementById('stepperItem2');
+  const sNum2 = document.getElementById('stepperNum2');
+  const sItem3 = document.getElementById('stepperItem3');
+
+  if (sItem2) {
+    sItem2.classList.remove('active');
+    sItem2.classList.add('completed');
+  }
+  if (sNum2) sNum2.innerHTML = '<i class="ri-check-line"></i>';
+  if (sItem3) sItem3.classList.add('active');
+}
+
+// MODIFICA I DOCUMENTI (TORNA ALLA SEZIONE 2)
+function editStep2Docs() {
+  const step2 = document.getElementById('sectionStep2');
+  const summary2 = document.getElementById('sectionStep2Summary');
+  const step3 = document.getElementById('embeddedCheckoutSection');
+
+  if (summary2) summary2.style.display = 'none';
+  if (step2) {
+    step2.style.display = 'block';
+    step2.scrollIntoView({ behavior: 'smooth' });
+  }
+  if (step3) step3.style.display = 'none';
+
+  // Ripristina la Stepper Bar
+  const sItem2 = document.getElementById('stepperItem2');
+  const sNum2 = document.getElementById('stepperNum2');
+  const sItem3 = document.getElementById('stepperItem3');
+
+  if (sItem2) {
+    sItem2.classList.remove('completed');
+    sItem2.classList.add('active');
+  }
+  if (sNum2) sNum2.textContent = '2';
+  if (sItem3) sItem3.classList.remove('active');
+}
+
 // FORMATTAZIONE AUTOMATICA NUMERO CARTA
 function formatCardNumberInput(input) {
   let v = input.value.replace(/\D/g, '').slice(0, 16);

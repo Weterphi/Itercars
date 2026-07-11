@@ -209,18 +209,18 @@
   <main class="upload-container">
     
     <!-- STEPPER BAR -->
-    <div class="stepper-bar">
-      <div class="step-item completed">
+    <div class="stepper-bar" id="stepperBar">
+      <div class="step-item completed" id="stepperItem1">
         <div class="step-num"><i class="ri-check-line"></i></div>
         <div class="step-label">1. Configurazione Preventivo</div>
       </div>
-      <div class="step-item active">
-        <div class="step-num">2</div>
-        <div class="step-label">Caricamento Documenti</div>
+      <div class="step-item active" id="stepperItem2">
+        <div class="step-num" id="stepperNum2">2</div>
+        <div class="step-label">2. Caricamento Documenti</div>
       </div>
-      <div class="step-item">
-        <div class="step-num">3</div>
-        <div class="step-label">Blocco Pratica & Fee Stripe</div>
+      <div class="step-item" id="stepperItem3">
+        <div class="step-num" id="stepperNum3">3</div>
+        <div class="step-label">3. Blocco Pratica & Fee Stripe</div>
       </div>
     </div>
 
@@ -245,50 +245,77 @@
       <strong>Sicurezza & Privacy 256-bit:</strong> I tuoi file vengono trasmessi tramite crittografia di livello bancario ai nostri sistemi informativi per l'istruttoria e la delibera del credito presso il mandante ufficiale. Non verranno in alcun caso divulgati o ceduti a terzi non autorizzati.
     </div>
 
-    <!-- CUSTOMER TYPE SELECTOR -->
-    <div style="margin-bottom: 24px;">
-      <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px;">Seleziona Tipologia Intestatario per visualizzare i documenti specifici:</label>
-      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-        <button type="button" class="btn btn-outline active-type-btn" id="typeBtnPrivato" onclick="switchCustomerType('Privato')" style="border-color: #2ecc71; color: #2ecc71; font-weight: 800;">👤 Privato / Lavoratore Dipendente</button>
-        <button type="button" class="btn btn-outline" id="typeBtnPiva" onclick="switchCustomerType('Partita IVA')" style="font-weight: 800;">💼 Partita IVA / Ditta Individuale</button>
-        <button type="button" class="btn btn-outline" id="typeBtnAzienda" onclick="switchCustomerType('Azienda SRL/SPA')" style="font-weight: 800;">🏢 Azienda (SRL / SPA / Società)</button>
+    <!-- SEZIONE 2: CARICAMENTO DOCUMENTI -->
+    <div id="sectionStep2">
+      <!-- CUSTOMER TYPE SELECTOR -->
+      <div style="margin-bottom: 24px;">
+        <label style="display: block; font-size: 0.9rem; font-weight: 700; color: var(--text-muted); margin-bottom: 10px;">Seleziona Tipologia Intestatario per visualizzare i documenti specifici:</label>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-outline active-type-btn" id="typeBtnPrivato" onclick="switchCustomerType('Privato')" style="border-color: #2ecc71; color: #2ecc71; font-weight: 800;">👤 Privato / Lavoratore Dipendente</button>
+          <button type="button" class="btn btn-outline" id="typeBtnPiva" onclick="switchCustomerType('Partita IVA')" style="font-weight: 800;">💼 Partita IVA / Ditta Individuale</button>
+          <button type="button" class="btn btn-outline" id="typeBtnAzienda" onclick="switchCustomerType('Azienda SRL/SPA')" style="font-weight: 800;">🏢 Azienda (SRL / SPA / Società)</button>
+        </div>
+      </div>
+
+      <!-- UPLOAD GRID -->
+      <div class="upload-grid" id="dropzonesGrid">
+        
+        <!-- DROPZONE 1: CARTA D'IDENTITÀ -->
+        <div class="upload-dropzone" id="dz_id_card" onclick="triggerFileInput('file_id_card')">
+          <input type="file" id="file_id_card" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileSelected('file_id_card', 'carta_identita', 'dz_id_card')">
+          <div class="dropzone-icon"><i class="ri-id-card-line"></i></div>
+          <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">1. Documento d'Identità</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4;">Carta d'identità in corso di validità o Passaporto (Fronte e Retro o PDF unico).</p>
+          <div class="doc-status-badge" id="status_dz_id_card">Clicca o trascina il file</div>
+        </div>
+
+        <!-- DROPZONE 2: PATENTE DI GUIDA -->
+        <div class="upload-dropzone" id="dz_driving_license" onclick="triggerFileInput('file_driving_license')">
+          <input type="file" id="file_driving_license" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileSelected('file_driving_license', 'patente', 'dz_driving_license')">
+          <div class="dropzone-icon"><i class="ri-steering-2-line"></i></div>
+          <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">2. Patente di Guida</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4;">Patente B di chi condurrà il mezzo o del rappresentante legale (Fronte e Retro).</p>
+          <div class="doc-status-badge" id="status_dz_driving_license">Clicca o trascina il file</div>
+        </div>
+
+        <!-- DROPZONE 3: DOCUMENTAZIONE REDDITUALE -->
+        <div class="upload-dropzone" id="dz_income_doc" onclick="triggerFileInput('file_income_doc')">
+          <input type="file" id="file_income_doc" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileSelected('file_income_doc', 'documento_reddituale', 'dz_income_doc')">
+          <div class="dropzone-icon"><i class="ri-file-paper-2-line"></i></div>
+          <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;" id="incomeDocTitle">3. Ultime 2 Buste Paga</strong>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4;" id="incomeDocDesc">Ultime due buste paga complete oppure Ultimo CUD / Modello 730.</p>
+          <div class="doc-status-badge" id="status_dz_income_doc">Clicca o trascina il file</div>
+        </div>
+
+      </div>
+
+      <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px; text-align: center; margin: 30px 0;">
+        <h4 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 8px;">Documentazione Pronta per il Dossier?</h4>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0 auto 20px; max-width: 580px; line-height: 1.5;">
+          Una volta selezionati i file (identità e patente), clicca qui sotto per confermare l'acquisizione del dossier e sbloccare la Sezione 3 (Blocco Pratica & Fee Stripe).
+        </p>
+        <button type="button" id="btnConfirmStep2" onclick="confirmStep2AndShowStep3(event)" class="btn btn-primary" style="height: 54px; padding: 0 38px; font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; box-shadow: 0 8px 24px rgba(46, 204, 113, 0.3); display: inline-flex; align-items: center; gap: 10px;">
+          <i class="ri-check-double-line" style="font-size: 1.3rem;"></i> <span>Conferma Documenti e Vai alla Sezione 3 (Stripe Fee)</span> <i class="ri-arrow-right-line" style="font-size: 1.3rem;"></i>
+        </button>
       </div>
     </div>
 
-    <!-- UPLOAD GRID -->
-    <div class="upload-grid" id="dropzonesGrid">
-      
-      <!-- DROPZONE 1: CARTA D'IDENTITÀ -->
-      <div class="upload-dropzone" id="dz_id_card" onclick="triggerFileInput('file_id_card')">
-        <input type="file" id="file_id_card" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileSelected('file_id_card', 'carta_identita', 'dz_id_card')">
-        <div class="dropzone-icon"><i class="ri-id-card-line"></i></div>
-        <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">1. Documento d'Identità</strong>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4;">Carta d'identità in corso di validità o Passaporto (Fronte e Retro o PDF unico).</p>
-        <div class="doc-status-badge" id="status_dz_id_card">Clicca o trascina il file</div>
+    <!-- SUMMARY SEZIONE 2 COMPILATA -->
+    <div id="sectionStep2Summary" style="display: none; background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.4); border-radius: 16px; padding: 18px 24px; margin-bottom: 28px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; animation: fadeIn 0.3s ease;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <i class="ri-folder-check-fill" style="color: #2ecc71; font-size: 1.8rem;"></i>
+        <div>
+          <strong style="color: #fff; font-size: 1rem; display: block;">Sezione 2: Documentazione Dossier Acquisita</strong>
+          <span style="color: var(--text-muted); font-size: 0.85rem;" id="summaryDocsCount">I tuoi file sono pronti per l'istruttoria e la delibera</span>
+        </div>
       </div>
-
-      <!-- DROPZONE 2: PATENTE DI GUIDA -->
-      <div class="upload-dropzone" id="dz_driving_license" onclick="triggerFileInput('file_driving_license')">
-        <input type="file" id="file_driving_license" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileSelected('file_driving_license', 'patente', 'dz_driving_license')">
-        <div class="dropzone-icon"><i class="ri-steering-2-line"></i></div>
-        <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">2. Patente di Guida</strong>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4;">Patente B di chi condurrà il mezzo o del rappresentante legale (Fronte e Retro).</p>
-        <div class="doc-status-badge" id="status_dz_driving_license">Clicca o trascina il file</div>
-      </div>
-
-      <!-- DROPZONE 3: DOCUMENTAZIONE REDDITUALE -->
-      <div class="upload-dropzone" id="dz_income_doc" onclick="triggerFileInput('file_income_doc')">
-        <input type="file" id="file_income_doc" accept=".pdf,.png,.jpg,.jpeg" style="display: none;" onchange="handleFileSelected('file_income_doc', 'documento_reddituale', 'dz_income_doc')">
-        <div class="dropzone-icon"><i class="ri-file-paper-2-line"></i></div>
-        <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;" id="incomeDocTitle">3. Ultime 2 Buste Paga</strong>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.4;" id="incomeDocDesc">Ultime due buste paga complete oppure Ultimo CUD / Modello 730.</p>
-        <div class="doc-status-badge" id="status_dz_income_doc">Clicca o trascina il file</div>
-      </div>
-
+      <button type="button" onclick="editStep2Docs()" class="btn btn-outline" style="height: 40px; padding: 0 16px; font-size: 0.85rem; font-weight: 700; border-color: rgba(255,255,255,0.2); color: #fff;">
+        <i class="ri-edit-line"></i> Modifica Documenti
+      </button>
     </div>
 
-    <!-- CHECKOUT ACTION FOOTER BOX (EMBEDDED PAYMENT MODULE) -->
-    <div class="checkout-action-box" id="embeddedCheckoutSection">
+    <!-- SEZIONE 3: CHECKOUT E BLOCCO PRATICA (EMBEDDED PAYMENT MODULE) -->
+    <div class="checkout-action-box" id="embeddedCheckoutSection" style="display: none; animation: fadeIn 0.4s ease;">
       <h3 style="font-size: 1.6rem; font-weight: 900; margin: 0 0 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
         <i class="ri-lock-star-fill" style="color: #2ecc71;"></i> 3. Blocco Pratica & Preaddebito (Stripe Secure)
       </h3>
