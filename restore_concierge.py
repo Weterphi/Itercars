@@ -28,13 +28,12 @@ bot_html = """  <!-- Floating Mobile Phone Button -->
         <p>Benvenuto in ITERCARS! Come preferisci metterti in contatto con il nostro team VIP?</p>
         
         <div class="bot-contact-cards">
-          <a href="tel:+393755942143" class="bot-card-link">
-            <i class="ri-phone-fill" style="color: var(--accent-primary); font-size: 1.3rem;"></i>
-            <div>
-              <strong>Chiama ITERCARS</strong>
-              <span>+39 375 594 2143</span>
-            </div>
-          </a>
+            <a href="#" class="bot-card-link">
+              <i class="ri-phone-fill" style="color: var(--accent-primary); font-size: 1.3rem;"></i>
+              <div>
+                <strong>Chiama ITERCARS</strong>
+              </div>
+            </a>
           
           <a href="mailto:info@itercars.com" class="bot-card-link">
             <i class="ri-mail-fill" style="color: var(--accent-red); font-size: 1.3rem;"></i>
@@ -55,7 +54,7 @@ bot_html = """  <!-- Floating Mobile Phone Button -->
     </form>
   </div>"""
 
-old_button_pattern = re.compile(r'<!-- Floating Mobile Phone Button -->\s*<a href="tel:\+393755942143" class="mobile-floating-phone" title="Contatta Concierge">\s*<i class="ri-phone-line"></i>\s*</a>', re.DOTALL)
+old_button_pattern = re.compile(r'<!-- Floating Mobile Phone Button -->\s*<a href="tel:\+\d+" class="mobile-floating-phone" title="Contatta Concierge">\s*<i class="ri-phone-line"></i>\s*</a>', re.DOTALL)
 
 text = old_button_pattern.sub(bot_html, text)
 
