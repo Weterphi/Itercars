@@ -244,9 +244,12 @@ header.scrolled {
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* Hide phone button on mobile */
+/* Hide phone button, phone numbers, and phone icons on mobile */
 @media (max-width: 768px) {
-  .nav-phone-btn {
+  .nav-phone-btn,
+  .phone-text,
+  .ri-phone-line,
+  a[href^="tel:"] {
     display: none !important;
   }
 }
