@@ -228,6 +228,8 @@ header {
   position: fixed;
   top: 0;
   left: 0;
+
+
   width: 100%;
   z-index: 1000;
   padding: 8px 0 !important;
@@ -241,6 +243,14 @@ header.scrolled {
   border-bottom: 1px solid var(--border-glass);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
 }
+
+/* Hide phone button on mobile */
+@media (max-width: 768px) {
+  .nav-phone-btn {
+    display: none !important;
+  }
+}
+
 
 /* Solo ed esclusivamente sulla pagina flotta: menu con sfondo scuro leggermente trasparente per ottima visibilità ed eleganza */
 body.fleet-page header {
