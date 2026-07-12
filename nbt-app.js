@@ -1765,39 +1765,32 @@ async function handleGeneratePDFSubmit(event) {
   // Salva il lead su Supabase crm_leads se connesso
 
   if (typeof window.supabase !== 'undefined' && window.supabase) {
-
     try {
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      let vehicleUuid = offer.vehicle_id && uuidRegex.test(offer.vehicle_id) ? offer.vehicle_id : (offer.id && uuidRegex.test(offer.id) ? offer.id : null);
 
-      const { error } = await window.supabase.from('crm_leads').insert([{
-
+      const leadPayload = {
         first_name: name.split(' ')[0] || name,
-
         last_name: name.split(' ').slice(1).join(' ') || 'Cliente NBT',
-
         phone: phone,
-
         email: email,
+        customer_type: type || 'Privato',
+        vehicle_interest: `${offer.brand} ${offer.model} ${offer.trim || ''}`.trim() + ` (${priceInfo.details || ''} - Rata €${priceInfo.price}/giorno)`,
+        pipeline_status: 'new_lead',
+        assigned_broker_agent: 'Consulente Senior ITERCARS',
+        interested_offer_id: null,
+        interested_vehicle_id: vehicleUuid,
+        notes: `Preventivo 1-Click per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/giorno`
+      };
 
-        customer_type: type,
-
-        vehicle_interest: `${offer.brand} ${offer.model}`,
-
-        pipeline_status: 'quote_sent',
-
-        notes: `Preventivo per ${offer.brand} ${offer.model} - Canone ${priceInfo.price} €/giorno`
-
-      }]);
-
-      if (error) console.error('Errore Supabase:', error);
-
-      else console.log('✅ Lead registrato nel database!');
-
+      const { error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]);
+      if (leadErr && (leadErr.code === '23503' || (leadErr.message && leadErr.message.toLowerCase().includes('foreign key')))) {
+        leadPayload.interested_vehicle_id = null;
+        await window.supabase.from('crm_leads').insert([leadPayload]);
+      }
     } catch (e) {
-
-      console.log('Salvataggio lead su DB non critico in demo locale.');
-
+      console.log('Salvataggio lead crm_leads NBT 1-click completato o con avviso in demo:', e);
     }
-
   }
 
 

@@ -365,6 +365,8 @@ function setConfigDuration(days, btnElem) {
     const customInput = document.getElementById('customDurationInput');
     if (customInput) customInput.value = ''; // clear custom input
   }
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
 }
 
@@ -380,6 +382,8 @@ function handleCustomDuration(val) {
     group.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
   }
   
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
 }
 
@@ -390,6 +394,8 @@ function setConfigKmDaily(km, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
 }
 
@@ -399,6 +405,8 @@ function obsolete_setConfigKm(km, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
 }
 
@@ -409,6 +417,8 @@ function setConfigDeposit(deposit, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
 }
 
@@ -419,6 +429,8 @@ function setConfigKasko(type, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
 }
 
@@ -602,7 +614,30 @@ async function handleQuoteSubmit(event) {
         </div>
       </div>
     `;
-    previewBox.scrollIntoView({ behavior: 'smooth' });
+    const sidebarActions = document.getElementById('sidebarQuoteActions');
+    if (sidebarActions) {
+      sidebarActions.style.display = 'block';
+      sidebarActions.innerHTML = `
+        <div style="margin-bottom: 14px; padding: 12px 14px; border-radius: 8px; background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; color: #fff; font-weight: 600; font-size: 0.88rem; display: flex; align-items: flex-start; gap: 10px; line-height: 1.4;">
+          <i class="ri-mail-check-fill" style="color: #2ecc71; font-size: 1.3rem; flex-shrink: 0; margin-top: 1px;"></i>
+          <span>Preventivo generato e inviato al tuo indirizzo email! Puoi procedere con il pagamento o scaricare il PDF.</span>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="window.acceptQuoteAndRedirect('${quoteCode}', event)" style="width: 100%; height: 52px; font-size: 1.05rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px; box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);">
+          <i class="ri-folder-upload-fill" style="font-size: 1.35rem;"></i> Accetta Preventivo e Carica Documenti
+        </button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <button type="button" class="btn btn-outline" onclick="window.print()" style="height: 48px; font-size: 0.95rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px;">
+            <i class="ri-printer-line" style="font-size: 1.2rem;"></i> Scarica PDF
+          </button>
+          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationDays}', '${ConfigState.kmDailyLimit}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}')" style="height: 48px; font-size: 0.95rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px;">
+            <i class="ri-whatsapp-line" style="font-size: 1.2rem;"></i> Invia su WhatsApp
+          </button>
+        </div>
+      `;
+      sidebarActions.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else {
+      previewBox.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   submitBtn.disabled = false;
@@ -621,17 +656,36 @@ async function handleQuoteSubmit(event) {
       }
 
       if (typeof window.supabase !== 'undefined' && window.supabase) {
-        const { data: leadData, error: leadErr } = await window.supabase.from('crm_leads').insert([{
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+        let vehicleUuid = c.vehicle_id && uuidRegex.test(c.vehicle_id) ? c.vehicle_id : (c.id && uuidRegex.test(c.id) ? c.id : null);
+
+        const leadPayload = {
           first_name: name.split(' ')[0] || name,
           last_name: name.split(' ').slice(1).join(' ') || 'Cliente NBT',
           phone: phone,
           email: email,
-          customer_type: type,
-          pipeline_status: 'quote_sent',
+          customer_type: type || 'Privato',
+          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (NBT ${ConfigState.durationDays} Giorni / ${ConfigState.kmDailyLimit} km/giorno - Rata €${ConfigState.finalMonthlyPrice}/giorno)`,
+          pipeline_status: 'new_lead',
+          assigned_broker_agent: 'Consulente Senior ITERCARS',
           interested_offer_id: null,
-          interested_vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
-          notes: `Preventivo NBT per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}`
-        }]).select();
+          interested_vehicle_id: vehicleUuid,
+          notes: `Preventivo NBT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/giorno`
+        };
+
+        let leadData = null;
+        try {
+          const { data: resData, error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]).select();
+          if (leadErr && (leadErr.code === '23503' || (leadErr.message && leadErr.message.toLowerCase().includes('foreign key')))) {
+            leadPayload.interested_vehicle_id = null;
+            const retry = await window.supabase.from('crm_leads').insert([leadPayload]).select();
+            leadData = retry.data;
+          } else {
+            leadData = resData;
+          }
+        } catch (dbE) {
+          console.warn("Errore inserimento crm_leads NBT:", dbE);
+        }
 
         let newLeadId = leadData && leadData.length > 0 ? leadData[0].id : null;
 
@@ -677,6 +731,7 @@ async function handleQuoteSubmit(event) {
            pdfBase64: pdfBase64,
            pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),
            quoteCode: quoteCode,
+           dossierUrl: window.location.origin + '/upload-documenti.html?code=' + quoteCode,
            checkoutUrl: checkoutUrl
         };
 

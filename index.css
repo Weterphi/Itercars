@@ -107,11 +107,13 @@ button {
   width: 100%;
   max-width: 100%;
   padding: 0 20px;
+  flex-wrap: nowrap;
+  gap: 16px;
 }
 
 @media (min-width: 1200px) {
   .nav-container {
-    padding: 0 60px;
+    padding: 0 40px;
   }
 }
 
@@ -228,16 +230,16 @@ header {
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 20px 0;
+  padding: 8px 0 !important;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 header.scrolled {
-  background: rgba(10, 14, 23, 0.95);
+  background: rgba(10, 14, 23, 0.96);
   backdrop-filter: blur(20px);
-  padding: 8px 0;
+  padding: 8px 0 !important;
   border-bottom: 1px solid var(--border-glass);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
 }
 
 /* Solo ed esclusivamente sulla pagina flotta: menu con sfondo scuro leggermente trasparente per ottima visibilità ed eleganza */
@@ -249,7 +251,7 @@ body.fleet-page header {
 }
 
 body.fleet-page header.scrolled {
-  background: rgba(10, 14, 23, 0.90);
+  background: rgba(10, 14, 23, 0.94);
 }
 
 .logo {
@@ -257,17 +259,40 @@ body.fleet-page header.scrolled {
   align-items: center;
   gap: 0;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .navbar-logo-img {
-  width: 280px;
+  width: 200px !important;
   height: auto;
   object-fit: contain;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform var(--transition-fast), filter var(--transition-fast);
+  transition: transform var(--transition-fast), filter var(--transition-fast);
 }
 
 header.scrolled .navbar-logo-img {
-  width: 200px;
+  width: 200px !important;
+}
+
+header.scrolled .nav-links {
+  gap: 24px !important;
+}
+
+header.scrolled .nav-links a {
+  font-size: 0.86rem !important;
+}
+
+header.scrolled .nav-actions .btn {
+  padding: 8px 16px !important;
+  font-size: 0.86rem !important;
+}
+
+header.scrolled .nav-actions .lang-dropdown-wrapper .btn {
+  padding: 6px 12px !important;
+  font-size: 0.84rem !important;
+}
+
+header.scrolled .nav-actions {
+  gap: 12px !important;
 }
 
 .logo:hover .navbar-logo-img {
@@ -339,14 +364,18 @@ header.scrolled .navbar-logo-img {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 24px !important;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-links a {
   font-weight: 500;
-  font-size: 0.86rem;
+  font-size: 0.86rem !important;
   color: var(--text-muted);
   position: relative;
+  white-space: nowrap;
 }
 
 .nav-links a:hover, .nav-links a.active {
@@ -372,7 +401,21 @@ header.scrolled .navbar-logo-img {
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px !important;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-actions .btn {
+  padding: 8px 16px !important;
+  font-size: 0.86rem !important;
+  white-space: nowrap;
+}
+
+.nav-actions .lang-dropdown-wrapper .btn {
+  padding: 6px 12px !important;
+  font-size: 0.84rem !important;
 }
 
 /* ==========================================================================
@@ -1581,18 +1624,33 @@ footer {
   display: none;
 }
 
+@media (min-width: 992px) and (max-width: 1380px) {
+  .nav-container { padding: 0 15px !important; gap: 10px !important; }
+  .navbar-logo-img { width: 160px !important; }
+  header.scrolled .navbar-logo-img { width: 160px !important; }
+  .nav-links { gap: 16px !important; }
+  .nav-links a { font-size: 0.82rem !important; }
+  .nav-actions { gap: 8px !important; }
+  .nav-actions .btn { padding: 6px 14px !important; font-size: 0.82rem !important; }
+  .nav-phone-btn .phone-text { display: none !important; }
+  .nav-phone-btn { padding: 8px !important; }
+}
+
 @media (max-width: 991px) {
   .hero {
     padding-bottom: 10px !important;
   }
   header {
-    padding: 10px 0;
+    padding: 6px 0 !important;
+  }
+  header.scrolled {
+    padding: 6px 0 !important;
   }
   .navbar-logo-img {
-    width: 140px;
+    width: 140px !important;
   }
   header.scrolled .navbar-logo-img {
-    width: 110px;
+    width: 140px !important;
   }
   .footer-logo-img {
     height: 45px;
@@ -1600,7 +1658,20 @@ footer {
 
   .mobile-menu-btn {
     display: inline-flex;
-    padding: 10px 14px;
+    padding: 7px 12px !important;
+    font-size: 0.95rem !important;
+  }
+  header.scrolled .mobile-menu-btn {
+    padding: 7px 12px !important;
+    font-size: 0.95rem !important;
+  }
+  .nav-actions .btn {
+    padding: 5px 12px !important;
+    font-size: 0.82rem !important;
+  }
+  header.scrolled .nav-actions .btn {
+    padding: 5px 12px !important;
+    font-size: 0.82rem !important;
   }
 
   .nav-phone-btn {

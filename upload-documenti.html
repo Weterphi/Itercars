@@ -30,7 +30,6 @@
   <script src="https://js.stripe.com/v3/"></script>
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=40">
-  <link rel="icon" type="image/png" href="logo.png">
   <style>
     body {
       background: #06060c;
@@ -44,17 +43,33 @@
       margin: 40px auto 80px;
       padding: 0 20px;
     }
+    /* Unified Stepper & Navigation Container */
+    .stepper-and-nav-container {
+      background: rgba(15, 20, 32, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 20px;
+      padding: 20px 28px;
+      margin-bottom: 28px;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.45);
+      backdrop-filter: blur(16px);
+    }
+    .stepper-top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 18px;
+    }
     .stepper-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: rgba(15, 20, 32, 0.8);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
-      padding: 20px 30px;
-      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 16px;
       position: relative;
-      overflow: hidden;
     }
     .step-item {
       display: flex;
@@ -211,29 +226,42 @@
       padding: 30px;
       text-align: center;
     }
-    /* navigation arrows styling */
-    .nav-arrows {
-      position: fixed;
-      top: 50%;
-      left: 0;
-      right: 0;
+    .dossier-nav-actions {
       display: flex;
-      justify-content: space-between;
-      pointer-events: none; /* allow clicks only on buttons */
-      z-index: 1000;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
     }
-    .nav-arrow {
-      background: rgba(0,0,0,0.4);
-      border: none;
+    .btn-nav-item {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       color: #fff;
-      padding: 12px;
-      margin: 0 20px;
-      border-radius: 50%;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 0.88rem;
+      font-weight: 700;
       cursor: pointer;
-      pointer-events: all; /* re‑enable click */
-      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      text-decoration: none;
     }
-    .nav-arrow:hover { background: rgba(0,0,0,0.6); }
+    .btn-nav-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+    }
+    .btn-nav-primary {
+      background: linear-gradient(135deg, #2ecc71, #009246);
+      color: #000 !important;
+      border: none;
+      box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+    }
+    .btn-nav-primary:hover {
+      background: linear-gradient(135deg, #32e07c, #00a850);
+      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.45);
+    }
     @media (max-width: 640px) {
       .stepper-bar {
         flex-direction: column;
@@ -242,6 +270,12 @@
       }
     }
   </style>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body>
 
@@ -250,28 +284,48 @@
     #header { display: none; }
   </style>
 
-  <!-- Navigation arrows overlay -->
-  <div class="nav-arrows">
-    <button id="prevBtn" class="nav-arrow" title="Indietro"><i class="ri-arrow-left-s-line" style="font-size:2rem;"></i></button>
-    <button id="nextBtn" class="nav-arrow" title="Avanti"><i class="ri-arrow-right-s-line" style="font-size:2rem;"></i></button>
-  </div>
 
-  <!-- ================= MAIN CONTENT ================= -->
   <main class="upload-container">
     
-    <!-- STEPPER BAR -->
-    <div class="stepper-bar" id="stepperBar">
-      <div class="step-item completed" id="stepperItem1">
-        <div class="step-num"><i class="ri-check-line"></i></div>
-        <div class="step-label">1. Configurazione Preventivo</div>
+    <!-- UNIFIED NAVIGATION & STEPPER CARD -->
+    <div class="stepper-and-nav-container">
+      <!-- Top Row: Navigation Actions -->
+      <div class="stepper-top-nav">
+        <div class="dossier-nav-actions">
+          <a href="index.html" class="btn-nav-item" title="Torna alla Homepage">
+            <i class="ri-home-4-line" style="color: #2ecc71; font-size: 1.1rem;"></i> <span>Home</span>
+          </a>
+          <button type="button" class="btn-nav-item" id="topNavBackBtn" onclick="handleProfessionalNavBack()">
+            <i class="ri-arrow-left-line"></i> <span>Indietro</span>
+          </button>
+        </div>
+        
+        <div style="font-size: 0.95rem; font-weight: 800; color: #fff; display: flex; align-items: center; gap: 8px;">
+          <i class="ri-shield-keyhole-fill" style="color: #2ecc71; font-size: 1.3rem;"></i>
+          <span>Portale Pratiche ITERCARS</span>
+        </div>
+
+        <div class="dossier-nav-actions">
+          <button type="button" class="btn-nav-item btn-nav-primary" id="topNavNextBtn" onclick="handleProfessionalNavNext()">
+            <span>Avanti</span> <i class="ri-arrow-right-line"></i>
+          </button>
+        </div>
       </div>
-      <div class="step-item active" id="stepperItem2">
-        <div class="step-num" id="stepperNum2">2</div>
-        <div class="step-label">2. Caricamento Documenti</div>
-      </div>
-      <div class="step-item" id="stepperItem3">
-        <div class="step-num" id="stepperNum3">3</div>
-        <div class="step-label">3. Blocco Pratica & Fee Stripe</div>
+
+      <!-- Bottom Row: Stepper 1, 2, 3 -->
+      <div class="stepper-bar" id="stepperBar">
+        <div class="step-item completed" id="stepperItem1">
+          <div class="step-num"><i class="ri-check-line"></i></div>
+          <div class="step-label">1. Configurazione Preventivo</div>
+        </div>
+        <div class="step-item active" id="stepperItem2">
+          <div class="step-num" id="stepperNum2">2</div>
+          <div class="step-label">2. Caricamento Documenti</div>
+        </div>
+        <div class="step-item" id="stepperItem3">
+          <div class="step-num" id="stepperNum3">3</div>
+          <div class="step-label">3. Blocco Pratica & Fee Stripe</div>
+        </div>
       </div>
     </div>
 
@@ -282,7 +336,7 @@
           <i class="ri-folder-shield-2-fill"></i> Dossier Delibera Pratica
         </span>
         <h1 id="uploadCarTitle" style="font-size: 1.9rem; font-weight: 900; margin: 6px 0;">Caricamento In Corso...</h1>
-        <div style="font-size: 0.92rem; color: var(--text-muted);" id="uploadQuoteInfo">Codice Preventivo: <strong id="uploadQuoteCodeDisplay">---</strong></div>
+        <div style="font-size: 0.92rem; color: var(--text-muted);" id="uploadQuoteInfo">Codice Preventivo: <strong id="uploadQuoteCodeDisplay">---</strong> <span id="uploadQuoteMonthlyBox" style="display: none;">• Canone: <strong id="uploadQuoteMonthlyDisplay" style="color: #fff;">€ ---</strong></span></div>
       </div>
       <div style="text-align: right; background: rgba(0, 146, 70, 0.15); border: 1px solid rgba(0, 146, 70, 0.4); padding: 16px 24px; border-radius: 16px;">
         <span style="font-size: 0.8rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Fee Trattenuta Pratica</span>
@@ -447,7 +501,7 @@
     </div>
 
     <!-- SEZIONE 3: CHECKOUT E BLOCCO PRATICA (EMBEDDED PAYMENT MODULE) -->
-    <div class="checkout-action-box" id="embeddedCheckoutSection" style="display: none; animation: fadeIn 0.4s ease;">
+  <div class="checkout-action-box" id="embeddedCheckoutSection" style="display: none; animation: fadeIn 0.4s ease;">
       <h3 style="font-size: 1.6rem; font-weight: 900; margin: 0 0 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
         <i class="ri-lock-star-fill" style="color: #2ecc71;"></i> 3. Blocco Pratica & Preaddebito (Stripe Secure)
       </h3>
@@ -538,28 +592,74 @@
   <footer style="border-top: 1px solid rgba(255,255,255,0.08); padding: 40px 0; background: #040509; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
     <div class="container">
       <p style="margin-bottom: 8px;">&copy; 2026 ITERCARS Marketplace — Sistema di Delibera Digitalizzata Multi-Mandante</p>
-      <p>Assistenza Clienti e Supporto Documentale: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a> • <a href="mailto:dossier@itercars.com" style="color: inherit;">dossier@itercars.com</a></p>
+      <p>Assistenza Clienti e Supporto Documentale: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a> • <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
     </div>
   </footer>
 
   <!-- Supabase JS SDK & App Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js?v=21"></script>
-  <script src="upload-documenti.js?v=1"></script>
+  <script src="upload-documenti.js?v=20260712_nav"></script>
 
-  <!-- Arrow navigation script -->
+  <!-- Professional Navigation System Script -->
   <script>
-    document.getElementById('prevBtn').addEventListener('click', () => history.back());
-    // Replace '#NEXT_PAGE#' with the actual URL of the next step if needed.
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      const nextUrl = '#NEXT_PAGE#';
-      if (nextUrl && nextUrl !== '#NEXT_PAGE#') {
-        window.location.href = nextUrl;
-      } else {
-        // fallback: go forward in history if possible
-        history.forward();
+    function handleProfessionalNavBack() {
+      const step3 = document.getElementById('embeddedCheckoutSection');
+      const step2 = document.getElementById('sectionStep2');
+      
+      // Se siamo nella Sezione 3 (Blocco Pratica/Stripe), tornare indietro significa tornare alla Sezione 2 (Modifica Documenti)
+      if (step3 && step3.style.display && step3.style.display !== 'none') {
+        if (typeof editStep2Docs === 'function') {
+          editStep2Docs();
+        } else {
+          step3.style.display = 'none';
+          if (step2) step2.style.display = 'block';
+        }
+        return;
       }
-    });
+      
+      // Se siamo nella Sezione 2 (Caricamento Documenti), tornare indietro ci riporta alla configurazione vettura o al preventivo
+      if (typeof CurrentQuote !== 'undefined' && CurrentQuote.quoteCode) {
+        if (CurrentQuote.isNbt) {
+          window.location.href = `nbt-dettaglio.html?code=${CurrentQuote.quoteCode}`;
+          return;
+        } else {
+          window.location.href = `nlt-dettaglio.html?code=${CurrentQuote.quoteCode}`;
+          return;
+        }
+      }
+      
+      // Fallback sicuro
+      if (document.referrer && document.referrer.includes('dettaglio')) {
+        window.history.back();
+      } else {
+        window.location.href = 'index.html';
+      }
+    }
+
+    function handleProfessionalNavNext() {
+      const step3 = document.getElementById('embeddedCheckoutSection');
+      
+      // Se siamo già nella Sezione 3 (Blocco Pratica), scrolliamo direttamente al modulo di pagamento
+      if (step3 && step3.style.display && step3.style.display !== 'none') {
+        const payBtn = document.getElementById('btnSubmitAndPay') || step3;
+        payBtn.scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+      
+      // Se siamo nella Sezione 2 (Caricamento Documenti), procediamo alla conferma e alla Sezione 3
+      if (typeof confirmStep2AndShowStep3 === 'function') {
+        const uploadedCount = (typeof CurrentQuote !== 'undefined' && CurrentQuote.uploadedDocs) ? Object.keys(CurrentQuote.uploadedDocs).length : 0;
+        if (uploadedCount > 0) {
+          confirmStep2AndShowStep3();
+        } else {
+          const proceed = confirm('Non hai ancora caricato i file. Vuoi comunque procedere alla Sezione 3 (Blocco Pratica e Preaddebito Stripe)?');
+          if (proceed) {
+            confirmStep2AndShowStep3();
+          }
+        }
+      }
+    }
   </script>
 </body>
 </html>

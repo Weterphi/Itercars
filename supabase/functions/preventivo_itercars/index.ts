@@ -13,8 +13,8 @@ serve(async (req) => {
   }
 
   try {
-    // Estrazione dei dati inviati dal frontend (ora accetta anche checkoutUrl e quoteCode)
-    const { email, nome, dettagli, totale, pdfBase64, pdfName, checkoutUrl, quoteCode } = await req.json()
+    // Estrazione dei dati inviati dal frontend (ora accetta anche quoteCode e dossierUrl)
+    const { email, nome, dettagli, totale, pdfBase64, pdfName, quoteCode, dossierUrl } = await req.json()
 
     // Recupero della API Key di Resend salvata nei Secret
     const resendApiKey = Deno.env.get("PREVENTIVO")
@@ -23,17 +23,20 @@ serve(async (req) => {
       throw new Error("Il Secret 'PREVENTIVO' non è configurato correttamente nella Edge Function.")
     }
 
-    // Blocco HTML del pulsante Stripe (appare solo se checkoutUrl è presente)
-    const stripeButtonHtml = checkoutUrl ? `
+    // Calcolo URL del Dossier Pratica (se passato dal frontend o generato dal quoteCode)
+    const finalDossierUrl = dossierUrl || (quoteCode ? `https://itercars.com/upload-documenti.html?code=${quoteCode}` : null);
+
+    // Blocco HTML del pulsante per accedere al Dossier e caricare i documenti
+    const dossierButtonHtml = finalDossierUrl ? `
       <div style="text-align: center; margin: 35px 0; padding: 25px 20px; background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 10px;">
         <p style="color: #1e293b; font-weight: 600; font-size: 16px; margin-top: 0; margin-bottom: 15px;">
-          🚀 Vuoi confermare e bloccare subito questa vettura?
+          🚀 Vuoi accettare il preventivo e avviare subito la pratica di delibera?
         </p>
-        <a href="${checkoutUrl}" target="_blank" style="background: linear-gradient(135deg, #635bff, #00d4ff); color: #ffffff; padding: 16px 36px; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 8px; display: inline-block; box-shadow: 0 4px 14px rgba(99, 91, 255, 0.35); letter-spacing: 0.3px;">
-          💳 Paga Acconto e Prenota Online
+        <a href="${finalDossierUrl}" target="_blank" style="background: linear-gradient(135deg, #2ecc71, #009246); color: #ffffff; padding: 16px 36px; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 8px; display: inline-block; box-shadow: 0 4px 14px rgba(46, 204, 113, 0.35); letter-spacing: 0.3px;">
+          📂 Accetta Preventivo e Carica Documenti
         </a>
         <p style="color: #64748b; font-size: 13px; margin-top: 12px; margin-bottom: 0; line-height: 1.5;">
-          Pagamento sicuro 100% gestito da <strong>Stripe</strong>. L'importo copre l'acconto e avvia istantaneamente la pratica di noleggio (Rif. ${quoteCode || 'Preventivo'}).
+          Cliccando accederai al <strong>Portale Pratiche Itercars</strong> (Rif. ${quoteCode || 'Preventivo'}) per caricare in modo sicuro i documenti d'identità e reddito richiesti per bloccare la vettura.
         </p>
       </div>
     ` : '';
@@ -80,7 +83,7 @@ serve(async (req) => {
                 </table>
               </div>
 
-              ${stripeButtonHtml}
+              ${dossierButtonHtml}
               
               <div style="background-color: #ffffff; border: 1px solid #e2ece6; padding: 20px; border-radius: 8px; margin-bottom: 35px;">
                 <p style="color: #1b4332; font-weight: 600; margin-top: 0; margin-bottom: 8px; font-size: 15px; display: flex; align-items: center;">

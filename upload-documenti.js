@@ -91,22 +91,28 @@ function renderQuoteDetails() {
   const titleEl = document.getElementById('uploadCarTitle');
   const priceEl = document.getElementById('uploadQuotePriceDisplay');
   const feeEl = document.getElementById('stripeFeeDisplay');
+  const monthlyBox = document.getElementById('uploadQuoteMonthlyBox');
+  const monthlyDisplay = document.getElementById('uploadQuoteMonthlyDisplay');
 
   if (codeEl) codeEl.textContent = CurrentQuote.quoteCode || 'PREV-2026-XXXX';
   if (titleEl) titleEl.textContent = CurrentQuote.carTitle || 'Configurazione Vettura ITERCARS';
   
-  if (priceEl && CurrentQuote.monthlyPrice > 0) {
-    priceEl.innerHTML = `€ ${CurrentQuote.monthlyPrice.toLocaleString('it-IT')} <small style="font-size: 0.85rem; font-weight: 400; color: #fff;">${CurrentQuote.isNbt ? '/ periodo' : '/ mese'}</small>`;
+  if (monthlyDisplay && CurrentQuote.monthlyPrice > 0) {
+    if (monthlyBox) monthlyBox.style.display = 'inline';
+    monthlyDisplay.innerHTML = `€ ${CurrentQuote.monthlyPrice.toLocaleString('it-IT')}${CurrentQuote.isNbt ? '/periodo' : '/mese'}`;
   }
 
-  // Calcolo fee di blocco visuale
+  // Calcolo fee trattenuta pratica sulle 2 mensilità (o sul periodo NBT)
   let fee = 0;
   if (CurrentQuote.isNbt) {
-    // NBT default 15% sul lordo approssimato o su monthlyPrice
+    // NBT default 15% sul lordo o su monthlyPrice
     fee = Math.round(CurrentQuote.monthlyPrice * 0.15 * 100) / 100;
     if (fee <= 0) fee = 120.00;
   } else {
-    // NLT formula sulle 2 mensilità con scaglioni
+    // NLT formula sulle 2 mensilità con scaglioni:
+    // Canone <= 350€ -> 15% delle 2 mensilità
+    // Canone <= 800€ -> 12% delle 2 mensilità
+    // Canone > 800€ -> 10% delle 2 mensilità
     const m = CurrentQuote.monthlyPrice;
     if (m > 0) {
       const twoMonths = m * 2;
@@ -118,6 +124,11 @@ function renderQuoteDetails() {
     } else {
       fee = 144.00; // default es. 600€ * 2 * 12%
     }
+  }
+
+  // Inserisce correttamente l'importo della fee trattenuta nel box dedicato "Fee Trattenuta Pratica"
+  if (priceEl) {
+    priceEl.innerHTML = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
 
   if (feeEl) feeEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
@@ -601,7 +612,7 @@ async function submitEmbeddedPayment(event) {
 
   // Verifica che almeno il documento di identità sia stato caricato
   if (Object.keys(CurrentQuote.uploadedDocs).length === 0) {
-    const confirmProceed = confirm("Non hai ancora caricato i file di identità/reddito. Vuoi comunque pre-autorizzare la fee per riservare la vettura e inviare i documenti via email a dossier@itercars.com?");
+    const confirmProceed = confirm("Non hai ancora caricato i file di identità/reddito. Vuoi comunque pre-autorizzare la fee per riservare la vettura e inviare i documenti via email a info@itercars.com?");
     if (!confirmProceed) return;
   }
 

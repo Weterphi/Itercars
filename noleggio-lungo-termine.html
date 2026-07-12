@@ -51,7 +51,12 @@
       .nlt-desktop-video { display: none !important; }
     }
   </style>
-  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body style="background: #06060c; color: #fff; margin: 0; padding: 0;">
 
@@ -269,6 +274,9 @@
 
         <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; font-weight: 800; margin-top: 8px;">
           <span>Emetti Preventivo PDF in 1-Click</span> <i class="ri-file-pdf-fill"></i>
+        </button>
+        <button type="button" onclick="openDossierRecoveryModal()" class="btn btn-outline" style="width: 100%; height: 42px; font-size: 0.88rem; font-weight: 700; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; border-color: rgba(46, 204, 113, 0.4); color: #2ecc71; background: rgba(46, 204, 113, 0.05); border-radius: 8px;">
+          <i class="ri-folder-shield-2-fill"></i> <span>Hai già un preventivo? Recupera Pratica</span>
         </button>
       </form>
 

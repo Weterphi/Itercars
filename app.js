@@ -2168,5 +2168,218 @@ document.addEventListener('DOMContentLoaded', () => {
     vid.muted = true;
     vid.volume = 0;
   });
+
+  // Avvia il controllo automatico del dossier in sospeso
+  initAutoRecoveryCheck();
 });
+
+/* ==========================================================================
+   DOSSIER & PRATICA RECOVERY SYSTEM (Pillars 2 & 3)
+   ========================================================================== */
+
+function ensureDossierRecoveryModal() {
+  let modal = document.getElementById('dossierRecoveryModal');
+  if (!modal) {
+    const div = document.createElement('div');
+    div.className = 'modal-overlay';
+    div.id = 'dossierRecoveryModal';
+    div.innerHTML = `
+      <div class="glass-card modal-content" style="max-width: 520px; text-align: center;">
+        <button class="close-modal" onclick="closeDossierRecoveryModal()"><i class="ri-close-line"></i></button>
+        
+        <div style="width: 64px; height: 64px; background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.8rem; color: #2ecc71;">
+          <i class="ri-folder-shield-2-fill"></i>
+        </div>
+
+        <h3 style="font-size: 1.6rem; margin-bottom: 6px; color: #fff;">Recupera la Tua Pratica</h3>
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
+          Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
+        </p>
+
+        <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+          <div class="form-group">
+            <label style="color: var(--text-muted); font-size: 0.85rem;"><i class="ri-barcode-line text-gradient"></i> Codice Preventivo (es. PREV-XXXX o IT-...)</label>
+            <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px; width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; color: #fff;">
+          </div>
+
+          <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">— OPPURE —</div>
+
+          <div class="form-group">
+            <label style="color: var(--text-muted); font-size: 0.85rem;"><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
+            <input type="email" class="form-control" id="recoveryEmailInput" placeholder="nome.cognome@email.com" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; color: #fff;">
+          </div>
+
+          <div id="recoveryErrorMsg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; text-align: center;"></div>
+
+          <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 6px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <i class="ri-search-eye-line"></i> <span>Riapri Pratica & Documenti</span>
+          </button>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(div);
+    modal = div;
+  }
+  return modal;
+}
+
+function openDossierRecoveryModal() {
+  const modal = ensureDossierRecoveryModal();
+  if (modal) {
+    modal.classList.add('active');
+    const input = document.getElementById('recoveryQuoteCodeInput');
+    if (input) {
+      const savedCode = localStorage.getItem('itercars_last_quote_code');
+      if (savedCode) input.value = savedCode;
+      input.focus();
+    }
+    const err = document.getElementById('recoveryErrorMsg');
+    if (err) err.style.display = 'none';
+  }
+}
+
+function closeDossierRecoveryModal() {
+  const modal = document.getElementById('dossierRecoveryModal');
+  if (modal) modal.classList.remove('active');
+}
+
+async function handleDossierRecoverySubmit(e) {
+  e.preventDefault();
+  const codeInput = document.getElementById('recoveryQuoteCodeInput');
+  const emailInput = document.getElementById('recoveryEmailInput');
+  const errorDiv = document.getElementById('recoveryErrorMsg');
+  if (errorDiv) errorDiv.style.display = 'none';
+
+  let code = codeInput ? codeInput.value.trim().toUpperCase() : '';
+  const email = emailInput ? emailInput.value.trim() : '';
+
+  if (!code && !email) {
+    if (errorDiv) {
+      errorDiv.innerText = 'Inserisci un Codice Preventivo oppure la tua Email.';
+      errorDiv.style.display = 'block';
+    }
+    return;
+  }
+
+  // 1. Se l'utente ha digitato un codice o se c'è una corrispondenza esatta, reindirizza direttamente ad upload-documenti.html!
+  if (code && code.length >= 3) {
+    localStorage.setItem('itercars_last_quote_code', code);
+    window.location.href = `upload-documenti.html?code=${encodeURIComponent(code)}`;
+    return;
+  }
+
+  // 2. Se ha inserito solo l'email, cerca su Supabase (se connesso)
+  const supa = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+  if (supa && email) {
+    try {
+      // Cerca prima l'email su crm_leads per risalire a note e preventivi
+      const { data: leadsData } = await supa.from('crm_leads')
+        .select('id, notes, vehicle_interest')
+        .ilike('email', `%${email}%`)
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (leadsData && leadsData.length > 0) {
+        for (const lead of leadsData) {
+          // Controlla se c'è un preventivo collegato al lead_id in quotes
+          const { data: quotesData } = await supa.from('quotes')
+            .select('quote_code')
+            .eq('lead_id', lead.id)
+            .limit(1);
+
+          if (quotesData && quotesData.length > 0 && quotesData[0].quote_code) {
+            const matchedCode = quotesData[0].quote_code;
+            localStorage.setItem('itercars_last_quote_code', matchedCode);
+            window.location.href = `upload-documenti.html?code=${encodeURIComponent(matchedCode)}`;
+            return;
+          }
+
+          // Se non in quotes, cerca il codice nelle note (es. [PREV-1234] o IT-...)
+          if (lead.notes) {
+            const codeMatch = lead.notes.match(/\[(PREV-[A-Z0-9\-]+)\]|\[(IT-[A-Z0-9\-]+)\]|\b(PREV-[A-Z0-9\-]+)\b|\b(IT-[A-Z0-9\-]+)\b/i);
+            if (codeMatch) {
+              const extractedCode = (codeMatch[1] || codeMatch[2] || codeMatch[3] || codeMatch[4]).toUpperCase();
+              localStorage.setItem('itercars_last_quote_code', extractedCode);
+              window.location.href = `upload-documenti.html?code=${encodeURIComponent(extractedCode)}`;
+              return;
+            }
+          }
+        }
+      }
+
+      // Cerca in quotes per quote_code o se presente in memoria locale
+      const localCode = localStorage.getItem('itercars_last_quote_code');
+      if (localCode) {
+        window.location.href = `upload-documenti.html?code=${encodeURIComponent(localCode)}`;
+        return;
+      }
+    } catch (dbErr) {
+      console.warn("Avviso durante ricerca pratica per email:", dbErr);
+    }
+  }
+
+  // 3. Fallback per email senza DB
+  const savedLocalCode = localStorage.getItem('itercars_last_quote_code');
+  if (savedLocalCode) {
+    window.location.href = `upload-documenti.html?code=${encodeURIComponent(savedLocalCode)}`;
+    return;
+  }
+
+  if (errorDiv) {
+    errorDiv.innerText = 'Nessuna pratica trovata per l\'email o codice specificato. Verifica di aver digitato il codice preventivo corretto.';
+    errorDiv.style.display = 'block';
+  }
+}
+
+function initAutoRecoveryCheck() {
+  // Non mostrare se siamo già su upload-documenti.html o success.html
+  if (window.location.pathname.includes('upload-documenti.html') || window.location.pathname.includes('success.html')) return;
+
+  const savedQuoteJson = localStorage.getItem('itercars_last_quote');
+  const savedCode = localStorage.getItem('itercars_last_quote_code');
+
+  if (savedQuoteJson || savedCode) {
+    let carName = 'la tua vettura';
+    let codeStr = savedCode || 'Preventivo';
+    try {
+      if (savedQuoteJson) {
+        const qData = JSON.parse(savedQuoteJson);
+        if (qData.carBrand || qData.carModel) {
+          carName = `${qData.carBrand || ''} ${qData.carModel || ''}`.trim();
+        } else if (qData.brand || qData.model) {
+          carName = `${qData.brand || ''} ${qData.model || ''}`.trim();
+        }
+        if (qData.code) codeStr = qData.code;
+      }
+    } catch (e) { /* ignore */ }
+
+    // Mostra il toast con un piccolo ritardo (es. 1.5s per un effetto WOW e non invasivo)
+    setTimeout(() => {
+      const toast = document.getElementById('autoRecoveryToast');
+      const textElem = document.getElementById('autoRecoveryText');
+      if (textElem) {
+        textElem.innerHTML = `Abbiamo memorizzato il tuo preventivo per <strong>${carName}</strong> (${codeStr}). Clicca sotto per riprendere il caricamento documenti e bloccare l'auto.`;
+      }
+      if (toast) {
+        toast.style.display = 'block';
+      }
+    }, 1500);
+  }
+}
+
+function resumeSavedQuote() {
+  const savedCode = localStorage.getItem('itercars_last_quote_code');
+  if (savedCode) {
+    window.location.href = `upload-documenti.html?code=${encodeURIComponent(savedCode)}`;
+  } else {
+    window.location.href = 'upload-documenti.html';
+  }
+}
+
+function dismissAutoRecoveryToast() {
+  const toast = document.getElementById('autoRecoveryToast');
+  if (toast) {
+    toast.style.display = 'none';
+  }
+}
 

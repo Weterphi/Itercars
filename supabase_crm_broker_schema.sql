@@ -217,8 +217,11 @@ CREATE TABLE IF NOT EXISTS public.crm_leads (
     
     assigned_broker_agent VARCHAR(100) DEFAULT 'Consulente Senior ITERCARS',
     notes TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    vehicle_interest TEXT
 );
+
+ALTER TABLE public.crm_leads ADD COLUMN IF NOT EXISTS vehicle_interest TEXT;
 
 -- ==========================================================================
 -- 7. TABELLA DOSSIER DOCUMENTI SCORING (crm_documents)
