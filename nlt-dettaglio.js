@@ -13,7 +13,19 @@ const OFFICIAL_RATES = {
     24: { baseKm: 20000, deposit: 2000, price: 450, extraKmPrice: 0.14 },
     36: { baseKm: 20000, deposit: 2000, price: 390, extraKmPrice: 0.12 }
   },
+  'bmw-s1': {
+    6: { baseKm: 20000, deposit: 0, price: 650, extraKmPrice: 0.16 },
+    12: { baseKm: 20000, deposit: 0, price: 580, extraKmPrice: 0.15 },
+    24: { baseKm: 20000, deposit: 2000, price: 450, extraKmPrice: 0.14 },
+    36: { baseKm: 20000, deposit: 2000, price: 390, extraKmPrice: 0.12 }
+  },
   'ccaa728f-9b2d-4480-9f1c-76d7c97ccc79': {
+    6: { baseKm: 20000, deposit: 0, price: 750, extraKmPrice: 0.18 },
+    12: { baseKm: 20000, deposit: 0, price: 680, extraKmPrice: 0.16 },
+    24: { baseKm: 20000, deposit: 3000, price: 520, extraKmPrice: 0.15 },
+    36: { baseKm: 20000, deposit: 3000, price: 460, extraKmPrice: 0.14 }
+  },
+  'bmw-x1': {
     6: { baseKm: 20000, deposit: 0, price: 750, extraKmPrice: 0.18 },
     12: { baseKm: 20000, deposit: 0, price: 680, extraKmPrice: 0.16 },
     24: { baseKm: 20000, deposit: 3000, price: 520, extraKmPrice: 0.15 },
@@ -25,7 +37,19 @@ const OFFICIAL_RATES = {
     24: { baseKm: 25000, deposit: 3500, price: 660, extraKmPrice: 0.16 },
     36: { baseKm: 25000, deposit: 3500, price: 580, extraKmPrice: 0.15 }
   },
+  'bmw-s3t': {
+    6: { baseKm: 30000, deposit: 0, price: 890, extraKmPrice: 0.20 },
+    12: { baseKm: 25000, deposit: 0, price: 820, extraKmPrice: 0.18 },
+    24: { baseKm: 25000, deposit: 3500, price: 660, extraKmPrice: 0.16 },
+    36: { baseKm: 25000, deposit: 3500, price: 580, extraKmPrice: 0.15 }
+  },
   '1933cb66-5804-45ef-b997-8e038059f0b4': {
+    6: { baseKm: 30000, deposit: 0, price: 990, extraKmPrice: 0.22 },
+    12: { baseKm: 25000, deposit: 0, price: 920, extraKmPrice: 0.20 },
+    24: { baseKm: 25000, deposit: 4000, price: 740, extraKmPrice: 0.18 },
+    36: { baseKm: 25000, deposit: 4000, price: 650, extraKmPrice: 0.16 }
+  },
+  'bmw-x3': {
     6: { baseKm: 30000, deposit: 0, price: 990, extraKmPrice: 0.22 },
     12: { baseKm: 25000, deposit: 0, price: 920, extraKmPrice: 0.20 },
     24: { baseKm: 25000, deposit: 4000, price: 740, extraKmPrice: 0.18 },
@@ -36,12 +60,28 @@ const OFFICIAL_RATES = {
     24: { baseKm: 20000, deposit: 5000, price: 890, extraKmPrice: 0.22 },
     36: { baseKm: 20000, deposit: 5000, price: 790, extraKmPrice: 0.20 }
   },
+  'bmw-s5': {
+    12: { baseKm: 20000, deposit: 0, price: 1150, extraKmPrice: 0.25 },
+    24: { baseKm: 20000, deposit: 5000, price: 890, extraKmPrice: 0.22 },
+    36: { baseKm: 20000, deposit: 5000, price: 790, extraKmPrice: 0.20 }
+  },
   'f4c1e663-a663-4fba-81c1-8ed424caf0ba': {
     12: { baseKm: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28 },
     24: { baseKm: 25000, deposit: 6000, price: 1180, extraKmPrice: 0.25 },
     36: { baseKm: 25000, deposit: 6000, price: 1050, extraKmPrice: 0.22 }
   },
+  'bmw-x5': {
+    12: { baseKm: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28 },
+    24: { baseKm: 25000, deposit: 6000, price: 1180, extraKmPrice: 0.25 },
+    36: { baseKm: 25000, deposit: 6000, price: 1050, extraKmPrice: 0.22 }
+  },
   'efce36a9-41fc-4285-a167-4badbcbbb2c6': {
+    6: { baseKm: 20000, deposit: 0, price: 890, extraKmPrice: 0.20 },
+    12: { baseKm: 20000, deposit: 0, price: 790, extraKmPrice: 0.18 },
+    24: { baseKm: 20000, deposit: 4000, price: 640, extraKmPrice: 0.16 },
+    36: { baseKm: 20000, deposit: 4000, price: 570, extraKmPrice: 0.15 }
+  },
+  'bmw-i4': {
     6: { baseKm: 20000, deposit: 0, price: 890, extraKmPrice: 0.20 },
     12: { baseKm: 20000, deposit: 0, price: 790, extraKmPrice: 0.18 },
     24: { baseKm: 20000, deposit: 4000, price: 640, extraKmPrice: 0.16 },
@@ -360,6 +400,8 @@ function setConfigDuration(months, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const customInput = document.getElementById('customDurationInput');
+  if (customInput) customInput.value = '';
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
@@ -372,6 +414,8 @@ function setConfigKm(km, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const customInput = document.getElementById('customKmInput');
+  if (customInput) customInput.value = '';
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
@@ -384,6 +428,8 @@ function setConfigDeposit(deposit, btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
   }
+  const customInput = document.getElementById('customDepositInput');
+  if (customInput) customInput.value = '';
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
@@ -401,66 +447,177 @@ function setConfigKasko(type, btnElem) {
   calculateAndRenderPrice();
 }
 
-// Motore di calcolo finanziario tariffa NLT in tempo reale
+// Gestione input numerico manuale - Durata Contratto
+function handleCustomDuration(valStr) {
+  const inputElem = document.getElementById('customDurationInput');
+  let cleanVal = String(valStr || '').replace(/[^0-9]/g, '');
+  if (inputElem && inputElem.value !== cleanVal) {
+    inputElem.value = cleanVal;
+  }
+  const num = parseInt(cleanVal, 10);
+  if (isNaN(num) || num <= 0) return;
+  
+  let safeMonths = Math.min(Math.max(num, 6), 84);
+  ConfigState.durationMonths = safeMonths;
+  syncActiveButtons('configDurationGroup', safeMonths);
+  
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
+  calculateAndRenderPrice();
+}
+
+// Gestione input numerico manuale - Chilometri per Anno
+function handleCustomKm(valStr) {
+  const inputElem = document.getElementById('customKmInput');
+  let cleanVal = String(valStr || '').replace(/[^0-9]/g, '');
+  if (inputElem && inputElem.value !== cleanVal) {
+    inputElem.value = cleanVal;
+  }
+  const num = parseInt(cleanVal, 10);
+  if (isNaN(num) || num <= 0) return;
+  
+  let safeKm = Math.min(Math.max(num, 3000), 150000);
+  ConfigState.kmPerYear = safeKm;
+  syncActiveButtons('configKmGroup', safeKm);
+  
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
+  calculateAndRenderPrice();
+}
+
+// Gestione input numerico manuale - Anticipo Iniziale / Permuta
+function handleCustomDeposit(valStr) {
+  const inputElem = document.getElementById('customDepositInput');
+  let cleanVal = String(valStr || '').replace(/[^0-9]/g, '');
+  if (inputElem && inputElem.value !== cleanVal) {
+    inputElem.value = cleanVal;
+  }
+  const num = parseInt(cleanVal, 10);
+  if (isNaN(num) || num < 0) return;
+  
+  let safeDeposit = Math.min(Math.max(num, 0), 100000);
+  ConfigState.depositAmount = safeDeposit;
+  syncActiveButtons('configDepositGroup', safeDeposit);
+  
+  const sa = document.getElementById('sidebarQuoteActions');
+  if (sa && sa.style.display === 'block') sa.style.display = 'none';
+  calculateAndRenderPrice();
+}
+
+// Motore di calcolo finanziario tariffa NLT in tempo reale e interpolato
 function calculateAndRenderPrice() {
   const c = ConfigState.car;
   if (!c) return;
   
-  // Find official rates for this car
-  // Extract base car ID (remove any trailing suffixes like -36-4k from old logic if present)
-  let baseCarId = c.id;
+  let dur = Number(ConfigState.durationMonths) || 36;
+  
+  // 1. PRIORITÀ ASSOLUTA al listino ufficiale (foglio Excel) per i modelli in catalogo o sincronizzati
+  let rates = null;
+  let baseCarId = String(c.id || '');
   if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
-  if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3'; // Fallback just in case
+  if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3';
+  rates = OFFICIAL_RATES[baseCarId];
 
-  let rates = OFFICIAL_RATES[baseCarId];
+  if (!rates && c.vehicle_id) {
+    rates = OFFICIAL_RATES[String(c.vehicle_id)];
+  }
+
+  if (!rates && c.model) {
+    const modelStr = String(c.model).toLowerCase();
+    if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['bmw-s1'];
+    else if (modelStr.includes('x1')) rates = OFFICIAL_RATES['bmw-x1'];
+    else if (modelStr.includes('serie 3')) rates = OFFICIAL_RATES['bmw-s3t'];
+    else if (modelStr.includes('x3')) rates = OFFICIAL_RATES['bmw-x3'];
+    else if (modelStr.includes('serie 5')) rates = OFFICIAL_RATES['bmw-s5'];
+    else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['bmw-x5'];
+    else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['bmw-i4'];
+  }
+
+  // 2. Se non è nei modelli Excel ufficiali, ma ha canone dal DB o custom, genera scaglioni proporzionali
+  if (!rates && c.basePrice && Number(c.basePrice) > 0) {
+    const base = Number(c.basePrice);
+    const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
+    const baseDur = Number(c.baseDuration || 36);
+    rates = {
+      6: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.55), extraKmPrice: 0.18 },
+      12: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.35), extraKmPrice: 0.16 },
+      24: { baseKm: 20000, deposit: baseDep, price: Math.round(base * 1.12), extraKmPrice: 0.15 },
+      36: { baseKm: 20000, deposit: baseDep, price: Math.round(base), extraKmPrice: 0.14 },
+      48: { baseKm: 20000, deposit: baseDep, price: Math.round(base * 0.92), extraKmPrice: 0.12 },
+      60: { baseKm: 20000, deposit: baseDep, price: Math.round(base * 0.86), extraKmPrice: 0.12 }
+    };
+    if (rates[baseDur]) rates[baseDur].price = base;
+  }
+
+  // 3. Fallback standard
   if (!rates) {
-    // Fallback intelligente per Modello (se l'ID è un nuovo UUID del database)
-    const modelStr = (c.model || '').toLowerCase();
-    if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['32226fdb-ba8c-4e46-8e21-e303e0a0fe3d'];
-    else if (modelStr.includes('x1')) rates = OFFICIAL_RATES['ccaa728f-9b2d-4480-9f1c-76d7c97ccc79'];
-    else if (modelStr.includes('serie 3')) rates = OFFICIAL_RATES['e3f556d9-8c52-43fd-9d81-ffb9c1551928'];
-    else if (modelStr.includes('x3')) rates = OFFICIAL_RATES['1933cb66-5804-45ef-b997-8e038059f0b4'];
-    else if (modelStr.includes('serie 5')) rates = OFFICIAL_RATES['3b99316f-29bb-4392-86d3-98cc6e77485d'];
-    else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['f4c1e663-a663-4fba-81c1-8ed424caf0ba'];
-    else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['efce36a9-41fc-4285-a167-4badbcbbb2c6'];
+    const base = Number(c.basePrice) || 699;
+    rates = {
+      6: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.6), extraKmPrice: 0.18 },
+      12: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.45), extraKmPrice: 0.16 },
+      24: { baseKm: 20000, deposit: 3000, price: Math.round(base * 1.15), extraKmPrice: 0.15 },
+      36: { baseKm: 20000, deposit: 3000, price: Math.round(base), extraKmPrice: 0.14 },
+      48: { baseKm: 20000, deposit: 3000, price: Math.round(base * 0.92), extraKmPrice: 0.12 }
+    };
+  }
 
-    // Se ancora non trovato, genera una tabella di canoni dinamica basata sul prezzo base
-    if (!rates) {
-      const base = Number(c.basePrice) || 699;
-      rates = {
-        6: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.6), extraKmPrice: 0.18 },
-        12: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.45), extraKmPrice: 0.16 },
-        24: { baseKm: 20000, deposit: 3000, price: Math.round(base * 1.15), extraKmPrice: 0.15 },
-        36: { baseKm: 20000, deposit: 3000, price: Math.round(base), extraKmPrice: 0.14 },
-        48: { baseKm: 20000, deposit: 3000, price: Math.round(base * 0.92), extraKmPrice: 0.12 }
+  let rateInfo = rates[dur];
+
+  // Se la durata non è uno scaglione esatto, interpola linearmente o trova i limiti più vicini
+  if (!rateInfo) {
+    const available = Object.keys(rates).map(Number).sort((a, b) => a - b);
+    if (dur <= available[0]) {
+      rateInfo = Object.assign({}, rates[available[0]]);
+    } else if (dur >= available[available.length - 1]) {
+      rateInfo = Object.assign({}, rates[available[available.length - 1]]);
+    } else {
+      let lower = available[0];
+      let upper = available[available.length - 1];
+      for (let i = 0; i < available.length - 1; i++) {
+        if (dur > available[i] && dur < available[i + 1]) {
+          lower = available[i];
+          upper = available[i + 1];
+          break;
+        }
+      }
+      const rLower = rates[lower];
+      const rUpper = rates[upper];
+      const factor = (dur - lower) / (upper - lower);
+      rateInfo = {
+        baseKm: Math.round(rLower.baseKm + (rUpper.baseKm - rLower.baseKm) * factor),
+        deposit: Math.round(rLower.deposit + (rUpper.deposit - rLower.deposit) * factor),
+        price: Math.round(rLower.price + (rUpper.price - rLower.price) * factor),
+        extraKmPrice: Number((rLower.extraKmPrice + (rUpper.extraKmPrice - rLower.extraKmPrice) * factor).toFixed(2))
       };
     }
   }
 
-  // Fallback to closest available duration if exact not available (e.g. 6m for X5 doesn't exist)
-  let dur = ConfigState.durationMonths;
-  if (!rates[dur]) {
-      // Find closest duration
-      let available = Object.keys(rates).map(Number);
-      dur = available.reduce((prev, curr) => Math.abs(curr - dur) < Math.abs(prev - dur) ? curr : prev);
-      ConfigState.durationMonths = dur;
-      syncActiveButtons('configDurationGroup', dur);
+  let price = rateInfo.price;
+
+  // 1. Smart km handling – distinguish yearly km from total contract km
+  const rawKm = Number(ConfigState.kmPerYear) || 15000;
+  let kmYearly;
+  if (rawKm >= 35000) {
+    // Value is interpreted as total contract km; convert to yearly km
+    kmYearly = Math.round(rawKm / (dur / 12));
+  } else {
+    // For lower values, decide if it's total contract km based on contract duration
+    const totalKmBasedOnBase = rateInfo.baseKm * (dur / 12);
+    if (rawKm <= totalKmBasedOnBase) {
+      // Treat as total km for the contract and scale to yearly equivalent
+      kmYearly = Math.round(rawKm * 12 / dur);
+    } else {
+      // Assume the input already represents yearly km
+      kmYearly = rawKm;
+    }
   }
-
-  const rateInfo = rates[dur];
-  let price = rateInfo.price; // This is the pure Mandante base price
-
-  // 1. Aggiustamento Chilometri (if user selects different km/year)
-  const kmDeltaYearly = ConfigState.kmPerYear - rateInfo.baseKm;
+  
+  const kmDeltaYearly = kmYearly - rateInfo.baseKm;
   if (kmDeltaYearly !== 0) {
-      // Delta is applied per month, so Costo Km Extra applies to total km diff per year? No, the extra cost in the file is usually per km total.
-      // Or we can just use the rate per km for every km extra per year divided by 12?
-      // "Costo Km Extra": 0.16/km. This is typically charged at end of contract for each km over limit.
-      // But we can approximate monthly increase: kmDeltaYearly * extraKmPrice / 12
-      price += (kmDeltaYearly * rateInfo.extraKmPrice) / 12;
+    price += (kmDeltaYearly * rateInfo.extraKmPrice) / 12;
   }
 
-  // 2. Aggiustamento Anticipo (if user selects different deposit than the base for this duration)
+  // 2. Aggiustamento Anticipo (il maggior o minor anticipo viene ammortizzato sui mesi di durata)
   const depositDelta = rateInfo.deposit - ConfigState.depositAmount;
   price += (depositDelta / dur);
 
@@ -469,13 +626,14 @@ function calculateAndRenderPrice() {
     price += 35.00;
   }
 
-  // 4. APPLICAZIONE MARGINE (impostato a 1.0 per evitare il doppio ricarico sul canone già ricaricato in fase di ingestione)
+  // 4. APPLICAZIONE MARGINE
   price = price * BROKER_MARGIN;
 
   ConfigState.finalMonthlyPrice = Math.round(price);
 
   const priceDisplay = document.getElementById('liveMonthlyPrice');
   const summaryDisplay = document.getElementById('liveConfigSummary');
+  const extraKmDisplay = document.getElementById('liveExtraKmInfo');
   const boxElem = document.getElementById('livePriceBox');
 
   if (priceDisplay && summaryDisplay && boxElem) {
@@ -483,7 +641,11 @@ function calculateAndRenderPrice() {
     boxElem.style.opacity = '0.6';
     setTimeout(() => {
       priceDisplay.textContent = `€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`;
-      summaryDisplay.innerHTML = `<strong>${ConfigState.durationMonths} Mesi</strong> • <strong>${ConfigState.kmPerYear.toLocaleString('it-IT')} Km/anno</strong> • Anticipo <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
+      const kmTextShown = rawKm >= 35000 ? `${rawKm.toLocaleString('it-IT')} Km totali (${kmYearly.toLocaleString('it-IT')}/anno)` : `${rawKm.toLocaleString('it-IT')} Km/anno`;
+      summaryDisplay.innerHTML = `<strong>${ConfigState.durationMonths} Mesi</strong> • <strong>${kmTextShown}</strong> • Anticipo <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
+      if (extraKmDisplay && rateInfo.extraKmPrice !== undefined) {
+        extraKmDisplay.innerHTML = `<i class="ri-information-line"></i> Costo Km Extra: € ${Number(rateInfo.extraKmPrice).toFixed(2).replace('.', ',')} / km`;
+      }
       boxElem.style.transform = 'scale(1.02)';
       boxElem.style.opacity = '1';
       setTimeout(() => boxElem.style.transform = 'none', 160);
@@ -581,10 +743,11 @@ async function handleQuoteSubmit(event) {
             <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Configurazione Contratto NLT</span>
             <div style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 4px;">
               Durata: <span style="color: #2ecc71;">${ConfigState.durationMonths} Mesi</span> • 
-              Km compresi: <span style="color: #2ecc71;">${ConfigState.kmPerYear.toLocaleString('it-IT')} km/anno</span> • 
+              Km compresi: <span style="color: #2ecc71;">${ConfigState.kmPerYear >= 35000 ? ConfigState.kmPerYear.toLocaleString('it-IT') + ' km totali (' + Math.round(ConfigState.kmPerYear / (ConfigState.durationMonths / 12)).toLocaleString('it-IT') + ' km/anno)' : ConfigState.kmPerYear.toLocaleString('it-IT') + ' km/anno'}</span> • 
               Anticipo: <span style="color: #2ecc71;">€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</span>
             </div>
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Kasko Integral ${ConfigState.kaskoFranchigia === 'zero' ? '(Franchigia Zero 0€)' : '(Franchigia Standard)'} + Bollo & Manutenzione H24</div>
+            <div style="font-size: 0.82rem; color: #f39c12; margin-top: 4px; font-weight: 600;"><i class="ri-information-line"></i> Costo Km Extra da tabella mandante compreso nel contratto</div>
           </div>
 
           <div style="text-align: right;">

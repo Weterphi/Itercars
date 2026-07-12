@@ -746,11 +746,9 @@ async function loadOffersFromDatabase() {
 
         if (mapped.length > 0) {
 
-          const dbIds = new Set(mapped.map(o => o.id));
+          // Prezzi e offerte sono rigorosamente allineati al database in tempo reale
 
-          const extraBmw = SAMPLE_OFFERS.filter(o => !dbIds.has(o.id));
-
-          NltState.offers = [...mapped, ...extraBmw];
+          NltState.offers = mapped;
 
         } else {
 

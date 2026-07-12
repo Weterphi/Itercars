@@ -477,11 +477,23 @@
 
       <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px; text-align: center; margin: 30px 0;">
         <h4 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 8px;">Documentazione Pronta per il Dossier?</h4>
-        <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0 auto 20px; max-width: 580px; line-height: 1.5;">
-          Una volta selezionati i file (identità e patente), clicca qui sotto per confermare l'acquisizione del dossier e sbloccare la Sezione 3 (Blocco Pratica & Fee Stripe).
+        <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0 auto 20px; max-width: 580px; line-height: 1.5;" id="docsReadyInstructionText">
+          Una volta selezionati i file (identità, patente ed eventuale reddito), clicca su "Verifica documenti" per il controllo istantaneo tramite Grok AI. Solo al completamento della verifica potrai accedere alla Sezione 3.
         </p>
-        <button type="button" id="btnConfirmStep2" onclick="confirmStep2AndShowStep3(event)" class="btn btn-primary" style="height: 54px; padding: 0 38px; font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; box-shadow: 0 8px 24px rgba(46, 204, 113, 0.3); display: inline-flex; align-items: center; gap: 10px;">
-          <i class="ri-check-double-line" style="font-size: 1.3rem;"></i> <span>Conferma Documenti e Vai alla Sezione 3 (Stripe Fee)</span> <i class="ri-arrow-right-line" style="font-size: 1.3rem;"></i>
+        
+        <!-- Tasto "Verifica documenti" (appare quando vengono inseriti i documenti) -->
+        <div id="verifyButtonContainer" style="margin-bottom: 16px; display: none;">
+          <button type="button" id="btnVerifyDocs" onclick="verifyDocumentsWithGrok(event)" class="btn btn-primary" style="height: 54px; padding: 0 38px; font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #3498db, #2980b9); border: none; box-shadow: 0 8px 24px rgba(52, 152, 219, 0.35); display: inline-flex; align-items: center; gap: 10px; cursor: pointer; transition: all 0.3s ease;">
+            <i class="ri-ai-generate" style="font-size: 1.3rem;"></i> <span>Verifica documenti</span>
+          </button>
+        </div>
+
+        <!-- Messaggio di esito verifica Grok (appare in verde con scritta "verifica completata") -->
+        <div id="verificationStatusMsg" style="display: none; margin: 20px auto; max-width: 520px; padding: 16px 24px; border-radius: 16px; font-weight: 800; font-size: 1.15rem; transition: all 0.3s ease;"></div>
+
+        <!-- Tasto conferma per procedere (appare SOLO DOPO che la verifica con Grok è completata) -->
+        <button type="button" id="btnConfirmStep2" onclick="confirmStep2AndShowStep3(event)" class="btn btn-primary" style="display: none; height: 54px; padding: 0 38px; font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; box-shadow: 0 8px 24px rgba(46, 204, 113, 0.3); align-items: center; gap: 10px; transition: all 0.3s ease;">
+          <i class="ri-check-double-line" style="font-size: 1.3rem;"></i> <span>Invia documenti e vai alla Sezione 3</span> <i class="ri-arrow-right-line" style="font-size: 1.3rem;"></i>
         </button>
       </div>
     </div>
@@ -596,10 +608,13 @@
     </div>
   </footer>
 
-  <!-- Supabase JS SDK & App Scripts -->
+  <!-- Supabase JS SDK, PDF.js & OCR SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script>if (typeof pdfjsLib !== 'undefined') pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
   <script src="app.js?v=21"></script>
-  <script src="upload-documenti.js?v=20260712_nav"></script>
+  <script src="upload-documenti.js?v=20260712_ocr_ai"></script>
 
   <!-- Professional Navigation System Script -->
   <script>
@@ -647,16 +662,24 @@
         return;
       }
       
-      // Se siamo nella Sezione 2 (Caricamento Documenti), procediamo alla conferma e alla Sezione 3
+      // Se siamo nella Sezione 2 (Caricamento Documenti), controlliamo il flusso di verifica documenti
       if (typeof confirmStep2AndShowStep3 === 'function') {
         const uploadedCount = (typeof CurrentQuote !== 'undefined' && CurrentQuote.uploadedDocs) ? Object.keys(CurrentQuote.uploadedDocs).length : 0;
-        if (uploadedCount > 0) {
-          confirmStep2AndShowStep3();
-        } else {
-          const proceed = confirm('Non hai ancora caricato i file. Vuoi comunque procedere alla Sezione 3 (Blocco Pratica e Preaddebito Stripe)?');
-          if (proceed) {
-            confirmStep2AndShowStep3();
+        
+        if (!window.grokVerificationCompleted) {
+          if (uploadedCount > 0) {
+            alert("Per favore, clicca prima sul tasto 'Verifica documenti' per avviare la verifica tramite Grok AI prima di procedere.");
+            const btnVerify = document.getElementById('btnVerifyDocs') || document.getElementById('verifyButtonContainer');
+            if (btnVerify) btnVerify.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+          } else {
+            const proceed = confirm('Non hai ancora caricato e verificato i file con Grok AI. Vuoi comunque procedere alla Sezione 3 (Blocco Pratica e Preaddebito Stripe)?');
+            if (proceed) {
+              confirmStep2AndShowStep3();
+            }
           }
+        } else {
+          confirmStep2AndShowStep3();
         }
       }
     }

@@ -746,11 +746,9 @@ async function loadOffersFromDatabase() {
 
         if (mapped.length > 0) {
 
-          const dbIds = new Set(mapped.map(o => o.id));
+          // Prezzi e offerte NBT rigorosamente allineati al database in tempo reale
 
-          const extraBmw = SAMPLE_OFFERS.filter(o => !dbIds.has(o.id));
-
-          NbtState.offers = [...mapped, ...extraBmw];
+          NbtState.offers = mapped;
 
         } else {
 

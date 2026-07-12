@@ -901,8 +901,8 @@ document.addEventListener("DOMContentLoaded", () => {
   changeLanguage(currentLang, true);
   setupScrollListener();
   if (typeof initAuthListener === 'function') initAuthListener();
-  // se non vogliamo caricare dati mock dal DB, disabilitiamo:
-  // if (typeof loadFleetFromSupabase === 'function') loadFleetFromSupabase();
+  // Sincronizzazione obbligatoria in tempo reale tra sito e database SQL Supabase
+  if (typeof loadFleetFromSupabase === 'function') loadFleetFromSupabase();
   
   const navBtn = document.getElementById("navAreaBtn");
   if (navBtn) {
@@ -922,7 +922,7 @@ async function loadFleetFromSupabase() {
         .eq('is_active', true);
 
       if (!error && data && data.length > 0) {
-        console.log("✅ Caricata flotta da Supabase DB:", data.length, "veicoli");
+        console.log("✅ Caricata flotta in tempo reale da Supabase DB:", data.length, "veicoli");
         const mappedCars = data.map(v => {
           let specsObj = {};
           if (typeof v.specs === 'string') {
@@ -953,9 +953,8 @@ async function loadFleetFromSupabase() {
         });
 
         if (mappedCars.length > 0) {
-          const dbIds = new Set(mappedCars.map(c => String(c.id)));
-          const extraBmw = fleetData.filter(c => !dbIds.has(String(c.id)));
-          fleetData = [...mappedCars, ...extraBmw];
+          // I prezzi e le vetture sul sito DEVONO essere al 100% quelli del database (nessun mescolamento con mock offline o prezzi 0)
+          fleetData = mappedCars;
           try { localStorage.setItem('itercars_fleet_cache', JSON.stringify(fleetData)); } catch(e){}
         }
       }

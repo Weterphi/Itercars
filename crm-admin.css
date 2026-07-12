@@ -407,6 +407,16 @@ body {
   display: block;
 }
 
+/* SUB PANES FOR FLEET CATEGORIES (NLT, NBT, GENERAL) */
+.fleet-subpane {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.fleet-subpane.active {
+  display: block !important;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }

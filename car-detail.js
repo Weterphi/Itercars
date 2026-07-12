@@ -123,7 +123,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (specSeats) specSeats.innerText = seats;
 
   // Price
-  document.getElementById("detailPrice").innerText = `€ ${car.price}`;
+  const detailPriceElem = document.getElementById("detailPrice");
+  if (detailPriceElem) {
+    if (car.price === 0 || !car.price) {
+      detailPriceElem.innerText = "Su Richiesta";
+      detailPriceElem.style.fontSize = "1.45rem";
+      detailPriceElem.style.color = "#f39c12";
+    } else {
+      detailPriceElem.innerText = `€ ${car.price}/giorno`;
+    }
+  }
 });
 
 async function submitDetailBooking(event) {

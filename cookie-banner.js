@@ -256,5 +256,85 @@
         a.addEventListener('click', window.reopenCookieBanner);
       }
     });
+
+    // =========================================================================
+    // GLOBAL MOBILE VIDEO AUTOPLAY ENFORCER & TOUCH BUTTON OPTIMIZER
+    // =========================================================================
+    function enforceMobileVideoAutoplay() {
+      const isMobile = window.innerWidth <= 768;
+      const videos = document.querySelectorAll('video');
+      
+      videos.forEach(vid => {
+        // Forza attributi obbligatori su iOS WebKit / Android Chrome
+        vid.setAttribute('playsinline', '');
+        vid.setAttribute('webkit-playsinline', '');
+        vid.setAttribute('muted', '');
+        vid.muted = true;
+        vid.defaultMuted = true;
+        
+        // Verifica se il video è nascosto (es. video desktop su mobile)
+        const isHidden = window.getComputedStyle(vid).display === 'none' || 
+                         (isMobile && (vid.classList.contains('nlt-desktop-video') || vid.classList.contains('nbt-desktop-video')));
+        
+        if (isHidden) {
+          vid.pause();
+        } else {
+          // Video visibile: avvia la riproduzione
+          const playPromise = vid.play();
+          if (playPromise !== undefined) {
+            playPromise.catch(error => {
+              // Se il browser o la modalità risparmio energetico blocca l'autoplay, riprova al primo tocco o scroll
+              const forcePlayOnInteract = () => {
+                if (window.getComputedStyle(vid).display !== 'none') {
+                  vid.muted = true;
+                  vid.play().catch(()=>{});
+                }
+              };
+              ['touchstart', 'click', 'scroll', 'orientationchange'].forEach(evt => {
+                window.addEventListener(evt, forcePlayOnInteract, { once: true, passive: true });
+              });
+            });
+          }
+        }
+      });
+    }
+
+    enforceMobileVideoAutoplay();
+    window.addEventListener('resize', enforceMobileVideoAutoplay, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) enforceMobileVideoAutoplay();
+    });
+
+    // Inietta regole CSS globali di ottimizzazione per pulsanti e video su dispositivi mobili
+    if (!document.getElementById('mobileGlobalOptStyle')) {
+      const optStyle = document.createElement('style');
+      optStyle.id = 'mobileGlobalOptStyle';
+      optStyle.innerHTML = `
+        @media (max-width: 768px) {
+          /* Garanzia area touch di almeno 44px su pulsanti e campi di input */
+          .btn, button, .config-option-btn, input[type="number"], select, .mobile-menu-btn {
+            min-height: 44px !important;
+          }
+          .btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+          /* Fix per video di sfondo su mobile */
+          .hero-bg-wrapper video.nlt-mobile-video,
+          .hero-bg-wrapper video.nbt-mobile-video {
+            display: block !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+          }
+          .hero-bg-wrapper video.nlt-desktop-video,
+          .hero-bg-wrapper video.nbt-desktop-video {
+            display: none !important;
+          }
+        }
+      `;
+      document.head.appendChild(optStyle);
+    }
   });
 })();
