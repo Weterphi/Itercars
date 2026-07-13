@@ -135,7 +135,7 @@
             <div class="detail-spec-card">
               <i class="ri-gas-station-line"></i>
               <span class="label">Alimentazione</span>
-              <span class="value" id="detailFuel">Elettrico ⚡</span>
+              <span class="value" id="detailFuel">Elettrico</span>
             </div>
             <div class="detail-spec-card">
               <i class="ri-settings-4-line"></i>
@@ -223,66 +223,30 @@
               </div>
             </div>
 
-            <!-- STEP 1: DURATA MESI -->
+            <!-- STEP 1: PACCHETTI DI NOLEGGIO DISPONIBILI -->
             <div class="config-section">
-              <div class="config-section-title"><i class="ri-calendar-schedule-line"></i> 1. Durata Contratto (Mesi)</div>
-              <div class="config-options-grid-3" id="configDurationGroup">
-                <button type="button" class="config-option-btn" data-value="6" onclick="setConfigDuration(6, this)">6 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Mid-Term</small></button>
-                <button type="button" class="config-option-btn" data-value="12" onclick="setConfigDuration(12, this)">12 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Annuale</small></button>
-                <button type="button" class="config-option-btn" data-value="24" onclick="setConfigDuration(24, this)">24 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Biennale</small></button>
-                <button type="button" class="config-option-btn active" data-value="36" onclick="setConfigDuration(36, this)">36 Mesi<br><small style="font-weight: 400; font-size:0.7rem; color:#2ecc71">Consigliato</small></button>
-              </div>
-              <div style="margin-top: 12px; display: flex; align-items: center; gap: 10px;">
-                <label for="customDurationInput" style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">Oppure digita durata (6 - 84 Mesi):</label>
-                <input type="number" id="customDurationInput" min="6" max="84" step="1" placeholder="Es. 18" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; width: 110px;" oninput="this.value = this.value.replace(/[^0-9]/g, ''); handleCustomDuration(this.value)">
+              <div class="config-section-title"><i class="ri-checkbox-multiple-line"></i> 1. Seleziona Pacchetto di Noleggio</div>
+              <p style="font-size: 0.84rem; color: var(--text-muted); margin-top: 4px; margin-bottom: 6px; line-height: 1.45;">
+                Scegli una delle combinazioni di noleggio all-inclusive disponibili per questa vettura:
+              </p>
+              <div id="packagesListGrid" class="packages-list-grid">
+                <!-- I pacchetti di noleggio verranno generati dinamicamente da nlt-dettaglio.js -->
               </div>
             </div>
 
-            <!-- STEP 2: CHILOMETRI COMPRESI -->
-            <div class="config-section">
-              <div class="config-section-title"><i class="ri-road-map-line"></i> 2. Chilometri Compresi (Km/anno o Km totali contratto)</div>
-              <div class="config-options-grid" id="configKmGroup">
-                <button type="button" class="config-option-btn" data-value="10000" onclick="setConfigKm(10000, this)">10.000 Km</button>
-                <button type="button" class="config-option-btn active" data-value="15000" onclick="setConfigKm(15000, this)">15.000 Km</button>
-                <button type="button" class="config-option-btn" data-value="20000" onclick="setConfigKm(20000, this)">20.000 Km</button>
-                <button type="button" class="config-option-btn" data-value="25000" onclick="setConfigKm(25000, this)">25.000 Km</button>
-                <button type="button" class="config-option-btn" data-value="30000" onclick="setConfigKm(30000, this)">30.000 Km</button>
-              </div>
-              <div style="margin-top: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <label for="customKmInput" style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">Oppure digita km (es. 20000/anno o 60000 totali):</label>
-                <input type="number" id="customKmInput" min="3000" max="150000" step="500" placeholder="Es. 60000..." style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; width: 140px;" oninput="this.value = this.value.replace(/[^0-9]/g, ''); handleCustomKm(this.value)">
-              </div>
-            </div>
-
-            <!-- STEP 3: ANTICIPO INIZIALE -->
-            <div class="config-section">
-              <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Anticipo Iniziale / Permuta</div>
-              <div class="config-options-grid" id="configDepositGroup">
-                <button type="button" class="config-option-btn" data-value="0" onclick="setConfigDeposit(0, this)" style="border-color: rgba(245, 158, 11, 0.5); color: #f59e0b;">⚡ 0€ Anticipo</button>
-                <button type="button" class="config-option-btn" data-value="2500" onclick="setConfigDeposit(2500, this)">€ 2.500</button>
-                <button type="button" class="config-option-btn active" data-value="3000" onclick="setConfigDeposit(3000, this)">€ 3.000</button>
-                <button type="button" class="config-option-btn" data-value="5000" onclick="setConfigDeposit(5000, this)">€ 5.000</button>
-                <button type="button" class="config-option-btn" data-value="7500" onclick="setConfigDeposit(7500, this)">€ 7.500</button>
-              </div>
-              <div style="margin-top: 12px; display: flex; align-items: center; gap: 10px;">
-                <label for="customDepositInput" style="font-size: 0.85rem; color: var(--text-muted); white-space: nowrap;">Oppure digita importo anticipo (€):</label>
-                <input type="number" id="customDepositInput" min="0" max="100000" step="100" placeholder="€ anticipo..." style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; width: 130px;" oninput="this.value = this.value.replace(/[^0-9]/g, ''); handleCustomDeposit(this.value)">
-              </div>
-            </div>
-
-            <!-- STEP 4: OPZIONE FRANCHIGIA KASKO -->
-            <div class="config-section">
-              <div class="config-section-title"><i class="ri-shield-star-line"></i> 4. Opzione Franchigia Assicurativa</div>
+            <!-- STEP 2: OPZIONE FRANCHIGIA KASKO -->
+            <div class="config-section" style="margin-top: 10px;">
+              <div class="config-section-title"><i class="ri-shield-star-line"></i> 2. Opzione Franchigia Assicurativa</div>
               <div class="config-options-grid" id="configKaskoGroup">
                 <button type="button" class="config-option-btn active" data-value="standard" onclick="setConfigKasko('standard', this)">Standard (500€)</button>
-                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">🛡️ Franchigia Zero 0€ (+€35/m)</button>
+                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">Franchigia Zero 0€ (+€35/m)</button>
               </div>
               <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4;"><i class="ri-information-line"></i> La copertura Kasko protegge il veicolo da danni accidentali. L'opzione Franchigia Zero azzera completamente ogni eventuale costo o scoperto a carico del conducente in caso di sinistro.</p>
             </div>
 
-            <!-- STEP 5: FORM PER EMISSIONE PREVENTIVO -->
+            <!-- STEP 3: FORM PER EMISSIONE PREVENTIVO -->
             <form class="quote-form" onsubmit="handleQuoteSubmit(event)">
-              <div class="config-section-title" style="margin-bottom: 2px;"><i class="ri-file-pdf-line"></i> 5. Dati per Emissione Preventivo PDF</div>
+              <div class="config-section-title" style="margin-bottom: 2px;"><i class="ri-file-pdf-line"></i> 3. Dati per Emissione Preventivo PDF</div>
               
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div>

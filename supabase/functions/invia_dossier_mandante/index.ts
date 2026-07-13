@@ -45,9 +45,12 @@ serve(async (req) => {
         
         // Se c'è un base64 (o dataUrl), prepariamo l'allegato per Resend
         if (doc.file_base64) {
+          const cleanBase64 = typeof doc.file_base64 === 'string' && doc.file_base64.includes(',')
+            ? doc.file_base64.split(',')[1]
+            : doc.file_base64;
           resendAttachments.push({
             filename: doc.file_name || `${docTitle}.pdf`,
-            content: doc.file_base64
+            content: cleanBase64
           });
         } else if (doc.dataUrl && doc.dataUrl.includes(',')) {
           resendAttachments.push({
@@ -193,8 +196,9 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     })
 
-  } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
+  } catch (error: any) {
+    const errorMessage = error instanceof Error ? error.message : (error?.message || String(error));
+    return new Response(JSON.stringify({ error: errorMessage }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     })

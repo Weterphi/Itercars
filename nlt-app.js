@@ -218,7 +218,7 @@ const SAMPLE_OFFERS = [
 
     category: 'Sportiva',
 
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
 
     transmission: 'Steptronic 8M',
 
@@ -296,7 +296,7 @@ const SAMPLE_OFFERS = [
 
     category: 'SUV Luxury',
 
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
 
     transmission: 'Steptronic xDrive',
 
@@ -374,7 +374,7 @@ const SAMPLE_OFFERS = [
 
     category: 'Supercar',
 
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
 
     transmission: 'Steptronic 8M',
 
@@ -450,7 +450,7 @@ const SAMPLE_OFFERS = [
 
     category: 'SUV Luxury',
 
-    fuel: 'Diesel MHEV ⚡',
+    fuel: 'Diesel MHEV',
 
     transmission: 'Steptronic Sport xDrive',
 
@@ -526,7 +526,7 @@ const SAMPLE_OFFERS = [
 
     category: 'Supercar',
 
-    fuel: 'Elettrico ⚡',
+    fuel: 'Elettrico',
 
     transmission: 'Automatico Single Speed',
 
@@ -1450,7 +1450,7 @@ function renderOffersGrid() {
 
               <button class="card-tab ${NltState.durationFilter === 48 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, 'default', event)">48 Mesi</button>
 
-              <button class="card-tab ${NltState.depositFilter === '0' ? 'active-zero' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, '0', event)">⚡ 0€ Anticipo</button>
+              <button class="card-tab ${NltState.depositFilter === '0' ? 'active-zero' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, '0', event)">0€ Anticipo</button>
 
             </div>
 

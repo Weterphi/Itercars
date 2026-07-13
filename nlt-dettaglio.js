@@ -8,84 +8,84 @@ const BROKER_MARGIN = 1.0; // Rimosso doppio ricarico (+15%), le tariffe base e 
 
 const OFFICIAL_RATES = {
   '32226fdb-ba8c-4e46-8e21-e303e0a0fe3d': {
-    6: { baseKm: 20000, deposit: 0, price: 650, extraKmPrice: 0.16 },
-    12: { baseKm: 20000, deposit: 0, price: 580, extraKmPrice: 0.15 },
-    24: { baseKm: 20000, deposit: 2000, price: 450, extraKmPrice: 0.14 },
-    36: { baseKm: 20000, deposit: 2000, price: 390, extraKmPrice: 0.12 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 650, extraKmPrice: 0.16, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 580, extraKmPrice: 0.15, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 2000, price: 450, extraKmPrice: 0.14, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 2000, price: 390, extraKmPrice: 0.12, status: 'Disponibile' }
   },
   'bmw-s1': {
-    6: { baseKm: 20000, deposit: 0, price: 650, extraKmPrice: 0.16 },
-    12: { baseKm: 20000, deposit: 0, price: 580, extraKmPrice: 0.15 },
-    24: { baseKm: 20000, deposit: 2000, price: 450, extraKmPrice: 0.14 },
-    36: { baseKm: 20000, deposit: 2000, price: 390, extraKmPrice: 0.12 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 650, extraKmPrice: 0.16, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 580, extraKmPrice: 0.15, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 2000, price: 450, extraKmPrice: 0.14, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 2000, price: 390, extraKmPrice: 0.12, status: 'Disponibile' }
   },
   'ccaa728f-9b2d-4480-9f1c-76d7c97ccc79': {
-    6: { baseKm: 20000, deposit: 0, price: 750, extraKmPrice: 0.18 },
-    12: { baseKm: 20000, deposit: 0, price: 680, extraKmPrice: 0.16 },
-    24: { baseKm: 20000, deposit: 3000, price: 520, extraKmPrice: 0.15 },
-    36: { baseKm: 20000, deposit: 3000, price: 460, extraKmPrice: 0.14 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 750, extraKmPrice: 0.18, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 680, extraKmPrice: 0.16, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 3000, price: 520, extraKmPrice: 0.15, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3000, price: 460, extraKmPrice: 0.14, status: 'Disponibile' }
   },
   'bmw-x1': {
-    6: { baseKm: 20000, deposit: 0, price: 750, extraKmPrice: 0.18 },
-    12: { baseKm: 20000, deposit: 0, price: 680, extraKmPrice: 0.16 },
-    24: { baseKm: 20000, deposit: 3000, price: 520, extraKmPrice: 0.15 },
-    36: { baseKm: 20000, deposit: 3000, price: 460, extraKmPrice: 0.14 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 750, extraKmPrice: 0.18, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 680, extraKmPrice: 0.16, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 3000, price: 520, extraKmPrice: 0.15, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3000, price: 460, extraKmPrice: 0.14, status: 'Disponibile' }
   },
   'e3f556d9-8c52-43fd-9d81-ffb9c1551928': {
-    6: { baseKm: 30000, deposit: 0, price: 890, extraKmPrice: 0.20 },
-    12: { baseKm: 25000, deposit: 0, price: 820, extraKmPrice: 0.18 },
-    24: { baseKm: 25000, deposit: 3500, price: 660, extraKmPrice: 0.16 },
-    36: { baseKm: 25000, deposit: 3500, price: 580, extraKmPrice: 0.15 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 820, extraKmPrice: 0.18, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 3500, price: 660, extraKmPrice: 0.16, status: 'In Arrivo' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3500, price: 580, extraKmPrice: 0.15, status: 'Disponibile' }
   },
   'bmw-s3t': {
-    6: { baseKm: 30000, deposit: 0, price: 890, extraKmPrice: 0.20 },
-    12: { baseKm: 25000, deposit: 0, price: 820, extraKmPrice: 0.18 },
-    24: { baseKm: 25000, deposit: 3500, price: 660, extraKmPrice: 0.16 },
-    36: { baseKm: 25000, deposit: 3500, price: 580, extraKmPrice: 0.15 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 820, extraKmPrice: 0.18, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 3500, price: 660, extraKmPrice: 0.16, status: 'In Arrivo' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3500, price: 580, extraKmPrice: 0.15, status: 'Disponibile' }
   },
   '1933cb66-5804-45ef-b997-8e038059f0b4': {
-    6: { baseKm: 30000, deposit: 0, price: 990, extraKmPrice: 0.22 },
-    12: { baseKm: 25000, deposit: 0, price: 920, extraKmPrice: 0.20 },
-    24: { baseKm: 25000, deposit: 4000, price: 740, extraKmPrice: 0.18 },
-    36: { baseKm: 25000, deposit: 4000, price: 650, extraKmPrice: 0.16 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 990, extraKmPrice: 0.22, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 920, extraKmPrice: 0.20, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 740, extraKmPrice: 0.18, status: 'In Arrivo' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 650, extraKmPrice: 0.16, status: 'Disponibile' }
   },
   'bmw-x3': {
-    6: { baseKm: 30000, deposit: 0, price: 990, extraKmPrice: 0.22 },
-    12: { baseKm: 25000, deposit: 0, price: 920, extraKmPrice: 0.20 },
-    24: { baseKm: 25000, deposit: 4000, price: 740, extraKmPrice: 0.18 },
-    36: { baseKm: 25000, deposit: 4000, price: 650, extraKmPrice: 0.16 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 990, extraKmPrice: 0.22, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 920, extraKmPrice: 0.20, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 740, extraKmPrice: 0.18, status: 'In Arrivo' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 650, extraKmPrice: 0.16, status: 'Disponibile' }
   },
   '3b99316f-29bb-4392-86d3-98cc6e77485d': {
-    12: { baseKm: 20000, deposit: 0, price: 1150, extraKmPrice: 0.25 },
-    24: { baseKm: 20000, deposit: 5000, price: 890, extraKmPrice: 0.22 },
-    36: { baseKm: 20000, deposit: 5000, price: 790, extraKmPrice: 0.20 }
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1150, extraKmPrice: 0.25, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 5000, price: 890, extraKmPrice: 0.22, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 5000, price: 790, extraKmPrice: 0.20, status: 'Disponibile' }
   },
   'bmw-s5': {
-    12: { baseKm: 20000, deposit: 0, price: 1150, extraKmPrice: 0.25 },
-    24: { baseKm: 20000, deposit: 5000, price: 890, extraKmPrice: 0.22 },
-    36: { baseKm: 20000, deposit: 5000, price: 790, extraKmPrice: 0.20 }
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1150, extraKmPrice: 0.25, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 5000, price: 890, extraKmPrice: 0.22, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 5000, price: 790, extraKmPrice: 0.20, status: 'Disponibile' }
   },
   'f4c1e663-a663-4fba-81c1-8ed424caf0ba': {
-    12: { baseKm: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28 },
-    24: { baseKm: 25000, deposit: 6000, price: 1180, extraKmPrice: 0.25 },
-    36: { baseKm: 25000, deposit: 6000, price: 1050, extraKmPrice: 0.22 }
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 6000, price: 1180, extraKmPrice: 0.25, status: 'In Arrivo' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 6000, price: 1050, extraKmPrice: 0.22, status: 'Disponibile' }
   },
   'bmw-x5': {
-    12: { baseKm: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28 },
-    24: { baseKm: 25000, deposit: 6000, price: 1180, extraKmPrice: 0.25 },
-    36: { baseKm: 25000, deposit: 6000, price: 1050, extraKmPrice: 0.22 }
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 6000, price: 1180, extraKmPrice: 0.25, status: 'In Arrivo' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 6000, price: 1050, extraKmPrice: 0.22, status: 'Disponibile' }
   },
   'efce36a9-41fc-4285-a167-4badbcbbb2c6': {
-    6: { baseKm: 20000, deposit: 0, price: 890, extraKmPrice: 0.20 },
-    12: { baseKm: 20000, deposit: 0, price: 790, extraKmPrice: 0.18 },
-    24: { baseKm: 20000, deposit: 4000, price: 640, extraKmPrice: 0.16 },
-    36: { baseKm: 20000, deposit: 4000, price: 570, extraKmPrice: 0.15 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 790, extraKmPrice: 0.18, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 640, extraKmPrice: 0.16, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 570, extraKmPrice: 0.15, status: 'Disponibile' }
   },
   'bmw-i4': {
-    6: { baseKm: 20000, deposit: 0, price: 890, extraKmPrice: 0.20 },
-    12: { baseKm: 20000, deposit: 0, price: 790, extraKmPrice: 0.18 },
-    24: { baseKm: 20000, deposit: 4000, price: 640, extraKmPrice: 0.16 },
-    36: { baseKm: 20000, deposit: 4000, price: 570, extraKmPrice: 0.15 }
+    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 790, extraKmPrice: 0.18, status: 'Disponibile' },
+    24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 640, extraKmPrice: 0.16, status: 'Disponibile' },
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 570, extraKmPrice: 0.15, status: 'Disponibile' }
   }
 };
 
@@ -130,7 +130,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'Serie 3 Touring',
     trim: '320d xDrive MSport',
     category: 'Sportiva',
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
     transmission: 'Steptronic 8M',
     image: 'bmw_serie_3_touring.webp',
     hp: '190 CV',
@@ -147,7 +147,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'X3',
     trim: 'xDrive20d MSport Mild-Hybrid',
     category: 'SUV Luxury',
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
     transmission: 'Steptronic xDrive',
     image: 'bmw_x3_msport.webp',
     hp: '190 CV',
@@ -164,7 +164,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'Serie 5',
     trim: '520d Mild Hybrid Eccelsa',
     category: 'Supercar',
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
     transmission: 'Steptronic 8M',
     image: 'bmw_serie_5_eccelsa.webp',
     hp: '197 CV',
@@ -181,7 +181,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'X5',
     trim: 'xDrive30d MSport MHEV',
     category: 'SUV Luxury',
-    fuel: 'Diesel MHEV ⚡',
+    fuel: 'Diesel MHEV',
     transmission: 'Steptronic Sport xDrive',
     image: 'bmw_x5_msport.webp',
     hp: '298 CV',
@@ -198,7 +198,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'i4 Gran Coupé',
     trim: 'eDrive40 Sport Elettrica',
     category: 'Supercar',
-    fuel: 'Elettrico ⚡',
+    fuel: 'Elettrico',
     transmission: 'Automatico Single Speed',
     image: 'bmw_i4_grancoupe.webp',
     hp: '340 CV',
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       model: paramModel,
       trim: params.get('trim') || 'Executive M Sport',
       category: params.get('cat') || 'Sportiva',
-      fuel: params.get('fuel') || 'Mild-Hybrid / Diesel ⚡',
+      fuel: params.get('fuel') || 'Mild-Hybrid / Diesel',
       transmission: params.get('trans') || 'Automatico 8M',
       image: params.get('img') || 'category-suv.jpg',
       hp: params.get('hp') || '190 CV',
@@ -378,60 +378,141 @@ function renderCarDetails() {
   if (fuelEl) fuelEl.textContent = c.fuel;
   if (transEl) transEl.textContent = c.transmission;
   
-  // Sincronizza i selettori attivi nella GUI
-  syncActiveButtons('configDurationGroup', ConfigState.durationMonths);
-  syncActiveButtons('configKmGroup', ConfigState.kmPerYear);
-  syncActiveButtons('configDepositGroup', ConfigState.depositAmount);
+  // Renderizza i pacchetti rettangolari all-inclusive e aggiorna il canone
+  renderRentalPackages();
 }
 
-function syncActiveButtons(containerId, value) {
-  const container = document.getElementById(containerId);
+function getRatesForCar(c) {
+  if (!c) return OFFICIAL_RATES['bmw-s3t'];
+  
+  let baseCarId = String(c.id || '');
+  if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
+  if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3';
+  
+  let rates = OFFICIAL_RATES[baseCarId] || (c.vehicle_id ? OFFICIAL_RATES[String(c.vehicle_id)] : null);
+  
+  if (!rates && c.model) {
+    const modelStr = String(c.model).toLowerCase();
+    if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['bmw-s1'];
+    else if (modelStr.includes('x1')) rates = OFFICIAL_RATES['bmw-x1'];
+    else if (modelStr.includes('serie 3')) rates = OFFICIAL_RATES['bmw-s3t'];
+    else if (modelStr.includes('x3')) rates = OFFICIAL_RATES['bmw-x3'];
+    else if (modelStr.includes('serie 5')) rates = OFFICIAL_RATES['bmw-s5'];
+    else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['bmw-x5'];
+    else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['bmw-i4'];
+  }
+  
+  if (!rates) {
+    // Generazione automatica di 4 pacchetti rettangolari (6, 12, 24, 36 mesi)
+    const base = Number(c.basePrice) || 699;
+    const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
+    rates = {
+      6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: Math.round(base * 1.45), extraKmPrice: 0.20, status: 'Disponibile' },
+      12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: Math.round(base * 1.25), extraKmPrice: 0.18, status: 'Disponibile' },
+      24: { baseKm: 25000, kmTotal: 50000, deposit: baseDep, price: Math.round(base * 1.10), extraKmPrice: 0.16, status: 'Disponibile' },
+      36: { baseKm: 25000, kmTotal: 75000, deposit: baseDep, price: Math.round(base), extraKmPrice: 0.15, status: 'Disponibile' }
+    };
+  }
+  return rates;
+}
+
+function renderRentalPackages() {
+  const container = document.getElementById('packagesListGrid');
   if (!container) return;
-  container.querySelectorAll('.config-option-btn').forEach(btn => {
-    const btnVal = Number(btn.dataset.value);
-    btn.classList.toggle('active', btnVal === value);
-  });
+  
+  const c = ConfigState.car;
+  if (!c) return;
+  
+  const rates = getRatesForCar(c);
+  const availableDurations = Object.keys(rates).map(Number).sort((a, b) => a - b);
+  
+  if (!availableDurations.includes(Number(ConfigState.durationMonths)) && availableDurations.length > 0) {
+    ConfigState.durationMonths = availableDurations.includes(36) ? 36 : availableDurations[0];
+  }
+  
+  const activeRate = rates[ConfigState.durationMonths] || rates[availableDurations[0]];
+  if (activeRate) {
+    const kmTot = activeRate.kmTotal || Math.round((activeRate.baseKm || 25000) * (ConfigState.durationMonths / 12));
+    ConfigState.kmPerYear = kmTot;
+    ConfigState.depositAmount = Number(activeRate.deposit || 0);
+  }
+
+  container.innerHTML = availableDurations.map(dur => {
+    const r = rates[dur];
+    const isSelected = Number(ConfigState.durationMonths) === dur;
+    
+    const kmTotal = r.kmTotal || Math.round((r.baseKm || 25000) * (dur / 12));
+    const kmYearly = r.baseKm || Math.round(kmTotal * (12 / dur));
+    
+    const statusText = r.status || 'Disponibile';
+    const statusClass = statusText.toLowerCase().includes('arrivo') ? 'status-inarrivo' : 'status-disponibile';
+    const statusIcon = statusText.toLowerCase().includes('arrivo') ? 'ri-time-line' : 'ri-checkbox-circle-fill';
+    
+    const kmDisplayShort = dur === 12 
+      ? `${kmTotal.toLocaleString('it-IT')} km`
+      : `${Math.round(kmYearly).toLocaleString('it-IT')} km/anno`;
+      
+    const depositDisplay = r.deposit === 0 ? 'Anticipo 0 €' : `Anticipo € ${Number(r.deposit).toLocaleString('it-IT')}`;
+    const displayPrice = Math.round((Number(r.price) + (ConfigState.kaskoFranchigia === 'zero' ? 35 : 0)) * BROKER_MARGIN);
+
+    const selectCircleIcon = isSelected 
+      ? `<i class="ri-radio-button-fill package-radio-icon selected"></i>` 
+      : `<i class="ri-checkbox-blank-circle-line package-radio-icon"></i>`;
+
+    return `
+      <div class="package-option-card ${isSelected ? 'active' : ''}" onclick="selectRentalPackage(${dur})">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            ${selectCircleIcon}
+            <div>
+              <div style="font-size: 1.05rem; font-weight: 800; color: #fff; line-height: 1.25;">
+                ${dur} mesi / ${kmDisplayShort}
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">
+                ${dur !== 12 ? `Totali ${kmTotal.toLocaleString('it-IT')} km nel contratto` : 'Chilometraggio annuo'}
+              </div>
+            </div>
+          </div>
+          <span class="package-status-badge ${statusClass}" style="padding: 3px 8px; font-size: 0.72rem;">
+            <i class="${statusIcon}"></i> ${statusText}
+          </span>
+        </div>
+        
+        <div style="border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 10px; margin-top: 2px; display: flex; justify-content: space-between; align-items: baseline;">
+          <div>
+            <div style="font-size: 0.92rem; font-weight: 700; color: ${r.deposit === 0 ? '#f59e0b' : '#e2e8f0'};">
+              ${depositDisplay}
+            </div>
+            ${r.extraKmPrice !== undefined ? `<div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 2px;">Extra: € ${Number(r.extraKmPrice).toFixed(2).replace('.', ',')} / km</div>` : ''}
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 1.45rem; font-weight: 950; color: #2ecc71; line-height: 1;">
+              € ${displayPrice.toLocaleString('it-IT')}<span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">/mese*</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-// Scelta Durata Contratto
-function setConfigDuration(months, btnElem) {
-  ConfigState.durationMonths = Number(months);
-  if (btnElem) {
-    btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
-    btnElem.classList.add('active');
-  }
-  const customInput = document.getElementById('customDurationInput');
-  if (customInput) customInput.value = '';
-  const sa = document.getElementById('sidebarQuoteActions');
-  if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  calculateAndRenderPrice();
-}
+// Scelta Pacchetto Noleggio (clic su blocco rettangolare)
+function selectRentalPackage(dur) {
+  const c = ConfigState.car;
+  if (!c) return;
+  
+  const rates = getRatesForCar(c);
+  const rateInfo = rates[dur] || rates[Object.keys(rates)[0]];
+  if (!rateInfo) return;
 
-// Scelta Chilometraggio Annuo
-function setConfigKm(km, btnElem) {
-  ConfigState.kmPerYear = Number(km);
-  if (btnElem) {
-    btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
-    btnElem.classList.add('active');
-  }
-  const customInput = document.getElementById('customKmInput');
-  if (customInput) customInput.value = '';
+  ConfigState.durationMonths = Number(dur);
+  ConfigState.kmPerYear = rateInfo.kmTotal || Math.round((rateInfo.baseKm || 25000) * (dur / 12));
+  ConfigState.depositAmount = Number(rateInfo.deposit || 0);
+  
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  calculateAndRenderPrice();
-}
-
-// Scelta Anticipo Iniziale
-function setConfigDeposit(deposit, btnElem) {
-  ConfigState.depositAmount = Number(deposit);
-  if (btnElem) {
-    btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
-    btnElem.classList.add('active');
-  }
-  const customInput = document.getElementById('customDepositInput');
-  if (customInput) customInput.value = '';
-  const sa = document.getElementById('sidebarQuoteActions');
-  if (sa && sa.style.display === 'block') sa.style.display = 'none';
+  
+  renderRentalPackages();
   calculateAndRenderPrice();
 }
 
@@ -444,189 +525,36 @@ function setConfigKasko(type, btnElem) {
   }
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
+  
+  renderRentalPackages();
   calculateAndRenderPrice();
 }
 
-// Gestione input numerico manuale - Durata Contratto
-function handleCustomDuration(valStr) {
-  const inputElem = document.getElementById('customDurationInput');
-  let cleanVal = String(valStr || '').replace(/[^0-9]/g, '');
-  if (inputElem && inputElem.value !== cleanVal) {
-    inputElem.value = cleanVal;
-  }
-  const num = parseInt(cleanVal, 10);
-  if (isNaN(num) || num <= 0) return;
-  
-  let safeMonths = Math.min(Math.max(num, 6), 84);
-  ConfigState.durationMonths = safeMonths;
-  syncActiveButtons('configDurationGroup', safeMonths);
-  
-  const sa = document.getElementById('sidebarQuoteActions');
-  if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  calculateAndRenderPrice();
-}
-
-// Gestione input numerico manuale - Chilometri per Anno
-function handleCustomKm(valStr) {
-  const inputElem = document.getElementById('customKmInput');
-  let cleanVal = String(valStr || '').replace(/[^0-9]/g, '');
-  if (inputElem && inputElem.value !== cleanVal) {
-    inputElem.value = cleanVal;
-  }
-  const num = parseInt(cleanVal, 10);
-  if (isNaN(num) || num <= 0) return;
-  
-  let safeKm = Math.min(Math.max(num, 3000), 150000);
-  ConfigState.kmPerYear = safeKm;
-  syncActiveButtons('configKmGroup', safeKm);
-  
-  const sa = document.getElementById('sidebarQuoteActions');
-  if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  calculateAndRenderPrice();
-}
-
-// Gestione input numerico manuale - Anticipo Iniziale / Permuta
-function handleCustomDeposit(valStr) {
-  const inputElem = document.getElementById('customDepositInput');
-  let cleanVal = String(valStr || '').replace(/[^0-9]/g, '');
-  if (inputElem && inputElem.value !== cleanVal) {
-    inputElem.value = cleanVal;
-  }
-  const num = parseInt(cleanVal, 10);
-  if (isNaN(num) || num < 0) return;
-  
-  let safeDeposit = Math.min(Math.max(num, 0), 100000);
-  ConfigState.depositAmount = safeDeposit;
-  syncActiveButtons('configDepositGroup', safeDeposit);
-  
-  const sa = document.getElementById('sidebarQuoteActions');
-  if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  calculateAndRenderPrice();
-}
-
-// Motore di calcolo finanziario tariffa NLT in tempo reale e interpolato
+// Motore di calcolo finanziario tariffa NLT
 function calculateAndRenderPrice() {
   const c = ConfigState.car;
   if (!c) return;
   
   let dur = Number(ConfigState.durationMonths) || 36;
-  
-  // 1. PRIORITÀ ASSOLUTA al listino ufficiale (foglio Excel) per i modelli in catalogo o sincronizzati
-  let rates = null;
-  let baseCarId = String(c.id || '');
-  if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
-  if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3';
-  rates = OFFICIAL_RATES[baseCarId];
+  const rates = getRatesForCar(c);
+  const rateInfo = rates[dur] || rates[Object.keys(rates)[0]] || {
+    baseKm: 25000,
+    kmTotal: 75000,
+    deposit: 3000,
+    price: ConfigState.car?.basePrice || 699,
+    extraKmPrice: 0.15,
+    status: 'Disponibile'
+  };
 
-  if (!rates && c.vehicle_id) {
-    rates = OFFICIAL_RATES[String(c.vehicle_id)];
-  }
+  const kmTotal = rateInfo.kmTotal || Math.round((rateInfo.baseKm || 25000) * (dur / 12));
+  const kmYearly = rateInfo.baseKm || Math.round(kmTotal * (12 / dur));
+  ConfigState.kmPerYear = kmTotal;
+  ConfigState.depositAmount = Number(rateInfo.deposit || 0);
 
-  if (!rates && c.model) {
-    const modelStr = String(c.model).toLowerCase();
-    if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['bmw-s1'];
-    else if (modelStr.includes('x1')) rates = OFFICIAL_RATES['bmw-x1'];
-    else if (modelStr.includes('serie 3')) rates = OFFICIAL_RATES['bmw-s3t'];
-    else if (modelStr.includes('x3')) rates = OFFICIAL_RATES['bmw-x3'];
-    else if (modelStr.includes('serie 5')) rates = OFFICIAL_RATES['bmw-s5'];
-    else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['bmw-x5'];
-    else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['bmw-i4'];
-  }
-
-  // 2. Se non è nei modelli Excel ufficiali, ma ha canone dal DB o custom, genera scaglioni proporzionali
-  if (!rates && c.basePrice && Number(c.basePrice) > 0) {
-    const base = Number(c.basePrice);
-    const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
-    const baseDur = Number(c.baseDuration || 36);
-    rates = {
-      6: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.55), extraKmPrice: 0.18 },
-      12: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.35), extraKmPrice: 0.16 },
-      24: { baseKm: 20000, deposit: baseDep, price: Math.round(base * 1.12), extraKmPrice: 0.15 },
-      36: { baseKm: 20000, deposit: baseDep, price: Math.round(base), extraKmPrice: 0.14 },
-      48: { baseKm: 20000, deposit: baseDep, price: Math.round(base * 0.92), extraKmPrice: 0.12 },
-      60: { baseKm: 20000, deposit: baseDep, price: Math.round(base * 0.86), extraKmPrice: 0.12 }
-    };
-    if (rates[baseDur]) rates[baseDur].price = base;
-  }
-
-  // 3. Fallback standard
-  if (!rates) {
-    const base = Number(c.basePrice) || 699;
-    rates = {
-      6: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.6), extraKmPrice: 0.18 },
-      12: { baseKm: 20000, deposit: 0, price: Math.round(base * 1.45), extraKmPrice: 0.16 },
-      24: { baseKm: 20000, deposit: 3000, price: Math.round(base * 1.15), extraKmPrice: 0.15 },
-      36: { baseKm: 20000, deposit: 3000, price: Math.round(base), extraKmPrice: 0.14 },
-      48: { baseKm: 20000, deposit: 3000, price: Math.round(base * 0.92), extraKmPrice: 0.12 }
-    };
-  }
-
-  let rateInfo = rates[dur];
-
-  // Se la durata non è uno scaglione esatto, interpola linearmente o trova i limiti più vicini
-  if (!rateInfo) {
-    const available = Object.keys(rates).map(Number).sort((a, b) => a - b);
-    if (dur <= available[0]) {
-      rateInfo = Object.assign({}, rates[available[0]]);
-    } else if (dur >= available[available.length - 1]) {
-      rateInfo = Object.assign({}, rates[available[available.length - 1]]);
-    } else {
-      let lower = available[0];
-      let upper = available[available.length - 1];
-      for (let i = 0; i < available.length - 1; i++) {
-        if (dur > available[i] && dur < available[i + 1]) {
-          lower = available[i];
-          upper = available[i + 1];
-          break;
-        }
-      }
-      const rLower = rates[lower];
-      const rUpper = rates[upper];
-      const factor = (dur - lower) / (upper - lower);
-      rateInfo = {
-        baseKm: Math.round(rLower.baseKm + (rUpper.baseKm - rLower.baseKm) * factor),
-        deposit: Math.round(rLower.deposit + (rUpper.deposit - rLower.deposit) * factor),
-        price: Math.round(rLower.price + (rUpper.price - rLower.price) * factor),
-        extraKmPrice: Number((rLower.extraKmPrice + (rUpper.extraKmPrice - rLower.extraKmPrice) * factor).toFixed(2))
-      };
-    }
-  }
-
-  let price = rateInfo.price;
-
-  // 1. Smart km handling – distinguish yearly km from total contract km
-  const rawKm = Number(ConfigState.kmPerYear) || 15000;
-  let kmYearly;
-  if (rawKm >= 35000) {
-    // Value is interpreted as total contract km; convert to yearly km
-    kmYearly = Math.round(rawKm / (dur / 12));
-  } else {
-    // For lower values, decide if it's total contract km based on contract duration
-    const totalKmBasedOnBase = rateInfo.baseKm * (dur / 12);
-    if (rawKm <= totalKmBasedOnBase) {
-      // Treat as total km for the contract and scale to yearly equivalent
-      kmYearly = Math.round(rawKm * 12 / dur);
-    } else {
-      // Assume the input already represents yearly km
-      kmYearly = rawKm;
-    }
-  }
-  
-  const kmDeltaYearly = kmYearly - rateInfo.baseKm;
-  if (kmDeltaYearly !== 0) {
-    price += (kmDeltaYearly * rateInfo.extraKmPrice) / 12;
-  }
-
-  // 2. Aggiustamento Anticipo (il maggior o minor anticipo viene ammortizzato sui mesi di durata)
-  const depositDelta = rateInfo.deposit - ConfigState.depositAmount;
-  price += (depositDelta / dur);
-
-  // 3. Supplemento Kasko Franchigia Zero (+ € 35 / mese)
+  let price = Number(rateInfo.price);
   if (ConfigState.kaskoFranchigia === 'zero') {
     price += 35.00;
   }
-
-  // 4. APPLICAZIONE MARGINE
   price = price * BROKER_MARGIN;
 
   ConfigState.finalMonthlyPrice = Math.round(price);
@@ -641,8 +569,10 @@ function calculateAndRenderPrice() {
     boxElem.style.opacity = '0.6';
     setTimeout(() => {
       priceDisplay.textContent = `€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`;
-      const kmTextShown = rawKm >= 35000 ? `${rawKm.toLocaleString('it-IT')} Km totali (${kmYearly.toLocaleString('it-IT')}/anno)` : `${rawKm.toLocaleString('it-IT')} Km/anno`;
-      summaryDisplay.innerHTML = `<strong>${ConfigState.durationMonths} Mesi</strong> • <strong>${kmTextShown}</strong> • Anticipo <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
+      const kmTextShown = dur === 12 
+        ? `${kmTotal.toLocaleString('it-IT')} Km/anno`
+        : `${kmTotal.toLocaleString('it-IT')} Km totali (${Math.round(kmYearly).toLocaleString('it-IT')}/anno)`;
+      summaryDisplay.innerHTML = `<strong>${dur} Mesi</strong> • <strong>${kmTextShown}</strong> • Anticipo <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
       if (extraKmDisplay && rateInfo.extraKmPrice !== undefined) {
         extraKmDisplay.innerHTML = `<i class="ri-information-line"></i> Costo Km Extra: € ${Number(rateInfo.extraKmPrice).toFixed(2).replace('.', ',')} / km`;
       }
