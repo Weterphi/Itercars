@@ -310,6 +310,31 @@
       const optStyle = document.createElement('style');
       optStyle.id = 'mobileGlobalOptStyle';
       optStyle.innerHTML = `
+        @media (max-width: 1024px) {
+          .mobile-floating-phone {
+            display: inline-flex !important;
+            position: fixed !important;
+            bottom: 24px !important;
+            right: 24px !important;
+            width: auto !important;
+            min-width: 56px !important;
+            height: 52px !important;
+            padding: 0 20px !important;
+            border-radius: 99px !important;
+            background: var(--accent-gradient) !important;
+            color: #ffffff !important;
+            box-shadow: 0 10px 25px rgba(0, 146, 70, 0.6) !important;
+            z-index: 9999999 !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            border: 1px solid rgba(255, 255, 255, 0.25) !important;
+            text-decoration: none !important;
+            cursor: pointer !important;
+            font-weight: 800 !important;
+            font-size: 0.92rem !important;
+          }
+        }
         @media (max-width: 768px) {
           /* Garanzia area touch di almeno 44px su pulsanti e campi di input */
           .btn, button, .config-option-btn, input[type="number"], select, .mobile-menu-btn {
