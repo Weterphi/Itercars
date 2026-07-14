@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ITERCARS PARTNER CONSOLE | Piattaforma SaaS Multi-Mandante e Noleggiatori</title>
+  
+  <!-- Favicon IC Verde/Oro -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23050811' stroke='%23facc15' stroke-width='6'/%3E%3Ctext x='50%25' y='66%25' font-family='sans-serif' font-weight='900' font-size='56' fill='%23facc15' text-anchor='middle' letter-spacing='-3'%3EIC%3C/text%3E%3C/svg%3E" />
+
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- RemixIcon -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
+  <!-- SheetJS (XLSX Parser universale per Excel e CSV) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <link rel="stylesheet" href="crm-partner.css?v=31" />
+</head>
+<body>
+
+  <!-- GATE DI AUTENTICAZIONE RISERVATO Al PARTNER / NOLEGGIATORE -->
+  <div class="partner-auth-overlay active" id="partnerAuthOverlay">
+    <div class="partner-auth-box">
+      <div style="text-align: center; margin-bottom: 24px;">
+        <img src="logo_tricolore.png" alt="ITERCARS" style="height: 48px; margin-bottom: 14px;" onerror="this.src='logo-text.png'" />
+        <h2 style="font-size: 1.35rem; font-weight: 300; color: #fff;">Console Partner</h2>
+        <p style="color: var(--text-muted); font-size: 0.84rem; margin-top: 4px;">Piattaforma Operativa</p>
+      </div>
+
+      <form onsubmit="handlePartnerLogin(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="text-align: left;">
+          <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email Aziendale Registrata</label>
+          <input type="email" id="partnerEmailInput" class="admin-input" placeholder="info@azienda.com" required />
+        </div>
+        <div style="text-align: left;">
+          <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password</label>
+          <input type="password" id="partnerPasswordInput" class="admin-input" placeholder="••••••••" required />
+        </div>
+
+        <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px;">
+          <i class="ri-shield-user-line"></i> Accedi alla Tua Console Flotta
+        </button>
+      </form>
+
+      <div style="margin-top: 22px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 0.76rem; color: var(--text-muted); text-align: center;">
+        <i class="ri-lock-password-line text-muted"></i> Connessione Protetta </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP LAYOUT (SIDEBAR SINISTRA + WORKSPACE CENTRALE) -->
+  <div class="app-layout">
+
+    <!-- BARRA LATERALE MANDANTE -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="logo_tricolore.png" alt="ITERCARS" onerror="this.src='logo-text.png'" />
+        <div class="sidebar-brand-badge">
+          <i class="ri-shield-star-fill"></i> <span id="displayPartnerPlan">PRO PARTNER</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Gestione Flotta</div>
+        
+        <button class="sidebar-item active" onclick="switchPartnerTab('tab-myfleet', this)">
+          <div class="sidebar-item-label">
+            <i class="ri-roadster-line"></i>
+            <span>La Mia Flotta & Toggle</span>
+          </div>
+          <span class="nav-badge" id="badgeFleetCount">0</span>
+        </button>
+
+        <button class="sidebar-item" onclick="switchPartnerTab('tab-import', this)">
+          <div class="sidebar-item-label">
+            <i class="ri-file-excel-2-line"></i>
+            <span>Import Excel & AI Photo</span>
+          </div>
+          <span class="nav-badge" style="background:transparent; color:#ffffff;">STUDIO</span>
+        </button>
+
+        <div class="nav-section-title">Operazioni e Pratiche</div>
+
+        <button class="sidebar-item" onclick="switchPartnerTab('tab-bookings', this)">
+          <div class="sidebar-item-label">
+            <i class="ri-bookmark-3-line"></i>
+            <span>Prenotazioni & Clienti</span>
+          </div>
+          <span class="nav-badge" id="badgeBookingsCount">0</span>
+        </button>
+
+        <button class="sidebar-item" onclick="switchPartnerTab('tab-settings', this)">
+          <div class="sidebar-item-label">
+            <i class="ri-building-4-line"></i>
+            <span>Profilo & Condizioni</span>
+          </div>
+        </button>
+      
+      </nav>
+
+      <div class="sidebar-footer">
+        <div style="font-size: 0.8rem; font-weight: 300; color: #fff; line-height: 1.2; margin-bottom: 4px;" id="displayPartnerName">Toribio Rent S.R.L.</div>
+        
+        
+        <button onclick="partnerLogout()" class="btn-header btn-header-outline" style="width: 100%; justify-content: center; font-size: 0.78rem; padding: 7px; margin-top: 6px;">
+          <i class="ri-logout-box-r-line"></i> Esci da Console
+        </button>
+      </div>
+    </aside>
+
+    <!-- WORKSPACE CENTRALE -->
+    <main class="main-wrapper">
+      
+      <!-- HEADER WORKSPACE -->
+      <header class="topbar">
+        <div class="topbar-breadcrumb">
+          <i class="ri-dashboard-2-line" style="color: var(--accent-gold); font-size: 1.2rem;"></i>
+          <span>ITERCARS PARTNER HUB / <strong id="partnerBreadcrumbName">La Mia Flotta & Tasti Rapidi</strong></span>
+        </div>
+
+        <div class="topbar-actions">
+          <div style="font-size: 0.76rem; display: flex; align-items: center; gap: 6px; background: transparent; color: #ffffff; padding: 6px 12px; border-radius: 20px; font-weight: 300;">
+            <span style="width: 7px; height: 7px; background: #ffffff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ffffff;"></span>
+            MULTI-TENANT LIVE
+          </div>
+          
+          <button class="btn-header btn-header-outline" onclick="loadPartnerDashboard()">
+            <i class="ri-refresh-line"></i> Sync Dati
+          </button>
+          
+          <button class="btn-header btn-header-primary" onclick="switchPartnerTab('tab-import', document.querySelectorAll('.sidebar-item')[1])">
+            <i class="ri-upload-cloud-2-line"></i> + Carica Excel Flotta
+          </button>
+        </div>
+      </header>
+
+      <!-- WORKSPACE CONTENT -->
+      <div class="workspace">
+        
+        <!-- KPI METRICS GRID -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Totale Veicoli in Flotta</span>
+              <div class="kpi-icon icon-gold"><i class="ri-database-2-line"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiTotalFleet">0</div>
+            <div class="kpi-subtext"><i class="ri-database-2-line"></i> Catalogo privato su Supabase</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Auto Online (Disponibili)</span>
+              <div class="kpi-icon icon-green"><i class="ri-global-line"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiActiveFleet">0</div>
+            <div class="kpi-subtext"><i class="ri-check-line"></i> Visibili live ai clienti e broker</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Richieste & Contratti</span>
+              <div class="kpi-icon icon-blue"><i class="ri-bookmark-3-line"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiBookingsCount">0</div>
+            <div class="kpi-subtext"><i class="ri-arrow-up-line"></i> Prenotazioni arrivate dal portale</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-card-header">
+              <span class="kpi-title">Valore Annuo Flotta Stimato</span>
+              <div class="kpi-icon icon-purple"><i class="ri-line-chart-line"></i></div>
+            </div>
+            <div class="kpi-value" id="kpiEstimatedValue">€ 0</div>
+            <div class="kpi-subtext"><i class="ri-pie-chart-line"></i> Calcolato sui canoni di listino</div>
+          </div>
+        </div>
+
+        <!-- TAB 1: LA MIA FLOTTA & TOGGLE SWITCH RAPIDI -->
+        <div id="tab-myfleet" class="tab-pane active">
+          <div class="data-table-container">
+            <div class="data-table-toolbar" style="background: rgba(250,204,21,0.03);">
+              <div>
+                
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Usa gli interruttori <strong style="color:var(--accent-green);">DISPONIBILE / FUORI FLOTTA</strong> per rendere disponibili o nascondere istantaneamente le tue macchine.</p>
+              </div>
+              <div style="display: flex; gap: 10px;">
+                <button class="btn-header btn-header-outline" onclick="switchPartnerTab('tab-import', document.querySelectorAll('.sidebar-item')[1])">
+                  <i class="ri-file-excel-line text-muted"></i> Importazione Excel CSV
+                </button>
+              </div>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Veicolo e Allestimento</th>
+                  <th>Alimentazione & Cambio</th>
+                  <th>Tariffa Giorno / Cauzione</th>
+                  <th>Categoria</th>
+                  <th>Disponibilità Live (Toggle Rapido)</th>
+                  <th style="text-align: right;">Azioni Flotta</th>
+                </tr>
+              </thead>
+              <tbody id="partnerVehiclesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 2: TRASMISSIONE FILE FLOTTA (EXCEL, PDF, LISTINI) -->
+        <div id="tab-import" class="tab-pane">
+          <div class="data-table-container" style="padding: 28px;">
+            <div style="max-width: 860px; margin: 0 auto;">
+              
+              <div style="text-align: center; margin-bottom: 24px;">
+                <span style="font-size: 0.74rem; font-weight: 300; color: #ffffff; background: transparent; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 1px;"><i class="ri-shield-check-line"></i> Trasmissione Diretta alla Direzione</span>
+                <h3 style="font-size: 1.45rem; font-weight: 300; color: #fff; margin-top: 10px;">Invio File Flotta (Excel o PDF)</h3>
+                <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 650px; margin: 8px auto 0 auto;">
+                  Seleziona o trascina qui il tuo file **Excel (.xlsx/.csv), PDF o Listino prezzi** aggiornato e clicca sul pulsante per inviarlo istantaneamente e in modo sicuro alla Console Centrale.
+                </p>
+              </div>
+
+              <!-- DRAG & DROP ZONE / SELEZIONE FILE -->
+              <div class="upload-dropzone" id="fleetUploadDropzone">
+                <i class="ri-file-cloud-line" style="font-size: 3.2rem; color: #ffffff; margin-bottom: 12px;"></i>
+                <h4 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">Trascina qui il file della tua flotta (Excel, PDF, CSV)</h4>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 18px 0;">Formati supportati: .xlsx, .xls, .csv, .pdf, .zip • Peso massimo 25 MB</p>
+                <label for="fleetFileInput" class="btn-header" style="background: #ffffff; color: #000; font-weight: 300; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 26px; font-size: 0.95rem; border-radius: 8px; box-shadow: 0 4px 14px transparent;">
+                  <i class="ri-folder-open-line" style="font-size: 1.2rem;"></i> Seleziona File dal Computer
+                </label>
+                <input type="file" id="fleetFileInput" accept=".csv,.xlsx,.xls,.pdf,.doc,.docx,.zip" style="display: none;" />
+              </div>
+
+              <!-- BOX FILE SELEZIONATO E TASTO INVIA FILE -->
+              <div id="selectedFilePreviewBox" style="display: none; margin-top: 20px; background: #141414; border: 1px solid rgba(255,255,255,0.15); border-radius: 0px; padding: 20px; text-align: center;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
+                  <i class="ri-file-text-fill" style="font-size: 2rem; color: #ffffff;"></i>
+                  <div style="text-align: left;">
+                    <strong id="selectedFileNameDisplay" style="color: #fff; font-size: 1.08rem; display: block;">File.xlsx</strong>
+                    <span id="selectedFileSizeDisplay" style="color: var(--text-muted); font-size: 0.84rem;">0 KB</span>
+                  </div>
+                </div>
+                <button onclick="submitSelectedPartnerFile()" id="btnSubmitPartnerFile" class="btn-header btn-header-primary" style="font-size: 1.05rem; padding: 14px 36px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 500;">
+                  <i class="ri-send-plane-2-fill" style="font-size: 1.3rem;"></i> INVIA FILE ALLA DIREZIONE CENTRALE
+                </button>
+              </div>
+
+              <!-- RIEPILOGO INVIO CORRENTE -->
+              <div id="aiStudioLogTerminal" style="display: none; background: rgba(0,0,0,0.5); border: 1px solid #ffffff; border-radius: 12px; padding: 18px; margin-top: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                  <span style="font-size: 0.86rem; font-weight: 300; color: #ffffff;"><i class="ri-send-plane-fill"></i> ESITO TRASMISSIONE FILE</span>
+                  <span style="font-size: 0.74rem; color: var(--text-muted);">SUPABASE CLOUD SYNC</span>
+                </div>
+                <div class="ai-log-terminal" id="aiLogContent" style="max-height: 200px; font-size: 0.88rem; color: #e2e8f0; line-height: 1.6;"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: PRENOTAZIONI & CONTRATTI CLIENTE -->
+        <div id="tab-bookings" class="tab-pane">
+          <div class="data-table-container">
+            <div class="data-table-toolbar">
+              <div>
+                <h4 style="font-size: 1.02rem; font-weight: 300; color: #fff;">Richieste di Noleggio e Contratti Clienti (`public.bookings`)</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Gestisci le richieste per la tua flotta, contatta il cliente via WhatsApp e avanza lo stato di consegna.</p>
+              </div>
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Pratica # e Data</th>
+                  <th>Cliente & WhatsApp</th>
+                  <th>Veicolo e Ritiro</th>
+                  <th>Durata Richiesta</th>
+                  <th>Importo Totale</th>
+                  <th>Stato Pratica</th>
+                  <th style="text-align: right;">Avanza Stato Operativo</th>
+                </tr>
+              </thead>
+              <tbody id="partnerBookingsTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- TAB 4: IMPOSTAZIONI PROFILO AZIENDALE -->
+        <div id="tab-settings" class="tab-pane">
+          <div class="data-table-container" style="padding: 30px; max-width: 760px; margin: 0 auto;">
+            <h3 style="font-size: 1.25rem; font-weight: 300; color: #fff; margin-bottom: 6px;"><i class="ri-building-4-line text-muted"></i> Profilo Mandante / Società di Noleggio</h3>
+            <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 24px;">Questi dati appariranno nelle schede auto sulla piattaforma e nei voucher di prenotazione dei clienti.</p>
+
+            <form onsubmit="savePartnerProfile(event)">
+              <div class="form-grid-2col">
+                <div>
+                  <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Ragione Sociale Azienda (*)</label>
+                  <input type="text" id="settingCompanyName" class="admin-input" value="Toribio Rent & Drive S.R.L." required />
+                </div>
+                <div>
+                  <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Partita IVA / C.F. (*)</label>
+                  <input type="text" id="settingCompanyVat" class="admin-input" value="IT12345670158" required />
+                </div>
+              </div>
+
+              <div class="form-grid-2col">
+                <div>
+                  <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email di Referenza Ordini (*)</label>
+                  <input type="email" id="settingCompanyEmail" class="admin-input" value="srl@toribiomoters.it" required />
+                </div>
+                <div>
+                  <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Standard Richiesta (€)</label>
+                  <input type="number" id="settingDefaultDeposit" class="admin-input" value="1500" required />
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Sede o Indirizzo Operativo per Consegne Veicoli</label>
+                <input type="text" id="settingAddress" class="admin-input" value="Via Montenapoleone 18, Milano (MI)" />
+              </div>
+
+              <div style="margin-bottom: 24px;">
+                <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Condizioni e Orari di Ritiro Veicoli</label>
+                <textarea rows="3" class="admin-input" placeholder="Orari di apertura: Lun-Sab 09:00 - 19:30. Consegna possibile a domicilio su Milano entro 15km...">Orari di apertura: Lun-Sab 09:00 - 19:30. Consegna possibile a domicilio su Milano e Aeroporti Linate/Malpensa.</textarea>
+              </div>
+
+              <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-subtle); padding-top: 18px;">
+                <button type="submit" class="btn-header btn-header-primary" style="padding: 10px 24px; font-size: 0.94rem;">
+                  <i class="ri-save-line"></i> Salva Profilo Mandante
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  
+
+            <div style="margin-bottom: 24px;">
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Endpoint Webhook (Eventi Flotta)</label>
+              <input type="url" class="admin-input" placeholder="https://tuo-server.com/api/webhooks/itercars" style="font-family: monospace;" />
+            </div>
+
+            <button class="btn-header btn-header-primary"><i class="ri-save-line"></i> Salva Configurazione API</button>
+          </div>
+        </div>
+
+  <!-- MODAL: MODIFICA RAPIDA TARIFFA E CAUZIONE -->
+  <div class="modal-overlay" id="editTariffModal">
+    <div class="modal-content" style="max-width: 460px;">
+      <div class="modal-header">
+        <h3 style="font-size: 1.18rem; font-weight: 300; color: var(--accent-gold);"><i class="ri-price-tag-3-line"></i> Modifica Veloce Tariffa</h3>
+        <button onclick="closeEditTariffModal()" class="btn-header btn-header-outline" style="padding: 6px 10px;">
+          <i class="ri-close-line" style="font-size: 1.2rem;"></i>
+        </button>
+      </div>
+
+      <form onsubmit="saveTariffChanges(event)">
+        <p id="modalVehTitle" style="color: #fff; font-weight: 300; font-size: 0.96rem; margin-bottom: 16px;"></p>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (€/giorno) (*)</label>
+          <input type="number" id="editDailyPrice" class="admin-input" required style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+        </div>
+
+        <div style="margin-bottom: 22px;">
+          <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Richiesta sulla Carta (€) (*)</label>
+          <input type="number" id="editDeposit" class="admin-input" required />
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" onclick="closeEditTariffModal()" class="btn-header btn-header-outline">Annulla</button>
+          <button type="submit" class="btn-header btn-header-primary">
+            <i class="ri-check-line"></i> Aggiorna Tariffa Live
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="crm-partner.js?v=31"></script>
+</body>
+</html>

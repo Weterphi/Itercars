@@ -1476,12 +1476,18 @@ function closeAuthModal() {
 function switchAuthMode(mode) {
   const loginBox = document.getElementById("loginFormBox");
   const regBox = document.getElementById("registerFormBox");
+  const partnerRegBox = document.getElementById("partnerRegFormBox");
+  
+  if (loginBox) loginBox.style.display = "none";
+  if (regBox) regBox.style.display = "none";
+  if (partnerRegBox) partnerRegBox.style.display = "none";
+
   if (mode === 'register') {
-    if (loginBox) loginBox.style.display = "none";
     if (regBox) regBox.style.display = "block";
+  } else if (mode === 'partner_reg') {
+    if (partnerRegBox) partnerRegBox.style.display = "block";
   } else {
     if (loginBox) loginBox.style.display = "block";
-    if (regBox) regBox.style.display = "none";
   }
 }
 
@@ -1647,738 +1653,86 @@ window.closeAuthModal = closeAuthModal;
 window.switchAuthMode = switchAuthMode;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
-window.openVipDashboardModal = openVipDashboardModal;
-window.closeVipDashboardModal = closeVipDashboardModal;
-window.handleLogout = handleLogout;
 
-function toggleMobileMenu() {
-  const navLinks = document.querySelector('.nav-links');
-  const icon = document.getElementById('mobileMenuIcon');
-  if (navLinks) {
-    navLinks.classList.toggle('mobile-open');
-    if (icon) {
-      if (navLinks.classList.contains('mobile-open')) {
-        icon.className = 'ri-close-line';
-      } else {
-        icon.className = 'ri-menu-line';
-      }
-    }
-  }
-}
-window.toggleMobileMenu = toggleMobileMenu;
-
-document.addEventListener('DOMContentLoaded', () => {
-  const links = document.querySelectorAll('.nav-links a');
-  links.forEach(link => {
-    link.addEventListener('click', () => {
-      const navLinks = document.querySelector('.nav-links');
-      const icon = document.getElementById('mobileMenuIcon');
-      if (navLinks && navLinks.classList.contains('mobile-open')) {
-        navLinks.classList.remove('mobile-open');
-        if (icon) icon.className = 'ri-menu-line';
-      }
-    });
-  });
-});
-
-/* ==========================================================================
-   CONCIERGE BOT WINDOW LOGIC
-   ========================================================================== */
-function toggleConciergeBot() {
-  const win = document.getElementById('conciergeBotWindow');
-  if (win) {
-    win.classList.toggle('active');
-    if (win.classList.contains('active')) {
-      const input = document.getElementById('botInputText');
-      if (input) setTimeout(() => input.focus(), 300);
-    }
-  }
-}
-window.toggleConciergeBot = toggleConciergeBot;
-
-function handleBotSendMessage(event) {
+async function handlePartnerReg(event) {
   event.preventDefault();
-  const input = document.getElementById('botInputText');
-  if (!input || !input.value.trim()) return;
-  
-  const text = encodeURIComponent(`Salve ITERCARS Concierge, vi contatto dal sito: ${input.value.trim()}`);
-  window.open(`https://wa.me/393755942143?text=${text}`, '_blank');
-  input.value = '';
-  toggleConciergeBot();
-}
-window.handleBotSendMessage = handleBotSendMessage;
-
-/* ==========================================================================
-   SUPPLIER / PARTNER FLEET APPLICATION SUBMIT LOGIC (FormSubmit AJAX)
-   ========================================================================== */
-async function handlePartnerApplicationSubmit(event) {
-  event.preventDefault();
-  
-  const company = document.getElementById('partCompany') ? document.getElementById('partCompany').value.trim() : '';
-  const referent = document.getElementById('partReferent') ? document.getElementById('partReferent').value.trim() : '';
-  const email = document.getElementById('partEmail') ? document.getElementById('partEmail').value.trim() : '';
-  const phone = document.getElementById('partPhone') ? document.getElementById('partPhone').value.trim() : '';
-  const fleetSize = document.getElementById('partFleetSize') ? document.getElementById('partFleetSize').value : '';
-  const city = document.getElementById('partCity') ? document.getElementById('partCity').value.trim() : '';
-  const models = document.getElementById('partModels') ? document.getElementById('partModels').value.trim() : '';
-
-  if (!company || !referent || !email || !phone) {
-    showToast("⚠️ Compila tutti i campi obbligatori contrassegnati con l'asterisco.");
+  if (!supabase) {
+    alert("Errore di connessione al database. Riprovare più tardi.");
     return;
   }
 
-  const recipient = "alessiaconese@itercars.com";
+  const companyName = document.getElementById('partRegCompany').value.trim();
+  const vat = document.getElementById('partRegVat').value.trim();
+  const contactName = document.getElementById('partRegName').value.trim();
+  const phone = document.getElementById('partRegPhone').value.trim();
+  const email = document.getElementById('partRegEmail').value.trim();
+  const address = document.getElementById('partRegAddress').value.trim();
+  const password = document.getElementById('partRegPassword').value;
+  const passwordConfirm = document.getElementById('partRegPasswordConfirm').value;
 
-  // Visualizza notifica di caricamento all'utente
-  showToast("⏳ Invio automatico all'email di Alessia Conese in corso...");
-
-  // Salva una copia nel database Supabase se attivo per mantenere lo storico
-  if (typeof supabase !== 'undefined' && supabase) {
-    try {
-      supabase.from('supplier_applications').insert([{
-        company_name: company,
-        referent_name: referent,
-        email: email,
-        phone: phone,
-        fleet_size: fleetSize,
-        city: city,
-        models: models,
-        recipient_email: recipient,
-        status: 'new'
-      }]).then(({ error }) => {
-        if (error) console.warn("Log Supabase info:", error.message);
-      });
-    } catch (e) {
-      console.warn(e);
-    }
+  if (password !== passwordConfirm) {
+    alert("Le password non coincidono.");
+    return;
   }
 
-  // Chiamata automatica AJAX a FormSubmit per inviare l'email in background
-  const payload = {
-    _subject: `💎 Candidatura Flotta Partner — ${company}`,
-    _template: "table",
-    _captcha: "false",
-    "Azienda / Società": company,
-    "Referente": referent,
-    "Email di Contatto": email,
-    "Telefono / WhatsApp": phone,
-    "Dimensione Flotta": `${fleetSize} supercar`,
-    "Sede / Città Principale": city,
-    "Modelli Proposti / Note": models || "Nessuno specificato"
-  };
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> <span>Invio in corso...</span>`;
+    submitBtn.disabled = true;
+  }
 
   try {
-    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const result = await response.json();
-
-    if (response.ok || result.success === "true") {
-      showToast("✨ Candidatura inviata con successo all'email alessiaconese@itercars.com!");
-      if (event.target && typeof event.target.reset === 'function') {
-        event.target.reset();
-      }
-    } else {
-      throw new Error(result.message || "Errore invio formsubmit");
-    }
-  } catch (err) {
-    console.warn("Chiamata AJAX offline o bloccata, fallback elegante su mailto:", err);
-    showToast("✨ Candidatura pronta! Apertura client email per alessiaconese@itercars.com...");
-    const subjectText = encodeURIComponent(`Candidatura Flotta Partner — ${company}`);
-    const bodyText = encodeURIComponent(
-      `Gentile Alessia Conese,\n\nCandidatura flotta per ITERCARS:\n\n• Azienda: ${company}\n• Referente: ${referent}\n• Email: ${email}\n• Telefono: ${phone}\n• Flotta: ${fleetSize} veicoli\n• Sede: ${city}\n• Modelli/Note: ${models}\n`
-    );
-    setTimeout(() => {
-      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
-    }, 1000);
-  }
-}
-window.handlePartnerApplicationSubmit = handlePartnerApplicationSubmit;
-
-/* ==========================================================================
-   AVAILABILITY REQUEST (Consulta Disponibilità) LOGIC
-   ========================================================================== */
-async function openAvailabilityModal(event) {
-  event.preventDefault();
-  
-  const loc = document.getElementById('searchLocation') ? document.getElementById('searchLocation').value : '';
-  const dFrom = document.getElementById('searchDateFrom') ? document.getElementById('searchDateFrom').value : '';
-  const dTo = document.getElementById('searchDateTo') ? document.getElementById('searchDateTo').value : '';
-  const catSelect = document.getElementById('searchCategory');
-  let cat = catSelect ? catSelect.options[catSelect.selectedIndex].text : '';
-
-  if (catSelect && catSelect.value === 'Specifico') {
-    const specificSelect = document.getElementById('searchSpecificModel');
-    if (specificSelect && specificSelect.value) {
-      cat = specificSelect.value;
-    } else {
-      cat = "Modello Specifico";
-    }
-  }
-
-  const displayLoc = loc || 'Qualsiasi Città / Aeroporto';
-  const displayDates = dFrom && dTo ? `${dFrom} al ${dTo}` : 'Date non specificate';
-
-  if (document.getElementById('availLuogo')) document.getElementById('availLuogo').textContent = displayLoc;
-  if (document.getElementById('availDate')) document.getElementById('availDate').textContent = displayDates;
-  if (document.getElementById('availCategoria')) document.getElementById('availCategoria').textContent = cat || 'Tutte le Categorie';
-
-  if (typeof supabase !== 'undefined' && supabase) {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session && session.user) {
-        const user = session.user;
-        const nameInput = document.getElementById('availName');
-        const emailInput = document.getElementById('availEmail');
-        
-        if (emailInput && user.email) {
-          emailInput.value = user.email;
-        }
-        if (nameInput && user.user_metadata && user.user_metadata.full_name) {
-          nameInput.value = user.user_metadata.full_name;
+    // 1. Create Supabase Auth User
+    const { data: authData, error: authErr } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: contactName,
+          company: companyName,
+          role: 'pending_partner'
         }
       }
-    } catch(e) {
-      console.warn("Nessun utente loggato o errore:", e.message);
-    }
-  }
-
-  const modal = document.getElementById('availabilityModal');
-  if (modal) modal.classList.add('active');
-}
-
-function closeAvailabilityModal() {
-  const modal = document.getElementById('availabilityModal');
-  if (modal) modal.classList.remove('active');
-}
-
-async function handleAvailabilitySubmit(event) {
-  event.preventDefault();
-  
-  const name = document.getElementById('availName') ? document.getElementById('availName').value.trim() : '';
-  const phone = document.getElementById('availPhone').value.trim();
-  const email = document.getElementById('availEmail').value.trim();
-  const notes = document.getElementById('availNotes').value.trim();
-  
-  const luogo = document.getElementById('availLuogo').textContent;
-  const dates = document.getElementById('availDate').textContent;
-  const categoria = document.getElementById('availCategoria').textContent;
-
-  // Cache user data locally
-  cacheUserData(name, email, phone);
-
-  if (!name || !phone || !email) {
-    showToast("⚠️ Compila Nome, Telefono ed Email.");
-    return;
-  }
-
-  showToast("⏳ Invio richiesta di disponibilità in corso...");
-
-  const recipient = "info@itercars.com";
-
-  if (typeof supabase !== 'undefined' && supabase) {
-    try {
-      // Inserisce in bookings per piena coerenza con la tabella principale NBT
-      supabase.from('bookings').insert([{
-        vehicle_name: categoria || 'Richiesta Disponibilità',
-        client_name: name,
-        client_phone: phone,
-        client_email: email,
-        pickup_location: luogo || null,
-        rental_days: 1,
-        total_price: 0,
-        status: 'pending'
-      }]).then(({ error }) => {
-         if (error) console.warn("Errore salvataggio disponibilità in bookings:", error.message);
-         else console.log("✅ Richiesta disponibilità salvata in bookings!");
-      });
-
-      // Retrocompatibilità su availability_requests
-      supabase.from('availability_requests').insert([{
-        name: name,
-        phone: phone,
-        email: email,
-        notes: notes,
-        location: luogo,
-        dates: dates,
-        category: categoria,
-        status: 'new'
-      }]).then(() => {});
-    } catch(e) { console.warn(e); }
-  }
-
-  // Risolvi il fornitore in base alla categoria o nome selezionato
-  let providerInfo = {
-    name: "Stefano",
-    phone: "+393206144070",
-    website: "https://mfitalyluxuryrent.com/"
-  };
-  const matchingCar = fleetData.find(c => categoria.toLowerCase().includes(c.name.toLowerCase()) || c.name.toLowerCase().includes(categoria.toLowerCase()));
-  if (matchingCar && matchingCar.provider && typeof providersData !== 'undefined') {
-    providerInfo = providersData[matchingCar.provider] || providerInfo;
-  }
-
-  const payload = {
-    _subject: `🚙 Nuova Richiesta Disponibilità Auto — ${categoria}`,
-    _template: "table",
-    _captcha: "false",
-    "Luogo di Ritiro": luogo,
-    "Date Richieste": dates,
-    "Categoria/Modello": categoria,
-    "Nome Cliente": name,
-    "Telefono Cliente": phone,
-    "Email Cliente": email,
-    "Note Aggiuntive": notes || "Nessuna nota",
-    "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
-  };
-
-  try {
-    const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(payload)
     });
 
-    const result = await response.json();
+    if (authErr) throw authErr;
 
-    if (response.ok || result.success === "true") {
-      showToast("✅ Richiesta inviata con successo! Ti contatteremo a breve.");
-      closeAvailabilityModal();
-      event.target.reset();
-    } else {
-      throw new Error(result.message || "Errore invio formsubmit");
-    }
-  } catch (err) {
-    console.warn("Fallback su mailto:", err);
-    showToast("✅ Apertura client email in corso...");
-    const subjectText = encodeURIComponent(`Richiesta Disponibilità — ${categoria}`);
-    const bodyText = encodeURIComponent(
-      `Richiesta disponibilità da ITERCARS:\n\n• Luogo: ${luogo}\n• Date: ${dates}\n• Categoria: ${categoria}\n• Telefono: ${phone}\n• Email: ${email}\n• Note: ${notes}\n`
-    );
-    setTimeout(() => {
-      window.location.href = `mailto:${recipient}?subject=${subjectText}&body=${bodyText}`;
-      closeAvailabilityModal();
-      event.target.reset();
-    }, 1000);
-  }
-}
+    const authId = authData.user ? authData.user.id : null;
 
-window.openAvailabilityModal = openAvailabilityModal;
-window.closeAvailabilityModal = closeAvailabilityModal;
-window.handleAvailabilitySubmit = handleAvailabilitySubmit;
+    // 2. Insert into supplier_applications with auth_id
+    const { error: dbErr } = await supabase.from('supplier_applications').insert([{
+      auth_id: authId,
+      company_name: companyName,
+      partita_iva: vat,
+      referent_name: contactName,
+      email: email,
+      phone: phone,
+      fleet_size: 'Non specificato',
+      city: address,
+      models: 'Richiesta dal popup Area Riservata',
+      status: 'new',
+      data: new Date().toLocaleString('it-IT')
+    }]);
 
-/* ==========================================================================
-   SPECIFIC MODEL SEARCH LOGIC
-   ========================================================================== */
-function setupSpecificModels() {
-  const specificModelSelect = document.getElementById('searchSpecificModel');
-  if (specificModelSelect && typeof fleetData !== 'undefined') {
-    specificModelSelect.innerHTML = '<option value="">Seleziona un modello...</option>';
-    // Sort cars alphabetically avoiding duplicates
-    const uniqueCars = [];
-    const map = new Map();
-    for (const item of fleetData) {
-        if(!map.has(item.name)){
-            map.set(item.name, true);
-            uniqueCars.push({
-                name: item.name
-            });
-        }
-    }
-    const sortedCars = uniqueCars.sort((a, b) => a.name.localeCompare(b.name));
+    if (dbErr) throw dbErr;
     
-    sortedCars.forEach(car => {
-      const option = document.createElement('option');
-      option.value = car.name;
-      option.textContent = car.name;
-      specificModelSelect.appendChild(option);
-    });
-  }
-}
+    // Auto-logout the pending user so they don't access the VIP dashboard
+    await supabase.auth.signOut();
 
-function handleCategoryChange() {
-  const catSelect = document.getElementById('searchCategory');
-  const specificContainer = document.getElementById('specificModelContainer');
-  const searchGrid = document.querySelector('.search-grid');
-  
-  if (catSelect && specificContainer) {
-    if (catSelect.value === 'Specifico') {
-      specificContainer.style.display = 'block';
-      if (searchGrid) searchGrid.classList.add('has-specific');
-    } else {
-      specificContainer.style.display = 'none';
-      if (searchGrid) searchGrid.classList.remove('has-specific');
+    alert("Richiesta inviata con successo! Il team ti contatterà al più presto. Non potrai accedere fino ad approvazione avvenuta.");
+    closeAuthModal();
+    event.target.reset();
+  } catch (error) {
+    console.error("Errore invio candidatura partner:", error);
+    alert("Si è verificato un errore durante l'invio della richiesta: " + (error.message || "Riprova più tardi."));
+  } finally {
+    if (submitBtn) {
+      submitBtn.innerHTML = `<span>Completa richiesta</span> <i class="ri-send-plane-fill"></i>`;
+      submitBtn.disabled = false;
     }
   }
 }
-
-window.handleCategoryChange = handleCategoryChange;
-document.addEventListener('DOMContentLoaded', setupSpecificModels);
-
-/* ==========================================================================
-   AUTOCOMPLETE INDIRIZZI GLOBALE (PHOTON API)
-   ========================================================================== */
-function setupAddressAutocomplete(inputId, suggestionsId) {
-  const input = document.getElementById(inputId);
-  const suggestionsBox = document.getElementById(suggestionsId);
-  if (!input || !suggestionsBox) return;
-
-  let timeoutId;
-
-  input.addEventListener('input', function() {
-    clearTimeout(timeoutId);
-    const query = this.value.trim();
-    
-    if (query.length < 3) {
-      suggestionsBox.style.display = 'none';
-      return;
-    }
-
-    timeoutId = setTimeout(() => {
-      fetch(`https://photon.komoot.io/api/?q=${encodeURIComponent(query)}&limit=5`)
-        .then(response => response.json())
-        .then(data => {
-          suggestionsBox.innerHTML = '';
-          if (data.features && data.features.length > 0) {
-            data.features.forEach(feature => {
-              const props = feature.properties;
-              const mainText = props.name || props.city || props.state;
-              if (!mainText) return;
-              
-              const addressParts = [];
-              if (props.city && props.city !== mainText) addressParts.push(props.city);
-              if (props.state && props.state !== mainText) addressParts.push(props.state);
-              if (props.country) addressParts.push(props.country);
-              const secondaryText = addressParts.join(', ');
-
-              const li = document.createElement('li');
-              li.innerHTML = `<strong>${mainText}</strong>${secondaryText ? `<span class="suggestion-secondary">${secondaryText}</span>` : ''}`;
-              
-              li.addEventListener('click', () => {
-                input.value = `${mainText}${secondaryText ? ', ' + secondaryText : ''}`;
-                suggestionsBox.style.display = 'none';
-              });
-              
-              suggestionsBox.appendChild(li);
-            });
-            suggestionsBox.style.display = 'block';
-          } else {
-            suggestionsBox.style.display = 'none';
-          }
-        })
-        .catch(err => {
-          console.error("Autocomplete error:", err);
-          suggestionsBox.style.display = 'none';
-        });
-    }, 300); // debounce 300ms
-  });
-
-  // Chiudi i suggerimenti se si clicca fuori
-  document.addEventListener('click', function(e) {
-    if (e.target !== input && e.target !== suggestionsBox) {
-      suggestionsBox.style.display = 'none';
-    }
-  });
-}
-
-/* ==========================================================================
-   USER DATA AUTOFILL & CACHING
-   ========================================================================== */
-function cacheUserData(name, email, phone) {
-  if (name) localStorage.setItem('itercars_user_name', name);
-  if (email) localStorage.setItem('itercars_user_email', email);
-  if (phone) localStorage.setItem('itercars_user_phone', phone);
-}
-
-async function prefillUserDataForms() {
-  let userData = {
-    name: localStorage.getItem('itercars_user_name') || '',
-    email: localStorage.getItem('itercars_user_email') || '',
-    phone: localStorage.getItem('itercars_user_phone') || ''
-  };
-
-  if (typeof supabase !== 'undefined' && supabase) {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session && session.user) {
-        const user = session.user;
-        if (user.email) userData.email = user.email;
-        if (user.user_metadata && user.user_metadata.full_name) userData.name = user.user_metadata.full_name;
-        if (user.phone || (user.user_metadata && user.user_metadata.phone)) userData.phone = user.phone || user.user_metadata.phone;
-      }
-    } catch(e) {}
-  }
-
-  const availName = document.getElementById('availName');
-  const availEmail = document.getElementById('availEmail');
-  const availPhone = document.getElementById('availPhone');
-  if (availName && !availName.value) availName.value = userData.name;
-  if (availEmail && !availEmail.value) availEmail.value = userData.email;
-  if (availPhone && !availPhone.value) availPhone.value = userData.phone;
-
-  const clientName = document.getElementById('clientNameInput');
-  const clientEmail = document.getElementById('clientEmailInput');
-  const clientPhone = document.getElementById('clientPhoneInput');
-  if (clientName && !clientName.value) clientName.value = userData.name;
-  if (clientEmail && !clientEmail.value) clientEmail.value = userData.email;
-  if (clientPhone && !clientPhone.value) clientPhone.value = userData.phone;
-
-  const detailName = document.getElementById('detailName');
-  const detailEmail = document.getElementById('detailEmail');
-  const detailPhone = document.getElementById('detailPhone');
-  if (detailName && !detailName.value) detailName.value = userData.name;
-  if (detailEmail && !detailEmail.value) detailEmail.value = userData.email;
-  if (detailPhone && !detailPhone.value) detailPhone.value = userData.phone;
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  setupAddressAutocomplete('searchLocation', 'searchLocationSuggestions');
-  setupAddressAutocomplete('detailLocation', 'detailLocationSuggestions');
-  
-  prefillUserDataForms();
-
-  // Handle Logo Animation Switch
-  const logoContainer = document.getElementById("navbarLogoContainer");
-  if (logoContainer) {
-    setTimeout(() => {
-      logoContainer.classList.remove("logo-animating");
-      logoContainer.classList.add("logo-idle");
-    }, 1200); // Wait for logoSlideIn animation to finish
-  }
-
-  // Inizializzazione per fleet.html
-  if (window.location.pathname.includes('fleet.html')) {
-    const params = new URLSearchParams(window.location.search);
-    const category = params.get('category') || 'Tutti';
-    filterFleetPage(category);
-  }
-
-  // Disattiva sempre l'audio dei video di background
-  document.querySelectorAll('.hero-bg-video, video').forEach(vid => {
-    vid.muted = true;
-    vid.volume = 0;
-  });
-
-  // Avvia il controllo automatico del dossier in sospeso
-  initAutoRecoveryCheck();
-});
-
-/* ==========================================================================
-   DOSSIER & PRATICA RECOVERY SYSTEM (Pillars 2 & 3)
-   ========================================================================== */
-
-function ensureDossierRecoveryModal() {
-  let modal = document.getElementById('dossierRecoveryModal');
-  if (!modal) {
-    const div = document.createElement('div');
-    div.className = 'modal-overlay';
-    div.id = 'dossierRecoveryModal';
-    div.innerHTML = `
-      <div class="glass-card modal-content" style="max-width: 520px; text-align: center;">
-        <button class="close-modal" onclick="closeDossierRecoveryModal()"><i class="ri-close-line"></i></button>
-        
-        <div style="width: 64px; height: 64px; background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.8rem; color: #2ecc71;">
-          <i class="ri-folder-shield-2-fill"></i>
-        </div>
-
-        <h3 style="font-size: 1.6rem; margin-bottom: 6px; color: #fff;">Recupera la Tua Pratica</h3>
-        <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
-          Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
-        </p>
-
-        <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
-          <div class="form-group">
-            <label style="color: var(--text-muted); font-size: 0.85rem;"><i class="ri-barcode-line text-gradient"></i> Codice Preventivo (es. PREV-XXXX o IT-...)</label>
-            <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px; width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; color: #fff;">
-          </div>
-
-          <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">— OPPURE —</div>
-
-          <div class="form-group">
-            <label style="color: var(--text-muted); font-size: 0.85rem;"><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
-            <input type="email" class="form-control" id="recoveryEmailInput" placeholder="nome.cognome@email.com" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); padding: 12px; border-radius: 8px; color: #fff;">
-          </div>
-
-          <div id="recoveryErrorMsg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; text-align: center;"></div>
-
-          <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 6px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
-            <i class="ri-search-eye-line"></i> <span>Riapri Pratica & Documenti</span>
-          </button>
-        </form>
-      </div>
-    `;
-    document.body.appendChild(div);
-    modal = div;
-  }
-  return modal;
-}
-
-function openDossierRecoveryModal() {
-  const modal = ensureDossierRecoveryModal();
-  if (modal) {
-    modal.classList.add('active');
-    const input = document.getElementById('recoveryQuoteCodeInput');
-    if (input) {
-      const savedCode = localStorage.getItem('itercars_last_quote_code');
-      if (savedCode) input.value = savedCode;
-      input.focus();
-    }
-    const err = document.getElementById('recoveryErrorMsg');
-    if (err) err.style.display = 'none';
-  }
-}
-
-function closeDossierRecoveryModal() {
-  const modal = document.getElementById('dossierRecoveryModal');
-  if (modal) modal.classList.remove('active');
-}
-
-async function handleDossierRecoverySubmit(e) {
-  e.preventDefault();
-  const codeInput = document.getElementById('recoveryQuoteCodeInput');
-  const emailInput = document.getElementById('recoveryEmailInput');
-  const errorDiv = document.getElementById('recoveryErrorMsg');
-  if (errorDiv) errorDiv.style.display = 'none';
-
-  let code = codeInput ? codeInput.value.trim().toUpperCase() : '';
-  const email = emailInput ? emailInput.value.trim() : '';
-
-  if (!code && !email) {
-    if (errorDiv) {
-      errorDiv.innerText = 'Inserisci un Codice Preventivo oppure la tua Email.';
-      errorDiv.style.display = 'block';
-    }
-    return;
-  }
-
-  // 1. Se l'utente ha digitato un codice o se c'è una corrispondenza esatta, reindirizza direttamente ad upload-documenti.html!
-  if (code && code.length >= 3) {
-    localStorage.setItem('itercars_last_quote_code', code);
-    window.location.href = `upload-documenti.html?code=${encodeURIComponent(code)}`;
-    return;
-  }
-
-  // 2. Se ha inserito solo l'email, cerca su Supabase (se connesso)
-  const supa = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
-  if (supa && email) {
-    try {
-      // Cerca prima l'email su crm_leads per risalire a note e preventivi
-      const { data: leadsData } = await supa.from('crm_leads')
-        .select('id, notes, vehicle_interest')
-        .ilike('email', `%${email}%`)
-        .order('created_at', { ascending: false })
-        .limit(3);
-
-      if (leadsData && leadsData.length > 0) {
-        for (const lead of leadsData) {
-          // Controlla se c'è un preventivo collegato al lead_id in quotes
-          const { data: quotesData } = await supa.from('quotes')
-            .select('quote_code')
-            .eq('lead_id', lead.id)
-            .limit(1);
-
-          if (quotesData && quotesData.length > 0 && quotesData[0].quote_code) {
-            const matchedCode = quotesData[0].quote_code;
-            localStorage.setItem('itercars_last_quote_code', matchedCode);
-            window.location.href = `upload-documenti.html?code=${encodeURIComponent(matchedCode)}`;
-            return;
-          }
-
-          // Se non in quotes, cerca il codice nelle note (es. [PREV-1234] o IT-...)
-          if (lead.notes) {
-            const codeMatch = lead.notes.match(/\[(PREV-[A-Z0-9\-]+)\]|\[(IT-[A-Z0-9\-]+)\]|\b(PREV-[A-Z0-9\-]+)\b|\b(IT-[A-Z0-9\-]+)\b/i);
-            if (codeMatch) {
-              const extractedCode = (codeMatch[1] || codeMatch[2] || codeMatch[3] || codeMatch[4]).toUpperCase();
-              localStorage.setItem('itercars_last_quote_code', extractedCode);
-              window.location.href = `upload-documenti.html?code=${encodeURIComponent(extractedCode)}`;
-              return;
-            }
-          }
-        }
-      }
-
-      // Cerca in quotes per quote_code o se presente in memoria locale
-      const localCode = localStorage.getItem('itercars_last_quote_code');
-      if (localCode) {
-        window.location.href = `upload-documenti.html?code=${encodeURIComponent(localCode)}`;
-        return;
-      }
-    } catch (dbErr) {
-      console.warn("Avviso durante ricerca pratica per email:", dbErr);
-    }
-  }
-
-  // 3. Fallback per email senza DB
-  const savedLocalCode = localStorage.getItem('itercars_last_quote_code');
-  if (savedLocalCode) {
-    window.location.href = `upload-documenti.html?code=${encodeURIComponent(savedLocalCode)}`;
-    return;
-  }
-
-  if (errorDiv) {
-    errorDiv.innerText = 'Nessuna pratica trovata per l\'email o codice specificato. Verifica di aver digitato il codice preventivo corretto.';
-    errorDiv.style.display = 'block';
-  }
-}
-
-function initAutoRecoveryCheck() {
-  // Non mostrare se siamo già su upload-documenti.html o success.html
-  if (window.location.pathname.includes('upload-documenti.html') || window.location.pathname.includes('success.html')) return;
-
-  const savedQuoteJson = localStorage.getItem('itercars_last_quote');
-  const savedCode = localStorage.getItem('itercars_last_quote_code');
-
-  if (savedQuoteJson || savedCode) {
-    let carName = 'la tua vettura';
-    let codeStr = savedCode || 'Preventivo';
-    try {
-      if (savedQuoteJson) {
-        const qData = JSON.parse(savedQuoteJson);
-        if (qData.carBrand || qData.carModel) {
-          carName = `${qData.carBrand || ''} ${qData.carModel || ''}`.trim();
-        } else if (qData.brand || qData.model) {
-          carName = `${qData.brand || ''} ${qData.model || ''}`.trim();
-        }
-        if (qData.code) codeStr = qData.code;
-      }
-    } catch (e) { /* ignore */ }
-
-    // Mostra il toast con un piccolo ritardo (es. 1.5s per un effetto WOW e non invasivo)
-    setTimeout(() => {
-      const toast = document.getElementById('autoRecoveryToast');
-      const textElem = document.getElementById('autoRecoveryText');
-      if (textElem) {
-        textElem.innerHTML = `Abbiamo memorizzato il tuo preventivo per <strong>${carName}</strong> (${codeStr}). Clicca sotto per riprendere il caricamento documenti e bloccare l'auto.`;
-      }
-      if (toast) {
-        toast.style.display = 'block';
-      }
-    }, 1500);
-  }
-}
-
-function resumeSavedQuote() {
-  const savedCode = localStorage.getItem('itercars_last_quote_code');
-  if (savedCode) {
-    window.location.href = `upload-documenti.html?code=${encodeURIComponent(savedCode)}`;
-  } else {
-    window.location.href = 'upload-documenti.html';
-  }
-}
-
-function dismissAutoRecoveryToast() {
-  const toast = document.getElementById('autoRecoveryToast');
-  if (toast) {
-    toast.style.display = 'none';
-  }
-}
+window.switchAuthMode = switchAuthMode;
+window.handleLogin = handleLogin;
+window.handleRegister = handleRegister;
 

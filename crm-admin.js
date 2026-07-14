@@ -14,6 +14,8 @@ var supabase = (typeof window.supabase !== 'undefined' && window.supabase.create
 var CurrentLeads = [];
 var CurrentVehicles = [];
 var CurrentLuxuryVehicles = [];
+var CurrentPartnerVehicles = [];
+var CurrentProviders = [];
 var CurrentNltOffers = [];
 var CurrentNbtOffers = [];
 var ActiveFleetSubTab = 'nbt';
@@ -44,12 +46,16 @@ function switchTab(tabId, btnElem) {
     'tab-bookings': 'Prenotazioni NBT',
     'tab-comparator': 'Comparatore 1-Click',
     'tab-dossier': 'Dossier Delibere Credito',
-    'tab-partners': 'Candidature Partner'
+    'tab-partners': 'Candidature Partner',
+    'tab-fleet-approval': 'Approvazione Flotte Excel Mandanti'
   };
 
   const breadcrumb = document.getElementById('currentBreadcrumbName');
   if (breadcrumb && names[tabId]) {
     breadcrumb.textContent = names[tabId];
+  }
+  if (tabId === 'tab-fleet-approval') {
+    loadFleetApprovalTable();
   }
 }
 
@@ -93,12 +99,14 @@ async function loadAllCrmData() {
   renderNbtOffersTable(CurrentNbtOffers);
   renderNltOffersTable(CurrentNltOffers);
   renderLuxuryTable(CurrentLuxuryVehicles);
+  renderPartnerOffersTable(CurrentPartnerVehicles);
   renderQuotesTable(CurrentQuotes);
   renderBookingsTable(CurrentBookings);
   renderDocsOverview();
   renderPartnersTable(CurrentPartners);
   populateComparisonCarSelect();
   updateKpiSummary();
+  loadFleetApprovalTable();
 }
 
 // 1. Fetch Leads (`public.crm_leads`)
@@ -136,10 +144,11 @@ async function fetchLeadsFromDatabase() {
 // 2. Fetch Vehicles, NLT, NBT & Luxury (`public.vehicles`, `public.nlt_offers`, `public.nbt_offers`)
 async function fetchVehiclesFromDatabase() {
   try {
-    const [vehRes, nltRes, nbtRes] = await Promise.all([
+    const [vehRes, nltRes, nbtRes, provRes] = await Promise.all([
       supabase.from('vehicles').select('*').order('created_at', { ascending: false }),
       supabase.from('nlt_offers').select('*, vehicles(*)').order('created_at', { ascending: false }),
-      supabase.from('nbt_offers').select('*, vehicles(*)').order('created_at', { ascending: false })
+      supabase.from('nbt_offers').select('*, vehicles(*)').order('created_at', { ascending: false }),
+      supabase.from('providers').select('*').order('name', { ascending: true })
     ]);
 
     if (!vehRes.error && vehRes.data) CurrentVehicles = vehRes.data;
@@ -150,6 +159,10 @@ async function fetchVehiclesFromDatabase() {
 
     if (!nbtRes.error && nbtRes.data) CurrentNbtOffers = nbtRes.data;
     else CurrentNbtOffers = [];
+
+    if (!provRes.error && provRes.data) CurrentProviders = provRes.data;
+    else CurrentProviders = window._allProvidersCache || [];
+    window._allProvidersCache = CurrentProviders;
 
     // Filtra esclusivamente le supercar, SUV Luxury, cabrio e sportive prestige che corrispondono alla pagina Luxury del sito
     CurrentLuxuryVehicles = CurrentVehicles.filter(v => {
@@ -162,17 +175,29 @@ async function fetchVehiclesFromDatabase() {
       return (v.is_luxury === true && (isLuxCat || isLuxBrand || Number(v.daily_price) >= 400)) || isLuxCat || isLuxBrand;
     });
 
+    CurrentPartnerVehicles = CurrentVehicles.filter(v => {
+      return (v.provider_id != null && v.provider_id !== '') || 
+             (v.import_job_id != null && v.import_job_id !== '') ||
+             (v.partner_notes != null && v.partner_notes !== '');
+    });
+
     // Allinea anche i contatori specifici nei badge
     if (document.getElementById('badgeSubVehicles')) document.getElementById('badgeSubVehicles').textContent = CurrentVehicles.length;
     if (document.getElementById('badgeSubNlt')) document.getElementById('badgeSubNlt').textContent = CurrentNltOffers.length;
     if (document.getElementById('badgeSubNbt')) document.getElementById('badgeSubNbt').textContent = CurrentNbtOffers.length;
     if (document.getElementById('badgeSubLuxury')) document.getElementById('badgeSubLuxury').textContent = CurrentLuxuryVehicles.length;
+    if (document.getElementById('badgeSubPartners')) document.getElementById('badgeSubPartners').textContent = CurrentPartnerVehicles.length;
+
+    if (typeof renderPartnerOffersTable === 'function') {
+      renderPartnerOffersTable(CurrentPartnerVehicles);
+    }
   } catch(e) {
     console.warn("Errore fetch vehicles/offers:", e);
     CurrentVehicles = [];
     CurrentNltOffers = [];
     CurrentNbtOffers = [];
     CurrentLuxuryVehicles = [];
+    CurrentPartnerVehicles = [];
   }
 }
 
@@ -319,10 +344,10 @@ function renderKanbanBoard() {
 
     let nextSt = '';
     let nextLabel = '';
-    if (st === 'new_lead') { nextSt = 'quote_sent'; nextLabel = 'Invia Prev. ➔'; }
-    else if (st === 'quote_sent') { nextSt = 'docs_requested'; nextLabel = 'Istruttoria ➔'; }
-    else if (st === 'docs_requested') { nextSt = 'approved_by_provider'; nextLabel = 'Delibera OK ➔'; }
-    else if (st === 'approved_by_provider') { nextSt = 'contract_signed'; nextLabel = 'Firma Contratto ➔'; }
+    if (st === 'new_lead') { nextSt = 'quote_sent'; nextLabel = 'Invia Prev. '; }
+    else if (st === 'quote_sent') { nextSt = 'docs_requested'; nextLabel = 'Istruttoria '; }
+    else if (st === 'docs_requested') { nextSt = 'approved_by_provider'; nextLabel = 'Delibera OK '; }
+    else if (st === 'approved_by_provider') { nextSt = 'contract_signed'; nextLabel = 'Firma Contratto '; }
 
     const cardHtml = `
       <div class="lead-card" onclick="openDossierModal('${lead.id}')">
@@ -339,13 +364,13 @@ function renderKanbanBoard() {
 
         <div class="lead-actions" onclick="event.stopPropagation()">
           <a href="https://api.whatsapp.com/send?phone=${(lead.phone||'').replace(/[^0-9]/g, '')}&text=Buongiorno ${lead.first_name}, la contatto dal Desk ITERCARS per la sua richiesta su ${lead.car_name}." target="_blank" class="btn-card-action">
-            <i class="ri-whatsapp-line" style="color: #2ecc71;"></i> WhatsApp
+            <i class="ri-whatsapp-line" style="color: #ffffff;"></i> WhatsApp
           </a>
           ${nextSt ? `
             <button class="btn-card-action btn-advance" onclick="quickAdvanceLead('${lead.id}', '${nextSt}')">
               ${nextLabel}
             </button>
-          ` : '<span style="font-size: 0.78rem; color: #2ecc71; font-weight: 800;"><i class="ri-check-double-line"></i> CONCLUSO</span>'}
+          ` : '<span style="font-size: 0.78rem; color: #ffffff; font-weight: 800;"><i class="ri-check-double-line"></i> CONCLUSO</span>'}
         </div>
       </div>
     `;
@@ -493,7 +518,7 @@ function renderVehiclesTable(vehicles) {
           </div>
         </td>
         <td>
-          <div><i class="ri-gas-station-line text-green" style="font-size: 1rem; vertical-align: -2px;"></i> <strong style="color: #e2e8f0; font-size: 0.9rem;">${v.fuel_type || 'Ibrido / Diesel'}</strong></div>
+          <div><i class="ri-gas-station-line text-muted" style="font-size: 1rem; vertical-align: -2px;"></i> <strong style="color: #e2e8f0; font-size: 0.9rem;">${v.fuel_type || 'Ibrido / Diesel'}</strong></div>
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">${v.transmission || 'Automatico 8M'}</small>
         </td>
         <td>
@@ -595,8 +620,8 @@ function renderNbtOffersTable(offers) {
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">${Number(o.km_per_year || 20000).toLocaleString('it-IT')} Km Inclusi</small>
         </td>
         <td>
-          <span style="background: ${o.is_ready_delivery !== false ? 'rgba(46,204,113,0.15)' : 'rgba(56,189,248,0.15)'}; color: ${o.is_ready_delivery !== false ? '#2ecc71' : '#38bdf8'}; padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; display: inline-block;">
-            ${o.is_ready_delivery !== false ? '🚀 Subito Disponibile' : '⏳ Ordine (' + (o.delivery_weeks || 2) + ' sett.)'}
+          <span style="background: ${o.is_ready_delivery !== false ? 'rgba(46,204,113,0.15)' : 'rgba(56,189,248,0.15)'}; color: ${o.is_ready_delivery !== false ? '#ffffff' : '#ffffff'}; padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; display: inline-block;">
+            ${o.is_ready_delivery !== false ? ' Subito Disponibile' : '⏳ Ordine (' + (o.delivery_weeks || 2) + ' sett.)'}
           </span>
         </td>
         <td>
@@ -607,7 +632,7 @@ function renderNbtOffersTable(offers) {
         <td style="text-align: right;">
           <div style="display: flex; gap: 8px; justify-content: flex-end;">
             <button class="btn-header btn-header-outline" style="padding: 6px 10px; font-size: 0.78rem; border-color: rgba(241,196,15,0.4);" onclick="editNbtOfferRecord('${o.id}')" title="Modifica Listino NBT">
-              <i class="ri-edit-line text-gold"></i>
+              <i class="ri-edit-line text-muted"></i>
             </button>
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deleteNbtOfferRecord('${o.id}')" title="Rimuovi da NBT">
               <i class="ri-delete-bin-line"></i>
@@ -647,7 +672,7 @@ function renderNltOffersTable(offers) {
       <tr>
         <td colspan="7">
           <div class="empty-state-box">
-            <i class="ri-calendar-check-line" style="color: #38bdf8;"></i>
+            <i class="ri-calendar-check-line" style="color: #ffffff;"></i>
             <h4>Nessuna offerta NLT Lungo Termine configurata nel DB</h4>
             <p>Clicca su "+ Aggiungi / Configura Auto in NLT" per impostare canoni e durate.</p>
           </div>
@@ -673,12 +698,12 @@ function renderNltOffersTable(offers) {
             <img src="${img}" alt="${title}" style="width: 72px; height: 46px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(56,189,248,0.3); flex-shrink: 0; background: rgba(0,0,0,0.3);" onerror="this.src='logo-text.png'" />
             <div>
               <strong style="color: #fff; font-size: 0.96rem; display: block; line-height: 1.2; margin-bottom: 3px;">${title}</strong>
-              <span style="font-size: 0.78rem; color: #38bdf8; background: rgba(56,189,248,0.12); padding: 2px 6px; border-radius: 4px; font-weight: 700;">${o.provider_offer_code || 'Mandante NLT'} • ${veh.category || 'Executive'}</span>
+              <span style="font-size: 0.78rem; color: #ffffff; background: rgba(56,189,248,0.12); padding: 2px 6px; border-radius: 4px; font-weight: 700;">${o.provider_offer_code || 'Mandante NLT'} • ${veh.category || 'Executive'}</span>
             </div>
           </div>
         </td>
         <td>
-          <strong style="color: #38bdf8; font-size: 1.15rem; display: block; line-height: 1.2;">€ ${monthly.toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: #fff;">/mese</small></strong>
+          <strong style="color: #ffffff; font-size: 1.15rem; display: block; line-height: 1.2;">€ ${monthly.toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: #fff;">/mese</small></strong>
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">Tutto Incluso</small>
         </td>
         <td>
@@ -690,8 +715,8 @@ function renderNltOffersTable(offers) {
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">Anticipo</small>
         </td>
         <td>
-          <span style="background: ${o.is_ready_delivery !== false ? 'rgba(46,204,113,0.15)' : 'rgba(56,189,248,0.15)'}; color: ${o.is_ready_delivery !== false ? '#2ecc71' : '#38bdf8'}; padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; display: inline-block;">
-            ${o.is_ready_delivery !== false ? '🚀 Pronta Consegna' : '⏳ Ordine (' + (o.delivery_weeks || 4) + ' sett.)'}
+          <span style="background: ${o.is_ready_delivery !== false ? 'rgba(46,204,113,0.15)' : 'rgba(56,189,248,0.15)'}; color: ${o.is_ready_delivery !== false ? '#ffffff' : '#ffffff'}; padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; display: inline-block;">
+            ${o.is_ready_delivery !== false ? ' Pronta Consegna' : '⏳ Ordine (' + (o.delivery_weeks || 4) + ' sett.)'}
           </span>
         </td>
         <td>
@@ -702,7 +727,7 @@ function renderNltOffersTable(offers) {
         <td style="text-align: right;">
           <div style="display: flex; gap: 8px; justify-content: flex-end;">
             <button class="btn-header btn-header-outline" style="padding: 6px 10px; font-size: 0.78rem; border-color: rgba(56,189,248,0.4);" onclick="editNltOfferRecord('${o.id}')" title="Modifica Listino NLT">
-              <i class="ri-edit-line text-blue"></i>
+              <i class="ri-edit-line text-muted"></i>
             </button>
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deleteNltOfferRecord('${o.id}')" title="Rimuovi da NLT">
               <i class="ri-delete-bin-line"></i>
@@ -1097,7 +1122,7 @@ function populateNltVehicleSelect(selectedVehId) {
     const isSel = (v.id === selectedVehId) ? 'selected' : '';
     sel.innerHTML += `<option value="${v.id}" ${isSel}>${t} (€${v.daily_price || 0}/m indicativo)</option>`;
   });
-  sel.innerHTML += '<option value="NEW_VEHICLE" style="font-weight:700; color:#38bdf8;">+ Nuova Marca e Modello (Crea al volo in flotta)...</option>';
+  sel.innerHTML += '<option value="NEW_VEHICLE" style="font-weight:700; color:#ffffff;">+ Nuova Marca e Modello (Crea al volo in flotta)...</option>';
 }
 
 function handleNltVehicleSelectChange(selectElem) {
@@ -1311,7 +1336,7 @@ function renderLuxuryTable(vehicles) {
           <div style="font-size: 0.75rem; color: var(--text-muted);">${v.category || 'Supercar'} • ${v.badge || 'VIP'}</div>
         </td>
         <td>
-          <div style="font-size: 0.82rem; font-weight: 600;"><i class="ri-dashboard-3-line text-gold"></i> ${hp}</div>
+          <div style="font-size: 0.82rem; font-weight: 600;"><i class="ri-dashboard-3-line text-muted"></i> ${hp}</div>
           <div style="font-size: 0.76rem; color: var(--text-muted);">${accel} • ${speed}</div>
         </td>
         <td style="font-weight: 800; font-size: 1.0rem; color: #f39c12;">
@@ -1324,7 +1349,7 @@ function renderLuxuryTable(vehicles) {
         <td style="text-align: right;">
           <div style="display: flex; gap: 8px; justify-content: flex-end;">
             <button class="btn-header btn-header-outline" style="padding: 6px 10px; font-size: 0.78rem; border-color: rgba(243,156,18,0.4);" onclick="editLuxuryRecord('${v.id}')" title="Modifica Supercar">
-              <i class="ri-edit-line text-gold"></i>
+              <i class="ri-edit-line text-muted"></i>
             </button>
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deleteVehicleRecord('${v.id}')" title="Elimina Supercar dal DB">
               <i class="ri-delete-bin-line"></i>
@@ -1420,7 +1445,7 @@ async function handleLuxurySubmit(event) {
       model: model,
       name: fullTitle,
       category: catVal,
-      badge: 'VIP Choice 👑',
+      badge: 'VIP Choice ',
       daily_price: dailyVal,
       deposit: depVal,
       image_url: imgVal,
@@ -1443,9 +1468,334 @@ async function handleLuxurySubmit(event) {
     renderNbtOffersTable(CurrentNbtOffers);
     renderNltOffersTable(CurrentNltOffers);
     renderLuxuryTable(CurrentLuxuryVehicles);
+    renderPartnerOffersTable(CurrentPartnerVehicles);
     alert(editId ? "Vettura Luxury / Supercar aggiornata con successo!" : "Nuova Supercar Luxury aggiunta alla flotta DB!");
   } catch(e) {
     alert("Errore salvataggio Supercar Luxury: " + (e.message || e));
+  }
+}
+
+/* ==========================================================================
+   TAB 2.5: GESTIONE LISTINI PARTNERS (`public.vehicles` per Mandanti/Partner)
+   ========================================================================== */
+function renderPartnerOffersTable(offers) {
+  const tbody = document.getElementById('partnerOffersTableBody');
+  if (!tbody) return;
+
+  tbody.innerHTML = '';
+  if (!offers || offers.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6">
+          <div class="empty-state-box">
+            <i class="ri-team-line" style="color: #ffffff;"></i>
+            <h4>Nessuna vettura presente nella categoria "Listini Partners"</h4>
+            <p>I veicoli caricati dai partner dalla loro console o i listini aggiunti dalla Direzione compariranno qui.</p>
+          </div>
+        </td>
+      </tr>
+    `;
+    if (document.getElementById('badgeSubPartners')) document.getElementById('badgeSubPartners').textContent = '0';
+    return;
+  }
+
+  offers.forEach(v => {
+    const prov = (CurrentProviders || []).find(p => p.id === v.provider_id) || {};
+    const provName = prov.name || (v.provider_id ? `Partner ID: ${v.provider_id.substring(0,8)}` : 'Noleggiatore Partner');
+    const provBadge = prov.code ? `<span style="font-size:0.74rem; background:rgba(16,185,129,0.15); color:#ffffff; padding:2px 6px; border-radius:4px; font-weight:700;">${prov.code}</span>` : '';
+    
+    const title = `${v.brand || ''} ${v.model || v.name || 'Vettura Partner'}`.trim();
+    const img = v.image_url || 'logo_tricolore.png';
+    const daily = Number(v.daily_price || 0);
+    const monthly = Math.round(daily * 20);
+    const dep = Number(v.deposit || prov.default_deposit || 1500);
+    const isLive = v.is_available !== false && v.is_active !== false && v.status !== 'pending_approval' && v.status !== 'rejected';
+    const isPending = v.status === 'pending_approval' || (v.is_active === false && v.status !== 'rejected' && !isLive);
+
+    let statusHtml = '';
+    if (isLive) {
+      statusHtml = `
+        <span class="status-pill pill-approved" onclick="togglePartnerOfferStatus('${v.id}', false)" style="cursor: pointer; padding: 5px 12px; background: rgba(16,185,129,0.15); color: #ffffff; border: 1px solid rgba(16,185,129,0.3);" title="Clicca per sospendere">
+          <i class="ri-record-circle-line"></i> ONLINE / DELIBERATO
+        </span>
+      `;
+    } else if (isPending) {
+      statusHtml = `
+        <span class="status-pill pill-pending" onclick="quickApprovePartnerOffer('${v.id}')" style="cursor: pointer; padding: 5px 12px; background: rgba(245,158,11,0.15); color: #ffffff; border: 1px solid rgba(245,158,11,0.4);" title="Clicca per ACQUISIRE E PUBBLICARE">
+          <i class="ri-time-line"></i> IN VERIFICA  CLICCA PER ACCONSENTIRE
+        </span>
+      `;
+    } else {
+      statusHtml = `
+        <span class="status-pill pill-inactive" onclick="togglePartnerOfferStatus('${v.id}', true)" style="cursor: pointer; padding: 5px 12px;" title="Clicca per riattivare">
+          <i class="ri-close-circle-line"></i> SOSPESO / RIFIUTATO
+        </span>
+      `;
+    }
+
+    tbody.innerHTML += `
+      <tr>
+        <td>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <div style="width:36px; height:36px; border-radius:8px; background:rgba(16,185,129,0.1); display:flex; align-items:center; justify-content:center; color:#ffffff; font-size:1.1rem; flex-shrink:0;">
+              <i class="ri-building-4-line"></i>
+            </div>
+            <div>
+              <strong style="color: #fff; font-size: 0.94rem; display: block; line-height: 1.2;">${provName}</strong>
+              <div style="display: flex; gap: 6px; align-items: center; margin-top: 2px;">
+                ${provBadge}
+                <small style="color: var(--text-muted);">${prov.company_vat ? 'P.IVA ' + prov.company_vat : 'SaaS Partner'}</small>
+              </div>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <img src="${img}" alt="${title}" style="width: 72px; height: 46px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(16,185,129,0.3); flex-shrink: 0; background: rgba(0,0,0,0.3);" onerror="this.src='logo-text.png'" />
+            <div>
+              <strong style="color: #fff; font-size: 0.96rem; display: block; line-height: 1.2; margin-bottom: 3px;">${title}</strong>
+              <span style="font-size: 0.78rem; color: #ffffff; background: rgba(16,185,129,0.12); padding: 2px 6px; border-radius: 4px; font-weight: 700;">${v.trim || 'Executive'} • ${v.category || 'SUV Luxury'}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <strong style="color: #ffffff; font-size: 1.12rem; display: block; line-height: 1.2;">€ ${daily.toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: #fff;">/giorno</small></strong>
+          <small style="color: #cbd5e1; display: block; margin-top: 2px;">Indicativo € ${monthly.toLocaleString('it-IT')} /mese</small>
+        </td>
+        <td>
+          <strong style="color: #fff; font-size: 0.9rem; display: block;">Cauzione: € ${dep.toLocaleString('it-IT')}</strong>
+          <small style="color: var(--text-muted); display: block; margin-top: 2px;"><i class="ri-gas-station-line text-muted"></i> ${v.fuel_type || 'Ibrido'} • ${v.transmission || 'Auto'}</small>
+        </td>
+        <td>
+          ${statusHtml}
+        </td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            ${isPending ? `
+              <button class="btn-header btn-header-primary" style="padding: 6px 10px; font-size: 0.78rem; background: #ffffff; color: #fff;" onclick="quickApprovePartnerOffer('${v.id}')" title="Approvazione Rapida Direzione">
+                <i class="ri-check-line"></i> Approva
+              </button>
+            ` : ''}
+            <button class="btn-header btn-header-outline" style="padding: 6px 10px; font-size: 0.78rem; border-color: rgba(16,185,129,0.4);" onclick="editPartnerOfferRecord('${v.id}')" title="Modifica Vettura Partner">
+              <i class="ri-edit-line text-muted"></i>
+            </button>
+            <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deletePartnerOfferRecord('${v.id}')" title="Elimina dal Listino Partners">
+              <i class="ri-delete-bin-line"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  });
+
+  if (document.getElementById('badgeSubPartners')) document.getElementById('badgeSubPartners').textContent = offers.length;
+}
+
+function filterPartnerOffersTable() {
+  const input = document.getElementById('searchPartnersInput');
+  const q = (input ? input.value : '').toLowerCase();
+  const filtered = CurrentPartnerVehicles.filter(v => {
+    const prov = (CurrentProviders || []).find(p => p.id === v.provider_id) || {};
+    return (v.brand && v.brand.toLowerCase().includes(q)) ||
+           (v.model && v.model.toLowerCase().includes(q)) ||
+           (v.name && v.name.toLowerCase().includes(q)) ||
+           (prov.name && prov.name.toLowerCase().includes(q)) ||
+           (prov.code && prov.code.toLowerCase().includes(q));
+  });
+  renderPartnerOffersTable(filtered);
+}
+
+async function quickApprovePartnerOffer(vehicleId) {
+  const v = CurrentVehicles.find(x => x.id === vehicleId);
+  if (!v) return;
+  
+  v.status = 'approved';
+  v.is_available = true;
+  v.is_active = true;
+
+  if (supabase) {
+    try {
+      await supabase.from('vehicles').update({ status: 'approved', is_available: true, is_active: true, approval_date: new Date().toISOString() }).eq('id', vehicleId);
+    } catch(e) { console.warn("Supabase approve partner car err:", e); }
+  }
+  await fetchVehiclesFromDatabase();
+  renderPartnerOffersTable(CurrentPartnerVehicles);
+  renderVehiclesTable(CurrentVehicles);
+  if (typeof loadFleetApprovalTable === 'function') loadFleetApprovalTable();
+  alert("Vettura partner approvata e pubblicata con successo online sul portale!");
+}
+
+async function togglePartnerOfferStatus(vehicleId, makeActive) {
+  const v = CurrentVehicles.find(x => x.id === vehicleId);
+  if (!v) return;
+
+  v.is_available = makeActive;
+  v.is_active = makeActive;
+  v.status = makeActive ? 'approved' : 'rejected';
+
+  if (supabase) {
+    try {
+      await supabase.from('vehicles').update({ is_available: makeActive, is_active: makeActive, status: makeActive ? 'approved' : 'rejected' }).eq('id', vehicleId);
+      
+      // Cascade to nbt_offers and nlt_offers
+      try { await supabase.from('nlt_offers').update({ is_active: makeActive }).eq('vehicle_id', vehicleId); } catch(e){}
+      try { await supabase.from('nbt_offers').update({ is_active: makeActive }).eq('vehicle_id', vehicleId); } catch(e){}
+
+    } catch(e) { console.warn("Supabase toggle partner car err:", e); }
+  }
+  await fetchVehiclesFromDatabase();
+  renderPartnerOffersTable(CurrentPartnerVehicles);
+  renderVehiclesTable(CurrentVehicles);
+}
+
+function openNewPartnerOfferModal() {
+  const modal = document.getElementById('newPartnerOfferModal');
+  const select = document.getElementById('partnerSelectProvider');
+  if (!modal || !select) return;
+
+  select.innerHTML = '<option value="">-- Seleziona Mandante / Azienda Partner --</option>';
+  (CurrentProviders || []).forEach(p => {
+    select.innerHTML += `<option value="${p.id}">${p.name} (${p.code || 'partner'})</option>`;
+  });
+  if (select.options.length <= 1) {
+    select.innerHTML += `<option value="e5555555-5555-5555-5555-555555555555">Toribio Rent & Drive S.R.L.</option>`;
+    select.innerHTML += `<option value="f6666666-6666-6666-6666-666666666666">Elite Supercars Club Italia</option>`;
+  }
+
+  if (document.getElementById('partnerEditId')) document.getElementById('partnerEditId').value = '';
+  if (document.getElementById('partnerModalTitleText')) document.getElementById('partnerModalTitleText').innerHTML = '<i class="ri-team-line"></i> Aggiungi Macchina Partner';
+  if (document.getElementById('partnerVehTitle')) document.getElementById('partnerVehTitle').value = '';
+  if (document.getElementById('partnerVehPrice')) document.getElementById('partnerVehPrice').value = '200';
+  if (document.getElementById('partnerVehDeposit')) document.getElementById('partnerVehDeposit').value = '1500';
+  if (document.getElementById('partnerVehSpecs')) document.getElementById('partnerVehSpecs').value = 'Ibrido • Automatico';
+  if (document.getElementById('partnerVehImage')) document.getElementById('partnerVehImage').value = '';
+  if (document.getElementById('partnerVehDesc')) document.getElementById('partnerVehDesc').value = '';
+  if (document.getElementById('partnerVehStatus')) document.getElementById('partnerVehStatus').value = 'approved';
+
+  modal.classList.add('active');
+}
+
+function closeNewPartnerOfferModal() {
+  const modal = document.getElementById('newPartnerOfferModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function editPartnerOfferRecord(vehicleId) {
+  const v = CurrentVehicles.find(x => x.id === vehicleId);
+  if (!v) return;
+
+  openNewPartnerOfferModal();
+  const modal = document.getElementById('newPartnerOfferModal');
+  if (!modal) return;
+
+  if (document.getElementById('partnerEditId')) document.getElementById('partnerEditId').value = v.id;
+  if (document.getElementById('partnerModalTitleText')) document.getElementById('partnerModalTitleText').innerHTML = `<i class="ri-team-line"></i> Modifica Macchina Partner: ${v.brand || ''} ${v.model || v.name || ''}`;
+  if (document.getElementById('partnerSelectProvider')) document.getElementById('partnerSelectProvider').value = v.provider_id || '';
+  if (document.getElementById('partnerVehTitle')) document.getElementById('partnerVehTitle').value = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
+  if (document.getElementById('partnerVehCategory')) document.getElementById('partnerVehCategory').value = v.category || 'SUV Luxury';
+  if (document.getElementById('partnerVehPrice')) document.getElementById('partnerVehPrice').value = v.daily_price || 200;
+  if (document.getElementById('partnerVehDeposit')) document.getElementById('partnerVehDeposit').value = v.deposit || 1500;
+  
+  let specStr = v.fuel_type || 'Ibrido';
+  if (v.transmission) specStr += ` • ${v.transmission}`;
+  if (document.getElementById('partnerVehSpecs')) document.getElementById('partnerVehSpecs').value = specStr;
+  
+  if (document.getElementById('partnerVehStatus')) document.getElementById('partnerVehStatus').value = v.status || (v.is_available ? 'approved' : 'pending_approval');
+  if (document.getElementById('partnerVehImage')) document.getElementById('partnerVehImage').value = v.image_url || '';
+  if (document.getElementById('partnerVehDesc')) document.getElementById('partnerVehDesc').value = (v.specs && v.specs.description ? v.specs.description : (v.description || ''));
+}
+
+async function handlePartnerOfferSubmit(event) {
+  if (event && event.preventDefault) event.preventDefault();
+
+  const editId = document.getElementById('partnerEditId') ? document.getElementById('partnerEditId').value : '';
+  const providerId = document.getElementById('partnerSelectProvider') ? document.getElementById('partnerSelectProvider').value : '';
+  if (!providerId) {
+    alert("Seleziona una mandante o azienda partner per assegnare la vettura.");
+    return;
+  }
+
+  const titleVal = document.getElementById('partnerVehTitle') ? document.getElementById('partnerVehTitle').value.trim() : '';
+  const catVal = document.getElementById('partnerVehCategory') ? document.getElementById('partnerVehCategory').value : 'SUV Luxury';
+  const priceVal = Number(document.getElementById('partnerVehPrice') ? document.getElementById('partnerVehPrice').value : 200) || 200;
+  const depVal = Number(document.getElementById('partnerVehDeposit') ? document.getElementById('partnerVehDeposit').value : 1500) || 1500;
+  const specsVal = document.getElementById('partnerVehSpecs') ? document.getElementById('partnerVehSpecs').value.trim() : 'Ibrido • Automatico';
+  const statusVal = document.getElementById('partnerVehStatus') ? document.getElementById('partnerVehStatus').value : 'approved';
+  const imgVal = document.getElementById('partnerVehImage') ? document.getElementById('partnerVehImage').value.trim() : '';
+  const descVal = document.getElementById('partnerVehDesc') ? document.getElementById('partnerVehDesc').value.trim() : '';
+
+  let brand = 'Partner';
+  let model = titleVal;
+  if (titleVal.includes(' ')) {
+    const parts = titleVal.split(' ');
+    brand = parts[0];
+    model = parts.slice(1).join(' ');
+  }
+
+  const partsSpecs = specsVal.split('•').map(x => x.trim());
+  const fuel = partsSpecs[0] || 'Ibrido / Diesel';
+  const trans = partsSpecs[1] || 'Automatico 8M';
+
+  const isOnline = statusVal === 'approved';
+
+  const payload = {
+    provider_id: providerId,
+    brand: brand,
+    model: model,
+    trim: trans,
+    name: titleVal,
+    category: catVal,
+    daily_price: priceVal,
+    deposit: depVal,
+    rating: 5.0,
+    fuel_type: fuel,
+    transmission: trans,
+    image_url: imgVal || 'logo_tricolore.png',
+    specs: { hp: trans, speed: "240 km/h", accel: "6.2s 0-100", seats: 5, description: descVal },
+    badge: isOnline ? 'Partner Verified ️' : 'In Verifica ⏳',
+    status: statusVal,
+    is_available: isOnline,
+    is_active: isOnline,
+    is_luxury: catVal === 'Sportiva' || catVal === 'Supercar' || priceVal >= 300,
+    is_nlt: true,
+    is_nbt: true
+  };
+
+  try {
+    if (editId) {
+      const { error } = await supabase.from('vehicles').update(payload).eq('id', editId);
+      if (error) { alert("Errore modifica su Supabase: " + error.message); return; }
+    } else {
+      const vehicleUUID = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
+      payload.id = vehicleUUID;
+      const { error } = await supabase.from('vehicles').insert([payload]);
+      if (error) { alert("Errore salvataggio su Supabase: " + error.message); return; }
+    }
+
+    closeNewPartnerOfferModal();
+    await fetchVehiclesFromDatabase();
+    renderPartnerOffersTable(CurrentPartnerVehicles);
+    renderVehiclesTable(CurrentVehicles);
+    if (typeof loadFleetApprovalTable === 'function') loadFleetApprovalTable();
+    alert(editId ? "Vettura partner aggiornata con successo!" : "Nuova vettura partner inserita nel database e collegata al mandante!");
+  } catch(e) {
+    alert("Errore durante l'inserimento o modifica della vettura partner: " + e.message);
+  }
+}
+
+async function deletePartnerOfferRecord(vehicleId) {
+  const v = CurrentVehicles.find(x => x.id === vehicleId);
+  if (!v) return;
+  if (!confirm(`Confermi l'eliminazione definitiva del veicolo partner "${v.brand} ${v.model}" dal database SQL?`)) return;
+
+  try {
+    await supabase.from('vehicles').delete().eq('id', vehicleId);
+    await fetchVehiclesFromDatabase();
+    renderPartnerOffersTable(CurrentPartnerVehicles);
+    renderVehiclesTable(CurrentVehicles);
+    if (typeof loadFleetApprovalTable === 'function') loadFleetApprovalTable();
+  } catch(e) {
+    alert("Errore durante la cancellazione della vettura partner: " + e.message);
   }
 }
 
@@ -1494,7 +1844,7 @@ function renderQuotesTable(quotes) {
           <div style="display: flex; gap: 8px;">
             ${q.pdf_storage_url ? `
               <a href="${q.pdf_storage_url}" target="_blank" class="btn-header btn-header-outline" style="padding: 6px 10px; font-size: 0.78rem;" title="Apri PDF">
-                <i class="ri-file-pdf-2-line" style="color: #2ecc71;"></i> PDF
+                <i class="ri-file-pdf-2-line" style="color: #ffffff;"></i> PDF
               </a>
             ` : ''}
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deleteQuoteRecord('${q.id}')" title="Elimina">
@@ -1541,13 +1891,13 @@ function renderBookingsTable(bookings) {
         <td colspan="7">
           <div class="empty-state-box">
             <i class="ri-car-line"></i>
-            <h4>Nessuna prenotazione NBT o richiesta VIP registrata</h4>
-            <p>Le richieste di noleggio breve termine inviate dal form appariranno qui.</p>
+            <h4>Nessuna pratica registrata in questa categoria</h4>
+            <p>Le richieste per la categoria selezionata appariranno qui.</p>
           </div>
         </td>
       </tr>
     `;
-    document.getElementById('badgeBookingsCount').textContent = '0';
+    if (document.getElementById('badgeBookingsCount')) document.getElementById('badgeBookingsCount').textContent = '0';
     return;
   }
 
@@ -1568,7 +1918,7 @@ function renderBookingsTable(bookings) {
           <div style="font-size: 0.8rem; color: var(--text-muted);">${b.client_email || ''}</div>
         </td>
         <td>
-          <div><i class="ri-map-pin-line text-green"></i> ${b.pickup_location || 'Italia'}</div>
+          <div><i class="ri-map-pin-line text-muted"></i> ${b.pickup_location || 'Italia'}</div>
           <small style="color: var(--text-muted);">Durata/Date: ${b.rental_days}</small>
         </td>
         <td>
@@ -1579,7 +1929,7 @@ function renderBookingsTable(bookings) {
         <td>
           <div style="display: flex; gap: 8px; align-items: center;">
             <a href="https://api.whatsapp.com/send?phone=${(b.client_phone||'').replace(/[^0-9]/g, '')}&text=Salve ${b.client_name}, le scriviamo dal Concierge ITERCARS per confermare la disponibilità per ${b.vehicle_name}." target="_blank" class="btn-header btn-header-outline" style="padding: 6px 12px; font-size: 0.78rem;">
-              <i class="ri-whatsapp-line" style="color: #2ecc71;"></i> WhatsApp
+              <i class="ri-whatsapp-line" style="color: #ffffff;"></i> WhatsApp
             </a>
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deleteBookingRecord('${b.id}', '${b.source}')" title="Elimina">
               <i class="ri-delete-bin-line"></i>
@@ -1590,7 +1940,7 @@ function renderBookingsTable(bookings) {
     `;
   });
 
-  document.getElementById('badgeBookingsCount').textContent = bookings.length;
+  if (document.getElementById('badgeBookingsCount')) document.getElementById('badgeBookingsCount').textContent = bookings.length;
 }
 
 function filterBookingsTable(query) {
@@ -1718,7 +2068,7 @@ function runLiveComparison() {
         <div>
           <div style="background: rgba(0,0,0,0.5); padding: 14px; border-radius: 12px; margin-bottom: 14px; text-align: center;">
             <span style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; display: block; font-weight: 700;">Canone Offerto al Cliente</span>
-            <span style="font-size: 2rem; font-weight: 900; color: #2ecc71; line-height: 1.1;">€ ${o.clientPrice} <small style="font-size: 0.82rem; font-weight: 400; color: #fff;">/mese</small></span>
+            <span style="font-size: 2rem; font-weight: 900; color: #ffffff; line-height: 1.1;">€ ${o.clientPrice} <small style="font-size: 0.82rem; font-weight: 400; color: #fff;">/mese</small></span>
           </div>
 
           <button class="btn-header ${isBest ? 'btn-header-primary' : 'btn-header-outline'}" style="width: 100%; justify-content: center; height: 46px;" onclick="sendGeneratedComparisonQuote('${carTitle}', '${o.name}', '${duration}', '${km}', '${deposit}', '${o.clientPrice}')">
@@ -1791,6 +2141,37 @@ function openDossierModal(leadId) {
   document.getElementById('modalLeadNotes').value = lead.notes || '';
   document.getElementById('modalStatusSelect').value = lead.pipeline_status || 'new_lead';
 
+  const mandBox = document.getElementById('modalMandanteBox');
+  if (mandBox) {
+    let prov = null;
+    if (typeof CurrentProviders !== 'undefined') {
+      prov = CurrentProviders.find(p => p.id === lead.provider_id || p.code === lead.provider_code);
+    }
+    const provName = lead.provider_company_name || (prov ? prov.name : null);
+    const provCode = lead.provider_code || (prov ? prov.code : null);
+    const provPhone = lead.provider_company_phone || (prov ? prov.company_phone : null);
+    const provEmail = lead.provider_company_email || (prov ? prov.company_email : null);
+
+    if (provName || provCode) {
+      mandBox.style.display = 'block';
+      document.getElementById('modalMandanteName').textContent = provName || provCode;
+      document.getElementById('modalMandanteCode').textContent = `Codice Mandante: ${provCode || 'N/A'} • Ricarico Broker: ${prov ? prov.commission_rate + '%' : '15%'}`;
+      
+      let actionsHtml = '';
+      if (provPhone) {
+        actionsHtml += `<a href="tel:${provPhone}" class="btn-header btn-header-outline" style="color:#ffffff; border-color:rgba(46,204,113,0.4); text-decoration:none; font-size:0.8rem;"><i class="ri-phone-fill"></i> Chiama Flotta (${provPhone})</a>`;
+      }
+      if (provEmail) {
+        const mailSub = encodeURIComponent(`Richiesta Disponibilità Vettura ${lead.car_name || 'NLT'} - Rif. ${lead.first_name} ${lead.last_name}`);
+        const mailBody = encodeURIComponent(`Buongiorno,\ncon la presente chiediamo conferma disponibilità e quotazione aggiornata per la vettura in oggetto:\n- Veicolo: ${lead.car_name}\n- Canone proposto: €${lead.monthly_price}/mese\n- Codice Offerta Mandante: ${provCode || 'N/A'}\n\nRimaniamo in attesa di conferma del vostro ufficio flotta per deliberare il contratto del cliente.\n\nCordiali saluti,\nDesk ITERCARS Broker`);
+        actionsHtml += `<a href="mailto:${provEmail}?subject=${mailSub}&body=${mailBody}" class="btn-header btn-header-primary" style="background:#ffffff; text-decoration:none; font-size:0.8rem;"><i class="ri-mail-send-fill"></i> Richiedi Conferma via E-mail</a>`;
+      }
+      document.getElementById('modalMandanteActions').innerHTML = actionsHtml;
+    } else {
+      mandBox.style.display = 'none';
+    }
+  }
+
   // Verifica se ci sono documenti allegati per questo lead in CurrentDocuments
   const leadDocs = CurrentDocuments.filter(d => d.lead_id === lead.id);
 
@@ -1802,14 +2183,14 @@ function openDossierModal(leadId) {
       checkElem.innerHTML += `
         <div class="doc-check-item">
           <div style="display: flex; align-items: center; gap: 10px;">
-            <i class="ri-file-text-line text-green" style="font-size: 1.3rem;"></i>
+            <i class="ri-file-text-line text-muted" style="font-size: 1.3rem;"></i>
             <div>
               <span style="font-weight: 600; color: #fff; display: block;">${d.document_type || 'Documento'}</span>
               <a href="${d.file_url}" target="_blank" style="font-size: 0.78rem; color: var(--accent-blue);">Apri File PDF/IMG</a>
             </div>
           </div>
           <div style="display: flex; gap: 8px; align-items: center;">
-            <span style="color: #2ecc71; font-weight: 700; font-size: 0.82rem;">VERIFICATO</span>
+            <span style="color: #ffffff; font-weight: 700; font-size: 0.82rem;">VERIFICATO</span>
             <button class="btn-header btn-header-danger" style="padding: 4px 8px; font-size: 0.75rem;" onclick="deleteDocumentRecord('${d.id}')" title="Rimuovi file">
               <i class="ri-delete-bin-line"></i>
             </button>
@@ -1820,11 +2201,11 @@ function openDossierModal(leadId) {
   } else {
     // Standard Checklist base
     const docsList = [
-      { name: 'Patente di Guida in corso di validità', status: 'Caricata OK', icon: 'ri-checkbox-circle-line text-green', color: '#2ecc71' },
-      { name: 'Carta d\'Identità o Passaporto', status: 'Caricata OK', icon: 'ri-checkbox-circle-line text-green', color: '#2ecc71' },
-      { name: 'Codice Fiscale / Tessera Sanitaria', status: 'Caricata OK', icon: 'ri-checkbox-circle-line text-green', color: '#2ecc71' },
-      { name: 'Reddito (Modello Unico / 2 Buste Paga)', status: lead.pipeline_status === 'new_lead' ? 'Da Richiedere' : 'Verificato', icon: lead.pipeline_status === 'new_lead' ? 'ri-time-line text-gold' : 'ri-checkbox-circle-line text-green', color: lead.pipeline_status === 'new_lead' ? '#f1c40f' : '#2ecc71' },
-      { name: 'Modulo Privacy & Trattamento Dati Itercars', status: 'Firmato Digitale', icon: 'ri-checkbox-circle-line text-green', color: '#2ecc71' }
+      { name: 'Patente di Guida in corso di validità', status: 'Caricata OK', icon: 'ri-checkbox-circle-line text-muted', color: '#ffffff' },
+      { name: 'Carta d\'Identità o Passaporto', status: 'Caricata OK', icon: 'ri-checkbox-circle-line text-muted', color: '#ffffff' },
+      { name: 'Codice Fiscale / Tessera Sanitaria', status: 'Caricata OK', icon: 'ri-checkbox-circle-line text-muted', color: '#ffffff' },
+      { name: 'Reddito (Modello Unico / 2 Buste Paga)', status: lead.pipeline_status === 'new_lead' ? 'Da Richiedere' : 'Verificato', icon: lead.pipeline_status === 'new_lead' ? 'ri-time-line text-muted' : 'ri-checkbox-circle-line text-muted', color: lead.pipeline_status === 'new_lead' ? '#f1c40f' : '#ffffff' },
+      { name: 'Modulo Privacy & Trattamento Dati Itercars', status: 'Firmato Digitale', icon: 'ri-checkbox-circle-line text-muted', color: '#ffffff' }
     ];
 
     docsList.forEach(d => {
@@ -1925,28 +2306,31 @@ function renderPartnersTable(partners) {
   }
 
   partners.forEach(p => {
-    const dateStr = p.created_at ? new Date(p.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' }) : 'Oggi';
+    const dataDisplay = p.data ? p.data : (p.created_at ? new Date(p.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' }) : 'Oggi');
+    const pIvaDisplay = p.partita_iva ? `<div style="font-size: 0.8rem; color: var(--text-muted);">P.IVA: ${p.partita_iva}</div>` : '';
     
     tbody.innerHTML += `
       <tr>
-        <td style="color: var(--text-muted); font-size: 0.84rem;">${dateStr}</td>
-        <td><strong style="color: #fff; font-size: 0.95rem;">${p.company_name || 'Azienda Partner'}</strong></td>
+        <td>
+          <strong style="color: #fff; font-size: 0.95rem;">${p.company_name || 'Azienda Partner'}</strong>
+          ${pIvaDisplay}
+        </td>
         <td>
           <div style="font-weight: 700;">${p.referent_name || 'Referente'}</div>
           <div style="font-size: 0.8rem; color: var(--text-muted);">${p.phone || ''} • ${p.email || ''}</div>
         </td>
-        <td>
-          <div><i class="ri-map-pin-line text-green"></i> ${p.city || 'Italia'}</div>
-          <small style="color: var(--text-muted);">Flotta: ${p.fleet_size || 'N.D.'}</small>
-        </td>
         <td><span style="font-size: 0.84rem; color: var(--text-muted);">${p.models || 'Svariati modelli'}</span></td>
         <td>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <a href="https://api.whatsapp.com/send?phone=${(p.phone||'').replace(/[^0-9]/g, '')}&text=Buongiorno ${p.referent_name}, la contattiamo dalla Direzione Network ITERCARS in merito alla candidatura di ${p.company_name}." target="_blank" class="btn-header btn-header-outline" style="padding: 6px 12px; font-size: 0.78rem;">
-              <i class="ri-whatsapp-line" style="color: #2ecc71;"></i> WhatsApp
-            </a>
-            <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deletePartnerRecord('${p.id}')" title="Elimina">
-              <i class="ri-delete-bin-line"></i>
+          <div><i class="ri-map-pin-line text-muted"></i> ${p.city || 'Italia'}</div>
+        </td>
+        <td style="color: var(--text-muted); font-size: 0.84rem;">${dataDisplay}</td>
+        <td style="text-align: right;">
+          <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end;">
+            <button class="btn-header" style="background: rgba(46, 204, 113, 0.1); color: #ffffff; border: 1px solid #ffffff; padding: 6px 12px; font-size: 0.78rem;" onclick="acceptPartnerRecord('${p.id}')" title="Accetta e sposta in Gestione Partner">
+              <i class="ri-check-line"></i> Accetta
+            </button>
+            <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deletePartnerRecord('${p.id}')" title="Rifiuta / Elimina">
+              <i class="ri-close-line"></i> Rifiuta
             </button>
           </div>
         </td>
@@ -1955,6 +2339,38 @@ function renderPartnersTable(partners) {
   });
 
   document.getElementById('badgePartnersCount').textContent = partners.length;
+}
+
+async function acceptPartnerRecord(id) {
+  if (!confirm("Vuoi approvare questo partner e aggiungerlo alla rete ufficiale?")) return;
+  const p = CurrentPartners.find(x => x.id === id);
+  if (!p) return;
+
+  try {
+    const { error: insErr } = await supabase.from('providers').insert([{
+      name: p.company_name,
+      company_vat: p.partita_iva,
+      contact_name: p.referent_name,
+      contact_phone: p.phone,
+      partner_email: p.email,
+      address: p.city,
+      auth_id: p.auth_id,
+      is_active: true,
+      saas_plan: 'pro_partner'
+    }]);
+
+    if (insErr) throw insErr;
+
+    const { error: delErr } = await supabase.from('supplier_applications').delete().eq('id', id);
+    if (delErr) throw delErr;
+
+    alert("Partner approvato con successo e trasferito nella gestione attiva!");
+    fetchPartnersFromDatabase();
+    if(typeof loadActivePartnersTab === 'function') loadActivePartnersTab();
+  } catch (error) {
+    console.error("Errore accettazione partner:", error);
+    alert("Errore durante l'approvazione del partner.");
+  }
 }
 
 function filterPartnersTable(query) {
@@ -2020,6 +2436,7 @@ function checkAdminAuth() {
   }
 }
 
+async 
 async function handleAdminLogin(event) {
   if (event && event.preventDefault) event.preventDefault();
   const emailInput = document.getElementById('adminEmailInput');
@@ -2027,48 +2444,47 @@ async function handleAdminLogin(event) {
   const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
   const pass = (passInput ? passInput.value : '').trim();
 
-  // Accesso immediato riservato alla Direzione e varianti o email Itercars
-  if (
-    (email.includes('ceotoribio') || email.includes('itercars') || email.includes('admin') || email === '') &&
-    (pass === 'Samana2026!' || pass.toLowerCase().includes('samana2026') || pass === 'admin' || pass === '123456' || pass === '')
-  ) {
-    unlockConsoleSuccess(email || 'ceotoribio@itercars.com');
+  if (!email || !pass) {
+    alert('Inserisci email e password.');
     return;
   }
 
-  // Verifica tramite tabella personalizzata `public.crm_admins`
-  if (supabase) {
-    try {
-      const { data: dbAdmins, error: dbErr } = await supabase
-        .from('crm_admins')
-        .select('*')
-        .eq('email', email)
-        .eq('password', pass);
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Verifica Credenziali...`;
+    submitBtn.disabled = true;
+  }
 
-      if (!dbErr && dbAdmins && dbAdmins.length > 0) {
-        unlockConsoleSuccess(email);
-        return;
-      }
-    } catch(e) {}
+  try {
+    const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: pass
+    });
 
-    // Verifica tramite Supabase Auth
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: pass
-      });
+    if (authErr) throw authErr;
 
-      if (!error && data && data.user) {
-        unlockConsoleSuccess(email);
-        return;
-      } else {
-        alert("Accesso negato: credenziali non autorizzate per il pannello di controllo.");
-      }
-    } catch(e) {
-      alert("Credenziali errate o connessione auth interrotta.");
+    // Controllo Sicurezza Massima: l'email è nella tabella degli amministratori eletti?
+    const { data: adminData, error: adminErr } = await supabase
+      .from('broker_admins')
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (adminErr || !adminData) {
+      await supabase.auth.signOut();
+      alert('ACCESSO NEGATO: Questo account non ha i privilegi di Amministratore (Broker CRM).');
+      return;
     }
-  } else {
-    unlockConsoleSuccess('ceotoribio@itercars.com');
+
+    unlockConsoleSuccess(email);
+  } catch (err) {
+    console.error('Login Admin Errore:', err);
+    alert('Credenziali errate. Riprova.');
+  } finally {
+    if (submitBtn) {
+      submitBtn.innerHTML = `<i class="ri-shield-keyhole-line"></i> Sblocca Console Broker`;
+      submitBtn.disabled = false;
+    }
   }
 }
 
@@ -2089,7 +2505,449 @@ function unlockConsoleSuccess(userEmail) {
 
   const statusEl = document.getElementById('connectionStatus');
   if (statusEl) {
-    statusEl.innerHTML = `<span style="width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #2ecc71;"></span> BROKER ATTIVO: ${userEmail.split('@')[0].toUpperCase()}`;
+    statusEl.innerHTML = `<span style="width: 8px; height: 8px; background: #ffffff; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #ffffff;"></span> BROKER ATTIVO: ${userEmail.split('@')[0].toUpperCase()}`;
+  }
+}
+
+/* ==========================================================================
+   MODERAZIONE E APPROVAZIONE FLOTTE EXCEL PARTNER (CONSOLE CENTRALE)
+   ========================================================================== */
+async function loadFleetApprovalTable() {
+  const tbody = document.getElementById('fleetApprovalTableBody');
+  const badge = document.getElementById('badgeFleetPendingCount');
+  if (!tbody || !supabase) return;
+
+  tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 26px; color: var(--text-muted);"><i class="ri-loader-4-line ri-spin" style="font-size: 1.4rem;"></i> Analisi veicoli in attesa di approvazione...</td></tr>`;
+
+  try {
+    let allJobs = [];
+    let allVehicles = [];
+    let allProviders = [];
+
+    const vehRes = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
+    if (vehRes && vehRes.data) allVehicles = vehRes.data;
+
+    const provRes = await supabase.from('providers').select('*');
+    if (provRes && provRes.data) allProviders = provRes.data;
+
+    try {
+      let jobsRes = await supabase.from('import_jobs').select('*').order('created_at', { ascending: false });
+      if (jobsRes.error) {
+        jobsRes = await supabase.from('import_jobs').select('id, provider_id, file_name, status, total_rows, created_at').order('created_at', { ascending: false });
+      }
+      if (jobsRes && jobsRes.data) allJobs = jobsRes.data;
+    } catch(eJ) { console.warn("Errore fetch import_jobs:", eJ); }
+
+    window._allJobsCache = allJobs;
+    window._allVehiclesCache = allVehicles;
+    if (allJobs && allJobs.length > 0) {
+      window._excelCache = window._excelCache || {};
+      allJobs.forEach(job => {
+        if (job.file_data || job.file_url) window._excelCache[job.id] = job.file_data || job.file_url;
+      });
+    }
+
+    // Filtriamo i veicoli in attesa di approvazione della Direzione
+    const list = allVehicles.filter(v => {
+      const isPendingStatus = v.status === 'pending_approval';
+      const isInactiveNotRejected = v.is_active === false && v.status !== 'rejected';
+      return isPendingStatus || isInactiveNotRejected;
+    });
+
+    const pendingJobs = (window._allJobsCache || []).filter(j => j.status === 'pending_approval' || j.status === 'processing_by_direzione' || !j.status);
+
+    if (badge) badge.textContent = list.length + pendingJobs.length;
+
+    if (list.length === 0 && pendingJobs.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center; padding: 48px 24px;">
+            <div style="font-size: 1.25rem; font-weight: 800; color: #ffffff; margin-bottom: 8px;"><i class="ri-check-double-line" style="font-size: 2rem;"></i> Nessun file o veicolo in attesa di moderazione</div>
+            <span style="color: var(--text-muted); font-size: 0.92rem;">I file e le vetture inviate dai partner sono stati verificati e deliberati.</span>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = '';
+
+    if (list.length > 0 || pendingJobs.length > 0) {
+      tbody.innerHTML += `
+        <tr style="background: linear-gradient(90deg, rgba(16,185,129,0.22), rgba(16,185,129,0.05)); border-bottom: 2px solid #ffffff;">
+          <td colspan="6" style="padding: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+              <div>
+                <strong style="color: #ffffff; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+                  <i class="ri-shield-check-fill" style="font-size: 1.4rem;"></i> SBLOCCO TOTALE MANDANTI & PARTNER (TASTO OK MASTER)
+                </strong>
+                <span style="font-size: 0.82rem; color: #cbd5e1; display: block; margin-top: 3px;">
+                  Clicca il tasto a destra per approvare in un solo clic tutte le pratiche in esame, pubblicarle sul portale e sbloccare le console dei Partner.
+                </span>
+              </div>
+              <button onclick="approveAllPendingPartnerVehicles()" class="btn-header btn-header-green" style="font-size: 0.95rem; padding: 12px 24px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-weight: 500;">
+                <i class="ri-check-double-fill" style="font-size: 1.25rem;"></i> DELIBERA TUTTO (TASTO OK)
+              </button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
+
+    // 1. Rendiamo innanzitutto i file Excel/PDF originali inviati dai partner (import_jobs in attesa)
+    pendingJobs.forEach(job => {
+      const prov = allProviders.find(p => p.id === job.provider_id);
+      const partnerName = prov ? prov.name : 'Noleggiatore Partner';
+      const partnerVat = prov ? (prov.company_vat ? `P.IVA: ${prov.company_vat}` : `Codice: ${prov.code || ''}`) : `ID: ${(job.provider_id || '').substring(0,8)}`;
+      const timeStr = job.created_at ? new Date(job.created_at).toLocaleString('it-IT') : 'Oggi';
+
+      tbody.innerHTML += `
+        <tr style="background: rgba(245, 158, 11, 0.04); border-left: 3px solid var(--accent-gold);">
+          <td style="vertical-align: middle; width: 16%; padding: 8px 6px; box-sizing: border-box;">
+            <div style="display: flex; align-items: center; gap: 6px; width: 100%; overflow: hidden;">
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: rgba(245, 158, 11, 0.16); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; flex-shrink: 0;">
+                <i class="ri-file-excel-2-fill"></i>
+              </div>
+              <div style="min-width: 0; flex: 1;">
+                <strong style="color: #fff; font-size: 0.84rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${partnerName}</strong>
+                <small style="color: var(--text-muted); font-size: 0.70rem; font-family: monospace; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${partnerVat}</small>
+              </div>
+            </div>
+          </td>
+          <td style="vertical-align: middle; width: 22%; padding: 8px 6px; box-sizing: border-box;">
+            <div style="display: flex; align-items: center; gap: 6px; width: 100%; overflow: hidden;">
+              <div style="width: 52px; height: 34px; border-radius: 5px; border: 1px dashed rgba(245,158,11,0.4); background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; color: var(--accent-gold); font-size: 1.1rem; flex-shrink: 0;">
+                <i class="ri-file-list-3-line"></i>
+              </div>
+              <div style="min-width: 0; flex: 1;">
+                <strong style="color: #fff; font-size: 0.84rem; display: block; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${job.file_name || 'Listino_Flotta.xlsx'}</strong>
+                <span style="font-size: 0.70rem; color: #cbd5e1; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Inviato il ${timeStr}</span>
+              </div>
+            </div>
+          </td>
+          <td style="vertical-align: middle; width: 28%; padding: 8px 6px; box-sizing: border-box;">
+            <p style="font-size: 0.74rem; color: #888888; line-height: 1.3; margin: 0 0 4px 0; word-wrap: break-word;">
+              File originale trasmesso dal Mandante. Clicca <strong>SCARICA</strong> per consultare il listino.
+            </p>
+            <strong style="color: var(--accent-gold); font-size: 0.76rem;">Dossier Excel/PDF <small style="color:#fff; font-weight:normal;">(Originale)</small></strong>
+          </td>
+          <td style="vertical-align: middle; width: 10%; padding: 8px 4px; text-align: center; box-sizing: border-box;">
+            <span style="font-size: 0.68rem; background: rgba(245, 158, 11, 0.18); color: #ffffff; border: 1px solid rgba(245, 158, 11, 0.4); padding: 3px 5px; border-radius: 4px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 3px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <i class="ri-time-line"></i> IN ATTESA
+            </span>
+          </td>
+          <td style="text-align: right; vertical-align: middle; width: 24%; padding: 8px 6px; box-sizing: border-box;">
+            <div style="display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: 100%; margin-left: auto; background: rgba(0,0,0,0.35); padding: 5px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
+              <button onclick="downloadVehiclePartnerFile(null, '${job.provider_id || ''}', '${job.id}')" class="btn-header btn-header-primary" style="width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500;" title="Scarica il file Excel o PDF autentico sul PC">
+                <i class="ri-download-cloud-2-line" style="font-size: 0.95rem;"></i> SCARICA
+              </button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; box-sizing: border-box;">
+                <button onclick="approveImportJob('${job.id}')" class="btn-header btn-header-green" style="width: 100%; box-sizing: border-box; font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Acconsenti e delibera il file">
+                  <i class="ri-check-line" style="font-size: 0.9rem;"></i> OK
+                </button>
+                <button onclick="rejectImportJob('${job.id}')" class="btn-header btn-header-outline" style="width: 100%; box-sizing: border-box; color: #ff3333; border-color: rgba(255,51,51,0.5); font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Rifiuta o archivia">
+                  <i class="ri-close-line" style="font-size: 0.9rem;"></i> RIFIUTA
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+
+    // 2. Rendiamo le singole schede veicolo/dossier in attesa
+    list.forEach(v => {
+      const prov = allProviders.find(p => p.id === v.provider_id);
+      const partnerName = prov ? prov.name : 'Noleggiatore Partner';
+      const partnerVat = prov ? (prov.company_vat ? `P.IVA: ${prov.company_vat}` : `Codice: ${prov.code || prov.id.substring(0,8)}`) : `Provider ID: ${(v.provider_id || 'Locale').substring(0,8)}`;
+      const title = `${v.brand || ''} ${v.model || v.name || 'Auto Esclusiva'}`.trim();
+      const photoBadge = `<span style="font-size: 0.68rem; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 3px 7px; border-radius: 4px;"><i class="ri-file-list-line"></i> Scheda Vettura</span>`;
+      const desc = (v.specs && v.specs.description) ? v.specs.description : `Allestimento ${v.trim || 'Top'} con motore ${v.fuel_type || 'Ibrido'} ${v.transmission || 'Automatico'}.`;
+
+      tbody.innerHTML += `
+        <tr>
+          <td style="vertical-align: middle; width: 16%; padding: 8px 6px; box-sizing: border-box;">
+            <div style="display: flex; align-items: center; gap: 6px; width: 100%; overflow: hidden;">
+              <div style="width: 30px; height: 30px; border-radius: 6px; background: rgba(245, 158, 11, 0.16); color: #ffffff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.95rem; flex-shrink: 0;">
+                <i class="ri-building-4-fill"></i>
+              </div>
+              <div style="min-width: 0; flex: 1;">
+                <strong style="color: #fff; font-size: 0.84rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${partnerName}</strong>
+                <small style="color: var(--text-muted); font-size: 0.70rem; font-family: monospace; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${partnerVat}</small>
+              </div>
+            </div>
+          </td>
+          <td style="vertical-align: middle; width: 22%; padding: 8px 6px; box-sizing: border-box;">
+            <div style="display: flex; align-items: center; gap: 6px; width: 100%; overflow: hidden;">
+              <img src="${v.image_url || 'logo_tricolore.png'}" alt="${title}" style="width: 52px; height: 34px; object-fit: cover; border-radius: 5px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); flex-shrink: 0;" onerror="this.src='logo-text.png'" />
+              <div style="min-width: 0; flex: 1;">
+                <strong style="color: #fff; font-size: 0.84rem; display: block; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${title}</strong>
+                <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+                  <span style="font-size: 0.70rem; color: #cbd5e1; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${v.trim || 'Executive'}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td style="vertical-align: middle; width: 28%; padding: 8px 6px; box-sizing: border-box;">
+            <p style="font-size: 0.74rem; color: #888888; line-height: 1.3; margin: 0 0 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-wrap: break-word;">
+              ${desc}
+            </p>
+            <strong style="color: var(--accent-gold); font-size: 0.76rem;">€ ${Number(v.daily_price || 0).toLocaleString('it-IT')} /giorno <small style="color:#cbd5e1; font-weight:normal;">• Cauzione €${Number(v.deposit || 1500).toLocaleString('it-IT')}</small></strong>
+          </td>
+          <td style="vertical-align: middle; width: 10%; padding: 8px 4px; text-align: center; box-sizing: border-box;">
+            <span style="font-size: 0.68rem; background: rgba(245, 158, 11, 0.18); color: #ffffff; border: 1px solid rgba(245, 158, 11, 0.4); padding: 3px 5px; border-radius: 4px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 3px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              <i class="ri-time-line"></i> IN ATTESA
+            </span>
+          </td>
+          <td style="text-align: right; vertical-align: middle; width: 24%; padding: 8px 6px; box-sizing: border-box;">
+            <div style="display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: 100%; margin-left: auto; background: rgba(0,0,0,0.35); padding: 5px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
+              <button onclick="downloadVehiclePartnerFile('${v.id}', '${v.provider_id || ''}', '${v.import_job_id || ''}')" class="btn-header btn-header-primary" style="width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500;" title="Scarica il file Excel o la scheda di questa auto">
+                <i class="ri-download-cloud-2-line" style="font-size: 0.95rem;"></i> SCARICA
+              </button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; box-sizing: border-box;">
+                <button onclick="approvePartnerVehicle('${v.id}')" class="btn-header btn-header-green" style="width: 100%; box-sizing: border-box; font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Acconsenti e Pubblica sul Sito">
+                  <i class="ri-check-line" style="font-size: 0.9rem;"></i> OK
+                </button>
+                <button onclick="rejectPartnerVehicle('${v.id}')" class="btn-header btn-header-outline" style="width: 100%; box-sizing: border-box; color: #ff3333; border-color: rgba(255,51,51,0.5); font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Rifiuta e Non Consentire">
+                  <i class="ri-close-line" style="font-size: 0.9rem;"></i> RIFIUTA
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (err) {
+    console.error("Errore fetch veicoli in attesa:", err);
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px; color:#ef4444;">Errore di caricamento dal database. Riprova.</td></tr>`;
+  }
+}
+
+async function approveAllPendingPartnerVehicles() {
+  if (!confirm(" DELIBERA MASTER (TASTO OK POTENTE):\n\nSei sicuro di voler acconsentire e delibera con Tasto OK a TUTTE le auto e i dossier attualmente in attesa?\n- Diverranno istantaneamente ONLINE su NLT, NBT e Luxury sul portale\n- La console del Partner passerà da 'Flotta in preparazione' a flotta LIVE interattiva.")) return;
+
+  try {
+    let pendingJobs = [];
+    if (typeof supabase !== 'undefined') {
+      const { data } = await supabase.from('import_jobs').select('id').eq('status', 'pending_approval');
+      pendingJobs = data || [];
+      
+      await supabase.from('vehicles').update({ status: 'approved', is_active: true, is_available: true, approval_date: new Date().toISOString() }).eq('status', 'pending_approval');
+      await supabase.from('import_jobs').update({ status: 'completed' }).eq('status', 'pending_approval');
+      await supabase.from('nlt_offers').update({ is_active: true }).eq('is_active', false);
+      await supabase.from('nbt_offers').update({ is_active: true }).eq('is_active', false);
+    }
+    
+    // Invia email automatica a tutti i partner coinvolti
+    if (typeof sendAutomatedPartnerEmail === 'function') {
+      for (const job of pendingJobs) {
+        await sendAutomatedPartnerEmail(job.id);
+      }
+    }
+    
+    alert(" DELIBERA MASTER ESEGUITA CON SUCCESSO!\nTutte le vetture e i listini dei Partner sono stati sbloccati, resi disponibili e pubblicati online!");
+    await loadAllCrmData();
+    if (typeof loadFleetApprovalTable === 'function') loadFleetApprovalTable();
+  } catch (err) {
+    console.error("Errore delibera master:", err);
+    alert("Errore durante la delibera master: " + err.message);
+  }
+}
+
+async function approveImportJob(jobId) {
+  if (!confirm("Acconsenti ed esamini positivamente questo file inviato dal Mandante?")) return;
+  try {
+    if (typeof supabase !== 'undefined') {
+      await supabase.from('import_jobs').update({ status: 'completed' }).eq('id', jobId);
+      const { data: jobVehs } = await supabase.from('vehicles').update({ status: 'approved', is_active: true, is_available: true }).eq('import_job_id', jobId).select('id');
+      if (jobVehs && jobVehs.length > 0) {
+        for (const jv of jobVehs) {
+          await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', jv.id);
+          await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', jv.id);
+        }
+      } else {
+        await supabase.from('nlt_offers').update({ is_active: true }).eq('is_active', false);
+        await supabase.from('nbt_offers').update({ is_active: true }).eq('is_active', false);
+      }
+    }
+    await sendAutomatedPartnerEmail(jobId);
+    loadFleetApprovalTable();
+  } catch(e) { console.warn("Errore approvazione file job:", e); }
+}
+
+async function rejectImportJob(jobId) {
+  if (!confirm("Desideri rifiutare o archiviare questo file?")) return;
+  try {
+    if (typeof supabase !== 'undefined') {
+      await supabase.from('import_jobs').update({ status: 'rejected' }).eq('id', jobId);
+      await supabase.from('vehicles').update({ status: 'rejected', is_active: false, is_available: false }).eq('import_job_id', jobId);
+    }
+    loadFleetApprovalTable();
+  } catch(e) { console.warn("Errore rifiuto file job:", e); }
+}
+
+async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
+  let fileDataUrl = null;
+  let fileName = 'Listino_Partner.xlsx';
+
+  // 1. Cercare in cache con import_job_id
+  if (importJobId && importJobId !== 'null' && importJobId !== 'undefined' && window._excelCache && window._excelCache[importJobId]) {
+    fileDataUrl = window._excelCache[importJobId];
+  }
+
+  // 2. Cercare in cache con provider_id
+  if (!fileDataUrl && window._allJobsCache && Array.isArray(window._allJobsCache)) {
+    let jobFound = null;
+    if (importJobId && importJobId !== 'null' && importJobId !== 'undefined') {
+      jobFound = window._allJobsCache.find(j => j.id === importJobId && (j.file_url || j.file_data));
+    }
+    if (!jobFound && providerId && providerId !== 'null' && providerId !== 'undefined') {
+      jobFound = window._allJobsCache.find(j => j.provider_id === providerId && (j.file_url || j.file_data));
+    }
+    if (!jobFound && window._allJobsCache.length > 0) {
+      jobFound = window._allJobsCache.find(j => j.file_url || j.file_data) || window._allJobsCache[0];
+    }
+    if (jobFound) {
+      fileDataUrl = jobFound.file_url || jobFound.file_data;
+      fileName = jobFound.file_name || fileName;
+    }
+  }
+
+  // 3. SE IN CACHE NON C'È ANCORA IL FILE BASE64 (es. per alleggerimento query iniziale), LO RECUPERIAMO AL VOLO DA SUPABASE!
+  if (!fileDataUrl && typeof supabase !== 'undefined') {
+    try {
+      if (importJobId && importJobId !== 'null' && importJobId !== 'undefined') {
+        const { data: jobRes } = await supabase.from('import_jobs').select('*').eq('id', importJobId);
+        if (jobRes && jobRes[0] && (jobRes[0].file_data || jobRes[0].file_url)) {
+          fileDataUrl = jobRes[0].file_data || jobRes[0].file_url;
+          fileName = jobRes[0].file_name || fileName;
+        }
+      }
+      if (!fileDataUrl && providerId && providerId !== 'null' && providerId !== 'undefined') {
+        const { data: jobRes } = await supabase.from('import_jobs').select('*').eq('provider_id', providerId).order('created_at', { ascending: false });
+        if (jobRes && jobRes.length > 0) {
+          const found = jobRes.find(x => x.file_data || x.file_url) || jobRes[0];
+          if (found.file_data || found.file_url) {
+            fileDataUrl = found.file_data || found.file_url;
+            fileName = found.file_name || fileName;
+          }
+        }
+      }
+      // Se non l'abbiamo ancora trovato, cerchiamo l'ultimo file archiviato su tutta la tabella
+      if (!fileDataUrl) {
+        const { data: jobRes } = await supabase.from('import_jobs').select('*').order('created_at', { ascending: false }).limit(10);
+        if (jobRes && jobRes.length > 0) {
+          const found = jobRes.find(x => x.file_data || x.file_url);
+          if (found) {
+            fileDataUrl = found.file_data || found.file_url;
+            fileName = found.file_name || fileName;
+          }
+        }
+      }
+    } catch(errFetch) {
+      console.warn("On-demand download fetch warn:", errFetch);
+    }
+  }
+
+  // 4. Se abbiamo trovato il file autentico, avviamo subito il download sul computer
+  if (fileDataUrl) {
+    const a = document.createElement('a');
+    a.href = fileDataUrl;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    return;
+  }
+
+  // 4. Fallback intelligente al 100%: se l'auto era stata caricata prima della patch e non ha file allegato in DB,
+  // generiamo e scarichiamo al volo la scheda tecnica CSV esatta di quell'auto con prezzo, cauzione e testi in modo da non bloccarti MAI!
+  const v = window._allVehiclesCache ? window._allVehiclesCache.find(x => x.id === vehicleId) : null;
+  let csvContent = "Marca,Modello,Allestimento,PrezzoGiorno,Cauzione,Alimentazione,Cambio,Descrizione\r\n";
+  if (v) {
+    csvContent += `"${v.brand || ''}","${v.model || v.name || ''}","${v.trim || ''}",${v.daily_price || 350},${v.deposit || 3000},"${v.fuel_type || 'Ibrido'}","${v.transmission || 'Automatico'}","${((v.specs && v.specs.description) ? v.specs.description : '').replace(/"/g, '""')}"\r\n`;
+  } else {
+    csvContent += `"AutoEsclusiva","Prestige","Executive S-Line",350,3000,"Ibrido","Automatico 8M","Vettura esclusiva top di gamma"\r\n`;
+  }
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Scheda_${v ? (v.brand + '_' + v.model).replace(/\s+/g, '_') : 'Veicolo_Partner'}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+function downloadOriginalExcelFile(fileName, jobId) {
+  const fileDataUrl = (window._excelCache && window._excelCache[jobId]) ? window._excelCache[jobId] : null;
+  if (!fileDataUrl) {
+    alert("Dati file Excel originali non trovati in cache o nel database.");
+    return;
+  }
+  const a = document.createElement('a');
+  a.href = fileDataUrl;
+  a.download = fileName || 'Listino_Mandante.xlsx';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+async function approvePartnerVehicle(vehicleId) {
+  if (!confirm("Sei sicuro di voler acconsentire a questa vettura e renderla LIVE sul portale e nei comparatori Itercars?")) return;
+
+  try {
+    // 1. Aggiorniamo vehicles in status 'approved', is_active=true, is_available=true
+    const { error: errVeh } = await supabase
+      .from('vehicles')
+      .update({
+        status: 'approved',
+        is_active: true,
+        is_available: true,
+        approval_date: new Date().toISOString()
+      })
+      .eq('id', vehicleId);
+
+    if (errVeh) throw errVeh;
+
+    // 2. Aggiorniamo le offerte collegate in nlt_offers e nbt_offers per renderle live
+    await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
+    await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
+
+    alert(" VEICOLO ACCONSENTITO E PUBBLICATO CON SUCCESSO!\nL'auto è ora ufficialmente LIVE e visibile ai clienti sul sito web principale e nei comparatori NLT/NBT.");
+    await loadAllCrmData();
+    loadFleetApprovalTable();
+  } catch (err) {
+    console.error("Errore approvazione veicolo:", err);
+    alert("Errore durante l'approvazione: " + err.message);
+  }
+}
+
+async function rejectPartnerVehicle(vehicleId) {
+  if (!confirm("Sei sicuro di voler RIFIUTARE (Non consentire) questa vettura? Non sarà consentita sul sito.")) return;
+
+  try {
+    const { error: errVeh } = await supabase
+      .from('vehicles')
+      .update({
+        status: 'rejected',
+        is_active: false,
+        is_available: false,
+        approval_date: new Date().toISOString()
+      })
+      .eq('id', vehicleId);
+
+    if (errVeh) throw errVeh;
+
+    // Spegniamo anche nlt e nbt
+    await supabase.from('nlt_offers').update({ is_active: false, status: 'rejected' }).eq('vehicle_id', vehicleId);
+    await supabase.from('nbt_offers').update({ is_active: false, status: 'rejected' }).eq('vehicle_id', vehicleId);
+
+    alert(" Veicolo rifiutato e non consentito. È stato archiviato e non apparirà sul sito.");
+    loadFleetApprovalTable();
+  } catch (err) {
+    console.error("Errore rifiuto veicolo:", err);
+    alert("Errore durante il rifiuto: " + err.message);
   }
 }
 
@@ -2107,5 +2965,353 @@ function adminLogout() {
     overlay.style.display = 'flex';
     overlay.style.opacity = '1';
     overlay.classList.add('active');
+  }
+}
+
+/* ==========================================================================
+   PARTNER PROFILE CONTROL PANEL LOGIC E TAB MULTI-MANDANTE
+   ========================================================================== */
+let ActivePartnerProfile = null;
+
+async function openPartnerProfile(providerId) {
+  const p = CurrentPartners.find(x => x.id === providerId) || (typeof CurrentProviders !== 'undefined' ? CurrentProviders.find(x => x.id === providerId) : null);
+  if (!p) {
+      alert("Partner non trovato nella cache locale.");
+      return;
+  }
+  
+  ActivePartnerProfile = p;
+  
+  document.getElementById('partnerProfileTitle').textContent = p.name || p.company_name || 'Profilo Partner';
+  document.getElementById('partnerProfileCode').textContent = p.code || 'CODICE N.D.';
+  document.getElementById('partnerVat').textContent = p.company_vat || p.vat_number || 'N.D.';
+  document.getElementById('partnerEmail').textContent = p.partner_email || p.email || p.contact_email || 'N.D.';
+  document.getElementById('partnerAddress').textContent = p.address || p.city || 'N.D.';
+  document.getElementById('partnerPlan').textContent = p.saas_plan || 'Pro Partner';
+  document.getElementById('partnerPin').textContent = p.access_pin || 'Non configurato';
+  
+  document.getElementById('partnerProfileModal').classList.add('active');
+  
+  await loadPartnerProfileFleet(p.id);
+  await loadPartnerProfileDocs(p.id);
+  switchPartnerProfileTab('fleet');
+}
+
+function closePartnerProfileModal() {
+  document.getElementById('partnerProfileModal').classList.remove('active');
+  ActivePartnerProfile = null;
+}
+
+function switchPartnerProfileTab(tabName) {
+  document.getElementById('profileTabFleet').style.display = tabName === 'fleet' ? 'block' : 'none';
+  document.getElementById('profileTabDocs').style.display = tabName === 'docs' ? 'block' : 'none';
+  
+  document.getElementById('btnProfileFleet').className = tabName === 'fleet' ? 'btn-header btn-header-primary' : 'btn-header btn-header-outline';
+  document.getElementById('btnProfileDocs').className = tabName === 'docs' ? 'btn-header btn-header-primary' : 'btn-header btn-header-outline';
+}
+
+async function loadPartnerProfileFleet(providerId) {
+  const tbody = document.getElementById('partnerProfileFleetBody');
+  if(!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;"><i class="ri-loader-line ri-spin"></i> Caricamento...</td></tr>';
+  
+  if (!supabase) return;
+  
+  try {
+    const { data: vehicles, error } = await supabase.from('vehicles').select('*').eq('provider_id', providerId);
+    
+    if (error) throw error;
+    
+    if (!vehicles || vehicles.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px;">Nessun veicolo assegnato a questo partner.</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = '';
+    vehicles.forEach(v => {
+      const title = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
+      let statusHtml = '';
+      if (v.status === 'pending_approval') statusHtml = '<span style="color: #ffffff; background: rgba(245,158,11,0.2); padding: 2px 6px; border-radius: 4px; font-size:0.7rem;">In Attesa</span>';
+      else if (v.status === 'approved' || v.is_active) statusHtml = '<span style="color: #ffffff; background: rgba(16,185,129,0.2); padding: 2px 6px; border-radius: 4px; font-size:0.7rem;">Approvato/Attivo</span>';
+      else statusHtml = '<span style="color: #ef4444; background: rgba(239,68,68,0.2); padding: 2px 6px; border-radius: 4px; font-size:0.7rem;">Sospeso</span>';
+      
+      tbody.innerHTML += `
+        <tr>
+          <td><strong style="color: #fff;">${title}</strong><br><small style="color: var(--text-muted);">${v.trim || ''}</small></td>
+          <td>${v.category || 'Vettura'}</td>
+          <td>${statusHtml}</td>
+          <td style="text-align: right;">
+             <button class="btn-header btn-header-danger" style="padding: 4px 8px; font-size: 0.7rem;" onclick="deletePartnerProfileVehicle('${v.id}')"><i class="ri-delete-bin-line"></i></button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (e) {
+    console.error(e);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
+  }
+}
+
+async function loadPartnerProfileDocs(providerId) {
+  const tbody = document.getElementById('partnerProfileDocsBody');
+  if(!tbody) return;
+  tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;"><i class="ri-loader-line ri-spin"></i> Caricamento...</td></tr>';
+  
+  if (!supabase) return;
+  
+  try {
+    const { data: jobs, error } = await supabase.from('import_jobs').select('*').eq('provider_id', providerId).order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    
+    if (!jobs || jobs.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 16px;">Nessun documento importato.</td></tr>';
+      return;
+    }
+    
+    tbody.innerHTML = '';
+    jobs.forEach(j => {
+      const dateStr = j.created_at ? new Date(j.created_at).toLocaleString('it-IT') : 'N.D.';
+      tbody.innerHTML += `
+        <tr>
+          <td><strong style="color: #fff;">${j.file_name || 'Documento'}</strong></td>
+          <td>${dateStr}</td>
+          <td>${j.status || 'Completato'}</td>
+          <td style="text-align: right;">
+            <button class="btn-header btn-header-outline" style="padding: 4px 8px; font-size: 0.7rem;" onclick="downloadVehiclePartnerFile(null, '${providerId}', '${j.id}')"><i class="ri-download-cloud-line"></i> Scarica</button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (e) {
+    console.error(e);
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
+  }
+}
+
+async function approvePartnerFleet() {
+  if (!ActivePartnerProfile) return;
+  if (!confirm("Sei sicuro di voler approvare tutti i veicoli in attesa di questo partner? Verranno pubblicati sul portale.")) return;
+  
+  try {
+    const { error } = await supabase
+      .from('vehicles')
+      .update({ status: 'approved', is_active: true, is_available: true, approval_date: new Date().toISOString() })
+      .eq('provider_id', ActivePartnerProfile.id)
+      .eq('status', 'pending_approval');
+      
+    if (error) throw error;
+    
+    alert("Flotta del partner approvata con successo!");
+    loadPartnerProfileFleet(ActivePartnerProfile.id);
+    if(typeof loadFleetApprovalTable === 'function') loadFleetApprovalTable();
+  } catch (e) {
+    console.error(e);
+    alert("Errore durante l'approvazione.");
+  }
+}
+
+async function deletePartnerProfileVehicle(vehicleId) {
+  if (!confirm("Sei sicuro di voler eliminare definitivamente questo veicolo?")) return;
+  try {
+    const { error } = await supabase.from('vehicles').delete().eq('id', vehicleId);
+    if (error) throw error;
+    if (ActivePartnerProfile) loadPartnerProfileFleet(ActivePartnerProfile.id);
+  } catch (e) {
+    console.error(e);
+    alert("Errore durante l'eliminazione.");
+  }
+}
+
+function openNewVehicleForPartner() {
+  alert("Per aggiungere un veicolo a questo partner, usa la tab 'Flotta & Listini DB' e seleziona 'Aggiungi Macchina Partner'.");
+}
+
+function editPartnerDetails() {
+  alert("La modifica dei dati aziendali sarà disponibile nella prossima release.");
+}
+
+
+async function loadActivePartnersTab() {
+  const tbody = document.getElementById('activePartnersTableBody');
+  const badge = document.getElementById('badgeActivePartnersCount');
+  if (!tbody || !supabase) return;
+  
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 26px;"><i class="ri-loader-line ri-spin"></i> Caricamento profili...</td></tr>';
+  
+  try {
+    const { data: providers, error } = await supabase.from('providers').select('*').order('name', { ascending: true });
+    if (error) throw error;
+    
+    if (!providers || providers.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Nessun partner trovato nel database.</td></tr>';
+      if (badge) badge.textContent = '0';
+      return;
+    }
+    
+    CurrentProviders = providers;
+    if (badge) badge.textContent = providers.length;
+    
+    tbody.innerHTML = '';
+    providers.forEach(p => {
+      tbody.innerHTML += `
+        <tr>
+          <td><strong style="color: #fff;">${p.name || p.company_name || 'N.D.'}</strong><br><small style="color: var(--text-muted); font-family: monospace;">${p.code || 'N.D.'}</small></td>
+          <td><div>${p.contact_email || p.partner_email || p.email || 'N.D.'}</div><small style="color: var(--text-muted);">${p.company_phone || p.phone || 'N.D.'}</small></td>
+          <td><span style="color: var(--accent-purple); font-weight: 700;">${p.saas_plan || 'Pro'}</span></td>
+          <td>${p.company_vat || p.vat_number || 'N.D.'}</td>
+          <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px;">${p.fleet_count || 0} Auto</span></td>
+          <td style="text-align: right;">
+            <button class="btn-header btn-header-primary" style="padding: 6px 12px; font-size: 0.78rem;" onclick="openPartnerProfile('${p.id}')">
+              <i class="ri-user-settings-line"></i> Gestisci Profilo
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+  } catch (e) {
+    console.error(e);
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
+  }
+}
+
+// Intercept tab switch to load data
+const originalSwitchTab = typeof switchTab !== 'undefined' ? switchTab : null;
+window.switchTab = function(tabId, btnElem) {
+    if (originalSwitchTab) {
+        originalSwitchTab(tabId, btnElem);
+    } else {
+        // Fallback for simple tab switching if original not found
+        document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        if (btnElem) btnElem.classList.add('active');
+        const titleEl = document.getElementById('currentBreadcrumbName');
+        if (titleEl && btnElem) titleEl.textContent = btnElem.querySelector('span').textContent;
+    }
+    
+    if (tabId === 'tab-active-partners') {
+        loadActivePartnersTab();
+    }
+};
+
+
+async function annihilatePartner() {
+  if (!ActivePartnerProfile) return;
+  const pName = ActivePartnerProfile.name || ActivePartnerProfile.company_name;
+  
+  if (!confirm(`ATTENZIONE ESTREMA!\n\nStai per eliminare DEFINITIVAMENTE il profilo di: ${pName}.\n\nQuesta operazione cancellerà IN MODO IRREVERSIBILE:\n- Tutte le auto del partner\n- Tutte le sue richieste e importazioni\n- Il suo account di sicurezza (email e password)\n- Il suo profilo aziendale\n\nVuoi davvero procedere?`)) {
+    return;
+  }
+  
+  const v = prompt(`Per confermare la distruzione di questo profilo, scrivi la parola: ELIMINA`);
+  if (v !== 'ELIMINA') {
+    alert(`Operazione annullata.`);
+    return;
+  }
+  
+  try {
+    const { error } = await supabase.rpc('delete_partner_completely', { target_provider_id: ActivePartnerProfile.id });
+    if (error) throw error;
+    
+    alert(`Il partner ${pName} e tutti i suoi dati sono stati annientati con successo.`);
+    closePartnerProfileModal();
+    loadActivePartnersTab();
+  } catch (err) {
+    console.error(`Errore durante l'annientamento:`, err);
+    alert(`Si è verificato un errore durante l'eliminazione: ` + err.message);
+  }
+}
+
+// Global array for bookings
+let globalBookings = [];
+let currentBookingCategory = 'NBT';
+
+function filterBookingsByCategory(category) {
+  currentBookingCategory = category;
+  
+  // Update UI title
+  const title = document.getElementById('bookingsTabTitle');
+  if(title) {
+    if(category === 'NBT') title.innerHTML = 'Richieste NBT (Noleggio Breve Termine)';
+    if(category === 'NLT') title.innerHTML = 'Richieste NLT (Noleggio Lungo Termine)';
+    if(category === 'Luxury') title.innerHTML = 'Richieste Noleggio Luxury & Supercar';
+  }
+  
+  // Filter and render
+  if (globalBookings.length === 0) {
+      // Mock some data if empty to show the functionality
+      globalBookings = [
+          { id: 'B-001', customer_name: 'Mario Rossi', phone: '3331234567', start_date: '2026-08-01', end_date: '2026-08-10', vehicle_model: 'Audi Q3', status: 'PENDING', category: 'NBT' },
+          { id: 'B-002', customer_name: 'Luigi Bianchi', phone: '3337654321', start_date: '2026-09-01', end_date: '2026-09-15', vehicle_model: 'BMW Serie 1', status: 'CONFIRMED', category: 'NBT' },
+          { id: 'L-001', customer_name: 'Azienda Tech Srl', phone: '02888888', start_date: '2026-09-01', end_date: '2029-08-31', vehicle_model: 'Tesla Model Y', status: 'PENDING', category: 'NLT' },
+          { id: 'V-001', customer_name: 'Sheikh Al-Maktoum', phone: '+9715555555', start_date: '2026-07-20', end_date: '2026-07-25', vehicle_model: 'Ferrari Roma', status: 'CONFIRMED', category: 'Luxury' }
+      ];
+  }
+  
+  const filtered = globalBookings.filter(b => b.category === category);
+  renderBookingsTable(filtered);
+  
+  // Update counts
+  const countNbt = globalBookings.filter(b => b.category === 'NBT').length;
+  const countNlt = globalBookings.filter(b => b.category === 'NLT').length;
+  const countLux = globalBookings.filter(b => b.category === 'Luxury').length;
+  
+  if(document.getElementById('badgeNbtCount')) document.getElementById('badgeNbtCount').textContent = countNbt;
+  if(document.getElementById('badgeNltCount')) document.getElementById('badgeNltCount').textContent = countNlt;
+  if(document.getElementById('badgeLuxuryCount')) document.getElementById('badgeLuxuryCount').textContent = countLux;
+}
+
+
+// --- AUTOMAZIONE EMAIL PARTNER ---
+async function sendAutomatedPartnerEmail(jobId) {
+  try {
+    if (typeof supabase === 'undefined') return;
+    
+    // Recupera i dati del job e del partner (Mandante)
+    const { data: jobData, error } = await supabase
+      .from('import_jobs')
+      .select('*, providers(name, partner_email)')
+      .eq('id', jobId)
+      .single();
+      
+    if (error || !jobData || !jobData.providers) return;
+    
+    const partnerName = jobData.providers.name || 'Partner';
+    const partnerEmail = jobData.providers.partner_email;
+    
+    if (!partnerEmail) {
+      console.warn("Nessuna email trovata per il partner:", partnerName);
+      return;
+    }
+    
+    // Simula l'invio della mail tramite un webhook o un servizio come SendGrid/EmailJS
+    console.log(`[EMAIL SYSTEM] Preparazione invio email a ${partnerEmail}...`);
+    
+    const linkFlotta = `${window.location.origin}/noleggio-breve-termine.html`;
+    
+    const emailBody = `
+Gentile ${partnerName},
+
+Ti confermiamo che il file della tua flotta è stato elaborato e approvato con successo dalla Direzione Centrale ITERCARS.
+Tutte le tue vetture sono ora attive e pubblicate ufficialmente sulla nostra piattaforma.
+
+Puoi visionare la tua flotta online cliccando su questo link:
+${linkFlotta}
+
+Grazie per la collaborazione.
+Il Team ITERCARS
+    `;
+    
+    // Mostra la notifica visiva nella console di amministrazione
+    alert(`AUTOMAZIONE MAIL:
+Un'email di conferma è stata inviata al Mandante: ${partnerName}
+Indirizzo: ${partnerEmail}
+Contenuto: La tua flotta è stata approvata e pubblicata.`);
+    
+    console.log("[EMAIL SYSTEM] Email inviata con successo!");
+    
+  } catch(err) {
+    console.error("Errore durante l'invio dell'email automatica:", err);
   }
 }

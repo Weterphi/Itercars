@@ -47,6 +47,237 @@ const NbtState = {
 // Dati d'esempio (Seed/Offline Fallback) sincronizzati con lo schema Supabase nbt_offers
 
 const SAMPLE_OFFERS = [
+  {
+    id: 'mb-pescara-1',
+    vehicle_id: 'mb-pescara-1',
+    brand: 'Mercedes-Benz',
+    model: 'Classe A 180 d Premium',
+    trim: 'Premium',
+    category: 'Sportiva',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_classe_a.png',
+    hp: '116 CV',
+    speed: '202 km/h',
+    accel: '9.5s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 85,
+    basePrice: 1800,
+    baseOffer: { duration: 30, km: 4500, deposit: 1000, monthlyPrice: 1800 },
+    variants: [{ duration: 1, deposit: 1000, price: 85 }, { duration: 7, deposit: 1000, price: 540 }, { duration: 30, deposit: 1000, price: 1800 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €1200', 'Km Concessi/Giorno: 150 Km', 'Costo Km Extra: €0.25']
+  },
+  {
+    id: 'mb-pescara-2',
+    vehicle_id: 'mb-pescara-2',
+    brand: 'Mercedes-Benz',
+    model: 'CLA Coupé 200 d',
+    trim: 'Automatic',
+    category: 'Supercar',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_cla_coupe.png',
+    hp: '150 CV',
+    speed: '226 km/h',
+    accel: '8.4s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 110,
+    basePrice: 2200,
+    baseOffer: { duration: 30, km: 4500, deposit: 1200, monthlyPrice: 2200 },
+    variants: [{ duration: 1, deposit: 1200, price: 110 }, { duration: 7, deposit: 1200, price: 690 }, { duration: 30, deposit: 1200, price: 2200 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €1400', 'Km Concessi/Giorno: 150 Km', 'Costo Km Extra: €0.28']
+  },
+  {
+    id: 'mb-pescara-3',
+    vehicle_id: 'mb-pescara-3',
+    brand: 'Mercedes-Benz',
+    model: 'Classe C 220 d SW',
+    trim: 'Premium Station',
+    category: 'Station Wagon',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_classe_c_sw.png',
+    hp: '200 CV',
+    speed: '240 km/h',
+    accel: '7.4s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 130,
+    basePrice: 2600,
+    baseOffer: { duration: 30, km: 6000, deposit: 1500, monthlyPrice: 2600 },
+    variants: [{ duration: 1, deposit: 1500, price: 130 }, { duration: 7, deposit: 1500, price: 820 }, { duration: 30, deposit: 1500, price: 2600 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €1500', 'Km Concessi/Giorno: 200 Km', 'Costo Km Extra: €0.30']
+  },
+  {
+    id: 'mb-pescara-4',
+    vehicle_id: 'mb-pescara-4',
+    brand: 'Mercedes-Benz',
+    model: 'GLA 200 d Enduro',
+    trim: 'Crossover Sportivo',
+    category: 'SUV Luxury',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_gla.png',
+    hp: '150 CV',
+    speed: '208 km/h',
+    accel: '8.6s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 95,
+    basePrice: 1950,
+    baseOffer: { duration: 30, km: 4500, deposit: 1200, monthlyPrice: 1950 },
+    variants: [{ duration: 1, deposit: 1200, price: 95 }, { duration: 7, deposit: 1200, price: 600 }, { duration: 30, deposit: 1200, price: 1950 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €1200', 'Km Concessi/Giorno: 150 Km', 'Costo Km Extra: €0.25']
+  },
+  {
+    id: 'mb-pescara-5',
+    vehicle_id: 'mb-pescara-5',
+    brand: 'Mercedes-Benz',
+    model: 'GLC 220 d 4MATIC',
+    trim: 'AMG Line',
+    category: 'SUV Luxury',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_glc.png',
+    hp: '194 CV',
+    speed: '215 km/h',
+    accel: '7.9s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 150,
+    basePrice: 3100,
+    baseOffer: { duration: 30, km: 4500, deposit: 1800, monthlyPrice: 3100 },
+    variants: [{ duration: 1, deposit: 1800, price: 150 }, { duration: 7, deposit: 1800, price: 950 }, { duration: 30, deposit: 1800, price: 3100 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €1800', 'Km Concessi/Giorno: 150 Km', 'Costo Km Extra: €0.35']
+  },
+  {
+    id: 'mb-pescara-6',
+    vehicle_id: 'mb-pescara-6',
+    brand: 'Mercedes-Benz',
+    model: 'GLE 300 d 4MATIC Coupé',
+    trim: 'Luxury SUV Coupé',
+    category: 'SUV Luxury',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_gle_coupe.png',
+    hp: '272 CV',
+    speed: '226 km/h',
+    accel: '6.8s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 240,
+    basePrice: 4800,
+    baseOffer: { duration: 30, km: 6000, deposit: 2500, monthlyPrice: 4800 },
+    variants: [{ duration: 1, deposit: 2500, price: 240 }, { duration: 7, deposit: 2500, price: 1500 }, { duration: 30, deposit: 2500, price: 4800 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €2500', 'Km Concessi/Giorno: 200 Km', 'Costo Km Extra: €0.40']
+  },
+  {
+    id: 'mb-pescara-7',
+    vehicle_id: 'mb-pescara-7',
+    brand: 'Mercedes-Benz',
+    model: 'Classe E 300 e',
+    trim: 'Plug-in Hybrid',
+    category: 'Supercar',
+    fuel: 'Ibrido ⚡',
+    transmission: 'Automatica',
+    image: 'mercedes_classe_e_phev.png',
+    hp: '320 CV',
+    speed: '250 km/h',
+    accel: '5.7s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 190,
+    basePrice: 3800,
+    baseOffer: { duration: 30, km: 6000, deposit: 2000, monthlyPrice: 3800 },
+    variants: [{ duration: 1, deposit: 2000, price: 190 }, { duration: 7, deposit: 2000, price: 1200 }, { duration: 30, deposit: 2000, price: 3800 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €2000', 'Km Concessi/Giorno: 200 Km', 'Costo Km Extra: €0.35']
+  },
+  {
+    id: 'mb-pescara-8',
+    vehicle_id: 'mb-pescara-8',
+    brand: 'Mercedes-Benz',
+    model: 'EQE 350+ Full Electric',
+    trim: 'Elettrica Lusso',
+    category: 'Supercar',
+    fuel: 'Elettrico ⚡',
+    transmission: 'Automatica',
+    image: 'mercedes_eqe_electric.png',
+    hp: '292 CV',
+    speed: '210 km/h',
+    accel: '6.4s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 210,
+    basePrice: 4100,
+    baseOffer: { duration: 30, km: 6000, deposit: 2000, monthlyPrice: 4100 },
+    variants: [{ duration: 1, deposit: 2000, price: 210 }, { duration: 7, deposit: 2000, price: 1320 }, { duration: 30, deposit: 2000, price: 4100 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €2000', 'Km Concessi/Giorno: 200 Km', 'Costo Km Extra: €0.35']
+  },
+  {
+    id: 'mb-pescara-9',
+    vehicle_id: 'mb-pescara-9',
+    brand: 'Mercedes-Benz',
+    model: 'Classe S 400 d Lunga',
+    trim: 'Ammiraglia Presidenziale',
+    category: 'Supercar',
+    fuel: 'Diesel',
+    transmission: 'Automatica',
+    image: 'mercedes_classe_s_presidenziale.png',
+    hp: '330 CV',
+    speed: '250 km/h',
+    accel: '5.4s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 380,
+    basePrice: 7500,
+    baseOffer: { duration: 30, km: 7500, deposit: 4000, monthlyPrice: 7500 },
+    variants: [{ duration: 1, deposit: 4000, price: 380 }, { duration: 7, deposit: 4000, price: 2400 }, { duration: 30, deposit: 4000, price: 7500 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €3500', 'Km Concessi/Giorno: 250 Km', 'Costo Km Extra: €0.50']
+  },
+  {
+    id: 'mb-pescara-10',
+    vehicle_id: 'mb-pescara-10',
+    brand: 'Mercedes-Benz',
+    model: 'G 63 AMG V8 BiTurbo',
+    trim: 'Super SUV Performance',
+    category: 'SUV Luxury',
+    fuel: 'Benzina',
+    transmission: 'Automatica',
+    image: 'mercedes_g63_amg.png',
+    hp: '585 CV',
+    speed: '220 km/h',
+    accel: '4.5s',
+    readyDelivery: true,
+    deliveryWeeks: 0,
+    providerName: 'ITERCARS TR SRL',
+    location: 'Pescara',
+    nbtDailyPrice: 680,
+    basePrice: 13000,
+    baseOffer: { duration: 30, km: 3000, deposit: 5000, monthlyPrice: 13000 },
+    variants: [{ duration: 1, deposit: 5000, price: 680 }, { duration: 7, deposit: 5000, price: 4250 }, { duration: 30, deposit: 5000, price: 13000 }],
+    services: ['📍 TROVAMI A PESCARA', 'Franchigia Danni: €5000', 'Km Concessi/Giorno: 100 Km', 'Costo Km Extra: €0.80']
+  }
+,
 
   {
 
@@ -621,16 +852,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadOffersFromDatabase() {
 
   if (typeof window.supabase !== 'undefined' && window.supabase) {
-
     try {
-
       const { data, error } = await window.supabase
 
         .from('nbt_offers')
 
         .select(`
 
-          id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
+          id, daily_price, deposit_required, km_daily_limit,
 
           vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
 
@@ -654,17 +883,13 @@ async function loadOffersFromDatabase() {
 
           const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
 
-          let servicesArr = ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Bollo e Messa su strada', 'Soccorso stradale H24 europea', 'Gestione sinistri e pneumatici'];
+          const dailyP = Number(o.daily_price) || Number(v.daily_price) || 120;
 
-          if (Array.isArray(o.services_included) && o.services_included.length > 0) {
+          const depositP = Number(o.deposit_required) || 1500;
 
-            servicesArr = o.services_included;
+          const monthlyP = Math.round(dailyP * 20);
 
-          } else if (typeof o.services_included === 'string') {
 
-            try { servicesArr = JSON.parse(o.services_included); } catch(e){}
-
-          }
 
           return {
 
@@ -692,57 +917,55 @@ async function loadOffersFromDatabase() {
 
             accel: specsObj.accel || '5.5s',
 
-            readyDelivery: !!o.is_ready_delivery,
+            readyDelivery: true,
 
-            deliveryWeeks: o.delivery_weeks || 4,
+            deliveryWeeks: 1,
 
             providerName: pName,
 
-            basePrice: Number(o.client_monthly_price) || 699,
+            basePrice: monthlyP,
 
-            baseDuration: o.duration_months || 48,
+            baseDuration: 30,
 
-            baseKm: o.km_per_year || 15000,
+            baseKm: (o.km_daily_limit || 150) * 30,
 
-            baseDeposit: Number(o.deposit_mandante) || 3000,
+            baseDeposit: depositP,
 
             baseOffer: {
 
-              duration: o.duration_months || 48,
+              duration: 30,
 
-              km: o.km_per_year || 15000,
+              km: (o.km_daily_limit || 150) * 30,
 
-              deposit: Number(o.deposit_mandante) || 3000,
+              deposit: depositP,
 
-              monthlyPrice: Number(o.client_monthly_price) || 699,
+              monthlyPrice: monthlyP,
 
-              zeroDepositPrice: Math.round((Number(o.client_monthly_price) || 699) + ((Number(o.deposit_mandante) || 3000) / (o.duration_months || 48)))
+              zeroDepositPrice: Math.round(monthlyP + (depositP / 30))
 
             },
 
             variants: [
 
-              { duration: 36, deposit: Number(o.deposit_mandante) || 3000, price: Math.round((Number(o.client_monthly_price) || 699) * 1.06) },
+              { duration: 1, deposit: depositP, price: dailyP },
 
-              { duration: 36, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) * 1.06 + ((Number(o.deposit_mandante) || 3000) / 36)) },
+              { duration: 7, deposit: depositP, price: Math.round(dailyP * 6.5) },
 
-              { duration: 48, deposit: Number(o.deposit_mandante) || 3000, price: Number(o.client_monthly_price) || 699 },
+              { duration: 15, deposit: depositP, price: Math.round(dailyP * 13) },
 
-              { duration: 48, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) + ((Number(o.deposit_mandante) || 3000) / 48)) },
-
-              { duration: 60, deposit: Number(o.deposit_mandante) || 3000, price: Math.round((Number(o.client_monthly_price) || 699) * 0.94) },
-
-              { duration: 60, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) * 0.94 + ((Number(o.deposit_mandante) || 3000) / 60)) }
+              { duration: 30, deposit: depositP, price: monthlyP }
 
             ],
 
-            nbtDailyPrice: Number(v.daily_price) || Math.round((Number(o.client_monthly_price) || 699) / 4),
+            nbtDailyPrice: dailyP,
 
-            services: servicesArr
+            services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Assistenza Stradale H24 ed Auto Sostitutiva', 'Tasse e Oneri Burocratici', 'Gestione Pneumatici']
 
           };
 
         });
+
+
 
         if (mapped.length > 0) {
 
@@ -1776,6 +1999,11 @@ async function handleGeneratePDFSubmit(event) {
         vehicle_interest: `${offer.brand} ${offer.model} ${offer.trim || ''}`.trim() + ` (${priceInfo.details || ''} - Rata €${priceInfo.price}/giorno)`,
         pipeline_status: 'new_lead',
         assigned_broker_agent: 'Consulente Senior ITERCARS',
+          provider_id: (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle.provider_id) ? vehicle.provider_id : null),
+          provider_code: (typeof c !== "undefined" && c.provider_code) ? c.provider_code : ((typeof vehicle !== "undefined" && vehicle.provider_code) ? vehicle.provider_code : null),
+          provider_company_name: (typeof c !== "undefined" && c.providerName) ? c.providerName : ((typeof vehicle !== "undefined" && vehicle.providerName) ? vehicle.providerName : null),
+          provider_company_phone: (typeof c !== "undefined" && c.provider_phone) ? c.provider_phone : ((typeof vehicle !== "undefined" && vehicle.provider_phone) ? vehicle.provider_phone : null),
+          provider_company_email: (typeof c !== "undefined" && c.provider_email) ? c.provider_email : ((typeof vehicle !== "undefined" && vehicle.provider_email) ? vehicle.provider_email : null),
         interested_offer_id: null,
         interested_vehicle_id: vehicleUuid,
         notes: `Preventivo 1-Click per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/giorno`

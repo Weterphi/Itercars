@@ -668,6 +668,11 @@ async function handleQuoteSubmit(event) {
           vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (NBT ${ConfigState.durationDays} Giorni / ${ConfigState.kmDailyLimit} km/giorno - Rata €${ConfigState.finalMonthlyPrice}/giorno)`,
           pipeline_status: 'new_lead',
           assigned_broker_agent: 'Consulente Senior ITERCARS',
+          provider_id: (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle.provider_id) ? vehicle.provider_id : null),
+          provider_code: (typeof c !== "undefined" && c.provider_code) ? c.provider_code : ((typeof vehicle !== "undefined" && vehicle.provider_code) ? vehicle.provider_code : null),
+          provider_company_name: (typeof c !== "undefined" && c.providerName) ? c.providerName : ((typeof vehicle !== "undefined" && vehicle.providerName) ? vehicle.providerName : null),
+          provider_company_phone: (typeof c !== "undefined" && c.provider_phone) ? c.provider_phone : ((typeof vehicle !== "undefined" && vehicle.provider_phone) ? vehicle.provider_phone : null),
+          provider_company_email: (typeof c !== "undefined" && c.provider_email) ? c.provider_email : ((typeof vehicle !== "undefined" && vehicle.provider_email) ? vehicle.provider_email : null),
           interested_offer_id: null,
           interested_vehicle_id: vehicleUuid,
           notes: `Preventivo NBT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/giorno`
