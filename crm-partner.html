@@ -82,7 +82,7 @@
         <button class="sidebar-item" onclick="switchPartnerTab('tab-import', this)">
           <div class="sidebar-item-label">
             <i class="ri-file-excel-2-line"></i>
-            <span>Import Excel & AI Photo</span>
+            <span>Inserisci Flotta</span>
           </div>
           <span class="nav-badge" style="background:transparent; color:#ffffff;">STUDIO</span>
         </button>
@@ -226,6 +226,27 @@
                 <p style="color: var(--text-muted); font-size: 0.92rem; max-width: 650px; margin: 8px auto 0 auto;">
                   Seleziona o trascina qui il tuo file **Excel (.xlsx/.csv), PDF o Listino prezzi** aggiornato e clicca sul pulsante per inviarlo istantaneamente e in modo sicuro alla Console Centrale.
                 </p>
+              </div>
+
+              <div style="margin-bottom: 20px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto;">
+                <label style="font-size: 0.8rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Destinazione Flotta (Tipologia Auto)</label>
+                <select id="fleetUploadCategory" class="admin-input" style="font-size: 0.95rem; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.2);">
+                  <option value="Mista / Da Verificare">Flotta Mista / Da Verificare</option>
+                  <option value="Solo NLT">Solo Noleggio Lungo Termine (NLT)</option>
+                  <option value="Solo NBT">Solo Noleggio Breve Termine (NBT)</option>
+                  <option value="Luxury / Supercar">Solo Luxury / Supercar</option>
+                </select>
+              </div>
+
+              <!-- DOWNLOAD TEMPLATE ZONE -->
+              <div style="margin-bottom: 24px; text-align: center; background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
+                <span style="font-size: 0.9rem; color: var(--text-muted); display: block; margin-bottom: 8px;"><i class="ri-download-cloud-2-line"></i> Scarica template per compilare flotta</span>
+                <select id="templateDownloadSelect" class="admin-input" style="font-size: 0.9rem; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.2); max-width: 300px; display: inline-block; vertical-align: middle;" onchange="if(this.value) { window.location.href = this.value; this.value = ''; }">
+                  <option value="">-- Seleziona un template --</option>
+                  <option value="templates/Template_Listino_Noleggio excel.xlsx">Template Listino Noleggio (Excel)</option>
+                  <option value="templates/Template_Listino_Noleggio cvs.csv">Template Listino Noleggio (CSV)</option>
+                  <option value="templates/Template_Listino_Noleggio word.docx">Template Listino Noleggio (Word)</option>
+                </select>
               </div>
 
               <!-- DRAG & DROP ZONE / SELEZIONE FILE -->
@@ -376,9 +397,26 @@
           <input type="number" id="editDailyPrice" class="admin-input" required style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
         </div>
 
-        <div style="margin-bottom: 22px;">
+        <div style="margin-bottom: 14px;">
           <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Richiesta sulla Carta (€) (*)</label>
           <input type="number" id="editDeposit" class="admin-input" required />
+        </div>
+
+        <div style="margin-bottom: 22px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+          <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;"><i class="ri-rocket-line"></i> Disponibilità & Consegna</label>
+          <select id="editDeliveryType" class="admin-input" onchange="toggleDeliveryFields()" style="margin-bottom: 8px; font-size: 0.88rem; padding: 8px 10px; background-color: #111111 !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.2);">
+            <option value="ready" style="background-color: #111111; color: #ffffff;">Pronta Consegna</option>
+            <option value="weeks" style="background-color: #111111; color: #ffffff;">Consegna tra X settimane</option>
+            <option value="date" style="background-color: #111111; color: #ffffff;">Disponibile dal (data specifica nel futuro)</option>
+          </select>
+          <div id="editDeliveryWeeksBox" style="display: none; margin-top: 8px;">
+            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Settimane di attesa per la consegna</label>
+            <input type="number" id="editDeliveryWeeks" class="admin-input" placeholder="es. 2, 4, 6" min="1" max="52" style="font-size: 0.88rem; background-color: #111111 !important; color: #ffffff !important;" />
+          </div>
+          <div id="editDeliveryDateBox" style="display: none; margin-top: 8px;">
+            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Data di disponibilità prevista</label>
+            <input type="date" id="editDeliveryDate" class="admin-input" style="font-size: 0.88rem; background-color: #111111 !important; color: #ffffff !important; color-scheme: dark;" />
+          </div>
         </div>
 
         <div style="display: flex; justify-content: flex-end; gap: 10px;">

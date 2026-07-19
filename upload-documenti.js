@@ -60,6 +60,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 3. Applica i dati all'interfaccia
   if (quoteData) {
     CurrentQuote.quoteCode = quoteData.quote_code || quoteData.quoteCode || code || 'PREV-2026-VIP';
+    if (quoteData.isNbt || quoteData.is_nbt || (CurrentQuote.quoteCode && CurrentQuote.quoteCode.startsWith('IT-NBT-'))) {
+      CurrentQuote.isNbt = true;
+    }
     CurrentQuote.monthlyPrice = Number(quoteData.final_monthly_price || quoteData.finalMonthlyPrice) || 0;
     
     if (quoteData.vehicles) {
@@ -80,6 +83,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   } else {
     CurrentQuote.quoteCode = code || 'PREV-2026-ESCLUSIVO';
+    if (CurrentQuote.quoteCode && CurrentQuote.quoteCode.startsWith('IT-NBT-')) {
+      CurrentQuote.isNbt = true;
+    }
   }
 
   renderQuoteDetails();
@@ -135,6 +141,24 @@ function renderQuoteDetails() {
   if (feeEl) feeEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const feeTextEl = document.getElementById('stripeFeeTextDisplay');
   if (feeTextEl) feeTextEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+  const incomeBox = document.getElementById('dz_income_doc');
+  if (incomeBox) {
+    if (CurrentQuote.isNbt) {
+      incomeBox.style.display = 'none';
+    } else {
+      incomeBox.style.display = 'flex';
+    }
+  }
+
+  const docsText = document.getElementById('docsReadyInstructionText');
+  if (docsText) {
+    if (CurrentQuote.isNbt) {
+      docsText.innerHTML = `Una volta selezionati i file (<strong>Documento d'Identità e Patente di Guida</strong>), clicca su "Verifica documenti" per il controllo istantaneo tramite Grok AI. Solo al completamento della verifica potrai accedere alla Sezione 3.`;
+    } else {
+      docsText.innerHTML = `Una volta selezionati i file (identità, patente ed eventuale reddito), clicca su "Verifica documenti" per il controllo istantaneo tramite Grok AI. Solo al completamento della verifica potrai accedere alla Sezione 3.`;
+    }
+  }
 }
 
 // Scelta Tipologia Cliente per adattare i documenti
@@ -148,6 +172,13 @@ function switchCustomerType(type) {
   if (pBtn && type === 'Privato') pBtn.classList.add('active-type-btn');
   if (pivaBtn && type === 'Partita IVA') pivaBtn.classList.add('active-type-btn');
   if (azBtn && type === 'Azienda SRL/SPA') azBtn.classList.add('active-type-btn');
+
+  const incomeBox = document.getElementById('dz_income_doc');
+  if (incomeBox && CurrentQuote && CurrentQuote.isNbt) {
+    incomeBox.style.display = 'none';
+  } else if (incomeBox) {
+    incomeBox.style.display = 'flex';
+  }
 
   const titleEl = document.getElementById('incomeDocTitle');
   const descEl = document.getElementById('incomeDocDesc');

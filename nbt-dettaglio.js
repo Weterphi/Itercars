@@ -90,7 +90,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'Serie 3 Touring',
     trim: '320d xDrive MSport',
     category: 'Sportiva',
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
     transmission: 'Steptronic 8M',
     image: 'bmw_serie_3_touring.webp',
     hp: '190 CV',
@@ -107,7 +107,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'X3',
     trim: 'xDrive20d MSport Mild-Hybrid',
     category: 'SUV Luxury',
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
     transmission: 'Steptronic xDrive',
     image: 'bmw_x3_msport.webp',
     hp: '190 CV',
@@ -124,7 +124,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'Serie 5',
     trim: '520d Mild Hybrid Eccelsa',
     category: 'Supercar',
-    fuel: 'Diesel Mild-Hybrid ⚡',
+    fuel: 'Diesel Mild-Hybrid',
     transmission: 'Steptronic 8M',
     image: 'bmw_serie_5_eccelsa.webp',
     hp: '197 CV',
@@ -141,7 +141,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'X5',
     trim: 'xDrive30d MSport MHEV',
     category: 'SUV Luxury',
-    fuel: 'Diesel MHEV ⚡',
+    fuel: 'Diesel MHEV',
     transmission: 'Steptronic Sport xDrive',
     image: 'bmw_x5_msport.webp',
     hp: '298 CV',
@@ -158,7 +158,7 @@ const SAMPLE_DETAIL_OFFERS = [
     model: 'i4 Gran Coupé',
     trim: 'eDrive40 Sport Elettrica',
     category: 'Supercar',
-    fuel: 'Elettrico ⚡',
+    fuel: 'Elettrico',
     transmission: 'Automatico Single Speed',
     image: 'bmw_i4_grancoupe.webp',
     hp: '340 CV',
@@ -193,34 +193,55 @@ document.addEventListener('DOMContentLoaded', async () => {
     found = cached.find(o => String(o.id) === String(carId) || String(o.vehicle_id) === String(carId) || (paramModel && String(o.model).toLowerCase() === String(paramModel).toLowerCase()));
   } catch(e) {}
 
-  // 2. Se non in cache e connesso a Supabase, cerca live sul DB
-  if (!found && typeof window.supabase !== 'undefined' && window.supabase) {
+  // 2. Cerca live sul DB se connesso a Supabase (dando priorità al dato live aggiornato dal partner)
+  if (typeof window.supabase !== 'undefined' && window.supabase) {
     try {
+      const selectFields = `
+        id, provider_offer_code, duration_months, km_per_year, deposit_mandante, deposit_required, daily_price, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
+        vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit),
+        providers (name)
+      `;
       let { data, error } = await window.supabase
         .from('nbt_offers')
-        .select(`
-          id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
-          vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
-          providers (name)
-        `)
+        .select(selectFields)
         .eq('id', carId)
         .maybeSingle();
         
       if (!data) {
         const res = await window.supabase
           .from('nbt_offers')
-          .select(`...`)
+          .select(selectFields)
           .eq('vehicle_id', carId)
           .maybeSingle();
         if (res.data) data = res.data;
       }
         
-      if (!error && data) {
-        const v = data.vehicles || {};
+      let vDb = (data && data.vehicles) ? data.vehicles : null;
+      if (!vDb && carId) {
+        const resVeh = await window.supabase
+          .from('vehicles')
+          .select('*, providers(name)')
+          .or(`id.eq.${carId},model.ilike."%${carId}%"`)
+          .maybeSingle();
+        if (resVeh && resVeh.data) {
+          vDb = resVeh.data;
+          if (!data) data = { vehicles: vDb, providers: resVeh.data.providers };
+        }
+      } else if (vDb && vDb.id) {
+        const resLive = await window.supabase.from('vehicles').select('*').eq('id', vDb.id).maybeSingle();
+        if (resLive && resLive.data) vDb = Object.assign({}, vDb, resLive.data);
+      }
+
+      if (!error && (data || vDb)) {
+        const v = vDb || {};
         const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
+        // Priorità alla tariffa e cauzione aggiornate live dal partner in tabella vehicles
+        const dailyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0) ? Number(v.daily_price) : ((data && data.daily_price !== undefined && data.daily_price !== null && data.daily_price !== '') ? Number(data.daily_price) : 85);
+        const depositP = (v.deposit !== undefined && v.deposit !== null && v.deposit !== '' && Number(v.deposit) >= 0) ? Number(v.deposit) : ((data && data.deposit_required !== undefined && data.deposit_required !== null && data.deposit_required !== '') ? Number(data.deposit_required) : ((data && data.deposit_mandante !== undefined && data.deposit_mandante !== null && data.deposit_mandante !== '') ? Number(data.deposit_mandante) : 3000));
+
         found = {
-          id: data.id,
-          vehicle_id: v.id || data.vehicle_id,
+          id: data ? data.id : (v.id || carId),
+          vehicle_id: v.id || (data ? data.vehicle_id : carId),
           brand: v.brand || 'Veicolo',
           model: v.model || 'NBT',
           trim: v.trim || 'Executive',
@@ -231,14 +252,15 @@ document.addEventListener('DOMContentLoaded', async () => {
           hp: specsObj.hp || '300 CV',
           speed: specsObj.speed || '240 km/h',
           accel: specsObj.accel || '5.5s',
-          readyDelivery: !!data.is_ready_delivery,
-          deliveryWeeks: data.delivery_weeks || 4,
-          providerName: (data.providers && data.providers.name) ? data.providers.name : 'Mandante NBT',
-          nbtDailyPrice: Number(data.daily_price) || (data.vehicles && data.vehicles.daily_price ? Number(data.vehicles.daily_price) : null) || 85,
-          basePrice: Number(data.client_monthly_price) || 699,
+          readyDelivery: (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (data && data.is_ready_delivery !== undefined ? !!data.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true)),
+          deliveryWeeks: specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : ((data && data.delivery_weeks !== undefined) ? Number(data.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 1)),
+          deliveryDate: specsObj.delivery_date || v.delivery_date || (data && data.delivery_date) || '',
+          providerName: (data && data.providers && data.providers.name) ? data.providers.name : (v.providerName || 'Mandante NBT'),
+          nbtDailyPrice: dailyP,
+          basePrice: (data && Number(data.client_monthly_price)) || Math.round(dailyP * 20) || 699,
           baseDuration: 7,
           baseKm: 150,
-          baseDeposit: Number(data.deposit_mandante) || 3000
+          baseDeposit: depositP
         };
       }
     } catch(err) {
@@ -260,7 +282,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       model: paramModel,
       trim: params.get('trim') || 'Executive M Sport',
       category: params.get('cat') || 'Sportiva',
-      fuel: params.get('fuel') || 'Mild-Hybrid / Diesel ⚡',
+      fuel: params.get('fuel') || 'Mild-Hybrid / Diesel',
       transmission: params.get('trans') || 'Automatico 8M',
       image: params.get('img') || 'category-suv.jpg',
       hp: params.get('hp') || '190 CV',
@@ -320,10 +342,16 @@ function renderCarDetails() {
   
   const badgeContainer = document.getElementById('detailBadgeContainer');
   if (badgeContainer) {
-    if (c.readyDelivery) {
+    if (c.deliveryDate && c.deliveryDate !== '') {
+      let fDate = c.deliveryDate;
+      try { const p = c.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
+    } else if (c.readyDelivery && (c.deliveryWeeks === 1 || c.deliveryWeeks <= 1)) {
+      badgeContainer.innerHTML = `<span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    } else if (c.readyDelivery) {
       badgeContainer.innerHTML = `<span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna (${c.deliveryWeeks} settimane)</span>`;
     } else {
-      badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-time-line"></i> Ordine su Misura (${c.deliveryWeeks} settimane)</span>`;
+      badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${c.deliveryWeeks || 4} settimane</span>`;
     }
   }
 
@@ -349,6 +377,24 @@ function renderCarDetails() {
 function syncActiveButtons(containerId, value) {
   const container = document.getElementById(containerId);
   if (!container) return;
+  if (containerId === 'configDepositGroup') {
+    const fixedDep = Number(ConfigState.depositAmount) || 0;
+    container.innerHTML = `
+      <div style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid #f59e0b; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%; grid-column: 1 / -1;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <i class="ri-shield-keyhole-fill" style="color: #f59e0b; font-size: 1.6rem;"></i>
+          <div style="text-align: left;">
+            <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; display: block;">Deposito Cauzionale sulla Carta</span>
+            <strong style="font-size: 1.2rem; color: #fff;">€ ${fixedDep.toLocaleString('it-IT')}</strong>
+          </div>
+        </div>
+        <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-size: 0.75rem; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; gap: 5px;">
+          <i class="ri-lock-fill"></i> Imposto da prassi
+        </span>
+      </div>
+    `;
+    return;
+  }
   container.querySelectorAll('.config-option-btn').forEach(btn => {
     const btnVal = Number(btn.dataset.value);
     btn.classList.toggle('active', btnVal === value);
@@ -514,6 +560,7 @@ async function handleQuoteSubmit(event) {
   localStorage.setItem('itercars_last_quote_code', quoteCode);
   localStorage.setItem('itercars_last_quote', JSON.stringify({
     quote_code: quoteCode,
+    isNbt: true,
     final_monthly_price: ConfigState.finalMonthlyPrice,
     carTitle: `${c.brand} ${c.model}`,
     selected_duration_months: ConfigState.durationDays,
@@ -658,6 +705,9 @@ async function handleQuoteSubmit(event) {
       if (typeof window.supabase !== 'undefined' && window.supabase) {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         let vehicleUuid = c.vehicle_id && uuidRegex.test(c.vehicle_id) ? c.vehicle_id : (c.id && uuidRegex.test(c.id) ? c.id : null);
+        let rawProvId = (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle && vehicle.provider_id) ? vehicle.provider_id : null);
+        let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
+        let provName = (typeof c !== "undefined" && (c.providerName || c.provider_company_name)) ? (c.providerName || c.provider_company_name) : 'NBT';
 
         const leadPayload = {
           first_name: name.split(' ')[0] || name,
@@ -665,24 +715,22 @@ async function handleQuoteSubmit(event) {
           phone: phone,
           email: email,
           customer_type: type || 'Privato',
-          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (NBT ${ConfigState.durationDays} Giorni / ${ConfigState.kmDailyLimit} km/giorno - Rata €${ConfigState.finalMonthlyPrice}/giorno)`,
+          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (NBT ${ConfigState.durationDays} Giorni / ${ConfigState.kmDailyLimit} km/giorno - Rata €${ConfigState.finalMonthlyPrice}/periodo)`,
           pipeline_status: 'new_lead',
           assigned_broker_agent: 'Consulente Senior ITERCARS',
-          provider_id: (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle.provider_id) ? vehicle.provider_id : null),
-          provider_code: (typeof c !== "undefined" && c.provider_code) ? c.provider_code : ((typeof vehicle !== "undefined" && vehicle.provider_code) ? vehicle.provider_code : null),
-          provider_company_name: (typeof c !== "undefined" && c.providerName) ? c.providerName : ((typeof vehicle !== "undefined" && vehicle.providerName) ? vehicle.providerName : null),
-          provider_company_phone: (typeof c !== "undefined" && c.provider_phone) ? c.provider_phone : ((typeof vehicle !== "undefined" && vehicle.provider_phone) ? vehicle.provider_phone : null),
-          provider_company_email: (typeof c !== "undefined" && c.provider_email) ? c.provider_email : ((typeof vehicle !== "undefined" && vehicle.provider_email) ? vehicle.provider_email : null),
+          provider_id: provUuid,
           interested_offer_id: null,
           interested_vehicle_id: vehicleUuid,
-          notes: `Preventivo NBT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/giorno`
+          notes: `Preventivo NBT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/periodo [Mandante: ${provName}]`
         };
 
         let leadData = null;
         try {
           const { data: resData, error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]).select();
-          if (leadErr && (leadErr.code === '23503' || (leadErr.message && leadErr.message.toLowerCase().includes('foreign key')))) {
+          if (leadErr) {
+            console.warn("Avviso inserimento crm_leads NBT, ritento pulendo chiavi esterne:", leadErr);
             leadPayload.interested_vehicle_id = null;
+            leadPayload.provider_id = null;
             const retry = await window.supabase.from('crm_leads').insert([leadPayload]).select();
             leadData = retry.data;
           } else {
@@ -699,6 +747,10 @@ async function handleQuoteSubmit(event) {
           lead_id: newLeadId,
           vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
           offer_id: null,
+          quote_type: 'NBT',
+          provider_id: (typeof c !== "undefined" && c.provider_id && c.provider_id.length === 36) ? c.provider_id : null,
+          selected_duration_days: ConfigState.durationDays,
+          selected_km_per_day: ConfigState.kmDailyLimit,
           selected_duration_months: ConfigState.durationDays,
           selected_km_per_year: ConfigState.kmDailyLimit,
           selected_deposit: ConfigState.depositAmount,
@@ -753,7 +805,7 @@ async function handleQuoteSubmit(event) {
 }
 
 function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
-  const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n📅 Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/giorno*\n💰 Anticipo: *€ ${deposit}*\n\n🔥 *Canone Calcolato: € ${price} / periodo Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
+  const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\nDurata: *${months} mesi*\nChilometri: *${km} km/giorno*\nAnticipo: *€ ${deposit}*\n\n*Canone Calcolato: € ${price} / periodo Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
 }
 

@@ -47,6 +47,7 @@ function switchTab(tabId, btnElem) {
     'tab-comparator': 'Comparatore 1-Click',
     'tab-dossier': 'Dossier Delibere Credito',
     'tab-partners': 'Candidature Partner',
+    'tab-active-partners': 'Gestione Profili Partner',
     'tab-fleet-approval': 'Approvazione Flotte Excel Mandanti'
   };
 
@@ -56,6 +57,9 @@ function switchTab(tabId, btnElem) {
   }
   if (tabId === 'tab-fleet-approval') {
     loadFleetApprovalTable();
+  }
+  if (tabId === 'tab-active-partners') {
+    if (typeof loadActivePartnersTab === 'function') loadActivePartnersTab();
   }
 }
 
@@ -760,14 +764,19 @@ function openNewVehicleModal() {
     const inputs = modal.querySelectorAll('input[type="text"], input[type="url"], textarea');
     inputs.forEach(i => i.value = '');
     if (document.getElementById('vehEditId')) document.getElementById('vehEditId').value = '';
+    if (document.getElementById('vehProviderId')) document.getElementById('vehProviderId').value = '';
     if (document.getElementById('vehicleModalTitleText')) document.getElementById('vehicleModalTitleText').textContent = 'Aggiungi Veicolo (`public.vehicles`)';
+    modal.style.zIndex = '2100';
     modal.classList.add('active');
   }
 }
 
 function closeNewVehicleModal() {
   const modal = document.getElementById('newVehicleModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.style.zIndex = '';
+    modal.classList.remove('active');
+  }
 }
 // Alias per compatibilità
 function closeVehicleModal() { closeNewVehicleModal(); }
@@ -780,6 +789,7 @@ function editVehicleRecord(vehicleId) {
   if (!modal) return;
 
   if (document.getElementById('vehEditId')) document.getElementById('vehEditId').value = v.id;
+  if (document.getElementById('vehProviderId')) document.getElementById('vehProviderId').value = v.provider_id || '';
   if (document.getElementById('vehTitle')) document.getElementById('vehTitle').value = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
   if (document.getElementById('vehPrice')) document.getElementById('vehPrice').value = v.daily_price || v.price || 500;
   
@@ -791,8 +801,10 @@ function editVehicleRecord(vehicleId) {
   if (document.getElementById('vehTag')) document.getElementById('vehTag').value = v.badge || 'NLT 48 Mesi';
   if (document.getElementById('vehImage')) document.getElementById('vehImage').value = v.image_url || '';
   if (document.getElementById('vehDesc')) document.getElementById('vehDesc').value = (v.specs && v.specs.description ? v.specs.description : (v.description || 'Dotazione executive completa di serie con navigatore, fari Matrix LED, interni in pelle e cerchi in lega.'));
+  if (document.getElementById('vehCity')) document.getElementById('vehCity').value = v['city'] || '';
 
   if (document.getElementById('vehicleModalTitleText')) document.getElementById('vehicleModalTitleText').textContent = `Modifica: ${v.brand || ''} ${v.model || v.name || ''}`;
+  modal.style.zIndex = '2100';
   modal.classList.add('active');
 }
 
@@ -800,12 +812,18 @@ async function handleVehicleFormSubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
   
   const id = document.getElementById('vehEditId') ? document.getElementById('vehEditId').value : '';
+  const providerIdVal = document.getElementById('vehProviderId') ? document.getElementById('vehProviderId').value : '';
   const titleVal = document.getElementById('vehTitle') ? document.getElementById('vehTitle').value.trim() : '';
   const priceVal = document.getElementById('vehPrice') ? Number(document.getElementById('vehPrice').value.replace(/[^0-9.]/g, '')) || 500 : 500;
   const specsVal = document.getElementById('vehSpecs') ? document.getElementById('vehSpecs').value.trim() : 'Ibrido • Automatico';
   const tagVal = document.getElementById('vehTag') ? document.getElementById('vehTag').value : 'NLT 48 Mesi';
   const imgVal = document.getElementById('vehImage') ? document.getElementById('vehImage').value.trim() : '';
   const descVal = document.getElementById('vehDesc') ? document.getElementById('vehDesc').value.trim() : '';
+  const cityVal = document.getElementById('vehCity') ? document.getElementById('vehCity').value.trim() : '';
+
+  const isLuxury = document.getElementById('vehIsLuxury') ? document.getElementById('vehIsLuxury').checked : false;
+  const isNbt = document.getElementById('vehIsNbt') ? document.getElementById('vehIsNbt').checked : false;
+  const isNlt = document.getElementById('vehIsNlt') ? document.getElementById('vehIsNlt').checked : false;
 
   let brand = 'ITERCARS';
   let model = titleVal;
@@ -826,10 +844,12 @@ async function handleVehicleFormSubmit(event) {
     image_url: imgVal || 'logo_tricolore.png',
     fuel_type: specsVal.split('•')[0].trim() || 'Ibrido',
     specs: { hp: specsVal, accel: "4.5s 0-100", seats: 5, speed: "250 km/h", transmission: "Automatico", description: descVal },
-    is_nlt: true,
-    is_nbt: true,
+    is_nlt: isNlt,
+    is_nbt: isNbt,
     is_available: true,
-    is_luxury: true
+    is_luxury: isLuxury,
+    provider_id: providerIdVal || null,
+    'city': cityVal
   };
 
   try {
@@ -857,10 +877,23 @@ async function handleVehicleFormSubmit(event) {
           is_ready_delivery: true,
           is_active: true
         }]);
+        await supabase.from('nbt_offers').insert([{
+          vehicle_id: newVeh[0].id,
+          daily_price: priceVal,
+          is_ready_delivery: true,
+          is_active: true
+        }]);
       }
     }
-    closeNewVehicleModal();
+    
+    closeVehicleModal();
     await fetchVehiclesFromDatabase();
+    
+    // Se siamo dentro il profilo partner, aggiorniamo la tabella del partner in tempo reale
+    if (typeof ActivePartnerProfile !== 'undefined' && ActivePartnerProfile) {
+      loadPartnerProfileFleet(ActivePartnerProfile.id);
+    }
+    
     renderVehiclesTable(CurrentVehicles);
     renderNbtOffersTable(CurrentNbtOffers);
     renderNltOffersTable(CurrentNltOffers);
@@ -1044,9 +1077,9 @@ async function handleNbtOfferSubmit(event) {
         fuel_type: 'Ibrido / Diesel',
         specs: { hp: '250 CV', accel: '5.2s 0-100', seats: 5, speed: '240 km/h', transmission: 'Automatico' },
         is_nbt: true,
-        is_nlt: true,
+        is_nlt: false,
         is_available: true,
-        is_luxury: true
+        is_luxury: false
       }]).select();
 
       if (vehErr || !createdVeh || !createdVeh[0]) throw new Error("Errore creazione veicolo DB: " + (vehErr ? vehErr.message : ''));
@@ -1235,9 +1268,9 @@ async function handleNltOfferSubmit(event) {
         fuel_type: 'Ibrido / Diesel',
         specs: { hp: '200 CV', accel: '7.5s 0-100', seats: 5, speed: '220 km/h', transmission: 'Automatico' },
         is_nlt: true,
-        is_nbt: true,
+        is_nbt: false,
         is_available: true,
-        is_luxury: true
+        is_luxury: false
       }]).select();
 
       if (vehErr || !createdVeh || !createdVeh[0]) throw new Error("Errore creazione veicolo DB: " + (vehErr ? vehErr.message : ''));
@@ -1825,21 +1858,40 @@ function renderQuotesTable(quotes) {
 
   quotes.forEach(q => {
     const dateStr = q.created_at ? new Date(q.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Oggi';
+    const isNbt = q.quote_type === 'NBT' || (q.quote_code && q.quote_code.startsWith('IT-NBT-'));
+    
+    const typeBadge = isNbt
+      ? '<span style="background: rgba(59, 130, 246, 0.18); color: #60a5fa; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(59, 130, 246, 0.4); display: inline-block; margin-top: 4px;">Breve Termine (NBT)</span>'
+      : '<span style="background: rgba(16, 185, 129, 0.18); color: #34d399; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.4); display: inline-block; margin-top: 4px;">Lungo Termine (NLT)</span>';
+
+    const durationText = isNbt
+      ? `${q.selected_duration_days || q.selected_duration_months || 7} Giorni • ${Number(q.selected_km_per_day || q.selected_km_per_year || 150).toLocaleString('it-IT')} km/giorno`
+      : `${q.selected_duration_months || 48} Mesi • ${Number(q.selected_km_per_year || 15000).toLocaleString('it-IT')} km/anno`;
+
+    const providerText = q.provider_id 
+      ? `<div style="font-size: 0.76rem; color: #facc15; margin-top: 4px;"><i class="ri-building-line"></i> Mandante: <code>${q.provider_id.slice(0, 8)}...</code></div>` 
+      : '';
     
     tbody.innerHTML += `
       <tr>
-        <td><strong style="color: var(--accent-green); font-family: monospace; font-size: 0.95rem;">${q.quote_code || 'QT-0000'}</strong></td>
+        <td>
+          <strong style="color: var(--accent-green); font-family: monospace; font-size: 0.95rem;">${q.quote_code || 'QT-0000'}</strong>
+          <br>${typeBadge}
+        </td>
         <td style="color: var(--text-muted); font-size: 0.84rem;">${dateStr}</td>
         <td><strong style="color: #fff;">Lead ID: ${q.lead_id ? q.lead_id.slice(0, 8) + '...' : 'Diretto'}</strong></td>
         <td>
-          <div style="font-weight: 700;">${q.vehicle_id ? 'Vettura Catalogo' : 'Configurazione NLT'}</div>
+          <div style="font-weight: 700;">${q.vehicle_id ? 'Vettura ID: ' + q.vehicle_id.slice(0, 8) + '...' : 'Configurazione'}</div>
           <small style="color: var(--text-muted);">Stato: ${q.status || 'inviato'}</small>
+          ${providerText}
         </td>
         <td>
-          <div>${q.selected_duration_months || 48} Mesi • ${Number(q.selected_km_per_year||15000).toLocaleString('it-IT')} km</div>
+          <div>${durationText}</div>
           <small style="color: var(--text-muted);">Anticipo: € ${Number(q.selected_deposit||0).toLocaleString('it-IT')}</small>
         </td>
-        <td><strong style="font-size: 1.1rem; color: #fff;">€ ${Number(q.final_monthly_price||0).toLocaleString('it-IT')} <small style="font-size: 0.75rem;">/m</small></strong></td>
+        <td>
+          <strong style="font-size: 1.1rem; color: #fff;">€ ${Number(q.final_monthly_price||0).toLocaleString('it-IT')} <small style="font-size: 0.75rem;">${isNbt ? '/periodo' : '/mese'}</small></strong>
+        </td>
         <td>
           <div style="display: flex; gap: 8px;">
             ${q.pdf_storage_url ? `
@@ -2436,7 +2488,6 @@ function checkAdminAuth() {
   }
 }
 
-async 
 async function handleAdminLogin(event) {
   if (event && event.preventDefault) event.preventDefault();
   const emailInput = document.getElementById('adminEmailInput');
@@ -2479,7 +2530,7 @@ async function handleAdminLogin(event) {
     unlockConsoleSuccess(email);
   } catch (err) {
     console.error('Login Admin Errore:', err);
-    alert('Credenziali errate. Riprova.');
+    alert('Errore Login: ' + err.message);
   } finally {
     if (submitBtn) {
       submitBtn.innerHTML = `<i class="ri-shield-keyhole-line"></i> Sblocca Console Broker`;
@@ -2738,6 +2789,7 @@ async function approveAllPendingPartnerVehicles() {
       await supabase.from('nbt_offers').update({ is_active: true }).eq('is_active', false);
     }
     
+    alert("Avvio email per " + pendingJobs.length + " pratiche trovate.");
     // Invia email automatica a tutti i partner coinvolti
     if (typeof sendAutomatedPartnerEmail === 'function') {
       for (const job of pendingJobs) {
@@ -2770,6 +2822,7 @@ async function approveImportJob(jobId) {
         await supabase.from('nbt_offers').update({ is_active: true }).eq('is_active', false);
       }
     }
+    alert("Avvio email singola per job: " + jobId);
     await sendAutomatedPartnerEmail(jobId);
     loadFleetApprovalTable();
   } catch(e) { console.warn("Errore approvazione file job:", e); }
@@ -2974,27 +3027,32 @@ function adminLogout() {
 let ActivePartnerProfile = null;
 
 async function openPartnerProfile(providerId) {
-  const p = CurrentPartners.find(x => x.id === providerId) || (typeof CurrentProviders !== 'undefined' ? CurrentProviders.find(x => x.id === providerId) : null);
-  if (!p) {
-      alert("Partner non trovato nella cache locale.");
-      return;
+  try {
+    const p = CurrentPartners.find(x => x.id === providerId) || (typeof CurrentProviders !== 'undefined' ? CurrentProviders.find(x => x.id === providerId) : null);
+    if (!p) {
+        alert("Partner non trovato nella cache locale.");
+        return;
+    }
+    
+    ActivePartnerProfile = p;
+    
+    document.getElementById('partnerProfileTitle').textContent = p.name || p.company_name || 'Profilo Partner';
+    document.getElementById('partnerProfileCode').textContent = p.code || 'CODICE N.D.';
+    document.getElementById('partnerVat').textContent = p.company_vat || p.vat_number || 'N.D.';
+    document.getElementById('partnerEmail').textContent = p.partner_email || p.email || p.contact_email || 'N.D.';
+    document.getElementById('partnerAddress').textContent = p.address || p.city || 'N.D.';
+    document.getElementById('partnerPlan').textContent = p.saas_plan || 'Pro Partner';
+    document.getElementById('partnerPin').textContent = p.access_pin || 'Non configurato';
+    
+    document.getElementById('partnerProfileModal').classList.add('active');
+    
+    await loadPartnerProfileFleet(p.id);
+    await loadPartnerProfileDocs(p.id);
+    switchPartnerProfileTab('fleet');
+  } catch (err) {
+    alert("Errore in openPartnerProfile: " + err.message);
+    console.error(err);
   }
-  
-  ActivePartnerProfile = p;
-  
-  document.getElementById('partnerProfileTitle').textContent = p.name || p.company_name || 'Profilo Partner';
-  document.getElementById('partnerProfileCode').textContent = p.code || 'CODICE N.D.';
-  document.getElementById('partnerVat').textContent = p.company_vat || p.vat_number || 'N.D.';
-  document.getElementById('partnerEmail').textContent = p.partner_email || p.email || p.contact_email || 'N.D.';
-  document.getElementById('partnerAddress').textContent = p.address || p.city || 'N.D.';
-  document.getElementById('partnerPlan').textContent = p.saas_plan || 'Pro Partner';
-  document.getElementById('partnerPin').textContent = p.access_pin || 'Non configurato';
-  
-  document.getElementById('partnerProfileModal').classList.add('active');
-  
-  await loadPartnerProfileFleet(p.id);
-  await loadPartnerProfileDocs(p.id);
-  switchPartnerProfileTab('fleet');
 }
 
 function closePartnerProfileModal() {
@@ -3041,6 +3099,7 @@ async function loadPartnerProfileFleet(providerId) {
           <td>${v.category || 'Vettura'}</td>
           <td>${statusHtml}</td>
           <td style="text-align: right;">
+             <button class="btn-header btn-header-outline" style="padding: 4px 8px; font-size: 0.7rem; margin-right: 4px;" onclick="editVehicleRecord('${v.id}')" title="Modifica Veicolo"><i class="ri-edit-2-line"></i></button>
              <button class="btn-header btn-header-danger" style="padding: 4px 8px; font-size: 0.7rem;" onclick="deletePartnerProfileVehicle('${v.id}')"><i class="ri-delete-bin-line"></i></button>
           </td>
         </tr>
@@ -3060,7 +3119,7 @@ async function loadPartnerProfileDocs(providerId) {
   if (!supabase) return;
   
   try {
-    const { data: jobs, error } = await supabase.from('import_jobs').select('*').eq('provider_id', providerId).order('created_at', { ascending: false });
+    const { data: jobs, error } = await supabase.from('import_jobs').select('*').eq('provider_id', providerId);
     
     if (error) throw error;
     
@@ -3124,7 +3183,11 @@ async function deletePartnerProfileVehicle(vehicleId) {
 }
 
 function openNewVehicleForPartner() {
-  alert("Per aggiungere un veicolo a questo partner, usa la tab 'Flotta & Listini DB' e seleziona 'Aggiungi Macchina Partner'.");
+  openNewVehicleModal();
+  if (typeof ActivePartnerProfile !== 'undefined' && ActivePartnerProfile) {
+    const provIdElem = document.getElementById('vehProviderId');
+    if (provIdElem) provIdElem.value = ActivePartnerProfile.id;
+  }
 }
 
 function editPartnerDetails() {
@@ -3135,12 +3198,14 @@ function editPartnerDetails() {
 async function loadActivePartnersTab() {
   const tbody = document.getElementById('activePartnersTableBody');
   const badge = document.getElementById('badgeActivePartnersCount');
+  
   if (!tbody || !supabase) return;
   
   tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 26px;"><i class="ri-loader-line ri-spin"></i> Caricamento profili...</td></tr>';
-  
+
   try {
     const { data: providers, error } = await supabase.from('providers').select('*').order('name', { ascending: true });
+    
     if (error) throw error;
     
     if (!providers || providers.length === 0) {
@@ -3154,15 +3219,17 @@ async function loadActivePartnersTab() {
     
     tbody.innerHTML = '';
     providers.forEach(p => {
+      const actualFleetCount = (typeof CurrentVehicles !== 'undefined' ? CurrentVehicles : []).filter(v => v.provider_id === p.id).length;
       tbody.innerHTML += `
         <tr>
           <td><strong style="color: #fff;">${p.name || p.company_name || 'N.D.'}</strong><br><small style="color: var(--text-muted); font-family: monospace;">${p.code || 'N.D.'}</small></td>
           <td><div>${p.contact_email || p.partner_email || p.email || 'N.D.'}</div><small style="color: var(--text-muted);">${p.company_phone || p.phone || 'N.D.'}</small></td>
           <td><span style="color: var(--accent-purple); font-weight: 700;">${p.saas_plan || 'Pro'}</span></td>
           <td>${p.company_vat || p.vat_number || 'N.D.'}</td>
-          <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px;">${p.fleet_count || 0} Auto</span></td>
+          <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px;">${actualFleetCount} Auto</span></td>
           <td style="text-align: right;">
             <button class="btn-header btn-header-primary" style="padding: 6px 12px; font-size: 0.78rem;" onclick="openPartnerProfile('${p.id}')">
+
               <i class="ri-user-settings-line"></i> Gestisci Profilo
             </button>
           </td>
@@ -3174,26 +3241,6 @@ async function loadActivePartnersTab() {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
   }
 }
-
-// Intercept tab switch to load data
-const originalSwitchTab = typeof switchTab !== 'undefined' ? switchTab : null;
-window.switchTab = function(tabId, btnElem) {
-    if (originalSwitchTab) {
-        originalSwitchTab(tabId, btnElem);
-    } else {
-        // Fallback for simple tab switching if original not found
-        document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        if (btnElem) btnElem.classList.add('active');
-        const titleEl = document.getElementById('currentBreadcrumbName');
-        if (titleEl && btnElem) titleEl.textContent = btnElem.querySelector('span').textContent;
-    }
-    
-    if (tabId === 'tab-active-partners') {
-        loadActivePartnersTab();
-    }
-};
 
 
 async function annihilatePartner() {
@@ -3275,7 +3322,7 @@ async function sendAutomatedPartnerEmail(jobId) {
       .eq('id', jobId)
       .single();
       
-    if (error || !jobData || !jobData.providers) return;
+    if (error || !jobData || !jobData.providers) { console.warn('Email data fetch failed:', error, jobData); return; }
     
     const partnerName = jobData.providers.name || 'Partner';
     const partnerEmail = jobData.providers.partner_email;

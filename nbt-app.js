@@ -829,7 +829,7 @@ const SAMPLE_OFFERS = [
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  NbtState.offers = SAMPLE_OFFERS.slice();
+  NbtState.offers = [];
 
   
 
@@ -847,155 +847,228 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-// Caricamento dal DB (con fallback trasparente)
+window.addEventListener('storage', (e) => {
+  if (e.key === 'itercars_force_refresh' || e.key === 'itercars_nbt_cache') {
+    loadOffersFromDatabase().then(() => renderOffersGrid());
+  }
+});
 
 async function loadOffersFromDatabase() {
-
   if (typeof window.supabase !== 'undefined' && window.supabase) {
     try {
-      const { data, error } = await window.supabase
+      // 1. Carica le offerte NBT dal database
+      const params = new URLSearchParams(window.location.search);
+      const cityFilter = params.get('city');
 
+      const baseQuery = `
+          *,
+          vehicles!inner (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit, city),
+          providers (id, name, logo_url)
+        `;
+
+      let query = window.supabase
         .from('nbt_offers')
-
-        .select(`
-
-          id, daily_price, deposit_required, km_daily_limit,
-
-          vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
-
-          providers (name)
-
-        `)
-
+        .select(baseQuery)
         .eq('is_active', true);
 
-        
+      if (cityFilter) {
+        query = query.ilike('vehicles.city', `%${cityFilter}%`);
+      }
+
+      const { data, error } = await query;
+
+      // 2. Carica in parallelo tutti i veicoli NBT live dalla flotta per catturare le modifiche dirette del partner
+      const { data: vehList } = await window.supabase
+        .from('vehicles')
+        .select('*')
+        .eq('is_available', true)
+        .eq('is_nbt', true);
+
+      const vehMap = {};
+      if (vehList && Array.isArray(vehList)) {
+        vehList.forEach(vh => { if (vh.id) vehMap[vh.id] = vh; });
+      }
 
       if (!error && data && data.length > 0) {
-
         console.log('✅ Caricate offerte NBT da Supabase DB:', data.length);
 
         const mapped = data.map(o => {
-
-          const v = o.vehicles || {};
-
+          const vBase = o.vehicles || {};
+          const v = (vehMap && vehMap[vBase.id || o.vehicle_id]) ? Object.assign({}, vBase, vehMap[vBase.id || o.vehicle_id]) : vBase;
           const pName = (o.providers && o.providers.name) ? o.providers.name : 'Mandante NBT';
-
           const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
 
-          const dailyP = Number(o.daily_price) || Number(v.daily_price) || 120;
+          // Diamo priorità assoluta ai prezzi salvati in tabella 'vehicles' (dove il Partner salva live le modifiche tariffarie)
+          const dailyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0) 
+            ? Number(v.daily_price) 
+            : ((o.daily_price !== undefined && o.daily_price !== null && o.daily_price !== '') ? Number(o.daily_price) : 120);
 
-          const depositP = Number(o.deposit_required) || 1500;
+          const depositP = (v.deposit !== undefined && v.deposit !== null && v.deposit !== '' && Number(v.deposit) >= 0) 
+            ? Number(v.deposit) 
+            : ((o.deposit_required !== undefined && o.deposit_required !== null && o.deposit_required !== '') ? Number(o.deposit_required) : ((o.deposit_mandante !== undefined && o.deposit_mandante !== null && o.deposit_mandante !== '') ? Number(o.deposit_mandante) : 1500));
 
           const monthlyP = Math.round(dailyP * 20);
 
-
+          const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (o.is_ready_delivery !== undefined ? !!o.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true));
+          const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : (o.delivery_weeks !== undefined ? Number(o.delivery_weeks) : 1));
+          const delivDate = specsObj.delivery_date || v.delivery_date || o.delivery_date || '';
 
           return {
-
             id: o.id,
-
             vehicle_id: v.id || o.vehicle_id,
-
             brand: v.brand || 'Veicolo',
-
             model: v.model || 'NBT',
-
             trim: v.trim || 'Executive',
-
             category: v.category || 'SUV Luxury',
-
-            fuel: v.fuel_type || 'Ibrido / Diesel',
-
+            fuel: v.motore || v.fuel_type || 'Ibrido / Diesel',
             transmission: v.transmission || 'Automatico',
-
             image: v.image_url || 'logo_fallback.png',
-
             hp: specsObj.hp || '300 CV',
-
             speed: specsObj.speed || '240 km/h',
-
             accel: specsObj.accel || '5.5s',
-
-            readyDelivery: true,
-
-            deliveryWeeks: 1,
-
+            readyDelivery: readyDeliv,
+            deliveryWeeks: delivWeeks,
+            deliveryDate: delivDate,
             providerName: pName,
-
-            basePrice: monthlyP,
-
-            baseDuration: 30,
-
-            baseKm: (o.km_daily_limit || 150) * 30,
-
-            baseDeposit: depositP,
-
-            baseOffer: {
-
-              duration: 30,
-
-              km: (o.km_daily_limit || 150) * 30,
-
-              deposit: depositP,
-
-              monthlyPrice: monthlyP,
-
-              zeroDepositPrice: Math.round(monthlyP + (depositP / 30))
-
-            },
-
-            variants: [
-
-              { duration: 1, deposit: depositP, price: dailyP },
-
-              { duration: 7, deposit: depositP, price: Math.round(dailyP * 6.5) },
-
-              { duration: 15, deposit: depositP, price: Math.round(dailyP * 13) },
-
-              { duration: 30, deposit: depositP, price: monthlyP }
-
-            ],
-
             nbtDailyPrice: dailyP,
-
+            basePrice: monthlyP,
+            baseDuration: 30,
+            baseKm: (o.km_daily_limit || 150) * 30,
+            baseDeposit: depositP,
+            baseOffer: {
+              duration: 30,
+              km: (o.km_daily_limit || 150) * 30,
+              deposit: depositP,
+              monthlyPrice: monthlyP,
+              zeroDepositPrice: Math.round(monthlyP + (depositP / 30))
+            },
+            variants: [
+              { duration: 1, deposit: depositP, price: dailyP },
+              { duration: 7, deposit: depositP, price: Math.round(dailyP * 6.5) },
+              { duration: 15, deposit: depositP, price: Math.round(dailyP * 13) },
+              { duration: 30, deposit: depositP, price: monthlyP }
+            ],
             services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Assistenza Stradale H24 ed Auto Sostitutiva', 'Tasse e Oneri Burocratici', 'Gestione Pneumatici']
-
           };
-
         });
 
-
-
-        if (mapped.length > 0) {
-
-          // Prezzi e offerte NBT rigorosamente allineati al database in tempo reale
-
-          NbtState.offers = mapped;
-
-        } else {
-
-          NbtState.offers = SAMPLE_OFFERS.slice();
-
+        // Aggiungi anche eventuali veicoli live su 'vehicles' che non hanno ancora una riga in 'nbt_offers'
+        if (vehList && Array.isArray(vehList)) {
+          const existingVehIds = new Set(mapped.map(item => String(item.vehicle_id)));
+          vehList.forEach(vh => {
+            if (vh.is_nbt === true && vh.id && !existingVehIds.has(String(vh.id))) {
+              const specsObj = typeof vh.specs === 'string' ? JSON.parse(vh.specs) : (vh.specs || {});
+              const dPrice = Number(vh.daily_price) || 120;
+              const depPrice = Number(vh.deposit) || 1500;
+              const mPrice = Math.round(dPrice * 20);
+              const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (vh.is_ready_delivery !== undefined ? !!vh.is_ready_delivery : true);
+              const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (vh.delivery_weeks !== undefined ? Number(vh.delivery_weeks) : 1);
+              const delivDate = specsObj.delivery_date || vh.delivery_date || '';
+              mapped.push({
+                id: vh.id,
+                vehicle_id: vh.id,
+                brand: vh.brand || 'Veicolo',
+                model: vh.model || 'NBT',
+                trim: vh.trim || 'Executive',
+                category: vh.category || 'SUV Luxury',
+                fuel: vh.motore || vh.fuel_type || 'Ibrido / Diesel',
+                transmission: vh.transmission || 'Automatico',
+                image: vh.image_url || 'logo_fallback.png',
+                hp: specsObj.hp || '300 CV',
+                speed: specsObj.speed || '240 km/h',
+                accel: specsObj.accel || '5.5s',
+                readyDelivery: readyDeliv,
+                deliveryWeeks: delivWeeks,
+                deliveryDate: delivDate,
+                providerName: 'Partner Flotta Live',
+                nbtDailyPrice: dPrice,
+                basePrice: mPrice,
+                baseDuration: 30,
+                baseKm: 4500,
+                baseDeposit: depPrice,
+                baseOffer: {
+                  duration: 30,
+                  km: 4500,
+                  deposit: depPrice,
+                  monthlyPrice: mPrice,
+                  zeroDepositPrice: Math.round(mPrice + (depPrice / 30))
+                },
+                variants: [
+                  { duration: 1, deposit: depPrice, price: dPrice },
+                  { duration: 7, deposit: depPrice, price: Math.round(dPrice * 6.5) },
+                  { duration: 15, deposit: depPrice, price: Math.round(dPrice * 13) },
+                  { duration: 30, deposit: depPrice, price: mPrice }
+                ],
+                services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Assistenza Stradale H24 ed Auto Sostitutiva', 'Tasse e Oneri Burocratici', 'Gestione Pneumatici']
+              });
+            }
+          });
         }
 
+        if (mapped.length > 0) {
+          // Prezzi e offerte NBT rigorosamente allineati al database in tempo reale
+          NbtState.offers = mapped; populateDynamicFilters();
+        } else {
+          NbtState.offers = [];
+        }
+      } else if (vehList && vehList.length > 0) {
+        const mappedVehs = vehList.filter(vh => vh.is_nbt === true).map(vh => {
+          const specsObj = typeof vh.specs === 'string' ? JSON.parse(vh.specs) : (vh.specs || {});
+          const dPrice = Number(vh.daily_price) || 120;
+          const depPrice = Number(vh.deposit) || 1500;
+          const mPrice = Math.round(dPrice * 20);
+          const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (vh.is_ready_delivery !== undefined ? !!vh.is_ready_delivery : true);
+          const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (vh.delivery_weeks !== undefined ? Number(vh.delivery_weeks) : 1);
+          const delivDate = specsObj.delivery_date || vh.delivery_date || '';
+          return {
+            id: vh.id,
+            vehicle_id: vh.id,
+            brand: vh.brand || 'Veicolo',
+            model: vh.model || 'NBT',
+            trim: vh.trim || 'Executive',
+            category: vh.category || 'SUV Luxury',
+            fuel: vh.motore || vh.fuel_type || 'Ibrido / Diesel',
+            transmission: vh.transmission || 'Automatico',
+            image: vh.image_url || 'logo_fallback.png',
+            hp: specsObj.hp || '300 CV',
+            speed: specsObj.speed || '240 km/h',
+            accel: specsObj.accel || '5.5s',
+            readyDelivery: readyDeliv,
+            deliveryWeeks: delivWeeks,
+            deliveryDate: delivDate,
+            providerName: 'Partner Flotta Live',
+            nbtDailyPrice: dPrice,
+            basePrice: mPrice,
+            baseDuration: 30,
+            baseKm: 4500,
+            baseDeposit: depPrice,
+            baseOffer: {
+              duration: 30,
+              km: 4500,
+              deposit: depPrice,
+              monthlyPrice: mPrice,
+              zeroDepositPrice: Math.round(mPrice + (depPrice / 30))
+            },
+            variants: [
+              { duration: 1, deposit: depPrice, price: dPrice },
+              { duration: 7, deposit: depPrice, price: Math.round(dPrice * 6.5) },
+              { duration: 15, deposit: depPrice, price: Math.round(dPrice * 13) },
+              { duration: 30, deposit: depPrice, price: mPrice }
+            ],
+            services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Assistenza Stradale H24 ed Auto Sostitutiva', 'Tasse e Oneri Burocratici', 'Gestione Pneumatici']
+          };
+        });
+        NbtState.offers = mappedVehs; populateDynamicFilters();
       } else {
-
-        NbtState.offers = SAMPLE_OFFERS.slice();
-
+        NbtState.offers = [];
       }
-
     } catch (err) {
-
       console.warn('⚠️ Fallback offline: utilizzo catalogo NBT ufficiale mandante.');
-
-      NbtState.offers = SAMPLE_OFFERS.slice();
-
+      NbtState.offers = [];
     }
-
   } else {
 
-    NbtState.offers = SAMPLE_OFFERS.slice();
+    NbtState.offers = [];
 
   }
 
@@ -1359,8 +1432,9 @@ function getCardPrice(offer, duration, depositMode) {
 
   if (NbtState.mode === 'NBT') {
     const days = duration || 1;
-    const price = offer.nbtDailyPrice * days;
-    return { price: price, label: ' Totale (IVA esc.)', details: `${days} ${days === 1 ? "Giorno" : "Giorni"} • Deposito €3.000` };
+    const price = (offer.nbtDailyPrice || 120) * days;
+    const dep = (offer.baseDeposit !== undefined && offer.baseDeposit !== null) ? offer.baseDeposit : (offer.baseOffer?.deposit || 1500);
+    return { price: price, label: ' Totale (IVA esc.)', details: `${days} ${days === 1 ? "Giorno" : "Giorni"} • Deposito €${Number(dep).toLocaleString('it-IT')}` };
 }
 
 
@@ -1446,43 +1520,21 @@ function renderOffersGrid() {
 
 
 
-    const fuelF = (NbtState.fuelFilter || 'all').toLowerCase();
+    const fuelF = (NbtState.fuelFilter || 'all');
 
-    if (fuelF !== 'all') {
-
-      const fLower = offer.fuel.toLowerCase();
-
-      if (fuelF === 'elettrica' || fuelF === 'elettrico') {
-
-        if (!fLower.includes('elettric')) return false;
-
-      } else if (fuelF === 'ibrida' || fuelF === 'ibrido') {
-
-        if (!fLower.includes('hybrid') && !fLower.includes('mhev') && !fLower.includes('ibrid')) return false;
-
-      } else {
-
-        if (!fLower.includes(fuelF)) return false;
-
-      }
-
-    }
+    if (fuelF !== 'all' && offer.fuel !== fuelF) return false;
 
 
 
-    const transF = (NbtState.transmissionFilter || 'all').toLowerCase();
+    const transF = (NbtState.transmissionFilter || 'all');
 
-    if (transF !== 'all') {
-
-      if (!offer.transmission.toLowerCase().includes(transF)) return false;
-
-    }
+    if (transF !== 'all' && offer.transmission !== transF) return false;
 
 
 
     const catF = NbtState.categoryFilter || 'all';
 
-    if (catF !== 'all' && !offer.category.includes(catF)) return false;
+    if (catF !== 'all' && offer.category !== catF) return false;
 
 
 
@@ -1596,11 +1648,18 @@ function renderOffersGrid() {
 
     const priceInfo = getCardPrice(offer);
 
-    const badgeText = offer.readyDelivery 
-
-      ? `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${offer.deliveryWeeks} sett.)</span>`
-
-      : `<span class="card-badge badge-custom"><i class="ri-time-line"></i> Ordine su Misura (${offer.deliveryWeeks} sett.)</span>`;
+    let badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    if (offer.deliveryDate && offer.deliveryDate !== '') {
+      let fDate = offer.deliveryDate;
+      try { const p = offer.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      badgeText = `<span class="card-badge badge-custom" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
+    } else if (offer.readyDelivery && (offer.deliveryWeeks === 1 || offer.deliveryWeeks <= 1)) {
+      badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    } else if (offer.readyDelivery) {
+      badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${offer.deliveryWeeks} sett.)</span>`;
+    } else {
+      badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${offer.deliveryWeeks || 4} sett.</span>`;
+    }
 
       
 
@@ -1989,6 +2048,9 @@ async function handleGeneratePDFSubmit(event) {
     try {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       let vehicleUuid = offer.vehicle_id && uuidRegex.test(offer.vehicle_id) ? offer.vehicle_id : (offer.id && uuidRegex.test(offer.id) ? offer.id : null);
+      let rawProvId = offer.provider_id || (offer.vehicles && offer.vehicles.provider_id) || null;
+      let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
+      let provName = offer.providerName || offer.provider_company_name || 'Mandante NBT';
 
       const leadPayload = {
         first_name: name.split(' ')[0] || name,
@@ -1999,19 +2061,17 @@ async function handleGeneratePDFSubmit(event) {
         vehicle_interest: `${offer.brand} ${offer.model} ${offer.trim || ''}`.trim() + ` (${priceInfo.details || ''} - Rata €${priceInfo.price}/giorno)`,
         pipeline_status: 'new_lead',
         assigned_broker_agent: 'Consulente Senior ITERCARS',
-          provider_id: (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle.provider_id) ? vehicle.provider_id : null),
-          provider_code: (typeof c !== "undefined" && c.provider_code) ? c.provider_code : ((typeof vehicle !== "undefined" && vehicle.provider_code) ? vehicle.provider_code : null),
-          provider_company_name: (typeof c !== "undefined" && c.providerName) ? c.providerName : ((typeof vehicle !== "undefined" && vehicle.providerName) ? vehicle.providerName : null),
-          provider_company_phone: (typeof c !== "undefined" && c.provider_phone) ? c.provider_phone : ((typeof vehicle !== "undefined" && vehicle.provider_phone) ? vehicle.provider_phone : null),
-          provider_company_email: (typeof c !== "undefined" && c.provider_email) ? c.provider_email : ((typeof vehicle !== "undefined" && vehicle.provider_email) ? vehicle.provider_email : null),
+        provider_id: provUuid,
         interested_offer_id: null,
         interested_vehicle_id: vehicleUuid,
-        notes: `Preventivo 1-Click per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/giorno`
+        notes: `Preventivo 1-Click NBT per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/periodo [Mandante: ${provName}]`
       };
 
       const { error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]);
-      if (leadErr && (leadErr.code === '23503' || (leadErr.message && leadErr.message.toLowerCase().includes('foreign key')))) {
+      if (leadErr) {
+        console.warn("Avviso 1-click crm_leads NBT, ritento senza foreign keys:", leadErr);
         leadPayload.interested_vehicle_id = null;
+        leadPayload.provider_id = null;
         await window.supabase.from('crm_leads').insert([leadPayload]);
       }
     } catch (e) {
@@ -2313,3 +2373,45 @@ function openWhatsAppForCard(offerId) {
 
 }
 
+
+function populateDynamicFilters() {
+  const stateOffers = NbtState.offers;
+  if (!stateOffers || stateOffers.length === 0) return;
+
+  const brands = new Set();
+  const categories = new Set();
+  const fuels = new Set();
+  const transmissions = new Set();
+
+  stateOffers.forEach(o => {
+    if (o.brand) brands.add(o.brand);
+    if (o.category) categories.add(o.category);
+    if (o.fuel) fuels.add(o.fuel);
+    if (o.transmission) transmissions.add(o.transmission);
+  });
+
+  const updateSelect = (id, defaultLabel, itemsSet) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    
+    // Maintain current selected value if possible
+    const currentVal = el.value;
+    
+    let html = `<option value="all" style="background: #111; color: #fff;">${defaultLabel}</option>`;
+    Array.from(itemsSet).sort().forEach(item => {
+      html += `<option value="${item}" style="background: #111; color: #fff;">${item}</option>`;
+    });
+    el.innerHTML = html;
+    
+    if (itemsSet.has(currentVal)) {
+      el.value = currentVal;
+    } else {
+      el.value = 'all';
+    }
+  };
+
+  updateSelect('filterMarca', 'Marca: Tutte', brands);
+  updateSelect('filterTipologia', 'Cat: Tutte', categories);
+  updateSelect('filterAlimentazione', 'Motore: Tutti', fuels);
+  updateSelect('filterCambio', 'Cambio: Tutti', transmissions);
+}

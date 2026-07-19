@@ -142,7 +142,10 @@
                   <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
                   <div class="input-wrapper">
                     <i class="ri-building-line"></i>
-                    <input type="text" class="form-control" id="searchLocation" placeholder="Città, aeroporto, via..." autocomplete="off">
+                    <input type="text" class="form-control" id="searchLocation" list="italian-cities" placeholder="Es. Milano, Roma..." autocomplete="off">
+                    <datalist id="italian-cities">
+                      <option value="Agrigento"></option><option value="Alessandria"></option><option value="Ancona"></option><option value="Aosta"></option><option value="Arezzo"></option><option value="Ascoli Piceno"></option><option value="Asti"></option><option value="Avellino"></option><option value="Bari"></option><option value="Barletta-Andria-Trani"></option><option value="Belluno"></option><option value="Benevento"></option><option value="Bergamo"></option><option value="Biella"></option><option value="Bologna"></option><option value="Bolzano"></option><option value="Brescia"></option><option value="Brindisi"></option><option value="Cagliari"></option><option value="Caltanissetta"></option><option value="Campobasso"></option><option value="Carbonia-Iglesias"></option><option value="Caserta"></option><option value="Catania"></option><option value="Catanzaro"></option><option value="Chieti"></option><option value="Como"></option><option value="Cosenza"></option><option value="Cremona"></option><option value="Crotone"></option><option value="Cuneo"></option><option value="Enna"></option><option value="Fermo"></option><option value="Ferrara"></option><option value="Firenze"></option><option value="Foggia"></option><option value="Forlì-Cesena"></option><option value="Frosinone"></option><option value="Genova"></option><option value="Gorizia"></option><option value="Grosseto"></option><option value="Imperia"></option><option value="Isernia"></option><option value="L'Aquila"></option><option value="La Spezia"></option><option value="Latina"></option><option value="Lecce"></option><option value="Lecco"></option><option value="Livorno"></option><option value="Lodi"></option><option value="Lucca"></option><option value="Macerata"></option><option value="Mantova"></option><option value="Massa-Carrara"></option><option value="Matera"></option><option value="Medio Campidano"></option><option value="Messina"></option><option value="Milano"></option><option value="Modena"></option><option value="Monza e della Brianza"></option><option value="Napoli"></option><option value="Novara"></option><option value="Nuoro"></option><option value="Ogliastra"></option><option value="Olbia-Tempio"></option><option value="Oristano"></option><option value="Padova"></option><option value="Palermo"></option><option value="Parma"></option><option value="Pavia"></option><option value="Perugia"></option><option value="Pesaro e Urbino"></option><option value="Pescara"></option><option value="Piacenza"></option><option value="Pisa"></option><option value="Pistoia"></option><option value="Pordenone"></option><option value="Potenza"></option><option value="Prato"></option><option value="Ragusa"></option><option value="Ravenna"></option><option value="Reggio Calabria"></option><option value="Reggio Emilia"></option><option value="Rieti"></option><option value="Rimini"></option><option value="Roma"></option><option value="Rovigo"></option><option value="Salerno"></option><option value="Sassari"></option><option value="Savona"></option><option value="Siena"></option><option value="Siracusa"></option><option value="Sondrio"></option><option value="Taranto"></option><option value="Teramo"></option><option value="Terni"></option><option value="Torino"></option><option value="Trapani"></option><option value="Trento"></option><option value="Treviso"></option><option value="Trieste"></option><option value="Udine"></option><option value="Varese"></option><option value="Venezia"></option><option value="Verbano-Cusio-Ossola"></option><option value="Vercelli"></option><option value="Verona"></option><option value="Vibo Valentia"></option><option value="Vicenza"></option><option value="Viterbo"></option>
+                    </datalist>
                     <ul id="searchLocationSuggestions" class="autocomplete-suggestions"></ul>
                   </div>
                 </div>
@@ -188,7 +191,20 @@
         </div>
       </section>
     </div>
-  </div>
+  </div> <!-- end hero-content -->
+
+  <!-- RISULTATI RICERCA EROE (Nascosto di default) -->
+  <section id="heroSearchResultsSection" style="display: none; background: #000; padding: 40px 0; border-top: 1px solid var(--border-glass); margin-bottom: 40px;">
+    <div class="container">
+      <div class="section-header" style="text-align: left; margin-bottom: 30px;">
+        <h2 style="font-size: 2rem;"><i class="ri-search-eye-line" style="color: var(--accent-primary); margin-right: 10px;"></i>Risultati Ricerca</h2>
+        <p style="color: var(--text-muted);" id="heroSearchResultsSubtitle">I veicoli disponibili per la tua ricerca.</p>
+      </div>
+      <div class="fleet-grid" id="heroSearchResultsGrid">
+        <!-- Vetture generate dinamicamente qui -->
+      </div>
+    </div>
+  </section>
 
   <!-- ================= FLEET / CATALOG SECTION ================= -->
   <section class="fleet-section" id="flotta">
@@ -834,8 +850,7 @@
 
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <!-- Script JS Principale -->
-  <script src="app.js?v=36"></script>
+  <script src="app.js?v=40"></script>
   <script>
     function handleMobileSearch() {
       const searchSection = document.getElementById('mainSearchSection');

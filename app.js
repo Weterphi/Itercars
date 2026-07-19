@@ -827,53 +827,7 @@ function changeLanguage(lang, silent = false) {
   }
 }
 
-let fleetData = [
-  // SUPERCAR (Luxury)
-  { id: 29, name: "Audi R8 Performance", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "331 KM/H", accel: "3.2s", hp: "620 CV" }, image: "audi-r8.webp", badge: "V10 5.2L FSI" },
-  { id: 30, name: "Bentley Continental GT", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "335 KM/H", accel: "3.6s", hp: "659 CV" }, image: "bentley-continental.webp", badge: "W12 6.0L Biturbo" },
-  { id: 31, name: "Ferrari 296 GTS", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "330 KM/H", accel: "2.9s", hp: "830 CV" }, image: "ferrari-296-gts.webp", badge: "V6 3.0L PHEV" },
-  { id: 32, name: "Ferrari 812 GTS", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "340 KM/H", accel: "3.0s", hp: "800 CV" }, image: "ferrari-812-gts.webp", badge: "V12 6.5L NA" },
-  { id: 33, name: "Ferrari F8 Tributo", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "340 KM/H", accel: "2.9s", hp: "720 CV" }, image: "ferrari-f8.webp", badge: "V8 3.9L Biturbo" },
-  { id: 34, name: "Ferrari Portofino M", category: "Supercar", price: 0, rating: "4.9", specs: { speed: "320 KM/H", accel: "3.45s", hp: "620 CV" }, image: "ferrari-portofino.webp", badge: "V8 3.9L Biturbo" },
-  { id: 35, name: "Ferrari Roma Spyder", category: "Supercar", price: 0, rating: "4.9", specs: { speed: "320 KM/H", accel: "3.4s", hp: "620 CV" }, image: "ferrari-roma.webp", badge: "V8 3.9L Biturbo" },
-  { id: 36, name: "Ferrari SF90 Stradale", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "340 KM/H", accel: "2.5s", hp: "1000 CV" }, image: "ferrari-sf90.webp", badge: "V8 4.0L PHEV" },
-  { id: 37, name: "Lamborghini Aventador S", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "350 KM/H", accel: "2.9s", hp: "740 CV" }, image: "lamborghini-aventador.webp", badge: "V12 6.5L NA" },
-  { id: 38, name: "Lamborghini Huracán EVO Spyder", category: "Supercar", price: 0, rating: "4.9", specs: { speed: "325 KM/H", accel: "3.1s", hp: "640 CV" }, image: "lamborghini-huracan.webp", badge: "V10 5.2L NA" },
-  { id: 39, name: "Lamborghini Revuelto", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "350 KM/H", accel: "2.5s", hp: "1015 CV" }, image: "lamborghini-revuelto.webp", badge: "V12 6.5L PHEV" },
-  { id: 40, name: "Maserati GranCabrio", category: "Supercar", price: 0, rating: "4.8", specs: { speed: "316 KM/H", accel: "3.6s", hp: "542 CV" }, image: "maserati-grancabrio.webp", badge: "V6 3.0L Nettuno" },
-  { id: 41, name: "Maserati MC20", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "325 KM/H", accel: "2.9s", hp: "630 CV" }, image: "maserati-mc20-new.webp", badge: "V6 3.0L Nettuno" },
-  { id: 42, name: "Porsche 911 992 Cabriolet", category: "Supercar", price: 0, rating: "4.9", specs: { speed: "306 KM/H", accel: "3.9s", hp: "450 CV" }, image: "porsche-911-cab.webp", badge: "Boxer 3.0L Biturbo" },
-  { id: 44, name: "Porsche 911 992 Turbo S Cabriolet", category: "Supercar", price: 0, rating: "5.0", specs: { speed: "330 KM/H", accel: "2.8s", hp: "650 CV" }, image: "porsche-911-turbo.webp", badge: "Boxer 3.8L Biturbo" },
-  // SUV LUXURY
-  { id: 5, name: "Audi Q8 S-Line", category: "SUV Luxury", price: 0, rating: "4.9", specs: { speed: "245 KM/H", accel: "6.3s", hp: "286 CV" }, image: "audi_q8_sline.webp", badge: "V6 3.0L TDI" },
-  { id: 6, name: "Audi RSQ3 Sportback", category: "SUV Luxury", price: 0, rating: "4.9", specs: { speed: "280 KM/H", accel: "4.5s", hp: "400 CV" }, image: "audi_rsq3_sportback.webp", badge: "L5 2.5L TFSI" },
-  { id: 7, name: "Audi RSQ8", category: "SUV Luxury", price: 0, rating: "5.0", specs: { speed: "305 KM/H", accel: "3.8s", hp: "600 CV" }, image: "audi_rsq8.webp", badge: "V8 4.0L TFSI" },
-  { id: 8, name: "Ferrari Purosangue", category: "SUV Luxury", price: 0, rating: "5.0", specs: { speed: "310 KM/H", accel: "3.3s", hp: "725 CV" }, image: "ferrari_purosangue.webp", badge: "V12 6.5L NA" },
-  { id: 17, name: "Lamborghini Urus S", category: "SUV Luxury", price: 0, rating: "5.0", specs: { speed: "305 KM/H", accel: "3.5s", hp: "666 CV" }, image: "lamborghini_urus.webp", badge: "V8 4.0L Biturbo" },
-  { id: 18, name: "Maserati Levante GTS", category: "SUV Luxury", price: 0, rating: "4.9", specs: { speed: "292 KM/H", accel: "4.2s", hp: "530 CV" }, image: "maserati_levante.webp", badge: "V8 3.8L Biturbo" },
-  { id: 19, name: "Mercedes G63 AMG", category: "SUV Luxury", price: 0, rating: "5.0", specs: { speed: "240 KM/H", accel: "4.5s", hp: "585 CV" }, image: "mercedes_g63.webp", badge: "V8 4.0L Biturbo" },
-  { id: 20, name: "Porsche Cayenne Coupé Turbo GT", category: "SUV Luxury", price: 0, rating: "5.0", specs: { speed: "300 KM/H", accel: "3.3s", hp: "640 CV" }, image: "porsche_cayenne.webp", badge: "V8 4.0L Biturbo" },
-  { id: 21, name: "Porsche Macan GTS", category: "SUV Luxury", price: 0, rating: "4.8", specs: { speed: "272 KM/H", accel: "4.5s", hp: "440 CV" }, image: "porsche_macan.webp", badge: "V6 2.9L Biturbo" },
-  // PRESTIGE (Sportiva)
-  { id: 26, name: "BMW M4 Competition", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "290 KM/H", accel: "3.5s", hp: "530 CV" }, image: "bmw_m4_competition.webp", badge: "L6 3.0L M TwinPower" },
-  { id: 22, name: "Audi A5 Avant", category: "Sportiva", price: 0, rating: "4.8", specs: { speed: "250 KM/H", accel: "5.0s", hp: "367 CV" }, image: "audi_a5_avant.webp", badge: "V6 3.0L TFSI" },
-  { id: 23, name: "Audi RS3", category: "Sportiva", price: 0, rating: "4.9", specs: { speed: "290 KM/H", accel: "3.8s", hp: "400 CV" }, image: "audi_rs3.webp", badge: "L5 2.5L TFSI" },
-  { id: 24, name: "Audi RS5 Avant", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "250 KM/H", accel: "3.9s", hp: "450 CV" }, image: "audi_rs5_avant.webp", badge: "V6 2.9L TFSI" },
-  { id: 25, name: "Audi RS6 Performance", category: "Sportiva", price: 0, rating: "5.0", specs: { speed: "305 KM/H", accel: "3.4s", hp: "630 CV" }, image: "audi_rs6_performance.webp", badge: "V8 4.0L TFSI" },
-  { id: 27, name: "BMW M8 Competition Cabrio", category: "Sportiva", price: 0, rating: "4.9", specs: { speed: "305 KM/H", accel: "3.3s", hp: "625 CV" }, image: "bmw_m8_cabrio.webp", badge: "V8 4.4L M TwinPower" },
-  { id: 28, name: "Porsche 718 Spyder", category: "Sportiva", price: 0, rating: "4.9", specs: { speed: "301 KM/H", accel: "4.4s", hp: "420 CV" }, image: "porsche_718_spyder.webp", badge: "Boxer 4.0L NA" },
-  // CABRIO
-  { id: 45, name: "BMW M8 Competition Cabrio", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "305 KM/H", accel: "3.3s", hp: "625 CV" }, image: "bmw_m8_cabrio.webp", badge: "V8 4.4L M TwinPower" },
-  { id: 46, name: "Ferrari 296 GTS", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "330 KM/H", accel: "2.9s", hp: "830 CV" }, image: "ferrari-296-gts.webp", badge: "V6 3.0L PHEV" },
-  { id: 47, name: "Ferrari 812 GTS", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "340 KM/H", accel: "3.0s", hp: "800 CV" }, image: "ferrari-812-gts.webp", badge: "V12 6.5L NA" },
-  { id: 48, name: "Ferrari Portofino M", category: "Cabriolet", price: 0, rating: "4.9", specs: { speed: "320 KM/H", accel: "3.45s", hp: "620 CV" }, image: "ferrari-portofino.webp", badge: "V8 3.9L Biturbo" },
-  { id: 49, name: "Ferrari Roma Spyder", category: "Cabriolet", price: 0, rating: "4.9", specs: { speed: "320 KM/H", accel: "3.4s", hp: "620 CV" }, image: "ferrari-roma.webp", badge: "V8 3.9L Biturbo" },
-  { id: 50, name: "Lamborghini Huracán EVO Spyder", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "325 KM/H", accel: "3.1s", hp: "640 CV" }, image: "lamborghini-huracan.webp", badge: "V10 5.2L NA" },
-  { id: 51, name: "Maserati GranCabrio", category: "Cabriolet", price: 0, rating: "4.8", specs: { speed: "316 KM/H", accel: "3.6s", hp: "542 CV" }, image: "maserati-grancabrio.webp", badge: "V6 3.0L Nettuno" },
-  { id: 52, name: "Porsche 718 Spyder", category: "Cabriolet", price: 0, rating: "4.9", specs: { speed: "301 KM/H", accel: "4.4s", hp: "420 CV" }, image: "porsche_718_spyder.webp", badge: "Boxer 4.0L NA" },
-  { id: 53, name: "Porsche 911 992 Cabriolet", category: "Cabriolet", price: 0, rating: "4.9", specs: { speed: "306 KM/H", accel: "3.9s", hp: "450 CV" }, image: "porsche-911-cab.webp", badge: "Boxer 3.0L Biturbo" },
-  { id: 54, name: "Porsche 911 992 Turbo S Cabriolet", category: "Cabriolet", price: 0, rating: "5.0", specs: { speed: "330 KM/H", accel: "2.8s", hp: "650 CV" }, image: "porsche-911-turbo.webp", badge: "Boxer 3.8L Biturbo" }
-];
+let fleetData = [];
 
 
 // Registry of Fleet Providers (Fornitori)
@@ -916,10 +870,20 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadFleetFromSupabase() {
   if (typeof supabase !== 'undefined' && supabase) {
     try {
-      const { data, error } = await supabase
+      const params = new URLSearchParams(window.location.search);
+      const cityFilter = params.get('city');
+
+      let query = supabase
         .from('vehicles')
         .select('*')
-        .eq('is_active', true);
+        .eq('is_active', true)
+        .eq('is_luxury', true);
+
+      if (cityFilter) {
+        query = query.ilike('city', `%${cityFilter}%`);
+      }
+
+      const { data, error } = await query;
 
       if (!error && data && data.length > 0) {
         console.log("✅ Caricata flotta in tempo reale da Supabase DB:", data.length, "veicoli");
@@ -956,7 +920,13 @@ async function loadFleetFromSupabase() {
           // I prezzi e le vetture sul sito DEVONO essere al 100% quelli del database (nessun mescolamento con mock offline o prezzi 0)
           fleetData = mappedCars;
           try { localStorage.setItem('itercars_fleet_cache', JSON.stringify(fleetData)); } catch(e){}
+        } else {
+          fleetData = []; // Azzera la flotta se il db è vuoto
+          try { localStorage.removeItem('itercars_fleet_cache'); } catch(e){}
         }
+      } else {
+          fleetData = []; // Azzera la flotta se la query ritorna vuoto
+          try { localStorage.removeItem('itercars_fleet_cache'); } catch(e){}
       }
     } catch (err) {
       console.warn("⚠️ Query Supabase fallita o offline. Utilizzo catalogo locale di fallback.");
@@ -1049,10 +1019,23 @@ function renderFleet(cars) {
 }
 
 function renderCarCard(car, dict) {
-  const cleanBadge = (car.badge || '').replace(/[\u1F600-\u1F64F\u1F300-\u1F5FF\u1F680-\u1F6FF\u1F1E6-\u1F1FF\u2600-\u26FF\u2700-\u27BF]/g, '').trim();
+  const cleanBadge = (car.badge || '').replace(/[ὠ0-ὤFἰ0-ὟFὨ0-ὯF἞6-἟F☀-⛿✀-➿]/g, '').trim();
+  
+  let targetLink = `car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}`;
+  let priceText = car.price === 0 ? "Su Richiesta" : "€ " + car.price;
+  let periodText = car.price === 0 ? "" : (dict && dict["dynamic.perDay"] ? dict["dynamic.perDay"] : "/ Giorno");
+
+  if (car.is_nlt) {
+    targetLink = `nlt-dettaglio.html?v=1&id=${encodeURIComponent(car.id || car.db_id || '')}`;
+    priceText = "Vedi Offerta";
+    periodText = "/ Mese";
+  } else if (car.is_nbt) {
+    targetLink = `nbt-dettaglio.html?v=1&id=${encodeURIComponent(car.id || car.db_id || '')}`;
+  }
+
   return `
     <div class="glass-card car-card">
-      <a href="car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}" style="display: block; position: relative;">
+      <a href="${targetLink}" style="display: block; position: relative;">
         <div class="car-image-container">
           <span class="car-badge">${cleanBadge}</span>
           <span class="car-rating"><i class="ri-star-fill"></i> ${car.rating}</span>
@@ -1062,7 +1045,7 @@ function renderCarCard(car, dict) {
       
       <div class="car-info">
         <h3 class="car-title">${car.name}</h3>
-        <span class="car-type"><i class="ri-steering-2-line"></i> ${dict["dynamic.cat"]} ${car.category}</span>
+        <span class="car-type"><i class="ri-steering-2-line"></i> ${dict && dict["dynamic.cat"] ? dict["dynamic.cat"] : "Categoria"} ${car.category}</span>
         
         <div class="car-specs">
           <div class="spec-item">
@@ -1081,12 +1064,12 @@ function renderCarCard(car, dict) {
         
         <div class="car-footer">
           <div class="car-price">
-            <span class="price-amount">${car.price === 0 ? "Su Richiesta" : "€ " + car.price}</span>
-            <span class="price-period">${car.price === 0 ? "" : dict["dynamic.perDay"]}</span>
+            <span class="price-amount">${priceText}</span>
+            <span class="price-period">${periodText}</span>
           </div>
           
-          <a href="car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; display: flex; gap: 8px; align-items: center;">
-            <span>${dict["dynamic.book"]}</span> <i class="ri-arrow-right-up-line"></i>
+          <a href="${targetLink}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; display: flex; gap: 8px; align-items: center;">
+            <span>${dict && dict["dynamic.book"] ? dict["dynamic.book"] : "Prenota Ora"}</span> <i class="ri-arrow-right-up-line"></i>
           </a>
         </div>
       </div>
@@ -1736,3 +1719,85 @@ window.switchAuthMode = switchAuthMode;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
 
+
+
+// Added for Hero Search
+window.handleHeroSearch = async function(event) {
+  event.preventDefault();
+  const loc = document.getElementById('searchLocation') ? document.getElementById('searchLocation').value.trim() : '';
+  const type = document.getElementById('searchType') ? document.getElementById('searchType').value : 'tutti';
+  
+  const resultsSection = document.getElementById("heroSearchResultsSection");
+  const container = document.getElementById("heroSearchResultsGrid");
+  const subtitle = document.getElementById("heroSearchResultsSubtitle");
+  
+  if (!container) return;
+  
+  // Rendi visibile la sezione risultati sotto la barra
+  if (resultsSection) {
+    resultsSection.style.display = 'block';
+    resultsSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); width: 100%;"><i class="ri-loader-4-line ri-spin" style="font-size: 2rem;"></i><p style="margin-top: 10px;">Ricerca veicoli in corso...</p></div>';
+
+  if (!supabase) return;
+
+  let query = supabase.from('vehicles').select('*').eq('is_active', true);
+  
+  if (type === 'nbt') query = query.eq('is_nbt', true);
+  else if (type === 'nlt') query = query.eq('is_nlt', true);
+  else if (type === 'luxury') query = query.eq('is_luxury', true);
+
+  if (loc) {
+    query = query.ilike('city', `%${loc}%`);
+  }
+
+  const { data, error } = await query;
+  
+  container.innerHTML = '';
+  
+  if (error || !data || data.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding: 40px; width: 100%;"><h3 style="color: var(--accent-primary);">Nessun Veicolo Trovato</h3><p style="color: var(--text-muted);">Non ci sono veicoli disponibili per la tua ricerca${loc ? ' a ' + loc : ''}. Prova a modificare i filtri.</p></div>`;
+    if (subtitle) subtitle.textContent = "Nessun risultato trovato.";
+    return;
+  }
+
+  if (subtitle) {
+    subtitle.textContent = `Trovati ${data.length} veicoli corrispondenti alla tua ricerca.`;
+  }
+
+  const mappedCars = data.map(v => {
+    let specsObj = {};
+    if (typeof v.specs === 'string') {
+      try { specsObj = JSON.parse(v.specs); } catch(e){}
+    } else if (v.specs) {
+      specsObj = v.specs;
+    }
+    const fullName = v.name || (v.brand ? `${v.brand} ${v.model}` : 'Veicolo Itercars');
+    return {
+      id: v.id,
+      db_id: v.id,
+      name: fullName,
+      brand: v.brand || '',
+      model: v.model || '',
+      category: v.category || 'Luxury',
+      price: v.daily_price || 0,
+      rating: v.rating || '5.0',
+      image: v.image_url || 'logo_tricolore.png',
+      badge: v.badge || '',
+      specs: {
+        speed: specsObj.speed || "250 km/h",
+        accel: specsObj.accel || "4.5s",
+        hp: specsObj.hp || (v.fuel_type || "Ibrido")
+      },
+      is_nbt: !!v.is_nbt,
+      is_nlt: !!v.is_nlt,
+      is_luxury: !!v.is_luxury
+    };
+  });
+
+  mappedCars.forEach(car => {
+    container.innerHTML += renderCarCard(car, translations[typeof currentLang !== 'undefined' ? currentLang : 'it'] || translations['it']);
+  });
+};

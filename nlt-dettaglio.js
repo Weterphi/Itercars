@@ -249,18 +249,44 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!data) {
         const res = await window.supabase
           .from('nlt_offers')
-          .select(`...`)
+          .select(`id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included, vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit), providers (name)`)
           .eq('vehicle_id', carId)
           .maybeSingle();
         if (res.data) data = res.data;
       }
         
-      if (!error && data) {
-        const v = data.vehicles || {};
+      let vDb = (data && data.vehicles) ? data.vehicles : null;
+      if (!vDb && carId) {
+        const resVeh = await window.supabase
+          .from('vehicles')
+          .select('*, providers(name)')
+          .or(`id.eq.${carId},model.ilike."%${carId}%"`)
+          .maybeSingle();
+        if (resVeh && resVeh.data) {
+          vDb = resVeh.data;
+          if (!data) data = { vehicles: vDb, providers: resVeh.data.providers };
+        }
+      } else if (vDb && vDb.id) {
+        const resLive = await window.supabase.from('vehicles').select('*').eq('id', vDb.id).maybeSingle();
+        if (resLive && resLive.data) vDb = Object.assign({}, vDb, resLive.data);
+      }
+
+      if (!error && (data || vDb)) {
+        const v = vDb || {};
         const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
+        
+        // Priorità alla tariffa e cauzione aggiornate live dal partner in tabella vehicles
+        const monthlyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0)
+          ? Math.round(Number(v.daily_price) * 20)
+          : ((data && data.client_monthly_price !== undefined && data.client_monthly_price !== null && data.client_monthly_price !== '') ? Number(data.client_monthly_price) : 699);
+
+        const depositP = (v.deposit !== undefined && v.deposit !== null && v.deposit !== '' && Number(v.deposit) >= 0)
+          ? Number(v.deposit)
+          : ((data && data.deposit_mandante !== undefined && data.deposit_mandante !== null && data.deposit_mandante !== '') ? Number(data.deposit_mandante) : 3000);
+
         found = {
-          id: data.id,
-          vehicle_id: v.id || data.vehicle_id,
+          id: data ? data.id : (v.id || carId),
+          vehicle_id: v.id || (data ? data.vehicle_id : carId),
           brand: v.brand || 'Veicolo',
           model: v.model || 'NLT',
           trim: v.trim || 'Executive',
@@ -271,13 +297,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           hp: specsObj.hp || '300 CV',
           speed: specsObj.speed || '240 km/h',
           accel: specsObj.accel || '5.5s',
-          readyDelivery: !!data.is_ready_delivery,
-          deliveryWeeks: data.delivery_weeks || 4,
-          providerName: (data.providers && data.providers.name) ? data.providers.name : 'Mandante NLT',
-          basePrice: Number(data.client_monthly_price) || 699,
-          baseDuration: data.duration_months || 48,
-          baseKm: data.km_per_year || 15000,
-          baseDeposit: Number(data.deposit_mandante) || 3000
+          readyDelivery: (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (data && data.is_ready_delivery !== undefined ? !!data.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true)),
+          deliveryWeeks: specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : ((data && data.delivery_weeks !== undefined) ? Number(data.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 4)),
+          deliveryDate: specsObj.delivery_date || v.delivery_date || (data && data.delivery_date) || '',
+          providerName: (data && data.providers && data.providers.name) ? data.providers.name : (v.providerName || 'Mandante NLT'),
+          basePrice: monthlyP,
+          baseDuration: (data && data.duration_months) ? data.duration_months : 48,
+          baseKm: (data && data.km_per_year) ? data.km_per_year : 15000,
+          baseDeposit: depositP
         };
       }
     } catch(err) {
@@ -358,10 +385,16 @@ function renderCarDetails() {
   
   const badgeContainer = document.getElementById('detailBadgeContainer');
   if (badgeContainer) {
-    if (c.readyDelivery) {
+    if (c.deliveryDate && c.deliveryDate !== '') {
+      let fDate = c.deliveryDate;
+      try { const p = c.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
+    } else if (c.readyDelivery && (c.deliveryWeeks === 1 || c.deliveryWeeks <= 1)) {
+      badgeContainer.innerHTML = `<span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    } else if (c.readyDelivery) {
       badgeContainer.innerHTML = `<span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna (${c.deliveryWeeks} settimane)</span>`;
     } else {
-      badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-time-line"></i> Ordine su Misura (${c.deliveryWeeks} settimane)</span>`;
+      badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${c.deliveryWeeks || 4} settimane</span>`;
     }
   }
 
@@ -749,6 +782,9 @@ async function handleQuoteSubmit(event) {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         let offerUuid = c.id && uuidRegex.test(c.id) ? c.id : null;
         let vehicleUuid = c.vehicle_id && uuidRegex.test(c.vehicle_id) ? c.vehicle_id : (offerUuid || null);
+        let rawProvId = (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle && vehicle.provider_id) ? vehicle.provider_id : null);
+        let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
+        let provName = (typeof c !== "undefined" && (c.providerName || c.provider_company_name)) ? (c.providerName || c.provider_company_name) : 'NLT';
 
         const leadPayload = {
           first_name: name.split(' ')[0] || name,
@@ -759,22 +795,20 @@ async function handleQuoteSubmit(event) {
           vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (${ConfigState.durationMonths} Mesi / ${ConfigState.kmPerYear} km/anno - Rata €${ConfigState.finalMonthlyPrice}/mese)`,
           pipeline_status: 'new_lead',
           assigned_broker_agent: 'Consulente Senior ITERCARS',
-          provider_id: (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle.provider_id) ? vehicle.provider_id : null),
-          provider_code: (typeof c !== "undefined" && c.provider_code) ? c.provider_code : ((typeof vehicle !== "undefined" && vehicle.provider_code) ? vehicle.provider_code : null),
-          provider_company_name: (typeof c !== "undefined" && c.providerName) ? c.providerName : ((typeof vehicle !== "undefined" && vehicle.providerName) ? vehicle.providerName : null),
-          provider_company_phone: (typeof c !== "undefined" && c.provider_phone) ? c.provider_phone : ((typeof vehicle !== "undefined" && vehicle.provider_phone) ? vehicle.provider_phone : null),
-          provider_company_email: (typeof c !== "undefined" && c.provider_email) ? c.provider_email : ((typeof vehicle !== "undefined" && vehicle.provider_email) ? vehicle.provider_email : null),
+          provider_id: provUuid,
           interested_offer_id: offerUuid,
           interested_vehicle_id: vehicleUuid,
-          notes: `Preventivo NLT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/mese`
+          notes: `Preventivo NLT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/mese [Mandante: ${provName}]`
         };
 
         let leadData = null;
         try {
           const { data: resData, error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]).select();
-          if (leadErr && (leadErr.code === '23503' || (leadErr.message && leadErr.message.toLowerCase().includes('foreign key')))) {
+          if (leadErr) {
+            console.warn("Avviso inserimento crm_leads NLT, ritento pulendo chiavi esterne:", leadErr);
             leadPayload.interested_offer_id = null;
             leadPayload.interested_vehicle_id = null;
+            leadPayload.provider_id = null;
             const retry = await window.supabase.from('crm_leads').insert([leadPayload]).select();
             leadData = retry.data;
           } else {
@@ -791,6 +825,8 @@ async function handleQuoteSubmit(event) {
           lead_id: newLeadId,
           vehicle_id: c.vehicle_id && c.vehicle_id.length === 36 ? c.vehicle_id : null,
           offer_id: c.id && c.id.length === 36 ? c.id : null,
+          quote_type: 'NLT',
+          provider_id: (typeof c !== "undefined" && c.provider_id && c.provider_id.length === 36) ? c.provider_id : null,
           selected_duration_months: ConfigState.durationMonths,
           selected_km_per_year: ConfigState.kmPerYear,
           selected_deposit: ConfigState.depositAmount,

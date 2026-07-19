@@ -86,6 +86,23 @@ body {
   box-shadow: none;
 }
 
+select.admin-input {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+
+select.admin-input option {
+  background-color: #111111 !important;
+  color: #ffffff !important;
+  padding: 10px;
+}
+
+input[type="date"].admin-input {
+  color-scheme: dark;
+  background-color: #111111 !important;
+  color: #ffffff !important;
+}
+
 /* LAYOUT ASIDE + MAIN WORKSPACE */
 .app-layout {
   display: flex;

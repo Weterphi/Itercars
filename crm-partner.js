@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ==========================================================================
    1. AUTENTICAZIONE E LOGOUT PARTNER
    ========================================================================== */
-function checkPartnerAuth() {
+async function checkPartnerAuth() {
   const saved = localStorage.getItem('itercars_partner_auth');
   const overlay = document.getElementById('partnerAuthOverlay');
   
@@ -60,7 +60,10 @@ function checkPartnerAuth() {
     try {
       CurrentPartner = JSON.parse(saved);
       if (overlay) overlay.classList.remove('active');
-      loadPartnerDashboard();
+      if (supabase && supabase.auth) {
+        try { await supabase.auth.getSession(); } catch(err){}
+      }
+      await loadPartnerDashboard();
       return;
     } catch(e) {
       localStorage.removeItem('itercars_partner_auth');
@@ -99,18 +102,23 @@ async function handlePartnerLogin(event) {
 
     const authId = authData.user.id;
 
-    // Verify if this user is an approved partner in the providers table
+    // Verify if this user is an approved partner in the providers table (using email to prevent lockout if Auth user is recreated)
     const { data: providerData, error: providerErr } = await supabase
       .from('providers')
       .select('*')
-      .eq('auth_id', authId)
+      .or(`auth_id.eq.${authId},partner_email.eq.${emailVal},contact_email.eq.${emailVal},email.eq.${emailVal}`)
       .eq('is_active', true);
 
     if (providerErr || !providerData || providerData.length === 0) {
       // Not an approved partner
       await supabase.auth.signOut();
-      alert("Accesso negato. L'account non risulta associato a un partner attivo. Contatta la direzione.");
+      alert("Accesso negato. L'account non risulta associato a un partner attivo. Contatta l'amministrazione.");
       return;
+    }
+
+    // Se l'ID auth è cambiato (es. l'utente ha ricreato l'account da Supabase), aggiorniamolo
+    if (providerData[0].auth_id !== authId) {
+      await supabase.from('providers').update({ auth_id: authId }).eq('id', providerData[0].id);
     }
 
     CurrentPartner = providerData[0];
@@ -328,6 +336,17 @@ function renderPartnerVehiclesTable() {
       `;
     }
 
+    const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
+    let delivBadgeHtml = `<span style="display:inline-block; margin-top:6px; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    if (specsObj.delivery_type === 'date' || specsObj.delivery_date) {
+      let formattedDate = specsObj.delivery_date;
+      try { const p = formattedDate.split('-'); if (p.length === 3) formattedDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      delivBadgeHtml = `<span style="display:inline-block; margin-top:6px; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Dal ${formattedDate}</span>`;
+    } else if (specsObj.delivery_type === 'weeks' || (specsObj.delivery_weeks && Number(specsObj.delivery_weeks) > 1) || (v.delivery_weeks && Number(v.delivery_weeks) > 1) || specsObj.is_ready_delivery === false || v.is_ready_delivery === false) {
+      const w = specsObj.delivery_weeks || v.delivery_weeks || 4;
+      delivBadgeHtml = `<span style="display:inline-block; margin-top:6px; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> In ${w} sett.</span>`;
+    }
+
     tbody.innerHTML += `
       <tr>
         <td>
@@ -349,6 +368,7 @@ function renderPartnerVehiclesTable() {
         <td>
           <strong style="color: var(--accent-gold); font-size: 1.12rem; display: block;">€ ${Number(v.daily_price || 0).toLocaleString('it-IT')} <small style="font-size: 0.75rem; color: #fff;">/giorno</small></strong>
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">Cauzione €${Number(v.deposit || 1500).toLocaleString('it-IT')}</small>
+          ${delivBadgeHtml}
         </td>
         <td>
           <span style="background: rgba(255,255,255,0.06); padding: 4px 10px; border-radius: 6px; font-size: 0.76rem; font-weight: 700; color: #cbd5e1;">
@@ -453,6 +473,8 @@ function selectPartnerFileForUpload(file) {
 
 async function submitSelectedPartnerFile() {
   const file = window._selectedPartnerFile;
+  const categoryElem = document.getElementById('fleetUploadCategory');
+  const uploadCategory = categoryElem ? categoryElem.value : 'Mista / Da Verificare';
   if (!file) {
     alert("Seleziona prima un file dal tuo computer o trascinalo nel riquadro.");
     return;
@@ -573,7 +595,7 @@ async function submitSelectedPartnerFile() {
             fuel_type: 'File Listino',
             transmission: 'Download Excel',
             image_url: 'logo_tricolore.png',
-            specs: { description: `Dossier autentico '${file.name}' inviato da '${CurrentPartner.name}' il ${new Date().toLocaleString('it-IT')}. Clicca il pulsante SCARICA FILE qui a destra per consultare il file sul tuo computer.` },
+            specs: { description: `DESTINAZIONE RICHIESTA: ${uploadCategory}. Dossier autentico '${file.name}' inviato da '${CurrentPartner.name}' il ${new Date().toLocaleString('it-IT')}. Clicca il pulsante SCARICA FILE qui a destra per consultare il file sul tuo computer.` },
             badge: 'Nuovo File Flotta ',
             status: 'pending_approval',
             is_available: false,
@@ -755,6 +777,14 @@ async function advanceBookingStatus(bookingId, nextStatus) {
 /* ==========================================================================
    7. MODIFICA TARIFFA VEICOLO MODAL
    ========================================================================== */
+function toggleDeliveryFields() {
+  const type = document.getElementById('editDeliveryType')?.value;
+  const weeksBox = document.getElementById('editDeliveryWeeksBox');
+  const dateBox = document.getElementById('editDeliveryDateBox');
+  if (weeksBox) weeksBox.style.display = type === 'weeks' ? 'block' : 'none';
+  if (dateBox) dateBox.style.display = type === 'date' ? 'block' : 'none';
+}
+
 function openEditTariffModal(vehicleId) {
   const v = PartnerVehicles.find(x => x.id === vehicleId);
   if (!v) return;
@@ -766,6 +796,28 @@ function openEditTariffModal(vehicleId) {
   if (document.getElementById('modalVehTitle')) document.getElementById('modalVehTitle').textContent = `${v.brand} ${v.model} (${v.trim || ''})`;
   if (document.getElementById('editDailyPrice')) document.getElementById('editDailyPrice').value = v.daily_price || 150;
   if (document.getElementById('editDeposit')) document.getElementById('editDeposit').value = v.deposit || 1500;
+
+  const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
+  const delivTypeElem = document.getElementById('editDeliveryType');
+  const delivWeeksElem = document.getElementById('editDeliveryWeeks');
+  const delivDateElem = document.getElementById('editDeliveryDate');
+
+  if (delivTypeElem && delivWeeksElem && delivDateElem) {
+    if (specsObj.delivery_type === 'date' || (specsObj.delivery_date && specsObj.delivery_date !== '')) {
+      delivTypeElem.value = 'date';
+      delivDateElem.value = specsObj.delivery_date || '';
+      delivWeeksElem.value = specsObj.delivery_weeks || 4;
+    } else if (specsObj.delivery_type === 'weeks' || (specsObj.delivery_weeks && Number(specsObj.delivery_weeks) > 1) || (v.delivery_weeks && Number(v.delivery_weeks) > 1) || specsObj.is_ready_delivery === false || v.is_ready_delivery === false) {
+      delivTypeElem.value = 'weeks';
+      delivWeeksElem.value = specsObj.delivery_weeks || v.delivery_weeks || 4;
+      delivDateElem.value = specsObj.delivery_date || '';
+    } else {
+      delivTypeElem.value = 'ready';
+      delivWeeksElem.value = 1;
+      delivDateElem.value = '';
+    }
+    toggleDeliveryFields();
+  }
 
   modal.classList.add('active');
 }
@@ -783,22 +835,171 @@ async function saveTariffChanges(event) {
   const v = PartnerVehicles.find(x => x.id === ActiveEditVehicleId);
   if (!v) return;
 
-  const newDay = Number(document.getElementById('editDailyPrice').value) || v.daily_price;
-  const newDep = Number(document.getElementById('editDeposit').value) || v.deposit;
+  const rawDay = document.getElementById('editDailyPrice').value;
+  const rawDep = document.getElementById('editDeposit').value;
+  const newDay = rawDay !== '' ? Number(rawDay) : (v.daily_price !== undefined ? Number(v.daily_price) : 150);
+  const newDep = rawDep !== '' ? Number(rawDep) : (v.deposit !== undefined ? Number(v.deposit) : 1500);
 
+  const delivType = document.getElementById('editDeliveryType')?.value || 'ready';
+  const delivWeeks = Number(document.getElementById('editDeliveryWeeks')?.value) || 4;
+  const delivDate = document.getElementById('editDeliveryDate')?.value || '';
+
+  const isReady = delivType === 'ready';
+  const weeksVal = delivType === 'ready' ? 1 : (delivType === 'weeks' ? delivWeeks : 4);
+
+  const updatedSpecs = Object.assign({}, typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {}), {
+    is_ready_delivery: isReady,
+    delivery_type: delivType,
+    delivery_weeks: weeksVal,
+    delivery_date: delivType === 'date' ? delivDate : ''
+  });
+
+  // Assicuriamoci che ci sia una sessione Supabase attiva prima dell'invio al DB
+  if (supabase) {
+    try {
+      if (supabase.auth) {
+        await supabase.auth.getSession();
+      }
+    } catch(errAuth) {}
+
+    const submitBtn = event.target ? event.target.querySelector('button[type="submit"]') : null;
+    const oldBtnText = submitBtn ? submitBtn.innerHTML : '';
+    if (submitBtn) {
+      submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Salvataggio su DB in corso...`;
+      submitBtn.disabled = true;
+    }
+
+    try {
+      // 1. Aggiornamento tabella vehicles (con verifica righe aggiornate)
+      let { data: vehUpdated, error: vehErr } = await supabase
+        .from('vehicles')
+        .update({ daily_price: newDay, deposit: newDep, specs: updatedSpecs })
+        .eq('id', ActiveEditVehicleId)
+        .select();
+
+      if (vehErr) {
+        console.error("❌ Errore aggiornamento DB vehicles:", vehErr);
+        if (vehErr.message && vehErr.message.includes('updated_at')) {
+          alert(`Errore dal trigger di Supabase (tabella vehicles):\n${vehErr.message}\n\n👉 PER RISOLVERE SU SUPABASE: Apri la sezione "SQL Editor" del tuo progetto Supabase ed esegui questo comando:\n\nALTER TABLE public.vehicles ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT timezone('utc'::text, now());`);
+        } else {
+          alert(`Errore salvataggio su DB (tabella vehicles): ${vehErr.message}`);
+        }
+        if (submitBtn) { submitBtn.innerHTML = oldBtnText; submitBtn.disabled = false; }
+        return;
+      } else if (!vehUpdated || vehUpdated.length === 0) {
+        console.warn("⚠️ Avviso: 0 righe aggiornate su vehicles con ID esatto. Tenta con controllo provider o modello...");
+        const resAlt = await supabase
+          .from('vehicles')
+          .update({ daily_price: newDay, deposit: newDep, specs: updatedSpecs })
+          .eq('provider_id', CurrentPartner ? CurrentPartner.id : '')
+          .ilike('model', `%${v.model}%`)
+          .select();
+        
+        if (!resAlt.data || resAlt.data.length === 0) {
+          alert("Attenzione: Il database ha bloccato la modifica su 'vehicles' (0 righe modificate). Verifica le politiche RLS su Supabase (UPDATE su 'vehicles') per assicurarti che il tuo account abbia i permessi di scrittura sul veicolo.");
+          if (submitBtn) { submitBtn.innerHTML = oldBtnText; submitBtn.disabled = false; }
+          return;
+        } else {
+          vehUpdated = resAlt.data;
+        }
+      }
+
+      // 2. Aggiornamento tabella nbt_offers
+      const { data: nbtUpdated, error: nbtErr } = await supabase
+        .from('nbt_offers')
+        .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal })
+        .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`)
+        .select();
+
+      if (nbtErr) {
+        console.warn("Errore aggiornamento nbt_offers:", nbtErr);
+      } else if (!nbtUpdated || nbtUpdated.length === 0) {
+        console.log("Nessuna riga pre-esistente in nbt_offers per questo veicolo. Creazione (upsert) in corso...");
+        const { error: upsertErr } = await supabase.from('nbt_offers').upsert([{
+          vehicle_id: ActiveEditVehicleId,
+          provider_id: CurrentPartner ? CurrentPartner.id : null,
+          daily_price: newDay,
+          deposit_required: newDep,
+          deposit_mandante: newDep,
+          km_daily_limit: 150,
+          is_ready_delivery: isReady,
+          delivery_weeks: weeksVal,
+          is_active: true
+        }], { onConflict: 'vehicle_id' });
+        if (upsertErr) console.warn("Errore upsert nbt_offers:", upsertErr);
+      }
+
+      // 3. Aggiornamento tabella nlt_offers
+      try {
+        await supabase
+          .from('nlt_offers')
+          .update({ deposit_mandante: newDep, deposit_required: newDep, client_monthly_price: Math.round(newDay * 20), is_ready_delivery: isReady, delivery_weeks: weeksVal })
+          .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`);
+      } catch(err){}
+
+      console.log("✅ Tariffa e disponibilità salvate con successo sul database Supabase:", vehUpdated);
+    } catch(e) {
+      console.error("Errore generale sync price:", e);
+      alert("Errore durante la comunicazione con il database Supabase: " + e.message);
+      if (submitBtn) { submitBtn.innerHTML = oldBtnText; submitBtn.disabled = false; }
+      return;
+    } finally {
+      if (submitBtn) {
+        submitBtn.innerHTML = oldBtnText;
+        submitBtn.disabled = false;
+      }
+    }
+  }
+
+  // Applica modifica in memoria e chiudi il modale solo se il salvataggio o fallback è confermato
   v.daily_price = newDay;
   v.deposit = newDep;
+  v.specs = updatedSpecs;
+  v.is_ready_delivery = isReady;
+  v.delivery_weeks = weeksVal;
 
   renderPartnerVehiclesTable();
   updatePartnerKpis();
   closeEditTariffModal();
 
-  if (supabase) {
-    try {
-      await supabase.from('vehicles').update({ daily_price: newDay, deposit: newDep }).eq('id', ActiveEditVehicleId);
-      await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep }).eq('vehicle_id', ActiveEditVehicleId);
-    } catch(e) { console.warn("Errore sync price:", e); }
-  }
+  // Aggiornamento cache locale per riflesso istantaneo se la pagina NBT/NLT è aperta o in cache
+  try {
+    const nbtCache = JSON.parse(localStorage.getItem('itercars_nbt_cache') || '[]');
+    let updatedCache = false;
+    nbtCache.forEach(o => {
+      if (String(o.id) === String(ActiveEditVehicleId) || String(o.vehicle_id) === String(ActiveEditVehicleId)) {
+        o.nbtDailyPrice = newDay;
+        o.baseDeposit = newDep;
+        o.readyDelivery = isReady;
+        o.deliveryWeeks = weeksVal;
+        o.deliveryDate = delivType === 'date' ? delivDate : '';
+        if (o.baseOffer) o.baseOffer.deposit = newDep;
+        if (Array.isArray(o.variants)) {
+          o.variants.forEach(varItem => varItem.deposit = newDep);
+        }
+        updatedCache = true;
+      }
+    });
+    if (updatedCache) {
+      localStorage.setItem('itercars_nbt_cache', JSON.stringify(nbtCache));
+    }
+    const nltCache = JSON.parse(localStorage.getItem('itercars_nlt_cache') || '[]');
+    let updatedNltCache = false;
+    nltCache.forEach(o => {
+      if (String(o.id) === String(ActiveEditVehicleId) || String(o.vehicle_id) === String(ActiveEditVehicleId)) {
+        o.basePrice = Math.round(newDay * 20);
+        o.baseDeposit = newDep;
+        o.readyDelivery = isReady;
+        o.deliveryWeeks = weeksVal;
+        o.deliveryDate = delivType === 'date' ? delivDate : '';
+        updatedNltCache = true;
+      }
+    });
+    if (updatedNltCache) {
+      localStorage.setItem('itercars_nlt_cache', JSON.stringify(nltCache));
+    }
+    localStorage.setItem('itercars_force_refresh', String(Date.now()));
+  } catch(e) {}
 }
 
 async function deletePartnerVehicle(vehicleId) {

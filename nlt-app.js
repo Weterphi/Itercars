@@ -598,7 +598,7 @@ const SAMPLE_OFFERS = [
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-  NltState.offers = SAMPLE_OFFERS.slice();
+  NltState.offers = [];
 
   
 
@@ -624,23 +624,45 @@ async function loadOffersFromDatabase() {
 
     try {
 
-      const { data, error } = await window.supabase
+      // 1. Carica le offerte NLT dal database
 
+      const params = new URLSearchParams(window.location.search);
+      const cityFilter = params.get('city');
+
+      let query = window.supabase
         .from('nlt_offers')
-
         .select(`
-
-          id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
-
-          vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
-
+          id, monthly_price, deposit, advance_payment, duration_months,
+          vehicles!inner (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, badge, city),
           providers (name)
-
         `)
-
         .eq('is_active', true);
 
+      if (cityFilter) {
+        query = query.ilike('vehicles.city', `%${cityFilter}%`);
+      }
+
+      const { data, error } = await query;
+
+      // 2. Carica in parallelo tutti i veicoli NLT live dalla flotta per catturare le modifiche dirette del partner su vehicles
+
+      const { data: vehList } = await window.supabase
+
+        .from('vehicles')
+
+        .select('*')
+
+        .eq('is_available', true)
         
+        .eq('is_nlt', true);
+
+      const vehMap = {};
+
+      if (vehList && Array.isArray(vehList)) {
+
+        vehList.forEach(vh => { if (vh.id) vehMap[vh.id] = vh; });
+
+      }
 
       if (!error && data && data.length > 0) {
 
@@ -648,9 +670,11 @@ async function loadOffersFromDatabase() {
 
         const mapped = data.map(o => {
 
-          const v = o.vehicles || {};
+          const vBase = o.vehicles || {};
 
-          const pName = (o.providers && o.providers.name) ? o.providers.name : 'Mandante NLT';
+          const v = (vehMap && vehMap[vBase.id || o.vehicle_id]) ? Object.assign({}, vBase, vehMap[vBase.id || o.vehicle_id]) : vBase;
+
+          const pName = (o.providers && o.providers.name) ? o.providers.name : (v.providerName || 'Mandante NLT');
 
           const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
 
@@ -666,6 +690,28 @@ async function loadOffersFromDatabase() {
 
           }
 
+          // Diamo priorità alla tariffa canone o cauzione aggiornate dal partner sulla tabella vehicles
+
+          const monthlyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0)
+
+            ? Math.round(Number(v.daily_price) * 20)
+
+            : ((o.client_monthly_price !== undefined && o.client_monthly_price !== null && o.client_monthly_price !== '') ? Number(o.client_monthly_price) : 699);
+
+          const depositP = (v.deposit !== undefined && v.deposit !== null && v.deposit !== '' && Number(v.deposit) >= 0)
+
+            ? Number(v.deposit)
+
+            : ((o.deposit_mandante !== undefined && o.deposit_mandante !== null && o.deposit_mandante !== '') ? Number(o.deposit_mandante) : 3000);
+
+          const durationM = o.duration_months || 48;
+
+          const kmY = o.km_per_year || 15000;
+
+          const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (o.is_ready_delivery !== undefined ? !!o.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true));
+          const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : (o.delivery_weeks !== undefined ? Number(o.delivery_weeks) : 4));
+          const delivDate = specsObj.delivery_date || v.delivery_date || o.delivery_date || '';
+
           return {
 
             id: o.id,
@@ -680,7 +726,7 @@ async function loadOffersFromDatabase() {
 
             category: v.category || 'SUV Luxury',
 
-            fuel: v.fuel_type || 'Ibrido / Diesel',
+            fuel: v.motore || v.fuel_type || 'Ibrido / Diesel',
 
             transmission: v.transmission || 'Automatico',
 
@@ -692,51 +738,53 @@ async function loadOffersFromDatabase() {
 
             accel: specsObj.accel || '5.5s',
 
-            readyDelivery: !!o.is_ready_delivery,
+            readyDelivery: readyDeliv,
 
-            deliveryWeeks: o.delivery_weeks || 4,
+            deliveryWeeks: delivWeeks,
+
+            deliveryDate: delivDate,
 
             providerName: pName,
 
-            basePrice: Number(o.client_monthly_price) || 699,
+            basePrice: monthlyP,
 
-            baseDuration: o.duration_months || 48,
+            baseDuration: durationM,
 
-            baseKm: o.km_per_year || 15000,
+            baseKm: kmY,
 
-            baseDeposit: Number(o.deposit_mandante) || 3000,
+            baseDeposit: depositP,
 
             baseOffer: {
 
-              duration: o.duration_months || 48,
+              duration: durationM,
 
-              km: o.km_per_year || 15000,
+              km: kmY,
 
-              deposit: Number(o.deposit_mandante) || 3000,
+              deposit: depositP,
 
-              monthlyPrice: Number(o.client_monthly_price) || 699,
+              monthlyPrice: monthlyP,
 
-              zeroDepositPrice: Math.round((Number(o.client_monthly_price) || 699) + ((Number(o.deposit_mandante) || 3000) / (o.duration_months || 48)))
+              zeroDepositPrice: Math.round(monthlyP + (depositP / durationM))
 
             },
 
             variants: [
 
-              { duration: 36, deposit: Number(o.deposit_mandante) || 3000, price: Math.round((Number(o.client_monthly_price) || 699) * 1.06) },
+              { duration: 36, deposit: depositP, price: Math.round(monthlyP * 1.06) },
 
-              { duration: 36, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) * 1.06 + ((Number(o.deposit_mandante) || 3000) / 36)) },
+              { duration: 36, deposit: 0, price: Math.round(monthlyP * 1.06 + (depositP / 36)) },
 
-              { duration: 48, deposit: Number(o.deposit_mandante) || 3000, price: Number(o.client_monthly_price) || 699 },
+              { duration: 48, deposit: depositP, price: monthlyP },
 
-              { duration: 48, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) + ((Number(o.deposit_mandante) || 3000) / 48)) },
+              { duration: 48, deposit: 0, price: Math.round(monthlyP + (depositP / 48)) },
 
-              { duration: 60, deposit: Number(o.deposit_mandante) || 3000, price: Math.round((Number(o.client_monthly_price) || 699) * 0.94) },
+              { duration: 60, deposit: depositP, price: Math.round(monthlyP * 0.94) },
 
-              { duration: 60, deposit: 0, price: Math.round((Number(o.client_monthly_price) || 699) * 0.94 + ((Number(o.deposit_mandante) || 3000) / 60)) }
+              { duration: 60, deposit: 0, price: Math.round(monthlyP * 0.94 + (depositP / 60)) }
 
             ],
 
-            nbtDailyPrice: Number(v.daily_price) || Math.round((Number(o.client_monthly_price) || 699) / 4),
+            nbtDailyPrice: Number(v.daily_price) || Math.round(monthlyP / 20),
 
             services: servicesArr
 
@@ -744,21 +792,223 @@ async function loadOffersFromDatabase() {
 
         });
 
-        if (mapped.length > 0) {
+        // Aggiungi anche i veicoli NLT live dal DB 'vehicles' che non hanno ancora una riga esplicita in 'nlt_offers'
 
-          // Prezzi e offerte sono rigorosamente allineati al database in tempo reale
+        if (vehList && Array.isArray(vehList)) {
 
-          NltState.offers = mapped;
+          const existingVehIds = new Set(mapped.map(item => String(item.vehicle_id)));
 
-        } else {
+          vehList.forEach(vh => {
 
-          NltState.offers = SAMPLE_OFFERS.slice();
+            if (vh.is_nlt === true && vh.id && !existingVehIds.has(String(vh.id))) {
+
+              const specsObj = typeof vh.specs === 'string' ? JSON.parse(vh.specs) : (vh.specs || {});
+
+              const dPrice = Number(vh.daily_price) || 35;
+
+              const mPrice = Math.round(dPrice * 20);
+
+              const depPrice = Number(vh.deposit) || 3000;
+
+              const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (vh.is_ready_delivery !== undefined ? !!vh.is_ready_delivery : true);
+              const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (vh.delivery_weeks !== undefined ? Number(vh.delivery_weeks) : 4);
+              const delivDate = specsObj.delivery_date || vh.delivery_date || '';
+
+              mapped.push({
+
+                id: vh.id,
+
+                vehicle_id: vh.id,
+
+                brand: vh.brand || 'Veicolo',
+
+                model: vh.model || 'NLT',
+
+                trim: vh.trim || 'Executive',
+
+                category: vh.category || 'SUV Luxury',
+
+                fuel: vh.motore || vh.fuel_type || 'Ibrido / Diesel',
+
+                transmission: vh.transmission || 'Automatico',
+
+                image: vh.image_url || 'logo_fallback.png',
+
+                hp: specsObj.hp || '300 CV',
+
+                speed: specsObj.speed || '240 km/h',
+
+                accel: specsObj.accel || '5.5s',
+
+                readyDelivery: readyDeliv,
+
+                deliveryWeeks: delivWeeks,
+
+                deliveryDate: delivDate,
+
+                providerName: 'Partner Flotta Live',
+
+                basePrice: mPrice,
+
+                baseDuration: 48,
+
+                baseKm: 15000,
+
+                baseDeposit: depPrice,
+
+                baseOffer: {
+
+                  duration: 48,
+
+                  km: 15000,
+
+                  deposit: depPrice,
+
+                  monthlyPrice: mPrice,
+
+                  zeroDepositPrice: Math.round(mPrice + (depPrice / 48))
+
+                },
+
+                variants: [
+
+                  { duration: 36, deposit: depPrice, price: Math.round(mPrice * 1.06) },
+
+                  { duration: 36, deposit: 0, price: Math.round(mPrice * 1.06 + (depPrice / 36)) },
+
+                  { duration: 48, deposit: depPrice, price: mPrice },
+
+                  { duration: 48, deposit: 0, price: Math.round(mPrice + (depPrice / 48)) },
+
+                  { duration: 60, deposit: depPrice, price: Math.round(mPrice * 0.94) },
+
+                  { duration: 60, deposit: 0, price: Math.round(mPrice * 0.94 + (depPrice / 60)) }
+
+                ],
+
+                nbtDailyPrice: dPrice,
+
+                services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Bollo e Messa su strada', 'Soccorso stradale H24 europea', 'Gestione sinistri e pneumatici']
+
+              });
+
+            }
+
+          });
 
         }
 
+        if (mapped.length > 0) {
+
+          NltState.offers = mapped; populateDynamicFilters();
+
+        } else {
+
+          NltState.offers = [];
+
+        }
+
+      } else if (vehList && vehList.length > 0) {
+
+        const mappedVehs = vehList.filter(vh => vh.is_nlt === true).map(vh => {
+
+          const specsObj = typeof vh.specs === 'string' ? JSON.parse(vh.specs) : (vh.specs || {});
+
+          const dPrice = Number(vh.daily_price) || 35;
+
+          const mPrice = Math.round(dPrice * 20);
+
+          const depPrice = Number(vh.deposit) || 3000;
+
+          const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (vh.is_ready_delivery !== undefined ? !!vh.is_ready_delivery : true);
+          const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (vh.delivery_weeks !== undefined ? Number(vh.delivery_weeks) : 4);
+          const delivDate = specsObj.delivery_date || vh.delivery_date || '';
+
+          return {
+
+            id: vh.id,
+
+            vehicle_id: vh.id,
+
+            brand: vh.brand || 'Veicolo',
+
+            model: vh.model || 'NLT',
+
+            trim: vh.trim || 'Executive',
+
+            category: vh.category || 'SUV Luxury',
+
+            fuel: vh.motore || vh.fuel_type || 'Ibrido / Diesel',
+
+            transmission: vh.transmission || 'Automatico',
+
+            image: vh.image_url || 'logo_fallback.png',
+
+            hp: specsObj.hp || '300 CV',
+
+            speed: specsObj.speed || '240 km/h',
+
+            accel: specsObj.accel || '5.5s',
+
+            readyDelivery: readyDeliv,
+
+            deliveryWeeks: delivWeeks,
+
+            deliveryDate: delivDate,
+
+            providerName: 'Partner Flotta Live',
+
+            basePrice: mPrice,
+
+            baseDuration: 48,
+
+            baseKm: 15000,
+
+            baseDeposit: depPrice,
+
+            baseOffer: {
+
+              duration: 48,
+
+              km: 15000,
+
+              deposit: depPrice,
+
+              monthlyPrice: mPrice,
+
+              zeroDepositPrice: Math.round(mPrice + (depPrice / 48))
+
+            },
+
+            variants: [
+
+              { duration: 36, deposit: depPrice, price: Math.round(mPrice * 1.06) },
+
+              { duration: 36, deposit: 0, price: Math.round(mPrice * 1.06 + (depPrice / 36)) },
+
+              { duration: 48, deposit: depPrice, price: mPrice },
+
+              { duration: 48, deposit: 0, price: Math.round(mPrice + (depPrice / 48)) },
+
+              { duration: 60, deposit: depPrice, price: Math.round(mPrice * 0.94) },
+
+              { duration: 60, deposit: 0, price: Math.round(mPrice * 0.94 + (depPrice / 60)) }
+
+            ],
+
+            nbtDailyPrice: dPrice,
+
+            services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Bollo e Messa su strada', 'Soccorso stradale H24 europea', 'Gestione sinistri e pneumatici']
+
+          };
+
+        });
+
+        NltState.offers = mappedVehs; populateDynamicFilters();
+
       } else {
 
-        NltState.offers = SAMPLE_OFFERS.slice();
+        NltState.offers = [];
 
       }
 
@@ -766,13 +1016,13 @@ async function loadOffersFromDatabase() {
 
       console.warn('⚠️ Fallback offline: utilizzo catalogo NLT ufficiale mandante.');
 
-      NltState.offers = SAMPLE_OFFERS.slice();
+      NltState.offers = [];
 
     }
 
   } else {
 
-    NltState.offers = SAMPLE_OFFERS.slice();
+    NltState.offers = [];
 
   }
 
@@ -1222,43 +1472,21 @@ function renderOffersGrid() {
 
 
 
-    const fuelF = (NltState.fuelFilter || 'all').toLowerCase();
+    const fuelF = (NltState.fuelFilter || 'all');
 
-    if (fuelF !== 'all') {
-
-      const fLower = offer.fuel.toLowerCase();
-
-      if (fuelF === 'elettrica' || fuelF === 'elettrico') {
-
-        if (!fLower.includes('elettric')) return false;
-
-      } else if (fuelF === 'ibrida' || fuelF === 'ibrido') {
-
-        if (!fLower.includes('hybrid') && !fLower.includes('mhev') && !fLower.includes('ibrid')) return false;
-
-      } else {
-
-        if (!fLower.includes(fuelF)) return false;
-
-      }
-
-    }
+    if (fuelF !== 'all' && offer.fuel !== fuelF) return false;
 
 
 
-    const transF = (NltState.transmissionFilter || 'all').toLowerCase();
+    const transF = (NltState.transmissionFilter || 'all');
 
-    if (transF !== 'all') {
-
-      if (!offer.transmission.toLowerCase().includes(transF)) return false;
-
-    }
+    if (transF !== 'all' && offer.transmission !== transF) return false;
 
 
 
     const catF = NltState.categoryFilter || 'all';
 
-    if (catF !== 'all' && !offer.category.includes(catF)) return false;
+    if (catF !== 'all' && offer.category !== catF) return false;
 
 
 
@@ -1372,11 +1600,18 @@ function renderOffersGrid() {
 
     const priceInfo = getCardPrice(offer);
 
-    const badgeText = offer.readyDelivery 
-
-      ? `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${offer.deliveryWeeks} sett.)</span>`
-
-      : `<span class="card-badge badge-custom"><i class="ri-time-line"></i> Ordine su Misura (${offer.deliveryWeeks} sett.)</span>`;
+    let badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    if (offer.deliveryDate && offer.deliveryDate !== '') {
+      let fDate = offer.deliveryDate;
+      try { const p = offer.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      badgeText = `<span class="card-badge badge-custom" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
+    } else if (offer.readyDelivery && (offer.deliveryWeeks === 1 || offer.deliveryWeeks <= 1)) {
+      badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    } else if (offer.readyDelivery) {
+      badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${offer.deliveryWeeks} sett.)</span>`;
+    } else {
+      badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${offer.deliveryWeeks || 4} sett.</span>`;
+    }
 
       
 
@@ -1773,6 +2008,9 @@ async function handleGeneratePDFSubmit(event) {
       const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
       let offerUuid = offer.id && uuidRegex.test(offer.id) ? offer.id : null;
       let vehicleUuid = offer.vehicle_id && uuidRegex.test(offer.vehicle_id) ? offer.vehicle_id : (offerUuid || null);
+      let rawProvId = offer.provider_id || (offer.vehicles && offer.vehicles.provider_id) || null;
+      let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
+      let provName = offer.providerName || offer.provider_company_name || 'Mandante NLT';
 
       const leadPayload = {
         first_name: name.split(' ')[0] || name,
@@ -1783,20 +2021,18 @@ async function handleGeneratePDFSubmit(event) {
         vehicle_interest: `${offer.brand} ${offer.model} ${offer.trim || ''}`.trim() + ` (${priceInfo.details || ''} - Rata €${priceInfo.price}/mese)`,
         pipeline_status: 'new_lead',
         assigned_broker_agent: 'Consulente Senior ITERCARS',
-          provider_id: (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle.provider_id) ? vehicle.provider_id : null),
-          provider_code: (typeof c !== "undefined" && c.provider_code) ? c.provider_code : ((typeof vehicle !== "undefined" && vehicle.provider_code) ? vehicle.provider_code : null),
-          provider_company_name: (typeof c !== "undefined" && c.providerName) ? c.providerName : ((typeof vehicle !== "undefined" && vehicle.providerName) ? vehicle.providerName : null),
-          provider_company_phone: (typeof c !== "undefined" && c.provider_phone) ? c.provider_phone : ((typeof vehicle !== "undefined" && vehicle.provider_phone) ? vehicle.provider_phone : null),
-          provider_company_email: (typeof c !== "undefined" && c.provider_email) ? c.provider_email : ((typeof vehicle !== "undefined" && vehicle.provider_email) ? vehicle.provider_email : null),
+        provider_id: provUuid,
         interested_offer_id: offerUuid,
         interested_vehicle_id: vehicleUuid,
-        notes: `Preventivo 1-Click per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/mese`
+        notes: `Preventivo 1-Click NLT per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/mese [Mandante: ${provName}]`
       };
 
       const { error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]);
-      if (leadErr && (leadErr.code === '23503' || (leadErr.message && leadErr.message.toLowerCase().includes('foreign key')))) {
+      if (leadErr) {
+        console.warn("Avviso 1-click crm_leads NLT, ritento senza foreign keys:", leadErr);
         leadPayload.interested_offer_id = null;
         leadPayload.interested_vehicle_id = null;
+        leadPayload.provider_id = null;
         await window.supabase.from('crm_leads').insert([leadPayload]);
       }
     } catch (e) {
@@ -2099,3 +2335,45 @@ function openWhatsAppForCard(offerId) {
 
 }
 
+
+function populateDynamicFilters() {
+  const stateOffers = NltState.offers;
+  if (!stateOffers || stateOffers.length === 0) return;
+
+  const brands = new Set();
+  const categories = new Set();
+  const fuels = new Set();
+  const transmissions = new Set();
+
+  stateOffers.forEach(o => {
+    if (o.brand) brands.add(o.brand);
+    if (o.category) categories.add(o.category);
+    if (o.fuel) fuels.add(o.fuel);
+    if (o.transmission) transmissions.add(o.transmission);
+  });
+
+  const updateSelect = (id, defaultLabel, itemsSet) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    
+    // Maintain current selected value if possible
+    const currentVal = el.value;
+    
+    let html = `<option value="all" style="background: #111; color: #fff;">${defaultLabel}</option>`;
+    Array.from(itemsSet).sort().forEach(item => {
+      html += `<option value="${item}" style="background: #111; color: #fff;">${item}</option>`;
+    });
+    el.innerHTML = html;
+    
+    if (itemsSet.has(currentVal)) {
+      el.value = currentVal;
+    } else {
+      el.value = 'all';
+    }
+  };
+
+  updateSelect('filterMarca', 'Marca: Tutte', brands);
+  updateSelect('filterTipologia', 'Cat: Tutte', categories);
+  updateSelect('filterAlimentazione', 'Motore: Tutti', fuels);
+  updateSelect('filterCambio', 'Cambio: Tutti', transmissions);
+}

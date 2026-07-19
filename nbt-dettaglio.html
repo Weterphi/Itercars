@@ -135,7 +135,7 @@
             <div class="detail-spec-card">
               <i class="ri-gas-station-line"></i>
               <span class="label">Alimentazione</span>
-              <span class="value" id="detailFuel">Elettrico ⚡</span>
+              <span class="value" id="detailFuel">Elettrico</span>
             </div>
             <div class="detail-spec-card">
               <i class="ri-settings-4-line"></i>
@@ -251,13 +251,20 @@
 
             <!-- STEP 3: DEPOSITO CAUZIONALE -->
             <div class="config-section">
-              <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Deposito Cauzionale</div>
+              <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Deposito Cauzionale (Richiesto sulla Carta)</div>
               <div class="config-options-grid" id="configDepositGroup">
-                <button type="button" class="config-option-btn" data-value="0" onclick="setConfigDeposit(0, this)" style="border-color: rgba(245, 158, 11, 0.5); color: #f59e0b;">⚡ 0€ Anticipo</button>
-                <button type="button" class="config-option-btn" data-value="2500" onclick="setConfigDeposit(2500, this)">€ 2.500</button>
-                <button type="button" class="config-option-btn active" data-value="3000" onclick="setConfigDeposit(3000, this)">€ 3.000</button>
-                <button type="button" class="config-option-btn" data-value="5000" onclick="setConfigDeposit(5000, this)">€ 5.000</button>
-                <button type="button" class="config-option-btn" data-value="7500" onclick="setConfigDeposit(7500, this)">€ 7.500</button>
+                <div style="background: rgba(245, 158, 11, 0.12); border: 1.5px solid #f59e0b; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; width: 100%; grid-column: 1 / -1;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="ri-shield-keyhole-fill" style="color: #f59e0b; font-size: 1.6rem;"></i>
+                    <div style="text-align: left;">
+                      <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; display: block;">Deposito Cauzionale sulla Carta</span>
+                      <strong style="font-size: 1.2rem; color: #fff;">€ 3.000</strong>
+                    </div>
+                  </div>
+                  <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-size: 0.75rem; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; gap: 5px;">
+                    <i class="ri-lock-fill"></i> Imposto da prassi
+                  </span>
+                </div>
               </div>
             </div>
 
@@ -266,7 +273,7 @@
               <div class="config-section-title"><i class="ri-shield-star-line"></i> 4. Opzione Franchigia Assicurativa</div>
               <div class="config-options-grid" id="configKaskoGroup">
                 <button type="button" class="config-option-btn active" data-value="standard" onclick="setConfigKasko('standard', this)">Standard (500€)</button>
-                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">🛡️ Franchigia Zero 0€ (+€35/m)</button>
+                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">Franchigia Zero 0€ (+€35/m)</button>
               </div>
             </div>
 

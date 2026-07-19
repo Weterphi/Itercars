@@ -746,6 +746,7 @@
 
       <form onsubmit="handleVehicleFormSubmit(event)">
         <input type="hidden" id="vehEditId" value="" />
+        <input type="hidden" id="vehProviderId" value="" />
         
         <div class="form-grid-2col">
           <div>
@@ -775,10 +776,30 @@
           </div>
         </div>
 
+        <div style="margin-bottom: 14px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
+          <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Destinazione nel Catalogo Pubblico</label>
+          <div style="display: flex; gap: 20px; align-items: center;">
+            <label style="color: #fff; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="vehIsLuxury" style="accent-color: var(--accent-gold); width: 16px; height: 16px;"> Luxury
+            </label>
+            <label style="color: #fff; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="vehIsNbt" style="accent-color: #f1c40f; width: 16px; height: 16px;"> Breve Termine (NBT)
+            </label>
+            <label style="color: #fff; font-size: 0.88rem; display: flex; align-items: center; gap: 6px; cursor: pointer;">
+              <input type="checkbox" id="vehIsNlt" style="accent-color: #38bdf8; width: 16px; height: 16px;"> Lungo Termine (NLT)
+            </label>
+          </div>
+        </div>
+
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome File Locale o URL Immagine Veicolo</label>
           <input type="text" id="vehImage" class="admin-input" placeholder="Es. bmw_serie_1_msport.webp oppure https://..." />
           <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;"><i class="ri-information-line text-green"></i> Puoi inserire direttamente il nome di un'immagine locale (es. <code>bmw_serie_1_msport.webp</code>) oppure un link Web.</span>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Città / Sede di Ritiro (Opzionale)</label>
+          <input type="text" id="vehCity" class="admin-input" placeholder="Es. Milano, Roma..." />
         </div>
 
         <div style="margin-bottom: 20px;">
@@ -1295,6 +1316,6 @@
     </div>
   </div>
 
-  <script src="crm-admin.js?v=38"></script>
+  <script src="crm-admin.js?v=41"></script>
 </body>
 </html>
