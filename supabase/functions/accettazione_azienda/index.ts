@@ -20,7 +20,7 @@ serve(async (req) => {
       throw new Error("Il Secret 'PREVENTIVO' non è configurato correttamente nella Edge Function.")
     }
 
-    const consoleLink = "https://itercars.com/partners.html";
+    const consoleLink = "https://www.itercars.com/crm-partner.html";
 
     const resendPayload = {
       from: "Itercars Rete Partner <info@itercars.com>",
