@@ -241,11 +241,18 @@
               <!-- DOWNLOAD TEMPLATE ZONE -->
               <div style="margin-bottom: 24px; text-align: center; background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
                 <span style="font-size: 0.9rem; color: var(--text-muted); display: block; margin-bottom: 8px;"><i class="ri-download-cloud-2-line"></i> Scarica template per compilare flotta</span>
-                <select id="templateDownloadSelect" class="admin-input" style="font-size: 0.9rem; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.2); max-width: 300px; display: inline-block; vertical-align: middle;" onchange="if(this.value) { window.location.href = this.value; this.value = ''; }">
+                <select id="templateDownloadSelect" class="admin-input" style="font-size: 0.9rem; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.2); max-width: 320px; display: inline-block; vertical-align: middle;" onchange="if(this.value) { window.location.href = this.value; this.value = ''; }">
                   <option value="">-- Seleziona un template --</option>
-                  <option value="templates/Template_Listino_Noleggio excel.xlsx">Template Listino Noleggio (Excel)</option>
-                  <option value="templates/Template_Listino_Noleggio cvs.csv">Template Listino Noleggio (CSV)</option>
-                  <option value="templates/Template_Listino_Noleggio word.docx">Template Listino Noleggio (Word)</option>
+                  <optgroup label="Noleggio Breve Termine (NBT)" style="color: #fff;">
+                    <option value="templates/Template_Listino_Noleggio excel.xlsx">Template Listino NBT (Excel)</option>
+                    <option value="templates/Template_Listino_Noleggio cvs.csv">Template Listino NBT (CSV)</option>
+                    <option value="templates/Template_Listino_Noleggio word.docx">Template Listino NBT (Word)</option>
+                  </optgroup>
+                  <optgroup label="Noleggio Lungo Termine (NLT)" style="color: #fff;">
+                    <option value="templates/Template_Lungo_Termine.xlsx">Template Listino NLT (Excel)</option>
+                    <option value="templates/Template_Lungo_Termine.csv">Template Listino NLT (CSV)</option>
+                    <option value="templates/Template_Lungo_Termine.docx">Template Listino NLT (Word)</option>
+                  </optgroup>
                 </select>
               </div>
 
