@@ -2436,37 +2436,38 @@ async function acceptPartnerRecord(id) {
 async function sendPartnerAcceptanceEmail(partnerEmail, companyName) {
   if (!partnerEmail) return;
   
-  const consoleLink = `${window.location.origin}/partners.html`;
+  console.log(`[EMAIL SYSTEM] Preparazione invio email REALE a: ${partnerEmail}`);
   
-  const emailBody = `
-Oggetto: Benvenuto nella Rete Partner Ufficiale ITERCARS!
-
-Gentile ${companyName || 'Partner'},
-
-Siamo felici di comunicarti che la tua candidatura è stata valutata e ACCETTATA con successo dalla Direzione Centrale ITERCARS!
-
-Il tuo account da Partner Ufficiale è ora attivo.
-Per accedere alla tua Console Partner riservata:
-1. Collegati a: ${consoleLink}
-2. Clicca su "Accedi alla Console"
-3. Inserisci le tue credenziali:
-   - Email: ${partnerEmail}
-   - Password: [La password scelta da te in fase di candidatura]
-
-IMPORTANTE: 
-Ti ricordiamo di caricare il prima possibile la tua flotta vetture!
-Una volta effettuato l'accesso, vai nella sezione "Inserisci Flotta" del menu laterale, scarica il template Excel, compilalo e caricalo. 
-La tua flotta verrà immediatamente sottoposta a verifica e pubblicata sul portale.
-
-Grazie per la collaborazione,
-Il Team Direttivo ITERCARS
-  `;
-
-  console.log(`[EMAIL SYSTEM] Invio email a: ${partnerEmail}`);
-  console.log(emailBody);
-
-  // Mostriamo un alert per simulare l'avvenuto invio lato frontend
-  alert(`[SIMULAZIONE INVIO EMAIL]\nEmail inviata a: ${partnerEmail}\nOggetto: Benvenuto nella Rete Partner Ufficiale ITERCARS!`);
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
+    
+    // Assicurati che l'URL di supabase sia disponibile (solitamente è window.supabaseUrl o lo estrai dal client)
+    const supabaseUrl = window.supabaseUrl || "https://brqayhwdrvgllwwjnyvz.supabase.co"; // Sostituisci o usa variabile globale se presente
+    
+    const res = await fetch(`${supabaseUrl}/functions/v1/accettazione_azienda`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token || supabaseKey}` // Fallback on anon key if no session
+      },
+      body: JSON.stringify({
+        email: partnerEmail,
+        nomeAzienda: companyName
+      })
+    });
+    
+    if (!res.ok) {
+      throw new Error(`Errore HTTP: ${res.status}`);
+    }
+    
+    console.log("[EMAIL SYSTEM] Email di accettazione inviata con successo tramite Edge Function!");
+    alert(`Email ufficiale di Benvenuto inviata con successo a: ${partnerEmail}`);
+    
+  } catch(err) {
+    console.error("[EMAIL SYSTEM] Errore chiamata Edge Function accettazione_azienda:", err);
+    alert(`Errore nell'invio dell'email a ${partnerEmail}. Assicurati che la function 'accettazione_azienda' sia deployata.`);
+  }
 }
 
 function filterPartnersTable(query) {
