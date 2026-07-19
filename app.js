@@ -1801,3 +1801,22 @@ window.handleHeroSearch = async function(event) {
     container.innerHTML += renderCarCard(car, translations[typeof currentLang !== 'undefined' ? currentLang : 'it'] || translations['it']);
   });
 };
+
+// --- MOBILE MENU TOGGLE ---
+function toggleMobileMenu() {
+  const navLinks = document.querySelector('.nav-links');
+  const mobileMenuIcon = document.getElementById('mobileMenuIcon');
+  if (navLinks) {
+    navLinks.classList.toggle('mobile-open');
+    if (mobileMenuIcon) {
+      if (navLinks.classList.contains('mobile-open')) {
+        mobileMenuIcon.classList.remove('ri-menu-line');
+        mobileMenuIcon.classList.add('ri-close-line');
+      } else {
+        mobileMenuIcon.classList.remove('ri-close-line');
+        mobileMenuIcon.classList.add('ri-menu-line');
+      }
+    }
+  }
+}
+window.toggleMobileMenu = toggleMobileMenu;
