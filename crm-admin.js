@@ -2413,6 +2413,13 @@ async function acceptPartnerRecord(id) {
 
     if (insErr) throw insErr;
 
+    // INVIA LA MAIL DI ACCETTAZIONE AL PARTNER
+    try {
+      await sendPartnerAcceptanceEmail(p.email, p.company_name);
+    } catch(e) {
+      console.warn("Errore simulazione email:", e);
+    }
+
     const { error: delErr } = await supabase.from('supplier_applications').delete().eq('id', id);
     if (delErr) throw delErr;
 
@@ -2423,6 +2430,43 @@ async function acceptPartnerRecord(id) {
     console.error("Errore accettazione partner:", error);
     alert("Errore durante l'approvazione del partner.");
   }
+}
+
+// --- AUTOMAZIONE EMAIL DI ACCETTAZIONE PARTNER ---
+async function sendPartnerAcceptanceEmail(partnerEmail, companyName) {
+  if (!partnerEmail) return;
+  
+  const consoleLink = `${window.location.origin}/partners.html`;
+  
+  const emailBody = `
+Oggetto: Benvenuto nella Rete Partner Ufficiale ITERCARS!
+
+Gentile ${companyName || 'Partner'},
+
+Siamo felici di comunicarti che la tua candidatura è stata valutata e ACCETTATA con successo dalla Direzione Centrale ITERCARS!
+
+Il tuo account da Partner Ufficiale è ora attivo.
+Per accedere alla tua Console Partner riservata:
+1. Collegati a: ${consoleLink}
+2. Clicca su "Accedi alla Console"
+3. Inserisci le tue credenziali:
+   - Email: ${partnerEmail}
+   - Password: [La password scelta da te in fase di candidatura]
+
+IMPORTANTE: 
+Ti ricordiamo di caricare il prima possibile la tua flotta vetture!
+Una volta effettuato l'accesso, vai nella sezione "Inserisci Flotta" del menu laterale, scarica il template Excel, compilalo e caricalo. 
+La tua flotta verrà immediatamente sottoposta a verifica e pubblicata sul portale.
+
+Grazie per la collaborazione,
+Il Team Direttivo ITERCARS
+  `;
+
+  console.log(`[EMAIL SYSTEM] Invio email a: ${partnerEmail}`);
+  console.log(emailBody);
+
+  // Mostriamo un alert per simulare l'avvenuto invio lato frontend
+  alert(`[SIMULAZIONE INVIO EMAIL]\nEmail inviata a: ${partnerEmail}\nOggetto: Benvenuto nella Rete Partner Ufficiale ITERCARS!`);
 }
 
 function filterPartnersTable(query) {
