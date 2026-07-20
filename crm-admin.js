@@ -1940,7 +1940,7 @@ function renderBookingsTable(bookings) {
   if (bookings.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="7">
+        <td colspan="6">
           <div class="empty-state-box">
             <i class="ri-car-line"></i>
             <h4>Nessuna pratica registrata in questa categoria</h4>
@@ -1955,23 +1955,41 @@ function renderBookingsTable(bookings) {
 
   bookings.forEach(b => {
     let pillClass = 'pill-new';
-    if (b.status === 'approved' || b.status === 'confermato') pillClass = 'pill-approved';
-    if (b.status === 'pending') pillClass = 'pill-pending';
+    if (b.status === 'approved' || b.status === 'confermato' || b.status === 'confirmed') pillClass = 'pill-approved';
+    if (b.status === 'pending' || b.status === 'new') pillClass = 'pill-pending';
+    if (b.status === 'delivered') pillClass = 'pill-approved';
 
     const dateStr = b.created_at ? new Date(b.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Oggi';
+    const sourceLabel = b.source === 'availability' ? 'Richiesta Disponibilità' : 'Sito Web';
+    const sourcePrefix = b.source === 'availability' ? '[VIP]' : '[WEB]';
+    
+    const idDisplay = b.id ? String(b.id).substring(0, 8) : 'N/A';
 
     tbody.innerHTML += `
       <tr>
-        <td style="color: var(--text-muted); font-size: 0.84rem;">${dateStr}</td>
-        <td><strong style="color: #fff; font-size: 0.95rem;">${b.vehicle_name}</strong></td>
-        <td><strong>${b.client_name || 'Cliente'}</strong></td>
         <td>
-          <div style="font-size: 0.9rem;">${b.client_phone}</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);">${b.client_email || ''}</div>
+          <strong style="color: #fff; font-family: monospace;">${idDisplay}</strong>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">${dateStr}</div>
+          <span style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; margin-top: 4px; display: inline-block;">${sourcePrefix} ${sourceLabel}</span>
         </td>
         <td>
-          <div><i class="ri-map-pin-line text-muted"></i> ${b.pickup_location || 'Italia'}</div>
-          <small style="color: var(--text-muted);">Durata/Date: ${b.rental_days}</small>
+          <strong style="color: #fff; font-size: 0.95rem;">${b.client_name || 'Cliente'}</strong>
+          <div style="font-size: 0.85rem; margin-top: 2px;">
+            <i class="ri-phone-line text-muted"></i> ${b.client_phone || 'N/D'}
+          </div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            <i class="ri-mail-line text-muted"></i> ${b.client_email || 'N/D'}
+          </div>
+        </td>
+        <td>
+          <div style="font-size: 0.9rem; color: #fff;">${b.rental_days || 'N/D'} giorni/mesi</div>
+          <small style="color: var(--text-muted);"><i class="ri-calendar-line"></i> Dal DB</small>
+        </td>
+        <td>
+          <strong style="color: #fff; font-size: 0.9rem;">${b.vehicle_name || 'Vettura'}</strong>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+            <i class="ri-map-pin-line text-green"></i> Ritiro: ${b.pickup_location || 'Italia'}
+          </div>
         </td>
         <td>
           <span class="status-pill ${pillClass}">
@@ -1979,9 +1997,9 @@ function renderBookingsTable(bookings) {
           </span>
         </td>
         <td>
-          <div style="display: flex; gap: 8px; align-items: center;">
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
             <a href="https://api.whatsapp.com/send?phone=${(b.client_phone||'').replace(/[^0-9]/g, '')}&text=Salve ${b.client_name}, le scriviamo dal Concierge ITERCARS per confermare la disponibilità per ${b.vehicle_name}." target="_blank" class="btn-header btn-header-outline" style="padding: 6px 12px; font-size: 0.78rem;">
-              <i class="ri-whatsapp-line" style="color: #ffffff;"></i> WhatsApp
+              <i class="ri-whatsapp-line" style="color: #ffffff;"></i>
             </a>
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deleteBookingRecord('${b.id}', '${b.source}')" title="Elimina">
               <i class="ri-delete-bin-line"></i>
@@ -1997,7 +2015,8 @@ function renderBookingsTable(bookings) {
 
 function filterBookingsTable(query) {
   const q = query.toLowerCase();
-  const filtered = CurrentBookings.filter(b => 
+  const catBookings = CurrentBookings.map(b => ({...b, derived_cat: getBookingCategory(b)})).filter(b => b.derived_cat === currentBookingCategory);
+  const filtered = catBookings.filter(b => 
     (b.client_name && b.client_name.toLowerCase().includes(q)) ||
     (b.vehicle_name && b.vehicle_name.toLowerCase().includes(q)) ||
     (b.client_phone && b.client_phone.includes(q))
@@ -3317,8 +3336,29 @@ async function annihilatePartner() {
 }
 
 // Global array for bookings
-let globalBookings = [];
 let currentBookingCategory = 'NBT';
+
+function getBookingCategory(b) {
+  if (b.category) return b.category;
+  
+  const vName = (b.vehicle_name || '').toLowerCase();
+  
+  if (vName.includes('nlt') || vName.includes('lungo termine')) return 'NLT';
+  
+  if (vName.includes('luxury') || vName.includes('supercar') || vName.includes('ferrari') || vName.includes('lamborghini') || vName.includes('porsche') || vName.includes('mclaren')) {
+    return 'Luxury';
+  }
+  
+  if (b.source === 'availability' && (vName.includes('vip') || vName.includes('luxury'))) {
+    return 'Luxury';
+  }
+  
+  if (String(b.rental_days).includes('mesi') || Number(b.rental_days) >= 30) {
+    return 'NLT';
+  }
+  
+  return 'NBT';
+}
 
 function filterBookingsByCategory(category) {
   currentBookingCategory = category;
@@ -3331,24 +3371,19 @@ function filterBookingsByCategory(category) {
     if(category === 'Luxury') title.innerHTML = 'Richieste Noleggio Luxury & Supercar';
   }
   
-  // Filter and render
-  if (globalBookings.length === 0) {
-      // Mock some data if empty to show the functionality
-      globalBookings = [
-          { id: 'B-001', customer_name: 'Mario Rossi', phone: '3331234567', start_date: '2026-08-01', end_date: '2026-08-10', vehicle_model: 'Audi Q3', status: 'PENDING', category: 'NBT' },
-          { id: 'B-002', customer_name: 'Luigi Bianchi', phone: '3337654321', start_date: '2026-09-01', end_date: '2026-09-15', vehicle_model: 'BMW Serie 1', status: 'CONFIRMED', category: 'NBT' },
-          { id: 'L-001', customer_name: 'Azienda Tech Srl', phone: '02888888', start_date: '2026-09-01', end_date: '2029-08-31', vehicle_model: 'Tesla Model Y', status: 'PENDING', category: 'NLT' },
-          { id: 'V-001', customer_name: 'Sheikh Al-Maktoum', phone: '+9715555555', start_date: '2026-07-20', end_date: '2026-07-25', vehicle_model: 'Ferrari Roma', status: 'CONFIRMED', category: 'Luxury' }
-      ];
-  }
+  // Map raw bookings to their derived category
+  const mappedBookings = CurrentBookings.map(b => ({
+    ...b,
+    derived_cat: getBookingCategory(b)
+  }));
   
-  const filtered = globalBookings.filter(b => b.category === category);
+  const filtered = mappedBookings.filter(b => b.derived_cat === category);
   renderBookingsTable(filtered);
   
   // Update counts
-  const countNbt = globalBookings.filter(b => b.category === 'NBT').length;
-  const countNlt = globalBookings.filter(b => b.category === 'NLT').length;
-  const countLux = globalBookings.filter(b => b.category === 'Luxury').length;
+  const countNbt = mappedBookings.filter(b => b.derived_cat === 'NBT').length;
+  const countNlt = mappedBookings.filter(b => b.derived_cat === 'NLT').length;
+  const countLux = mappedBookings.filter(b => b.derived_cat === 'Luxury').length;
   
   if(document.getElementById('badgeNbtCount')) document.getElementById('badgeNbtCount').textContent = countNbt;
   if(document.getElementById('badgeNltCount')) document.getElementById('badgeNltCount').textContent = countNlt;
