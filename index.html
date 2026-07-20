@@ -299,7 +299,7 @@
     </div>
   </section>
 
-  <div id="mobileSearchContainer"></div>
+
 
   <!-- ================= WHY CHOOSE US ================= -->
   <section class="features-section" id="perche-noi">
@@ -852,28 +852,6 @@
   <!-- Supabase JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js?v=40"></script>
-  <script>
-    function handleMobileSearch() {
-      const searchSection = document.getElementById('mainSearchSection');
-      const mobileContainer = document.getElementById('mobileSearchContainer');
-      const desktopContainer = document.getElementById('desktopSearchContainer');
-
-      if (window.innerWidth <= 768) {
-        if (searchSection && mobileContainer && searchSection.parentNode !== mobileContainer) {
-          searchSection.style.marginTop = '40px';
-          searchSection.style.marginBottom = '20px';
-          mobileContainer.appendChild(searchSection);
-        }
-      } else {
-        if (searchSection && desktopContainer && searchSection.parentNode !== desktopContainer) {
-          searchSection.style.marginTop = '';
-          searchSection.style.marginBottom = '';
-          desktopContainer.appendChild(searchSection);
-        }
-      }
-    }
-    window.addEventListener('resize', handleMobileSearch);
-    document.addEventListener('DOMContentLoaded', handleMobileSearch);
   </script>
   <!-- ================= DOSSIER RECOVERY MODAL ================= -->
   <div class="modal-overlay" id="dossierRecoveryModal">
