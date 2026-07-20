@@ -3449,7 +3449,11 @@ Contenuto: La tua flotta è stata approvata e pubblicata.`);
    ========================================================================== */
 function toggleMobileSidebar() {
   const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('mobileOverlay');
   if (sidebar) {
     sidebar.classList.toggle('open');
+  }
+  if (overlay) {
+    overlay.classList.toggle('active');
   }
 }

@@ -788,6 +788,20 @@ async function advanceBookingStatus(bookingId, nextStatus) {
 }
 
 /* ==========================================================================
+   9. MOBILE SIDEBAR LOGIC
+   ========================================================================== */
+function toggleMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  const overlay = document.getElementById('mobileOverlay');
+  if (sidebar) {
+    sidebar.classList.toggle('open');
+  }
+  if (overlay) {
+    overlay.classList.toggle('active');
+  }
+}
+
+/* ==========================================================================
    7. MODIFICA TARIFFA VEICOLO MODAL
    ========================================================================== */
 function toggleDeliveryFields() {
