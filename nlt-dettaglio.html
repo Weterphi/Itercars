@@ -516,5 +516,74 @@
   <script src="app.js?v=36"></script>
   <script src="nlt-dettaglio.js?v=7"></script>
   <script src="cookie-banner.js?v=5"></script>
+  <!-- ================= DOSSIER RECOVERY MODAL ================= -->
+  <div class="modal-overlay" id="dossierRecoveryModal">
+    <div class="glass-card modal-content" style="max-width: 520px; text-align: center;">
+      <button class="close-modal" onclick="closeDossierRecoveryModal()"><i class="ri-close-line"></i></button>
+      
+      <div style="width: 64px; height: 64px; background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.8rem; color: #2ecc71;">
+        <i class="ri-folder-shield-2-fill"></i>
+      </div>
+
+      <h3 style="font-size: 1.6rem; margin-bottom: 6px;">Recupera la Tua Pratica</h3>
+      <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
+        Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
+      </p>
+
+      <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
+        <div class="form-group">
+          <label><i class="ri-barcode-line text-gradient"></i> Codice Preventivo (es. PREV-XXXX o IT-NLT-...)</label>
+          <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-NLT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
+        </div>
+
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">— OPPURE —</div>
+
+        <div class="form-group">
+          <label><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
+          <input type="email" class="form-control" id="recoveryEmailInput" placeholder="nome.cognome@email.com">
+        </div>
+
+        <div id="recoveryErrorMsg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; text-align: center;"></div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 6px;">
+          <i class="ri-search-eye-line"></i> <span>Riapri Pratica & Documenti</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= AUTO-RECOVERY FLOATING BANNER ================= -->
+  <div id="autoRecoveryToast" style="display: none; position: fixed; bottom: 24px; right: 24px; z-index: 99999; max-width: 420px; background: rgba(15, 20, 32, 0.95); border: 1px solid rgba(46, 204, 113, 0.5); border-radius: 16px; padding: 18px 22px; box-shadow: 0 15px 40px rgba(0,0,0,0.65); backdrop-filter: blur(16px); animation: slideUpToast 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 36px; height: 36px; background: rgba(46, 204, 113, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #2ecc71; font-size: 1.2rem; flex-shrink: 0;">
+          <i class="ri-folder-shield-2-fill"></i>
+        </div>
+        <div>
+          <strong style="color: #fff; font-size: 0.95rem; display: block;">Hai una pratica in sospeso!</strong>
+          <span style="color: var(--text-muted); font-size: 0.8rem;" id="autoRecoverySubtitle">Ritrova il tuo preventivo e blocco vettura.</span>
+        </div>
+      </div>
+      <button type="button" onclick="dismissAutoRecoveryToast()" style="background: none; border: none; color: var(--text-muted); font-size: 1.2rem; cursor: pointer; padding: 0;"><i class="ri-close-line"></i></button>
+    </div>
+    <div style="font-size: 0.86rem; color: #d1d5db; margin-bottom: 14px; line-height: 1.4;" id="autoRecoveryText">
+      Abbiamo memorizzato il tuo preventivo in corso. Clicca per riprendere il caricamento documenti e bloccare l'auto.
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button type="button" onclick="resumeSavedQuote()" class="btn btn-primary" style="flex: 1; padding: 10px; font-size: 0.88rem; justify-content: center; background: linear-gradient(135deg, #2ecc71, #009246); color: #ffffff; font-weight: 800;">
+        <i class="ri-rocket-2-fill"></i> Riprendi Pratica
+      </button>
+      <button type="button" onclick="dismissAutoRecoveryToast()" class="btn btn-outline" style="padding: 10px 14px; font-size: 0.85rem;">
+        Chiudi
+      </button>
+    </div>
+  </div>
+  <style>
+    @keyframes slideUpToast {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
 </body>
 </html>
