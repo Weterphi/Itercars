@@ -106,7 +106,7 @@ async function handlePartnerLogin(event) {
     const { data: providerData, error: providerErr } = await supabase
       .from('providers')
       .select('*')
-      .or(`auth_id.eq.${authId},partner_email.eq.${emailVal},contact_email.eq.${emailVal},email.eq.${emailVal}`)
+      .or(`auth_id.eq.${authId},partner_email.eq.${emailVal},contact_email.eq.${emailVal}`)
       .eq('is_active', true);
 
     if (providerErr || !providerData || providerData.length === 0) {

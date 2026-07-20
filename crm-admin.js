@@ -2444,13 +2444,13 @@ async function sendPartnerAcceptanceEmail(partnerEmail, companyName) {
     const token = session?.access_token;
     
     // Assicurati che l'URL di supabase sia disponibile (solitamente è window.supabaseUrl o lo estrai dal client)
-    const supabaseUrl = window.supabaseUrl || "https://brqayhwdrvgllwwjnyvz.supabase.co"; // Sostituisci o usa variabile globale se presente
+    const supabaseUrl = SUPABASE_URL; // Sostituisci o usa variabile globale se presente
     
     const res = await fetch(`${supabaseUrl}/functions/v1/accettazione_azienda`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token || supabaseKey}` // Fallback on anon key if no session
+        'Authorization': `Bearer ${token || SUPABASE_ANON_KEY}` // Fallback on anon key if no session
       },
       body: JSON.stringify({
         email: partnerEmail,
