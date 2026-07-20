@@ -3443,3 +3443,13 @@ Contenuto: La tua flotta è stata approvata e pubblicata.`);
     console.error("Errore durante l'invio dell'email automatica:", err);
   }
 }
+
+/* ==========================================================================
+   MOBILE SIDEBAR LOGIC
+   ========================================================================== */
+function toggleMobileSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  if (sidebar) {
+    sidebar.classList.toggle('open');
+  }
+}
