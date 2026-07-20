@@ -274,6 +274,8 @@ input[type="date"].admin-input {
   .sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.8); }
   .main-wrapper { margin-left: 0; }
   .mobile-menu-btn { display: inline-block !important; }
+  .topbar-actions { display: none !important; }
+  .topbar-breadcrumb span { display: none !important; }
 }
 
 /* TOPBAR */
