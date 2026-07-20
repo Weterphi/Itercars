@@ -799,12 +799,19 @@ function toggleDeliveryFields() {
 }
 
 function switchPricingTab(tab) {
-  document.getElementById('currentPricingTab').value = tab;
+  console.log("switchPricingTab called with:", tab);
+  const currentInput = document.getElementById('currentPricingTab');
+  if (currentInput) currentInput.value = tab;
   
   const btnNbt = document.getElementById('btnNbtTab');
   const btnNlt = document.getElementById('btnNltTab');
   const nbtContainer = document.getElementById('nbtPricingContainer');
   const nltContainer = document.getElementById('nltPricingContainer');
+  
+  if (!btnNbt || !btnNlt || !nbtContainer || !nltContainer) {
+    console.warn("One or more tab elements missing in DOM!");
+    return;
+  }
   
   if (tab === 'nbt') {
     btnNbt.classList.add('active');
