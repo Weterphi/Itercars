@@ -801,6 +801,7 @@ header.scrolled .nav-actions {
 
 .category-highlight-content {
   padding: 24px;
+  padding-bottom: 80px; /* Previene l'accavallamento col bottone */
   background: #0a0e17; /* Dark background like in image */
   position: relative;
   flex-grow: 1;
