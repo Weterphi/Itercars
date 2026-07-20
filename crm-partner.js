@@ -160,7 +160,8 @@ function switchPartnerTab(tabId, btnElem) {
   const names = {
     'tab-myfleet': 'La Mia Flotta & Tasti Rapidi',
     'tab-import': 'Caricamento Excel & AI Studio',
-    'tab-bookings': 'Richieste & Contratti Clienti',
+    'tab-bookings': 'CRM & Prenotazioni',
+    'tab-calendar': 'Calendario Flotta NBT',
     'tab-settings': 'Profilo e Condizioni Aziendali'
   };
 
@@ -171,6 +172,10 @@ function switchPartnerTab(tabId, btnElem) {
 
   if (tabId === 'tab-import' && typeof loadPartnerImportsHistory === 'function') {
     loadPartnerImportsHistory();
+  }
+  
+  if (tabId === 'tab-calendar' && typeof renderNbtCalendar === 'function') {
+    renderNbtCalendar();
   }
 }
 
@@ -195,7 +200,7 @@ async function loadPartnerDashboard() {
   ]);
 
   renderPartnerVehiclesTable();
-  renderPartnerBookingsTable();
+  renderPartnerBookingsKanban();
   updatePartnerKpis();
 }
 
@@ -700,72 +705,80 @@ async function parseRowsAndIngestWithAI() {
 /* ==========================================================================
    6. GESTIONE E RISPOSTA CONTRATTI / PRENOTAZIONI (`public.bookings`)
    ========================================================================== */
-function renderPartnerBookingsTable() {
-  const tbody = document.getElementById('partnerBookingsTableBody');
-  if (!tbody) return;
+function renderPartnerBookingsKanban() {
+  const colPending = document.getElementById('kanban-cards-pending');
+  const colConfirmed = document.getElementById('kanban-cards-confirmed');
+  const colDelivered = document.getElementById('kanban-cards-delivered');
+  const colClosed = document.getElementById('kanban-cards-closed');
 
-  tbody.innerHTML = '';
-  if (PartnerBookings.length === 0) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6">
-          <div class="empty-state-box" style="padding: 30px;">
-            <i class="ri-bookmark-3-line text-muted"></i>
-            <h4>Nessuna prenotazione attiva per la tua flotta</h4>
-            <p>Le richieste di noleggio dei clienti dal portale compariranno qui in tempo reale.</p>
-          </div>
-        </td>
-      </tr>
-    `;
-    return;
-  }
+  if (!colPending || !colConfirmed || !colDelivered || !colClosed) return;
+
+  colPending.innerHTML = '';
+  colConfirmed.innerHTML = '';
+  colDelivered.innerHTML = '';
+  colClosed.innerHTML = '';
+
+  let countPending = 0, countConfirmed = 0, countDelivered = 0, countClosed = 0;
 
   PartnerBookings.forEach(b => {
-    let statusBadge = '<span class="status-pill pill-pending"><i class="ri-time-line"></i> IN VALUTAZIONE</span>';
-    if (b.status === 'confirmed') statusBadge = '<span class="status-pill pill-approved"><i class="ri-check-line"></i> CONFERMATO</span>';
-    if (b.status === 'delivered') statusBadge = '<span class="status-pill pill-completed"><i class="ri-car-line"></i> IN USE (CONSEGNATO)</span>';
+    const timeStr = new Date(b.created_at).toLocaleDateString('it-IT');
+    const phoneClean = (b.client_phone || '').replace(/[^0-9]/g, '');
+    const waLink = `https://api.whatsapp.com/send?phone=${phoneClean}&text=Buongiorno ${b.client_name}, la contatto per la conferma della sua prenotazione per ${b.vehicle_name}.`;
 
-    tbody.innerHTML += `
-      <tr>
-        <td>
-          <strong style="color: #fff; font-size: 0.95rem; display: block;"># ${b.id.substring(0, 8).toUpperCase()}</strong>
-          <small style="color: var(--text-muted);">${new Date(b.created_at).toLocaleDateString('it-IT')}</small>
-        </td>
-        <td>
-          <strong style="color: #fff; font-size: 0.95rem; display: block;">${b.client_name}</strong>
-          <a href="https://api.whatsapp.com/send?phone=${(b.client_phone||'').replace(/[^0-9]/g, '')}&text=Buongiorno ${b.client_name}, la contatto per la conferma della sua prenotazione per ${b.vehicle_name}." target="_blank" style="color: #ffffff; font-size: 0.8rem; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; margin-top: 2px;">
-            <i class="ri-whatsapp-line"></i> ${b.client_phone || 'Contatta WhatsApp'}
+    const cardHtml = `
+      <div class="kanban-card">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+          <span style="font-size: 0.72rem; color: var(--text-muted);">#${b.id.substring(0, 8).toUpperCase()}</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">${timeStr}</span>
+        </div>
+        
+        <div class="kanban-card-title">${b.client_name}</div>
+        <div class="kanban-card-subtitle"><i class="ri-roadster-line"></i> ${b.vehicle_name}</div>
+        
+        <div class="kanban-card-price">€ ${Number(b.total_price || 0).toLocaleString('it-IT')} <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">(${b.rental_days || 3} gg)</span></div>
+        
+        <div class="kanban-card-actions">
+          <a href="${waLink}" target="_blank" class="btn-header btn-header-outline" style="justify-content: center; font-size: 0.78rem; padding: 6px;">
+            <i class="ri-whatsapp-line" style="color: #25D366;"></i> Contatta
           </a>
-        </td>
-        <td>
-          <strong style="color: var(--accent-gold); font-size: 0.95rem; display: block;"><i class="ri-roadster-line"></i> ${b.vehicle_name}</strong>
-          <small style="color: var(--text-muted);">${b.pickup_location || 'Ritiro Sede'}</small>
-        </td>
-        <td>
-          <strong style="color: #fff; font-size: 0.95rem;">${b.rental_days || 3} Giorni</strong>
-        </td>
-        <td>
-          <strong style="color: #ffffff; font-size: 1.05rem;">€ ${Number(b.total_price || 0).toLocaleString('it-IT')}</strong>
-        </td>
-        <td>${statusBadge}</td>
-        <td style="text-align: right;">
-          <select onchange="advanceBookingStatus('${b.id}', this.value)" class="admin-input" style="width: auto; padding: 6px 10px; font-size: 0.78rem;">
-            <option value="">Cambia Stato...</option>
-            <option value="confirmed"> Conferma Pratica</option>
-            <option value="delivered"> Auto Consegnata</option>
-            <option value="closed"> Riconsegnata / Chiusa</option>
+          <select onchange="advanceBookingStatus('${b.id}', this.value)" class="admin-input" style="padding: 6px 10px; font-size: 0.76rem;">
+            <option value="" disabled selected>Avanza Stato...</option>
+            <option value="pending" ${b.status === 'pending' ? 'disabled' : ''}>Riporta In Valutazione</option>
+            <option value="confirmed" ${b.status === 'confirmed' ? 'disabled' : ''}>Segna Confermato</option>
+            <option value="delivered" ${b.status === 'delivered' ? 'disabled' : ''}>Segna Consegnato</option>
+            <option value="closed" ${b.status === 'closed' ? 'disabled' : ''}>Segna Riconsegnato</option>
           </select>
-        </td>
-      </tr>
+        </div>
+      </div>
     `;
+
+    if (b.status === 'confirmed') {
+      colConfirmed.innerHTML += cardHtml;
+      countConfirmed++;
+    } else if (b.status === 'delivered') {
+      colDelivered.innerHTML += cardHtml;
+      countDelivered++;
+    } else if (b.status === 'closed') {
+      colClosed.innerHTML += cardHtml;
+      countClosed++;
+    } else {
+      // Default to pending
+      colPending.innerHTML += cardHtml;
+      countPending++;
+    }
   });
+
+  if(document.getElementById('count-pending')) document.getElementById('count-pending').textContent = countPending;
+  if(document.getElementById('count-confirmed')) document.getElementById('count-confirmed').textContent = countConfirmed;
+  if(document.getElementById('count-delivered')) document.getElementById('count-delivered').textContent = countDelivered;
+  if(document.getElementById('count-closed')) document.getElementById('count-closed').textContent = countClosed;
 }
 
 async function advanceBookingStatus(bookingId, nextStatus) {
   if (!nextStatus) return;
   const bk = PartnerBookings.find(x => x.id === bookingId);
   if (bk) bk.status = nextStatus;
-  renderPartnerBookingsTable();
+  renderPartnerBookingsKanban();
 
   if (supabase) {
     try {
@@ -785,7 +798,40 @@ function toggleDeliveryFields() {
   if (dateBox) dateBox.style.display = type === 'date' ? 'block' : 'none';
 }
 
-function openEditTariffModal(vehicleId) {
+function switchPricingTab(tab) {
+  document.getElementById('currentPricingTab').value = tab;
+  
+  const btnNbt = document.getElementById('btnNbtTab');
+  const btnNlt = document.getElementById('btnNltTab');
+  const nbtContainer = document.getElementById('nbtPricingContainer');
+  const nltContainer = document.getElementById('nltPricingContainer');
+  
+  if (tab === 'nbt') {
+    btnNbt.classList.add('active');
+    btnNbt.style.borderColor = 'var(--accent-gold)';
+    btnNbt.style.color = 'var(--accent-gold)';
+    
+    btnNlt.classList.remove('active');
+    btnNlt.style.borderColor = 'rgba(255,255,255,0.15)';
+    btnNlt.style.color = 'var(--text-muted)';
+    
+    nbtContainer.style.display = 'block';
+    nltContainer.style.display = 'none';
+  } else {
+    btnNlt.classList.add('active');
+    btnNlt.style.borderColor = 'var(--accent-gold)';
+    btnNlt.style.color = 'var(--accent-gold)';
+    
+    btnNbt.classList.remove('active');
+    btnNbt.style.borderColor = 'rgba(255,255,255,0.15)';
+    btnNbt.style.color = 'var(--text-muted)';
+    
+    nltContainer.style.display = 'block';
+    nbtContainer.style.display = 'none';
+  }
+}
+
+async function openEditTariffModal(vehicleId) {
   const v = PartnerVehicles.find(x => x.id === vehicleId);
   if (!v) return;
   ActiveEditVehicleId = vehicleId;
@@ -796,6 +842,22 @@ function openEditTariffModal(vehicleId) {
   if (document.getElementById('modalVehTitle')) document.getElementById('modalVehTitle').textContent = `${v.brand} ${v.model} (${v.trim || ''})`;
   if (document.getElementById('editDailyPrice')) document.getElementById('editDailyPrice').value = v.daily_price || 150;
   if (document.getElementById('editDeposit')) document.getElementById('editDeposit').value = v.deposit || 1500;
+  
+  if (document.getElementById('editMonthlyPrice')) document.getElementById('editMonthlyPrice').value = Math.round((v.daily_price || 150) * 15);
+  if (document.getElementById('editNltMonths')) document.getElementById('editNltMonths').value = 36;
+  if (document.getElementById('editNltAdvance')) document.getElementById('editNltAdvance').value = 0;
+
+  // Try to load NLT offers from DB if available
+  if (supabase) {
+    try {
+      const { data: nltData } = await supabase.from('nlt_offers').select('*').eq('vehicle_id', vehicleId).single();
+      if (nltData) {
+        if (document.getElementById('editMonthlyPrice') && nltData.client_monthly_price) document.getElementById('editMonthlyPrice').value = nltData.client_monthly_price;
+        if (document.getElementById('editNltMonths') && nltData.months) document.getElementById('editNltMonths').value = nltData.months;
+        if (document.getElementById('editNltAdvance') && nltData.advance_payment !== undefined) document.getElementById('editNltAdvance').value = nltData.advance_payment;
+      }
+    } catch(e) {}
+  }
 
   const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
   const delivTypeElem = document.getElementById('editDeliveryType');
@@ -819,6 +881,7 @@ function openEditTariffModal(vehicleId) {
     toggleDeliveryFields();
   }
 
+  switchPricingTab('nbt'); // Default tab
   modal.classList.add('active');
 }
 
@@ -854,6 +917,8 @@ async function saveTariffChanges(event) {
     delivery_date: delivType === 'date' ? delivDate : ''
   });
 
+  const currentTab = document.getElementById('currentPricingTab')?.value || 'nbt';
+
   // Assicuriamoci che ci sia una sessione Supabase attiva prima dell'invio al DB
   if (supabase) {
     try {
@@ -870,7 +935,8 @@ async function saveTariffChanges(event) {
     }
 
     try {
-      // 1. Aggiornamento tabella vehicles (con verifica righe aggiornate)
+      // 1. Aggiornamento tabella vehicles
+      // Aggiorniamo sempre le info base del veicolo
       let { data: vehUpdated, error: vehErr } = await supabase
         .from('vehicles')
         .update({ daily_price: newDay, deposit: newDep, specs: updatedSpecs })
@@ -879,65 +945,73 @@ async function saveTariffChanges(event) {
 
       if (vehErr) {
         console.error("❌ Errore aggiornamento DB vehicles:", vehErr);
-        if (vehErr.message && vehErr.message.includes('updated_at')) {
-          alert(`Errore dal trigger di Supabase (tabella vehicles):\n${vehErr.message}\n\n👉 PER RISOLVERE SU SUPABASE: Apri la sezione "SQL Editor" del tuo progetto Supabase ed esegui questo comando:\n\nALTER TABLE public.vehicles ADD COLUMN IF NOT EXISTS updated_at timestamp with time zone DEFAULT timezone('utc'::text, now());`);
-        } else {
-          alert(`Errore salvataggio su DB (tabella vehicles): ${vehErr.message}`);
-        }
         if (submitBtn) { submitBtn.innerHTML = oldBtnText; submitBtn.disabled = false; }
         return;
-      } else if (!vehUpdated || vehUpdated.length === 0) {
-        console.warn("⚠️ Avviso: 0 righe aggiornate su vehicles con ID esatto. Tenta con controllo provider o modello...");
-        const resAlt = await supabase
-          .from('vehicles')
-          .update({ daily_price: newDay, deposit: newDep, specs: updatedSpecs })
-          .eq('provider_id', CurrentPartner ? CurrentPartner.id : '')
-          .ilike('model', `%${v.model}%`)
+      }
+
+      // 2. Aggiornamento in base al tab selezionato
+      if (currentTab === 'nbt') {
+        const { data: nbtUpdated, error: nbtErr } = await supabase
+          .from('nbt_offers')
+          .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal })
+          .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`)
           .select();
-        
-        if (!resAlt.data || resAlt.data.length === 0) {
-          alert("Attenzione: Il database ha bloccato la modifica su 'vehicles' (0 righe modificate). Verifica le politiche RLS su Supabase (UPDATE su 'vehicles') per assicurarti che il tuo account abbia i permessi di scrittura sul veicolo.");
-          if (submitBtn) { submitBtn.innerHTML = oldBtnText; submitBtn.disabled = false; }
-          return;
-        } else {
-          vehUpdated = resAlt.data;
+
+        if (nbtErr || !nbtUpdated || nbtUpdated.length === 0) {
+          const { error: upsertErr } = await supabase.from('nbt_offers').upsert([{
+            vehicle_id: ActiveEditVehicleId,
+            provider_id: CurrentPartner ? CurrentPartner.id : null,
+            daily_price: newDay,
+            deposit_required: newDep,
+            deposit_mandante: newDep,
+            km_daily_limit: 150,
+            is_ready_delivery: isReady,
+            delivery_weeks: weeksVal,
+            is_active: true
+          }], { onConflict: 'vehicle_id' });
+        }
+      } else if (currentTab === 'nlt') {
+        const newMonthly = Number(document.getElementById('editMonthlyPrice').value) || 0;
+        const newMonths = Number(document.getElementById('editNltMonths').value) || 36;
+        const newAdvance = Number(document.getElementById('editNltAdvance').value) || 0;
+
+        const { data: nltUpdated, error: nltErr } = await supabase
+          .from('nlt_offers')
+          .update({ 
+            client_monthly_price: newMonthly, 
+            months: newMonths, 
+            advance_payment: newAdvance,
+            deposit_required: newDep,
+            is_ready_delivery: isReady, 
+            delivery_weeks: weeksVal 
+          })
+          .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`)
+          .select();
+
+        if (nltErr || !nltUpdated || nltUpdated.length === 0) {
+          const { error: upsertErr } = await supabase.from('nlt_offers').upsert([{
+            vehicle_id: ActiveEditVehicleId,
+            provider_id: CurrentPartner ? CurrentPartner.id : null,
+            client_monthly_price: newMonthly,
+            months: newMonths,
+            advance_payment: newAdvance,
+            deposit_required: newDep,
+            km_yearly_limit: 15000,
+            is_ready_delivery: isReady,
+            delivery_weeks: weeksVal,
+            is_active: true
+          }], { onConflict: 'vehicle_id' });
         }
       }
 
-      // 2. Aggiornamento tabella nbt_offers
-      const { data: nbtUpdated, error: nbtErr } = await supabase
-        .from('nbt_offers')
-        .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal })
-        .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`)
-        .select();
-
-      if (nbtErr) {
-        console.warn("Errore aggiornamento nbt_offers:", nbtErr);
-      } else if (!nbtUpdated || nbtUpdated.length === 0) {
-        console.log("Nessuna riga pre-esistente in nbt_offers per questo veicolo. Creazione (upsert) in corso...");
-        const { error: upsertErr } = await supabase.from('nbt_offers').upsert([{
-          vehicle_id: ActiveEditVehicleId,
-          provider_id: CurrentPartner ? CurrentPartner.id : null,
-          daily_price: newDay,
-          deposit_required: newDep,
-          deposit_mandante: newDep,
-          km_daily_limit: 150,
-          is_ready_delivery: isReady,
-          delivery_weeks: weeksVal,
-          is_active: true
-        }], { onConflict: 'vehicle_id' });
-        if (upsertErr) console.warn("Errore upsert nbt_offers:", upsertErr);
-      }
-
-      // 3. Aggiornamento tabella nlt_offers
-      try {
-        await supabase
-          .from('nlt_offers')
-          .update({ deposit_mandante: newDep, deposit_required: newDep, client_monthly_price: Math.round(newDay * 20), is_ready_delivery: isReady, delivery_weeks: weeksVal })
-          .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`);
-      } catch(err){}
-
-      console.log("✅ Tariffa e disponibilità salvate con successo sul database Supabase:", vehUpdated);
+      console.log("✅ Tariffa e disponibilità salvate con successo sul database Supabase");
+      
+      // Aggiorna tabella localmente (optimistic UI)
+      v.daily_price = newDay;
+      v.deposit = newDep;
+      v.specs = JSON.stringify(updatedSpecs);
+      renderPartnerVehiclesTable();
+      closeEditTariffModal();
     } catch(e) {
       console.error("Errore generale sync price:", e);
       alert("Errore durante la comunicazione con il database Supabase: " + e.message);

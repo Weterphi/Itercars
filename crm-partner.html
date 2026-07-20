@@ -93,9 +93,16 @@
         <button class="sidebar-item" onclick="switchPartnerTab('tab-bookings', this)">
           <div class="sidebar-item-label">
             <i class="ri-bookmark-3-line"></i>
-            <span>Prenotazioni & Clienti</span>
+            <span>CRM & Prenotazioni</span>
           </div>
           <span class="nav-badge" id="badgeBookingsCount">0</span>
+        </button>
+
+        <button class="sidebar-item" onclick="switchPartnerTab('tab-calendar', this)">
+          <div class="sidebar-item-label">
+            <i class="ri-calendar-event-line"></i>
+            <span>Calendario NBT</span>
+          </div>
         </button>
 
         <button class="sidebar-item" onclick="switchPartnerTab('tab-settings', this)">
@@ -304,20 +311,57 @@
               </div>
             </div>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>Pratica # e Data</th>
-                  <th>Cliente & WhatsApp</th>
-                  <th>Veicolo e Ritiro</th>
-                  <th>Durata Richiesta</th>
-                  <th>Importo Totale</th>
-                  <th>Stato Pratica</th>
-                  <th style="text-align: right;">Avanza Stato Operativo</th>
-                </tr>
-              </thead>
-              <tbody id="partnerBookingsTableBody"></tbody>
-            </table>
+            <div class="kanban-board" id="partnerKanbanBoard">
+              <!-- Colonne generate via JS -->
+              <div class="kanban-column" id="kanban-col-pending">
+                <div class="kanban-col-header">
+                  <i class="ri-time-line"></i> In Valutazione
+                  <span class="kanban-count" id="count-pending">0</span>
+                </div>
+                <div class="kanban-cards" id="kanban-cards-pending"></div>
+              </div>
+              
+              <div class="kanban-column" id="kanban-col-confirmed">
+                <div class="kanban-col-header" style="color: #60a5fa;">
+                  <i class="ri-check-line"></i> Pagato / Confermato
+                  <span class="kanban-count" id="count-confirmed">0</span>
+                </div>
+                <div class="kanban-cards" id="kanban-cards-confirmed"></div>
+              </div>
+
+              <div class="kanban-column" id="kanban-col-delivered">
+                <div class="kanban-col-header" style="color: #10b981;">
+                  <i class="ri-car-line"></i> In Uso (Consegnato)
+                  <span class="kanban-count" id="count-delivered">0</span>
+                </div>
+                <div class="kanban-cards" id="kanban-cards-delivered"></div>
+              </div>
+
+              <div class="kanban-column" id="kanban-col-closed">
+                <div class="kanban-col-header" style="color: var(--text-muted);">
+                  <i class="ri-flag-checkered-fill"></i> Riconsegnato
+                  <span class="kanban-count" id="count-closed">0</span>
+                </div>
+                <div class="kanban-cards" id="kanban-cards-closed"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB CALENDARIO NBT -->
+        <div id="tab-calendar" class="tab-pane">
+          <div class="data-table-container">
+            <div class="data-table-toolbar">
+              <div>
+                <h4 style="font-size: 1.02rem; font-weight: 300; color: #fff;"><i class="ri-calendar-event-line"></i> Calendario Disponibilità Breve Termine</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Visualizza l'occupazione della tua flotta giorno per giorno.</p>
+              </div>
+            </div>
+            
+            <!-- CONTENITORE CALENDARIO GENERATO DA JS -->
+            <div id="calendarContainer" style="padding: 16px; overflow-x: auto;">
+              <!-- Calendar grid will be rendered here -->
+            </div>
           </div>
         </div>
 
@@ -399,14 +443,40 @@
       <form onsubmit="saveTariffChanges(event)">
         <p id="modalVehTitle" style="color: #fff; font-weight: 300; font-size: 0.96rem; margin-bottom: 16px;"></p>
 
-        <div style="margin-bottom: 14px;">
-          <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (€/giorno) (*)</label>
-          <input type="number" id="editDailyPrice" class="admin-input" required style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+        <!-- Tabs for Pricing Engine -->
+        <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+          <button type="button" class="btn-header btn-header-outline active" id="btnNbtTab" onclick="switchPricingTab('nbt')" style="flex: 1; justify-content: center; font-size: 0.8rem; border-color: var(--accent-gold); color: var(--accent-gold);">BREVE TERMINE</button>
+          <button type="button" class="btn-header btn-header-outline" id="btnNltTab" onclick="switchPricingTab('nlt')" style="flex: 1; justify-content: center; font-size: 0.8rem; border-color: rgba(255,255,255,0.15); color: var(--text-muted);">LUNGO TERMINE</button>
         </div>
 
-        <div style="margin-bottom: 14px;">
-          <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Richiesta sulla Carta (€) (*)</label>
-          <input type="number" id="editDeposit" class="admin-input" required />
+        <input type="hidden" id="currentPricingTab" value="nbt" />
+
+        <div id="nbtPricingContainer">
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (€/giorno) (*)</label>
+            <input type="number" id="editDailyPrice" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+          </div>
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Richiesta sulla Carta (€) (*)</label>
+            <input type="number" id="editDeposit" class="admin-input" />
+          </div>
+        </div>
+
+        <div id="nltPricingContainer" style="display: none;">
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT (€/mese) (*)</label>
+            <input type="number" id="editMonthlyPrice" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+          </div>
+          <div style="margin-bottom: 14px; display: flex; gap: 12px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Mesi (es. 36)</label>
+              <input type="number" id="editNltMonths" class="admin-input" value="36" />
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo (€)</label>
+              <input type="number" id="editNltAdvance" class="admin-input" value="0" />
+            </div>
+          </div>
         </div>
 
         <div style="margin-bottom: 22px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
