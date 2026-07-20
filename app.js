@@ -1820,3 +1820,59 @@ function toggleMobileMenu() {
   }
 }
 window.toggleMobileMenu = toggleMobileMenu;
+
+
+// ==========================================
+// DOSSIER RECOVERY MODAL LOGIC
+// ==========================================
+function openDossierRecoveryModal() {
+  const modal = document.getElementById('dossierRecoveryModal');
+  if (modal) {
+    modal.classList.add('active');
+  } else {
+    console.error("Dossier Recovery Modal not found in DOM");
+  }
+}
+window.openDossierRecoveryModal = openDossierRecoveryModal;
+
+function closeDossierRecoveryModal() {
+  const modal = document.getElementById('dossierRecoveryModal');
+  if (modal) {
+    modal.classList.remove('active');
+  }
+}
+window.closeDossierRecoveryModal = closeDossierRecoveryModal;
+
+async function handleDossierRecoverySubmit(e) {
+  e.preventDefault();
+  const code = document.getElementById('recoveryQuoteCodeInput')?.value.trim();
+  const email = document.getElementById('recoveryEmailInput')?.value.trim();
+  const errMsg = document.getElementById('recoveryErrorMsg');
+  if (errMsg) errMsg.style.display = 'none';
+  
+  if (!code && !email) {
+    if (errMsg) {
+      errMsg.innerText = "Inserisci almeno il codice preventivo o l'email.";
+      errMsg.style.display = 'block';
+    }
+    return;
+  }
+  
+  // Fake loader / redirect for now, assuming actual Supabase logic is elsewhere or we just show a message
+  const btn = e.target.querySelector('button[type="submit"]');
+  if (btn) {
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Ricerca in corso...';
+    btn.disabled = true;
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+      if (errMsg) {
+        errMsg.innerText = "Pratica non trovata o scaduta. Contatta il concierge.";
+        errMsg.style.display = 'block';
+      }
+    }, 1500);
+  }
+}
+window.handleDossierRecoverySubmit = handleDossierRecoverySubmit;
