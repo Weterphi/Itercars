@@ -810,6 +810,7 @@ header.scrolled .nav-actions {
 @media (min-width: 1200px) {
   .category-highlight-content {
     padding: 30px;
+    padding-bottom: 90px; /* Previene accavallamento anche su desktop */
   }
 }
 
