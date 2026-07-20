@@ -2424,7 +2424,8 @@ async function acceptPartnerRecord(id) {
     if (delErr) throw delErr;
 
     alert("Partner approvato con successo e trasferito nella gestione attiva!");
-    fetchPartnersFromDatabase();
+    await fetchPartnersFromDatabase();
+    renderPartnersTable(CurrentPartners);
     if(typeof loadActivePartnersTab === 'function') loadActivePartnersTab();
   } catch (error) {
     console.error("Errore accettazione partner:", error);
