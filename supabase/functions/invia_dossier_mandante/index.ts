@@ -19,7 +19,9 @@ serve(async (req) => {
       tipoCliente = 'Privato', 
       auto = {}, 
       documenti = [], 
-      mandanteEmail = 'toribiowillie@gmail.com' 
+      mandanteEmail = 'toribiowillie@gmail.com',
+      idAzienda = 'Non specificato',
+      nomeAzienda = 'ITERCARS Partner'
     } = await req.json()
 
     // Recupero API Key Resend dai Secrets (supporta sia PREVENTIVO che RESEND_API_KEY)
@@ -34,16 +36,16 @@ serve(async (req) => {
     const canoneMese = auto.canone || auto.monthlyPrice || '0';
     const anticipo = auto.anticipo || auto.deposit || '0';
 
-    // Allegati per Resend
+    // Logica di elaborazione allegati per Resend (i file vengono inclusi nella mail)
     const resendAttachments: any[] = [];
-
+    
     // Costruzione lista HTML dei documenti allegati
     let documentiListHtml = ''
+
     if (Array.isArray(documenti) && documenti.length > 0) {
       documentiListHtml = documenti.map((doc, idx) => {
         const docTitle = doc.document_type ? doc.document_type.toUpperCase().replace(/_/g, ' ') : `DOCUMENTO ${idx + 1}`
         
-        // Se c'è un base64 (o dataUrl), prepariamo l'allegato per Resend
         if (doc.file_base64) {
           const cleanBase64 = typeof doc.file_base64 === 'string' && doc.file_base64.includes(',')
             ? doc.file_base64.split(',')[1]
@@ -75,18 +77,15 @@ serve(async (req) => {
           </div>
         `
       }).join('')
-    } else {
-      documentiListHtml = `<p style="color: #8b949e; font-style: italic;">Documenti dossier verificati e caricati nel sistema.</p>`
     }
 
     const htmlEmail = `
       <div style="font-family: 'Segoe UI', Arial, sans-serif; background-color: #0d1117; color: #ffffff; padding: 40px 20px; margin: 0;">
         <div style="max-width: 650px; margin: 0 auto; background-color: #161b22; border: 1px solid #30363d; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
           
-          <!-- Header -->
           <div style="background: linear-gradient(135deg, #1f6feb, #238636); padding: 30px; text-align: center;">
             <h1 style="margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 1px; color: #ffffff;">
-              📂 NUOVO DOSSIER DI DELIBERA
+              NUOVO DOSSIER DI DELIBERA
             </h1>
             <p style="margin: 8px 0 0; font-size: 14px; color: #e6edf3; opacity: 0.9;">
               Pratica Pronta per Istruttoria — Rif. <strong>${quoteCode}</strong>
@@ -94,9 +93,8 @@ serve(async (req) => {
           </div>
 
           <div style="padding: 35px 30px;">
-            <!-- Dati Pratica e Cliente -->
             <h2 style="font-size: 18px; color: #58a6ff; border-bottom: 1px solid #21262d; padding-bottom: 10px; margin-top: 0;">
-              👤 Anagrafica Richiedente
+              Anagrafica Richiedente
             </h2>
             <table style="width: 100%; margin-bottom: 25px; border-collapse: collapse;">
               <tr>
@@ -113,9 +111,22 @@ serve(async (req) => {
               </tr>
             </table>
 
-            <!-- Caratteristiche Vettura -->
             <h2 style="font-size: 18px; color: #58a6ff; border-bottom: 1px solid #21262d; padding-bottom: 10px; margin-top: 30px;">
-              🚗 Vettura e Configurazione Selezionata
+              🏢 Dati Provider / Mandante
+            </h2>
+            <table style="width: 100%; margin-bottom: 25px; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; color: #8b949e; width: 40%;">Nome Azienda:</td>
+                <td style="padding: 8px 0; color: #ffffff; font-weight: 700; font-size: 16px;">${nomeAzienda}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #8b949e;">ID Azienda (Provider ID):</td>
+                <td style="padding: 8px 0; color: #ffffff; font-weight: 700; font-size: 16px;">${idAzienda}</td>
+              </tr>
+            </table>
+
+            <h2 style="font-size: 18px; color: #58a6ff; border-bottom: 1px solid #21262d; padding-bottom: 10px; margin-top: 30px;">
+              Vettura e Configurazione Selezionata
             </h2>
             <div style="background-color: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 22px; margin-bottom: 30px;">
               <h3 style="margin: 0 0 15px; color: #ffffff; font-size: 20px; font-weight: 800;">
@@ -146,32 +157,33 @@ serve(async (req) => {
             </div>
 
             <!-- Dossier Documenti Allegati -->
+            ${documentiListHtml ? `
             <h2 style="font-size: 18px; color: #3fb950; border-bottom: 1px solid #21262d; padding-bottom: 10px; margin-top: 30px;">
               📂 Documenti Dossier
             </h2>
             <p style="color: #8b949e; font-size: 13px; margin-bottom: 15px;">
               I file dei documenti sono scaricabili dai link sottostanti o allegati alla presente comunicazione:
             </p>
-            
             <div style="margin-bottom: 20px;">
               ${documentiListHtml}
             </div>
+            ` : ''}
 
           </div>
 
-          <!-- Footer -->
           <div style="background-color: #0d1117; padding: 20px; text-align: center; border-top: 1px solid #21262d; font-size: 12px; color: #6e7681;">
             ITERCARS Marketplace — Sistema di Delibera Digitalizzata Multi-Mandante<br>
-            Pratica trasmessa automaticamente al mandante designato (${mandanteEmail}).
+            Pratica trasmessa automaticamente al mandante designato (${mandanteEmail}) e alla direzione (info@itercars.com).
           </div>
 
         </div>
       </div>
     `
 
+    // Destinatari multipli: mandanteEmail + info@itercars.com
     const resendPayload: any = {
       from: "Dossier Delibere Itercars <info@itercars.com>",
-      to: [mandanteEmail],
+      to: [mandanteEmail, "info@itercars.com"],
       subject: `Nuovo dossier ${quoteCode}`,
       html: htmlEmail,
     }

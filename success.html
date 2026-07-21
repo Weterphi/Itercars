@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
   <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     const savedConsent = localStorage.getItem('itercars_cookie_consent');
@@ -22,11 +23,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pratica Inviata con Successo — ITERCARS</title>
-  <meta name="description" content="I tuoi documenti sono stati ricevuti e la fee è prenotata. Esito delibera in 48 ore lavorative.">
-  
+  <meta name="description"
+    content="I tuoi documenti sono stati ricevuti e la fee è prenotata. Esito delibera in 48 ore lavorative.">
+
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
-  
+
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=50">
   <style>
@@ -41,12 +43,14 @@
       flex-direction: column;
       justify-content: space-between;
     }
+
     .success-container {
       max-width: 720px;
       margin: 60px auto;
       padding: 0 20px;
       text-align: center;
     }
+
     .success-card {
       background: linear-gradient(145deg, rgba(15, 20, 32, 0.95), rgba(8, 12, 20, 0.98));
       border: 2px solid #2ecc71;
@@ -56,6 +60,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .check-icon-box {
       width: 96px;
       height: 96px;
@@ -68,15 +73,26 @@
       margin: 0 auto 28px;
       animation: pulseGreen 2s infinite;
     }
+
     .check-icon-box i {
       font-size: 3.2rem;
       color: #2ecc71;
     }
+
     @keyframes pulseGreen {
-      0% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4); }
-      70% { box-shadow: 0 0 0 20px rgba(46, 204, 113, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
+      0% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.4);
+      }
+
+      70% {
+        box-shadow: 0 0 0 20px rgba(46, 204, 113, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+      }
     }
+
     .main-message-box {
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -84,6 +100,7 @@
       padding: 24px;
       margin: 28px 0;
     }
+
     .quote-badge {
       display: inline-block;
       background: rgba(46, 204, 113, 0.18);
@@ -103,6 +120,7 @@
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
+
 <body>
 
   <!-- ================= HEADER ================= -->
@@ -113,10 +131,14 @@
       </a>
       <ul class="nav-links">
         <li><a href="index.html" data-i18n="nav.home">Home</a></li>
-        <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
-        <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
-        <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
-        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACCADEMY</a></li>
+        <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a>
+        </li>
+        <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo
+            Termine</a></li>
+        <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve
+            Termine</a></li>
+        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i>
+            ACCADEMY</a></li>
         <li><a href="index.html#contatti" data-i18n="nav.contacts" style="font-weight: 600;">CONTATTI</a></li>
       </ul>
       <div class="nav-actions">
@@ -130,7 +152,7 @@
   <!-- ================= SUCCESS CARD ================= -->
   <main class="success-container">
     <div class="success-card">
-      
+
       <!-- ICON -->
       <div class="check-icon-box">
         <i class="ri-shield-check-fill"></i>
@@ -138,7 +160,8 @@
 
       <!-- BADGE -->
       <div class="quote-badge">
-        <i class="ri-checkbox-circle-fill"></i> PRATICA IN DELIBERA • CODICE: <span id="successQuoteCodeDisplay">---</span>
+        <i class="ri-checkbox-circle-fill"></i> PRATICA IN DELIBERA • CODICE: <span
+          id="successQuoteCodeDisplay">---</span>
       </div>
 
       <!-- TITLE -->
@@ -148,23 +171,30 @@
 
       <!-- EXACT REQUESTED MESSAGE -->
       <div class="main-message-box">
-        <p style="font-size: 1.25rem; font-weight: 800; color: #fff; margin: 0; line-height: 1.5; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
-          "Documenti ricevuti e fee prenotata. Stiamo inviando la pratica per l'approvazione finale. Entro 48h riceverai l'esito."
+        <p
+          style="font-size: 1.25rem; font-weight: 800; color: #fff; margin: 0; line-height: 1.5; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+          "Documenti ricevuti e fee prenotata. Stiamo inviando la pratica per l'approvazione finale. Entro 48h riceverai
+          l'esito."
         </p>
       </div>
 
       <!-- STATUS BREAKDOWN -->
       <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 32px;">
-        Il nostro dipartimento istruttorio ha preso in carico il tuo dossier. I documenti di identità e reddituali sono attualmente in fase di verifica informatica presso l'istituto di credito / mandante ufficiale.<br>
-        In caso di esito positivo della delibera, verrai contattato dal tuo Concierge personale per la firma telematica del contratto di noleggio e la pianificazione della consegna.
+        Il nostro dipartimento istruttorio ha preso in carico il tuo dossier. I documenti di identità e reddituali sono
+        attualmente in fase di verifica informatica presso l'istituto di credito / mandante ufficiale.<br>
+        In caso di esito positivo della delibera, verrai contattato dal tuo Concierge personale per la firma telematica
+        del contratto di noleggio e la pianificazione della consegna.
       </p>
 
       <!-- ACTION BUTTONS -->
       <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-        <a href="https://api.whatsapp.com/send?phone=393755942143&text=Ciao%20ITERCARS!%20Ho%20appena%20completato%20l'upload%20dei%20documenti%20e%20pagato%20la%20fee%20per%20la%20pratica." target="_blank" class="btn btn-primary" style="height: 52px; padding: 0 28px; font-size: 1.05rem; font-weight: 800; background: #25d366; border: none; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="https://api.whatsapp.com/send?phone=393755942143&text=Ciao%20ITERCARS!%20Ho%20appena%20completato%20l'upload%20dei%20documenti%20e%20pagato%20la%20fee%20per%20la%20pratica."
+          target="_blank" class="btn btn-primary"
+          style="height: 52px; padding: 0 28px; font-size: 1.05rem; font-weight: 800; background: #25d366; border: none; display: inline-flex; align-items: center; gap: 8px;">
           <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i> <span>Contatta Concierge su WhatsApp</span>
         </a>
-        <a href="noleggio-lungo-termine.html" class="btn btn-outline" style="height: 52px; padding: 0 28px; font-size: 1.05rem; font-weight: 800; border-color: rgba(255,255,255,0.2); color: #fff; display: inline-flex; align-items: center; gap: 8px;">
+        <a href="noleggio-lungo-termine.html" class="btn btn-outline"
+          style="height: 52px; padding: 0 28px; font-size: 1.05rem; font-weight: 800; border-color: rgba(255,255,255,0.2); color: #fff; display: inline-flex; align-items: center; gap: 8px;">
           <i class="ri-arrow-left-line"></i> <span>Torna al Catalogo</span>
         </a>
       </div>
@@ -173,15 +203,18 @@
   </main>
 
   <!-- ================= FOOTER ================= -->
-  <footer style="border-top: 1px solid rgba(255,255,255,0.08); padding: 36px 0; background: #040509; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
+  <footer
+    style="border-top: 1px solid rgba(255,255,255,0.08); padding: 36px 0; background: #040509; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
     <div class="container">
       <p style="margin-bottom: 6px;">&copy; 2026 ITERCARS Marketplace — Tutela Privacy & Trasparenza Contrattuale</p>
-      <p>Servizio Clienti H24: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a></p>
+      <p>Servizio Clienti H24: <a href="tel:+393755942143"
+          style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a></p>
     </div>
   </footer>
 
   <!-- Floating Mobile Phone Button -->
-  <a href="tel:+393755942143" class="mobile-floating-phone" title="Chiama ITERCARS" aria-label="Chiama +39 375 594 2143">
+  <a href="tel:+393755942143" class="mobile-floating-phone" title="Chiama ITERCARS"
+    aria-label="Chiama +39 375 594 2143">
     <i class="ri-phone-fill"></i>
     <span>+39 375 594 2143</span>
   </a>
@@ -191,12 +224,14 @@
   <div class="modal-overlay" id="authModal">
     <div class="modal-content" style="max-width: 580px;">
       <button class="close-modal" onclick="closeAuthModal()"><i class="ri-close-line"></i></button>
-      
+
       <!-- LOGIN VIEW -->
       <div id="loginFormBox">
-        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-lock-2-fill text-gradient"></i> Accedi all'Area Riservata</h3>
-        <p style="color: var(--text-muted); margin-bottom: 24px;">Inserisci le tue credenziali per accedere ai tuoi privilegi VIP e tariffe esclusive.</p>
-        
+        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-lock-2-fill text-gradient"></i> Accedi all'Area
+          Riservata</h3>
+        <p style="color: var(--text-muted); margin-bottom: 24px;">Inserisci le tue credenziali per accedere ai tuoi
+          privilegi VIP e tariffe esclusive.</p>
+
         <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 16px;">
           <div class="form-group">
             <label>Indirizzo Email *</label>
@@ -206,34 +241,45 @@
             <label>Password *</label>
             <input type="password" class="form-control" id="authLoginPassword" required placeholder="••••••••">
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 8px;">
+          <button type="submit" class="btn btn-primary"
+            style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 8px;">
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
+        <div
+          style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Non sei ancora registrato?</span>
-          <button type="button" onclick="switchAuthMode('register')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Registrati qui</button>
+          <button type="button" onclick="switchAuthMode('register')"
+            style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Registrati
+            qui</button>
         </div>
 
         <!-- ACCESSO DIRETTO PER NOLEGGIATORI E PARTNER MANDANTI -->
-        <div style="margin-top: 18px; padding: 14px; background: rgba(250, 204, 21, 0.08); border: 1px dashed rgba(250, 204, 21, 0.4); border-radius: 12px; text-align: center;">
-          <span style="font-size: 0.85rem; color: #facc15; font-weight: 700; display: block; margin-bottom: 8px;"><i class="ri-building-4-fill"></i> Area partner</span>
-          <a href="crm-partner.html" class="btn btn-outline" style="width: 100%; justify-content: center; border-color: #facc15; color: #facc15; font-size: 0.9rem; padding: 8px; text-decoration: none; margin-bottom: 12px;">
+        <div
+          style="margin-top: 18px; padding: 14px; background: rgba(250, 204, 21, 0.08); border: 1px dashed rgba(250, 204, 21, 0.4); border-radius: 12px; text-align: center;">
+          <span style="font-size: 0.85rem; color: #facc15; font-weight: 700; display: block; margin-bottom: 8px;"><i
+              class="ri-building-4-fill"></i> Area partner</span>
+          <a href="crm-partner.html" class="btn btn-outline"
+            style="width: 100%; justify-content: center; border-color: #facc15; color: #facc15; font-size: 0.9rem; padding: 8px; text-decoration: none; margin-bottom: 12px;">
             <i class="ri-shield-keyhole-line"></i> Accedi alla Console Partner
           </a>
           <div style="border-top: 1px dashed rgba(250, 204, 21, 0.4); padding-top: 12px;">
             <span style="color: var(--text-muted); font-size: 0.85rem;">Non sei ancora partner?</span>
-            <button type="button" onclick="switchAuthMode('partner_reg')" style="background: none; border: none; color: #facc15; font-weight: 700; cursor: pointer; margin-left: 6px; text-decoration: underline; font-size: 0.85rem;">Diventa partner</button>
+            <button type="button" onclick="switchAuthMode('partner_reg')"
+              style="background: none; border: none; color: #facc15; font-weight: 700; cursor: pointer; margin-left: 6px; text-decoration: underline; font-size: 0.85rem;">Diventa
+              partner</button>
           </div>
         </div>
       </div>
 
       <!-- REGISTRATION VIEW -->
       <div id="registerFormBox" style="display: none;">
-        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gradient"></i> Registrazione Membro VIP</h3>
-        <p style="color: var(--text-muted); margin-bottom: 20px;">Crea il tuo profilo ITERCARS per sbloccare sconti riservati e supporto concierge.</p>
-        
+        <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gradient"></i> Registrazione
+          Membro VIP</h3>
+        <p style="color: var(--text-muted); margin-bottom: 20px;">Crea il tuo profilo ITERCARS per sbloccare sconti
+          riservati e supporto concierge.</p>
+
         <form onsubmit="handleRegister(event)" style="display: flex; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
@@ -271,30 +317,38 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
-              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regPassword" required minlength="6"
+                placeholder="••••••••">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6"
+                placeholder="••••••••">
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px;">
+          <button type="submit" class="btn btn-primary"
+            style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px;">
             <span>Crea Account VIP</span> <i class="ri-vip-crown-fill"></i>
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
+        <div
+          style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
-          <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
+          <button type="button" onclick="switchAuthMode('login')"
+            style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi
+            qui</button>
         </div>
       </div>
 
       <!-- PARTNER REGISTRATION VIEW -->
       <div id="partnerRegFormBox" style="display: none;">
-        <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
-        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la richiesta di adesione. Il nostro team ti contatterà per completare l'onboarding.</p>
-        
+        <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i
+            class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la
+          richiesta di adesione. Il nostro team ti contatterà per completare l'onboarding.</p>
+
         <form onsubmit="handlePartnerReg(event)" style="display: flex; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
@@ -332,22 +386,28 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password di Accesso *</label>
-              <input type="password" class="form-control" id="partRegPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="partRegPassword" required minlength="6"
+                placeholder="••••••••">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6"
+                placeholder="••••••••">
             </div>
           </div>
 
-          <button type="submit" class="btn btn-outline" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px; border-color: #facc15; color: #facc15; font-weight: 700;">
+          <button type="submit" class="btn btn-outline"
+            style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px; border-color: #facc15; color: #facc15; font-weight: 700;">
             <span>Completa richiesta</span> <i class="ri-send-plane-fill"></i>
           </button>
         </form>
 
-        <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
+        <div
+          style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Vuoi accedere al portale clienti?</span>
-          <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna al Login</button>
+          <button type="button" onclick="switchAuthMode('login')"
+            style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna
+            al Login</button>
         </div>
       </div>
 
@@ -355,13 +415,13 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js?v=36"></script>
+  <script src="app.js?v=38"></script>
   <script src="cookie-banner.js?v=5"></script>
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
       const params = new URLSearchParams(window.location.search);
       const quoteCode = params.get('quote_code') || params.get('code') || localStorage.getItem('itercars_last_quote_code') || 'PREV-2026-VIP';
-      
+
       const codeDisplay = document.getElementById('successQuoteCodeDisplay');
       if (codeDisplay) codeDisplay.textContent = quoteCode;
 
@@ -370,7 +430,7 @@
         try {
           const { data: quote, error } = await window.supabase
             .from('quotes')
-            .select('id, lead_id, status')
+            .select('*, crm_leads(*)')
             .eq('quote_code', quoteCode)
             .maybeSingle();
 
@@ -380,18 +440,50 @@
               .update({ status: 'paid' })
               .eq('id', quote.id);
 
-            if (quote.lead_id) {
+            const lead = quote.crm_leads;
+            if (lead) {
+              // 1. Aggiorna il CRM Admin a Istruttoria
               await window.supabase
                 .from('crm_leads')
-                .update({ pipeline_status: 'scoring_pending' })
-                .eq('id', quote.lead_id);
+                .update({ pipeline_status: 'docs_requested' })
+                .eq('id', lead.id);
+                
+              // 2. Crea/Aggiorna la prenotazione per il Partner a 'pending' (In Valutazione)
+              if (lead.provider_id || quote.provider_id) {
+                const newBooking = {
+                  provider_id: lead.provider_id || quote.provider_id,
+                  vehicle_id: quote.vehicle_id || lead.interested_vehicle_id,
+                  external_booking_ref: lead.id,
+                  client_name: `${lead.first_name || ''} ${lead.last_name || ''}`.trim() || 'Cliente NLT/NBT',
+                  client_phone: lead.phone || 'Non specificato',
+                  client_email: lead.email || 'Non specificata',
+                  vehicle_name: lead.car_name || 'Vettura non specificata',
+                  total_price: lead.monthly_price || quote.final_monthly_price || 0,
+                  status: 'pending',
+                  rental_days: quote.selected_duration_days || 1
+                };
+                
+                // Controlla se esiste già una prenotazione per questo lead
+                const { data: existingBk } = await window.supabase
+                  .from('bookings')
+                  .select('id')
+                  .eq('external_booking_ref', lead.id)
+                  .maybeSingle();
+                  
+                if (existingBk) {
+                  await window.supabase.from('bookings').update({ status: 'pending' }).eq('id', existingBk.id);
+                } else {
+                  await window.supabase.from('bookings').insert([newBooking]);
+                }
+              }
             }
           }
-        } catch(e) {
+        } catch (e) {
           console.warn("Aggiornamento stato CRM in background non completato:", e);
         }
       }
     });
   </script>
 </body>
+
 </html>

@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .from('quotes')
         .select(`
           *,
-          vehicles (brand, model, trim, category, daily_price),
+          vehicles (brand, model, trim, category, daily_price, provider_id, providers(name, partner_email)),
           crm_leads (first_name, last_name, email, customer_type)
         `)
         .eq('quote_code', code)
@@ -67,6 +67,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     if (quoteData.vehicles) {
       CurrentQuote.carTitle = `${quoteData.vehicles.brand || ''} ${quoteData.vehicles.model || ''} ${quoteData.vehicles.trim || ''}`.trim();
+      CurrentQuote.carDetails = {
+        brand: quoteData.vehicles.brand,
+        model: quoteData.vehicles.model,
+        provider_id: quoteData.vehicles.provider_id,
+        mandante_name: quoteData.vehicles.providers?.name,
+        mandante_email: quoteData.vehicles.providers?.partner_email
+      };
     } else if (quoteData.carTitle || quoteData.carName) {
       CurrentQuote.carTitle = quoteData.carTitle || quoteData.carName;
     }
@@ -1019,12 +1026,28 @@ async function inviaMailDossierMandante() {
       } catch (errDocs) {}
     }
 
-    // 4. Selezione automatica Email del Mandante (con fallback a toribiowillie@gmail.com)
+    // 4. Selezione automatica Email del Mandante e Provider
     let mandanteEmail = 'toribiowillie@gmail.com';
-    if (CurrentQuote.carDetails && CurrentQuote.carDetails.mandante_email && CurrentQuote.carDetails.mandante_email.includes('@')) {
-      mandanteEmail = CurrentQuote.carDetails.mandante_email;
-    } else if (CurrentQuote.mandanteEmail && CurrentQuote.mandanteEmail.includes('@')) {
-      mandanteEmail = CurrentQuote.mandanteEmail;
+    let idAzienda = 'Non specificato';
+    let nomeAzienda = 'ITERCARS Partner';
+
+    if (CurrentQuote.carDetails) {
+      if (CurrentQuote.carDetails.provider_id) idAzienda = CurrentQuote.carDetails.provider_id;
+      if (CurrentQuote.carDetails.mandante_email && CurrentQuote.carDetails.mandante_email.includes('@')) {
+        mandanteEmail = CurrentQuote.carDetails.mandante_email;
+      }
+      if (CurrentQuote.carDetails.provider_name || CurrentQuote.carDetails.mandante_name) {
+        nomeAzienda = CurrentQuote.carDetails.provider_name || CurrentQuote.carDetails.mandante_name;
+      }
+    }
+    
+    if (idAzienda === 'Non specificato') {
+      try {
+        const cached = JSON.parse(localStorage.getItem('itercars_last_quote') || 'null');
+        if (cached && cached.vehicles) {
+          idAzienda = cached.vehicles.provider_id || idAzienda;
+        }
+      } catch (e) {}
     }
 
     // 5. Invocazione della Supabase Edge Function
@@ -1038,7 +1061,9 @@ async function inviaMailDossierMandante() {
           tipoCliente,
           auto,
           documenti,
-          mandanteEmail
+          mandanteEmail,
+          idAzienda,
+          nomeAzienda
         }
       }).catch(err => console.warn("Errore chiamata Edge Function invia_dossier_mandante:", err));
     }

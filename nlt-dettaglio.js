@@ -89,127 +89,7 @@ const OFFICIAL_RATES = {
   }
 };
 
-const SAMPLE_DETAIL_OFFERS = [
-  {
-    id: 'bmw-s1',
-    brand: 'BMW',
-    model: 'Serie 1',
-    trim: '118d MSport Automatico',
-    category: 'Sportiva',
-    fuel: 'Diesel ⛽',
-    transmission: 'Automatico 8M',
-    image: 'bmw_serie_1_msport.webp',
-    hp: '150 CV',
-    speed: '216 km/h',
-    accel: '8.3s',
-    readyDelivery: true,
-    deliveryWeeks: 2,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-x1',
-    brand: 'BMW',
-    model: 'X1',
-    trim: 'sDrive18d xLine DCT',
-    category: 'SUV Luxury',
-    fuel: 'Diesel ⛽',
-    transmission: 'DCT 7M',
-    image: 'bmw_x1_xline.webp',
-    hp: '150 CV',
-    speed: '210 km/h',
-    accel: '8.9s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-s3t',
-    brand: 'BMW',
-    model: 'Serie 3 Touring',
-    trim: '320d xDrive MSport',
-    category: 'Sportiva',
-    fuel: 'Diesel Mild-Hybrid',
-    transmission: 'Steptronic 8M',
-    image: 'bmw_serie_3_touring.webp',
-    hp: '190 CV',
-    speed: '230 km/h',
-    accel: '7.1s',
-    readyDelivery: true,
-    deliveryWeeks: 2,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-x3',
-    brand: 'BMW',
-    model: 'X3',
-    trim: 'xDrive20d MSport Mild-Hybrid',
-    category: 'SUV Luxury',
-    fuel: 'Diesel Mild-Hybrid',
-    transmission: 'Steptronic xDrive',
-    image: 'bmw_x3_msport.webp',
-    hp: '190 CV',
-    speed: '213 km/h',
-    accel: '7.9s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-s5',
-    brand: 'BMW',
-    model: 'Serie 5',
-    trim: '520d Mild Hybrid Eccelsa',
-    category: 'Supercar',
-    fuel: 'Diesel Mild-Hybrid',
-    transmission: 'Steptronic 8M',
-    image: 'bmw_serie_5_eccelsa.webp',
-    hp: '197 CV',
-    speed: '233 km/h',
-    accel: '7.3s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-x5',
-    brand: 'BMW',
-    model: 'X5',
-    trim: 'xDrive30d MSport MHEV',
-    category: 'SUV Luxury',
-    fuel: 'Diesel MHEV',
-    transmission: 'Steptronic Sport xDrive',
-    image: 'bmw_x5_msport.webp',
-    hp: '298 CV',
-    speed: '233 km/h',
-    accel: '6.1s',
-    readyDelivery: true,
-    deliveryWeeks: 2,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-i4',
-    brand: 'BMW',
-    model: 'i4 Gran Coupé',
-    trim: 'eDrive40 Sport Elettrica',
-    category: 'Supercar',
-    fuel: 'Elettrico',
-    transmission: 'Automatico Single Speed',
-    image: 'bmw_i4_grancoupe.webp',
-    hp: '340 CV',
-    speed: '190 km/h',
-    accel: '5.7s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  }
-];
+const SAMPLE_DETAIL_OFFERS = [];
 
 // Stato della configurazione attiva per l'auto corrente
 const ConfigState = {
@@ -225,13 +105,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   let carId = params.get('id') || 'bmw-x3-48-3k';
   const paramModel = params.get('model');
-  
+  const paramBrand = params.get('brand');
+  const paramImg = params.get('img');
+  const paramTrim = params.get('trim');
+
+  // Eager load per velocizzare il sito (Zero-Layout-Shift)
+  if (paramImg) {
+    const imgEl = document.getElementById('detailMainImg');
+    if (imgEl) imgEl.src = paramImg;
+  }
+  if (paramBrand) {
+    const brandEl = document.getElementById('detailBrand');
+    if (brandEl) brandEl.innerText = paramBrand;
+  }
+  if (paramModel) {
+    const modelEl = document.getElementById('detailModel');
+    if (modelEl) modelEl.innerText = paramModel;
+  }
+  if (paramTrim) {
+    const trimEl = document.getElementById('detailTrim');
+    if (trimEl) trimEl.innerText = paramTrim;
+  }
+
   let found = null;
   // 1. Tenta da cache locale salvata da nlt-app.js (cerca per id, vehicle_id o model esatto)
   try {
     const cached = JSON.parse(localStorage.getItem('itercars_nlt_cache') || '[]');
     found = cached.find(o => String(o.id) === String(carId) || String(o.vehicle_id) === String(carId) || (paramModel && String(o.model).toLowerCase() === String(paramModel).toLowerCase()));
-  } catch(e) {}
+  } catch (e) { }
 
   // 2. Se non in cache e connesso a Supabase, cerca live sul DB
   if (!found && typeof window.supabase !== 'undefined' && window.supabase) {
@@ -239,22 +140,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       let { data, error } = await window.supabase
         .from('nlt_offers')
         .select(`
-          id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
-          vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price),
+          *,
+          vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit, provider_id),
           providers (name)
         `)
         .eq('id', carId)
         .maybeSingle();
-        
+
       if (!data) {
         const res = await window.supabase
           .from('nlt_offers')
-          .select(`id, provider_offer_code, duration_months, km_per_year, deposit_mandante, client_monthly_price, is_ready_delivery, delivery_weeks, services_included, vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit), providers (name)`)
+          .select(`*, vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit, provider_id), providers (name)`)
           .eq('vehicle_id', carId)
           .maybeSingle();
         if (res.data) data = res.data;
       }
-        
+
       let vDb = (data && data.vehicles) ? data.vehicles : null;
       if (!vDb && carId) {
         const resVeh = await window.supabase
@@ -274,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!error && (data || vDb)) {
         const v = vDb || {};
         const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
-        
+
         // Priorità alla tariffa e cauzione aggiornate live dal partner in tabella vehicles
         const monthlyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0)
           ? Math.round(Number(v.daily_price) * 20)
@@ -301,13 +202,14 @@ document.addEventListener('DOMContentLoaded', async () => {
           deliveryWeeks: specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : ((data && data.delivery_weeks !== undefined) ? Number(data.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 4)),
           deliveryDate: specsObj.delivery_date || v.delivery_date || (data && data.delivery_date) || '',
           providerName: (data && data.providers && data.providers.name) ? data.providers.name : (v.providerName || 'Mandante NLT'),
+          provider_id: v.provider_id || (data && data.provider_id ? data.provider_id : null),
           basePrice: monthlyP,
           baseDuration: (data && data.duration_months) ? data.duration_months : 48,
           baseKm: (data && data.km_per_year) ? data.km_per_year : 15000,
           baseDeposit: depositP
         };
       }
-    } catch(err) {
+    } catch (err) {
       console.warn("Dettaglio live da DB non raggiungibile, fallback in corso.");
     }
   }
@@ -342,7 +244,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (!found && SAMPLE_DETAIL_OFFERS.length > 0) found = SAMPLE_DETAIL_OFFERS[0];
-  
+
   if (found) {
     if (found.basePrice === undefined && found.baseOffer?.monthlyPrice !== undefined) found.basePrice = Number(found.baseOffer.monthlyPrice);
     if (found.baseDuration === undefined && found.baseOffer?.duration !== undefined) found.baseDuration = Number(found.baseOffer.duration);
@@ -354,7 +256,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ConfigState.kmPerYear = found.baseKm || 60000;
     ConfigState.depositAmount = found.baseDeposit !== undefined ? found.baseDeposit : 2000;
   }
-  
+
   renderCarDetails();
   calculateAndRenderPrice();
 });
@@ -362,32 +264,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 function renderCarDetails() {
   const c = ConfigState.car;
   if (!c) return;
-  
+
   document.title = `${c.brand} ${c.model} (${c.trim}) — Configura NLT | ITERCARS`;
-  
+
   // Breadcrumb & Titoli
   const breadcrumb = document.getElementById('nltBreadcrumb');
   if (breadcrumb) {
     breadcrumb.innerHTML = `<a href="noleggio-lungo-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NLT</a> <i class="ri-arrow-right-s-line"></i> <span>${c.brand}</span> <i class="ri-arrow-right-s-line"></i> <strong>${c.model}</strong>`;
   }
-  
+
   const brandElem = document.getElementById('detailBrand');
   const modelElem = document.getElementById('detailModel');
   const trimElem = document.getElementById('detailTrim');
   const providerElem = document.getElementById('detailProvider');
   const imgElem = document.getElementById('detailMainImg');
-  
+
   if (brandElem) brandElem.textContent = c.brand;
   if (modelElem) modelElem.textContent = c.model;
   if (trimElem) trimElem.textContent = c.trim;
   if (providerElem) providerElem.innerHTML = `<i class="ri-shield-star-fill text-green"></i> Listino Mandante: <strong>${c.providerName}</strong>`;
   if (imgElem) imgElem.src = c.image;
-  
+
   const badgeContainer = document.getElementById('detailBadgeContainer');
   if (badgeContainer) {
     if (c.deliveryDate && c.deliveryDate !== '') {
       let fDate = c.deliveryDate;
-      try { const p = c.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      try { const p = c.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch (e) { }
       badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
     } else if (c.readyDelivery && (c.deliveryWeeks === 1 || c.deliveryWeeks <= 1)) {
       badgeContainer.innerHTML = `<span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
@@ -410,20 +312,20 @@ function renderCarDetails() {
   if (hpEl) hpEl.textContent = c.hp;
   if (fuelEl) fuelEl.textContent = c.fuel;
   if (transEl) transEl.textContent = c.transmission;
-  
+
   // Renderizza i pacchetti rettangolari all-inclusive e aggiorna il canone
   renderRentalPackages();
 }
 
 function getRatesForCar(c) {
   if (!c) return OFFICIAL_RATES['bmw-s3t'];
-  
+
   let baseCarId = String(c.id || '');
   if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
   if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3';
-  
+
   let rates = OFFICIAL_RATES[baseCarId] || (c.vehicle_id ? OFFICIAL_RATES[String(c.vehicle_id)] : null);
-  
+
   if (!rates && c.model) {
     const modelStr = String(c.model).toLowerCase();
     if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['bmw-s1'];
@@ -434,7 +336,7 @@ function getRatesForCar(c) {
     else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['bmw-x5'];
     else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['bmw-i4'];
   }
-  
+
   if (!rates) {
     // Generazione automatica di 4 pacchetti rettangolari (6, 12, 24, 36 mesi)
     const base = Number(c.basePrice) || 699;
@@ -452,17 +354,17 @@ function getRatesForCar(c) {
 function renderRentalPackages() {
   const container = document.getElementById('packagesListGrid');
   if (!container) return;
-  
+
   const c = ConfigState.car;
   if (!c) return;
-  
+
   const rates = getRatesForCar(c);
   const availableDurations = Object.keys(rates).map(Number).sort((a, b) => a - b);
-  
+
   if (!availableDurations.includes(Number(ConfigState.durationMonths)) && availableDurations.length > 0) {
     ConfigState.durationMonths = availableDurations.includes(36) ? 36 : availableDurations[0];
   }
-  
+
   const activeRate = rates[ConfigState.durationMonths] || rates[availableDurations[0]];
   if (activeRate) {
     const kmTot = activeRate.kmTotal || Math.round((activeRate.baseKm || 25000) * (ConfigState.durationMonths / 12));
@@ -473,23 +375,23 @@ function renderRentalPackages() {
   container.innerHTML = availableDurations.map(dur => {
     const r = rates[dur];
     const isSelected = Number(ConfigState.durationMonths) === dur;
-    
+
     const kmTotal = r.kmTotal || Math.round((r.baseKm || 25000) * (dur / 12));
     const kmYearly = r.baseKm || Math.round(kmTotal * (12 / dur));
-    
+
     const statusText = r.status || 'Disponibile';
     const statusClass = statusText.toLowerCase().includes('arrivo') ? 'status-inarrivo' : 'status-disponibile';
     const statusIcon = statusText.toLowerCase().includes('arrivo') ? 'ri-time-line' : 'ri-checkbox-circle-fill';
-    
-    const kmDisplayShort = dur === 12 
+
+    const kmDisplayShort = dur === 12
       ? `${kmTotal.toLocaleString('it-IT')} km`
       : `${Math.round(kmYearly).toLocaleString('it-IT')} km/anno`;
-      
+
     const depositDisplay = r.deposit === 0 ? 'Anticipo 0 €' : `Anticipo € ${Number(r.deposit).toLocaleString('it-IT')}`;
     const displayPrice = Math.round((Number(r.price) + (ConfigState.kaskoFranchigia === 'zero' ? 35 : 0)) * BROKER_MARGIN);
 
-    const selectCircleIcon = isSelected 
-      ? `<i class="ri-radio-button-fill package-radio-icon selected"></i>` 
+    const selectCircleIcon = isSelected
+      ? `<i class="ri-radio-button-fill package-radio-icon selected"></i>`
       : `<i class="ri-checkbox-blank-circle-line package-radio-icon"></i>`;
 
     return `
@@ -533,7 +435,7 @@ function renderRentalPackages() {
 function selectRentalPackage(dur) {
   const c = ConfigState.car;
   if (!c) return;
-  
+
   const rates = getRatesForCar(c);
   const rateInfo = rates[dur] || rates[Object.keys(rates)[0]];
   if (!rateInfo) return;
@@ -541,10 +443,10 @@ function selectRentalPackage(dur) {
   ConfigState.durationMonths = Number(dur);
   ConfigState.kmPerYear = rateInfo.kmTotal || Math.round((rateInfo.baseKm || 25000) * (dur / 12));
   ConfigState.depositAmount = Number(rateInfo.deposit || 0);
-  
+
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  
+
   renderRentalPackages();
   calculateAndRenderPrice();
 }
@@ -558,7 +460,7 @@ function setConfigKasko(type, btnElem) {
   }
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
-  
+
   renderRentalPackages();
   calculateAndRenderPrice();
 }
@@ -567,7 +469,7 @@ function setConfigKasko(type, btnElem) {
 function calculateAndRenderPrice() {
   const c = ConfigState.car;
   if (!c) return;
-  
+
   let dur = Number(ConfigState.durationMonths) || 36;
   const rates = getRatesForCar(c);
   const rateInfo = rates[dur] || rates[Object.keys(rates)[0]] || {
@@ -602,7 +504,7 @@ function calculateAndRenderPrice() {
     boxElem.style.opacity = '0.6';
     setTimeout(() => {
       priceDisplay.textContent = `€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`;
-      const kmTextShown = dur === 12 
+      const kmTextShown = dur === 12
         ? `${kmTotal.toLocaleString('it-IT')} Km/anno`
         : `${kmTotal.toLocaleString('it-IT')} Km totali (${Math.round(kmYearly).toLocaleString('it-IT')}/anno)`;
       summaryDisplay.innerHTML = `<strong>${dur} Mesi</strong> • <strong>${kmTextShown}</strong> • Anticipo <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
@@ -619,13 +521,13 @@ function calculateAndRenderPrice() {
 // Gestione submit finale "Genera Preventivo" (Apre e mostra il preventivo ufficiale PDF/Stampabile)
 async function handleQuoteSubmit(event) {
   event.preventDefault();
-  
+
   const submitBtn = event.target.querySelector('button[type="submit"]');
   const originalBtnText = submitBtn.innerHTML;
-  
+
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Elaborazione Preventivo...';
-  
+
   const name = document.getElementById('quoteClientName').value;
   const email = document.getElementById('quoteClientEmail').value;
   const phone = document.getElementById('quoteClientPhone').value;
@@ -640,7 +542,8 @@ async function handleQuoteSubmit(event) {
     carTitle: `${c.brand} ${c.model} ${c.trim}`,
     selected_duration_months: ConfigState.durationMonths,
     selected_deposit: ConfigState.depositAmount,
-    crm_leads: { first_name: name, email: email, customer_type: type }
+    crm_leads: { first_name: name, email: email, customer_type: type },
+    vehicles: { provider_id: c.provider_id, brand: c.brand, model: c.model, trim: c.trim }
   }));
 
   // 1. Visualizza SUBITO la scheda Preventivo Ufficiale senza bloccare la pagina!
@@ -832,10 +735,10 @@ async function handleQuoteSubmit(event) {
           selected_deposit: ConfigState.depositAmount,
           final_monthly_price: ConfigState.finalMonthlyPrice,
           services_snapshot: {
-             kasko: ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard',
-             maintenance: 'Full',
-             road_tax: 'Included',
-             rca: 'Included'
+            kasko: ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard',
+            maintenance: 'Full',
+            road_tax: 'Included',
+            rca: 'Included'
           },
           status: 'sent'
         }]);
@@ -857,21 +760,21 @@ async function handleQuoteSubmit(event) {
         } catch (stripeErr) { console.warn("Stripe url gen fail in background:", stripeErr); }
 
         const emailPayload = {
-           email: email,
-           nome: name,
-           dettagli: `${c.brand} ${c.model} - ${ConfigState.durationMonths} Mesi, ${ConfigState.kmPerYear} km/anno, Anticipo €${ConfigState.depositAmount}`,
-           totale: ConfigState.finalMonthlyPrice,
-           pdfBase64: pdfBase64,
-           pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),
-           quoteCode: quoteCode,
-           dossierUrl: window.location.origin + '/upload-documenti.html?code=' + quoteCode,
-           checkoutUrl: checkoutUrl
+          email: email,
+          nome: name,
+          dettagli: `${c.brand} ${c.model} - ${ConfigState.durationMonths} Mesi, ${ConfigState.kmPerYear} km/anno, Anticipo €${ConfigState.depositAmount}`,
+          totale: ConfigState.finalMonthlyPrice,
+          pdfBase64: pdfBase64,
+          pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),
+          quoteCode: quoteCode,
+          dossierUrl: window.location.origin + '/upload-documenti.html?code=' + quoteCode,
+          checkoutUrl: checkoutUrl
         };
 
         await fetch(`${supabaseUrl}/functions/v1/preventivo_itercars`, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabaseKey}` },
-           body: JSON.stringify(emailPayload)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabaseKey}` },
+          body: JSON.stringify(emailPayload)
         });
       }
     } catch (err) {
@@ -933,7 +836,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
     const targetH = 100;
     const imgRatio = img.width / img.height;
     const boxRatio = targetW / targetH;
-    
+
     let drawW, drawH;
     if (imgRatio > boxRatio) {
       drawW = targetW;
@@ -942,14 +845,14 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
       drawH = targetH;
       drawW = targetH * imgRatio;
     }
-    
+
     // Center inside the 180x100 bounding box
     const drawX = ((210 - targetW) / 2) + ((targetW - drawW) / 2);
     const drawY = 42 + ((targetH - drawH) / 2);
-    
+
     doc.addImage(img, 'JPEG', drawX, drawY, drawW, drawH);
     const finalH = targetH; // FORZATO RETTANGOLARE per layout
-    
+
     // Calcoliamo le coordinate successive dinamicamente in base a quanto è alta l'immagine
     specsY = 42 + finalH + 10;
     boxY = specsY + 30;
@@ -961,7 +864,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFillColor(249, 249, 249);
   doc.setDrawColor(220, 220, 220);
   doc.roundedRect(15, specsY, 180, 20, 2, 2, 'FD');
-  
+
   const drawSpec = (label, value, x) => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
@@ -973,7 +876,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
     const splitValue = doc.splitTextToSize(value, 30);
     doc.text(splitValue, x, specsY + 11, { align: 'center' });
   };
-  
+
   drawSpec("VELOCITÀ", c.speed || "N/A", 25);
   drawSpec("0-100", c.accel || "N/A", 60);
   drawSpec("POTENZA", c.hp || "N/A", 95);
@@ -1017,12 +920,12 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFontSize(10);
   doc.setTextColor(50, 50, 50);
   doc.text("CONFIGURAZIONE CONTRATTO NLT", 20, finalY + 10);
-  
+
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
   const kaskoType = ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard';
   doc.text(`Durata: ${ConfigState.durationMonths} Mesi   -   Km annui: ${ConfigState.kmPerYear.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
-  
+
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
@@ -1032,11 +935,11 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
   doc.text("CANONE MENSILE", 185, finalY + 10, { align: 'right' });
-  
+
   doc.setFontSize(26);
   doc.setTextColor(0, 146, 70);
   doc.text(`€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`, 185, finalY + 22, { align: 'right' });
-  
+
   doc.setFontSize(8);
   doc.text("/mese (IVA esc.)", 185, finalY + 28, { align: 'right' });
 
@@ -1050,49 +953,49 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
 
 
 async function payQuoteStripe(quoteCode, event) {
-    if(!window.supabase || !window.supabase.supabaseUrl) {
-        alert("Servizio Stripe non ancora attivo in questo ambiente locale (Supabase mancante).");
-        return;
-    }
-    
-    try {
-        const btn = event.currentTarget;
-        const originalHtml = btn.innerHTML;
-        btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Preparazione Checkout...';
-        btn.disabled = true;
+  if (!window.supabase || !window.supabase.supabaseUrl) {
+    alert("Servizio Stripe non ancora attivo in questo ambiente locale (Supabase mancante).");
+    return;
+  }
 
-        const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${window.supabase.supabaseKey}`
-            },
-            body: JSON.stringify({ quoteCode })
-        });
-        
-        const data = await res.json();
-        
-        if (data.checkoutUrl) {
-            window.location.href = data.checkoutUrl;
-        } else {
-            alert('Errore Stripe: ' + (data.error || 'Impossibile avviare il checkout'));
-            btn.innerHTML = originalHtml;
-            btn.disabled = false;
-        }
-    } catch(err) {
-        console.error(err);
-        alert('Errore di rete con Stripe.');
-        event.currentTarget.innerHTML = '<i class="ri-bank-card-line" style="font-size: 1.3rem;"></i> Paga Acconto e Prenota Vettura';
-        event.currentTarget.disabled = false;
+  try {
+    const btn = event.currentTarget;
+    const originalHtml = btn.innerHTML;
+    btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Preparazione Checkout...';
+    btn.disabled = true;
+
+    const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${window.supabase.supabaseKey}`
+      },
+      body: JSON.stringify({ quoteCode })
+    });
+
+    const data = await res.json();
+
+    if (data.checkoutUrl) {
+      window.location.href = data.checkoutUrl;
+    } else {
+      alert('Errore Stripe: ' + (data.error || 'Impossibile avviare il checkout'));
+      btn.innerHTML = originalHtml;
+      btn.disabled = false;
     }
+  } catch (err) {
+    console.error(err);
+    alert('Errore di rete con Stripe.');
+    event.currentTarget.innerHTML = '<i class="ri-bank-card-line" style="font-size: 1.3rem;"></i> Paga Acconto e Prenota Vettura';
+    event.currentTarget.disabled = false;
+  }
 }
 
-window.acceptQuoteAndRedirect = function(quoteCode, event) {
-    if (event && event.currentTarget) {
-        event.currentTarget.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Apertura Dossier Documenti...';
-        event.currentTarget.disabled = true;
-    }
-    setTimeout(() => {
-        window.location.href = `upload-documenti.html?code=${quoteCode}`;
-    }, 250);
+window.acceptQuoteAndRedirect = function (quoteCode, event) {
+  if (event && event.currentTarget) {
+    event.currentTarget.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Apertura Dossier Documenti...';
+    event.currentTarget.disabled = true;
+  }
+  setTimeout(() => {
+    window.location.href = `upload-documenti.html?code=${quoteCode}`;
+  }, 250);
 };

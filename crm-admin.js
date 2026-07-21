@@ -133,6 +133,8 @@ async function fetchLeadsFromDatabase() {
         car_name: l.vehicle_interest || (l.notes ? l.notes.split('-')[0].trim() : 'Richiesta NLT'),
         monthly_price: Number(l.annual_income_or_revenue) || 799,
         provider_code: l.assigned_broker_agent || 'Consulente ITERCARS',
+        provider_id: l.provider_id || null,
+        interested_vehicle_id: l.interested_vehicle_id || null,
         notes: l.notes || '',
         created_at: l.created_at
       }));
@@ -397,6 +399,24 @@ async function quickAdvanceLead(leadId, nextStatus) {
   lead.pipeline_status = nextStatus;
   try {
     await supabase.from('crm_leads').update({ pipeline_status: nextStatus }).eq('id', leadId);
+    
+    // Se inviamo il preventivo e il lead è associato a un provider, creiamo una prenotazione nella dashboard del partner
+    if (nextStatus === 'quote_sent' && lead.provider_id) {
+       const newBooking = {
+          provider_id: lead.provider_id,
+          vehicle_id: lead.interested_vehicle_id,
+          external_booking_ref: lead.id,
+          client_name: `${lead.first_name || ''} ${lead.last_name || ''}`.trim() || 'Cliente NLT/NBT',
+          client_phone: lead.phone || 'Non specificato',
+          client_email: lead.email || 'Non specificata',
+          vehicle_name: lead.car_name || 'Vettura non specificata',
+          total_price: lead.monthly_price || 0,
+          status: 'pending',
+          rental_days: 1
+       };
+       await supabase.from('bookings').insert([newBooking]);
+    }
+
   } catch(e) {
     console.warn("Errore update lead status:", e);
   }
@@ -526,7 +546,7 @@ function renderVehiclesTable(vehicles) {
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">${v.transmission || 'Automatico 8M'}</small>
         </td>
         <td>
-          <strong style="color: var(--accent-green); font-size: 1.08rem; display: block; line-height: 1.2;">€ ${Number(v.daily_price || 0).toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: #fff;">/m</small></strong>
+          <strong style="color: var(--accent-green); font-size: 1.08rem; display: block; line-height: 1.2;">${v.is_nlt ? `€ ${Number((v.specs && v.specs.monthly_price) || v.daily_price || 0).toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: #fff;">/m</small>` : `€ ${Number(v.daily_price || 0).toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: #fff;">/g</small>`}</strong>
           <small style="color: var(--text-muted); display: block; margin-top: 2px;">Cauzione €${Number(v.deposit || 0).toLocaleString('it-IT')}</small>
         </td>
         <td>
@@ -908,11 +928,15 @@ async function handleVehicleFormSubmit(event) {
 function saveVehicleRecord(e) { handleVehicleFormSubmit(e); }
 
 async function deleteVehicleRecord(vehicleId) {
-  const v = CurrentVehicles.find(x => x.id === vehicleId);
-  if (!v) return;
-  if (!confirm(`Confermi l'eliminazione definitiva della vettura "${v.brand || ''} ${v.model || v.name || ''}" e di tutte le offerte associate?`)) return;
-
   try {
+    alert("Avvio eliminazione veicolo: " + vehicleId);
+    const v = CurrentVehicles.find(x => x.id === vehicleId);
+    if (!v) {
+      alert("Errore: Veicolo non trovato in memoria!");
+      return;
+    }
+    if (!confirm(`Confermi l'eliminazione definitiva della vettura "${v.brand || ''} ${v.model || v.name || ''}" e di tutte le offerte associate?`)) return;
+
     // 1. Eliminiamo prima preventivamente tutte le tabelle dipendenti (FK) per evitare errori "violates foreign key constraint"
     await supabase.from('nlt_offers').delete().eq('vehicle_id', vehicleId);
     await supabase.from('nbt_offers').delete().eq('vehicle_id', vehicleId);
@@ -2647,9 +2671,9 @@ async function loadFleetApprovalTable() {
     if (provRes && provRes.data) allProviders = provRes.data;
 
     try {
-      let jobsRes = await supabase.from('import_jobs').select('*').order('created_at', { ascending: false });
+      let jobsRes = await supabase.from('import_jobs').select('*').order('imported_at', { ascending: false });
       if (jobsRes.error) {
-        jobsRes = await supabase.from('import_jobs').select('id, provider_id, file_name, status, total_rows, created_at').order('created_at', { ascending: false });
+        jobsRes = await supabase.from('import_jobs').select('id, provider_id, file_name, status, total_rows_processed, imported_at').order('imported_at', { ascending: false });
       }
       if (jobsRes && jobsRes.data) allJobs = jobsRes.data;
     } catch(eJ) { console.warn("Errore fetch import_jobs:", eJ); }
@@ -2670,7 +2694,17 @@ async function loadFleetApprovalTable() {
       return isPendingStatus || isInactiveNotRejected;
     });
 
-    const pendingJobs = (window._allJobsCache || []).filter(j => j.status === 'pending_approval' || j.status === 'processing_by_direzione' || !j.status);
+    const pendingJobsIds = new Set();
+    list.forEach(v => {
+        if (v.import_job_id) pendingJobsIds.add(v.import_job_id);
+    });
+
+    const pendingJobs = (window._allJobsCache || []).filter(j => 
+      j.status === 'pending_approval' || 
+      j.status === 'processing_by_direzione' || 
+      !j.status ||
+      pendingJobsIds.has(j.id)
+    );
 
     if (badge) badge.textContent = list.length + pendingJobs.length;
 
@@ -2710,12 +2744,25 @@ async function loadFleetApprovalTable() {
       `;
     }
 
+    // Raggruppiamo i veicoli per import_job_id
+    const vehiclesByJob = {};
+    const standaloneVehicles = [];
+    
+    list.forEach(v => {
+      if (v.import_job_id) {
+        if (!vehiclesByJob[v.import_job_id]) vehiclesByJob[v.import_job_id] = [];
+        vehiclesByJob[v.import_job_id].push(v);
+      } else {
+        standaloneVehicles.push(v);
+      }
+    });
+
     // 1. Rendiamo innanzitutto i file Excel/PDF originali inviati dai partner (import_jobs in attesa)
     pendingJobs.forEach(job => {
       const prov = allProviders.find(p => p.id === job.provider_id);
       const partnerName = prov ? prov.name : 'Noleggiatore Partner';
       const partnerVat = prov ? (prov.company_vat ? `P.IVA: ${prov.company_vat}` : `Codice: ${prov.code || ''}`) : `ID: ${(job.provider_id || '').substring(0,8)}`;
-      const timeStr = job.created_at ? new Date(job.created_at).toLocaleString('it-IT') : 'Oggi';
+      const timeStr = job.imported_at ? new Date(job.imported_at).toLocaleString('it-IT') : 'Oggi';
 
       tbody.innerHTML += `
         <tr style="background: rgba(245, 158, 11, 0.04); border-left: 3px solid var(--accent-gold);">
@@ -2757,6 +2804,9 @@ async function loadFleetApprovalTable() {
               <button onclick="downloadVehiclePartnerFile(null, '${job.provider_id || ''}', '${job.id}')" class="btn-header btn-header-primary" style="width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500;" title="Scarica il file Excel o PDF autentico sul PC">
                 <i class="ri-download-cloud-2-line" style="font-size: 0.95rem;"></i> SCARICA
               </button>
+              <button onclick="sendToAntigravity('${job.id}')" class="btn-header" style="background: linear-gradient(135deg, #8b5cf6, #d946ef); color: #fff; width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 700;" title="Invia ad Antigravity per elaborazione automatica">
+                <i class="ri-robot-line" style="font-size: 0.95rem;"></i> INVIA AD ANTIGRAVITY
+              </button>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; box-sizing: border-box;">
                 <button onclick="approveImportJob('${job.id}')" class="btn-header btn-header-green" style="width: 100%; box-sizing: border-box; font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Acconsenti e delibera il file">
                   <i class="ri-check-line" style="font-size: 0.9rem;"></i> OK
@@ -2769,15 +2819,52 @@ async function loadFleetApprovalTable() {
           </td>
         </tr>
       `;
+
+      const jobVehicles = vehiclesByJob[job.id] || [];
+      if (jobVehicles.length > 0) {
+        let carsHtml = jobVehicles.map(v => `
+          <div style="background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; position: relative;">
+            <img src="${v.image_url || 'logo_tricolore.png'}" style="width: 100%; height: 110px; object-fit: cover; border-bottom: 1px solid rgba(255,255,255,0.1);" onerror="this.src='logo-text.png'" />
+            <div style="padding: 8px; text-align: center;">
+               <strong style="color: #fff; font-size: 0.75rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${v.brand || ''} ${v.model || v.name || ''}">${v.brand || ''} ${v.model || v.name || ''}</strong>
+               <span style="color: var(--accent-gold); font-size: 0.75rem; font-weight: bold;">${v.is_nlt ? `€${Number((v.specs && v.specs.monthly_price) || v.daily_price || 0).toLocaleString('it-IT')} /mese` : `€${Number(v.daily_price || 0).toLocaleString('it-IT')} /giorno`}</span>
+            </div>
+            <div style="position: absolute; top: 4px; right: 4px; display: flex; gap: 4px;">
+              <div style="background: rgba(0,0,0,0.6); padding: 2px 4px; border-radius: 4px;" title="Modifica vettura" onclick="openVehicleEditModal('${v.id}')">
+                 <i class="ri-edit-line" style="color: #60a5fa; font-size: 0.8rem; cursor: pointer;"></i>
+              </div>
+              <div style="background: rgba(0,0,0,0.6); padding: 2px 4px; border-radius: 4px;" title="Rifiuta singola vettura" onclick="rejectPartnerVehicle('${v.id}')">
+                 <i class="ri-delete-bin-line" style="color: #ef4444; font-size: 0.8rem; cursor: pointer;"></i>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        tbody.innerHTML += `
+          <tr style="background: rgba(0,0,0,0.25);">
+            <td colspan="5" style="padding: 16px 24px; border-bottom: 2px solid rgba(255,255,255,0.08);">
+               <h4 style="color: #fff; font-size: 0.9rem; margin: 0 0 12px 0;"><i class="ri-robot-2-line" style="color: var(--accent-gold);"></i> Vetture elaborate pronte per l'approvazione:</h4>
+               <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;">
+                 ${carsHtml}
+               </div>
+            </td>
+            <td style="vertical-align: middle; padding: 16px; border-bottom: 2px solid rgba(255,255,255,0.08); text-align: center; border-left: 1px solid rgba(255,255,255,0.05);">
+               <button onclick="approveImportJob('${job.id}')" class="btn-header btn-header-green" style="width: 100%; font-size: 0.8rem; padding: 12px 8px; font-weight: bold; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+                 <i class="ri-check-double-fill" style="font-size: 1.5rem;"></i>
+                 APPROVA<br>TUTTO
+               </button>
+            </td>
+          </tr>
+        `;
+      }
     });
 
-    // 2. Rendiamo le singole schede veicolo/dossier in attesa
-    list.forEach(v => {
+    // 2. Rendiamo eventuali schede veicolo isolate (senza job associato)
+    standaloneVehicles.forEach(v => {
       const prov = allProviders.find(p => p.id === v.provider_id);
       const partnerName = prov ? prov.name : 'Noleggiatore Partner';
       const partnerVat = prov ? (prov.company_vat ? `P.IVA: ${prov.company_vat}` : `Codice: ${prov.code || prov.id.substring(0,8)}`) : `Provider ID: ${(v.provider_id || 'Locale').substring(0,8)}`;
       const title = `${v.brand || ''} ${v.model || v.name || 'Auto Esclusiva'}`.trim();
-      const photoBadge = `<span style="font-size: 0.68rem; color: var(--text-muted); background: rgba(255,255,255,0.06); padding: 3px 7px; border-radius: 4px;"><i class="ri-file-list-line"></i> Scheda Vettura</span>`;
       const desc = (v.specs && v.specs.description) ? v.specs.description : `Allestimento ${v.trim || 'Top'} con motore ${v.fuel_type || 'Ibrido'} ${v.transmission || 'Automatico'}.`;
 
       tbody.innerHTML += `
@@ -2798,9 +2885,6 @@ async function loadFleetApprovalTable() {
               <img src="${v.image_url || 'logo_tricolore.png'}" alt="${title}" style="width: 52px; height: 34px; object-fit: cover; border-radius: 5px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.4); flex-shrink: 0;" onerror="this.src='logo-text.png'" />
               <div style="min-width: 0; flex: 1;">
                 <strong style="color: #fff; font-size: 0.84rem; display: block; margin-bottom: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${title}</strong>
-                <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
-                  <span style="font-size: 0.70rem; color: #cbd5e1; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${v.trim || 'Executive'}</span>
-                </div>
               </div>
             </div>
           </td>
@@ -2808,7 +2892,7 @@ async function loadFleetApprovalTable() {
             <p style="font-size: 0.74rem; color: #888888; line-height: 1.3; margin: 0 0 4px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; word-wrap: break-word;">
               ${desc}
             </p>
-            <strong style="color: var(--accent-gold); font-size: 0.76rem;">€ ${Number(v.daily_price || 0).toLocaleString('it-IT')} /giorno <small style="color:#cbd5e1; font-weight:normal;">• Cauzione €${Number(v.deposit || 1500).toLocaleString('it-IT')}</small></strong>
+            <strong style="color: var(--accent-gold); font-size: 0.76rem;">${v.is_nlt ? `€${Number((v.specs && v.specs.monthly_price) || v.daily_price || 0).toLocaleString('it-IT')} /mese` : `€${Number(v.daily_price || 0).toLocaleString('it-IT')} /giorno`} <small style="color:#cbd5e1; font-weight:normal;">• Cauzione €${Number(v.deposit || 1500).toLocaleString('it-IT')}</small></strong>
           </td>
           <td style="vertical-align: middle; width: 10%; padding: 8px 4px; text-align: center; box-sizing: border-box;">
             <span style="font-size: 0.68rem; background: rgba(245, 158, 11, 0.18); color: #ffffff; border: 1px solid rgba(245, 158, 11, 0.4); padding: 3px 5px; border-radius: 4px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center; gap: 3px; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -2817,12 +2901,18 @@ async function loadFleetApprovalTable() {
           </td>
           <td style="text-align: right; vertical-align: middle; width: 24%; padding: 8px 6px; box-sizing: border-box;">
             <div style="display: flex; flex-direction: column; gap: 4px; width: 100%; max-width: 100%; margin-left: auto; background: rgba(0,0,0,0.35); padding: 5px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); box-sizing: border-box;">
-              <button onclick="downloadVehiclePartnerFile('${v.id}', '${v.provider_id || ''}', '${v.import_job_id || ''}')" class="btn-header btn-header-primary" style="width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500;" title="Scarica il file Excel o la scheda di questa auto">
+              <button onclick="downloadVehiclePartnerFile('${v.id}', '${v.provider_id || ''}', null)" class="btn-header btn-header-primary" style="width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 500;" title="Scarica il file Excel o la scheda di questa auto">
                 <i class="ri-download-cloud-2-line" style="font-size: 0.95rem;"></i> SCARICA
               </button>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px; width: 100%; box-sizing: border-box;">
+              <button onclick="sendToAntigravity(null)" class="btn-header" style="background: linear-gradient(135deg, #8b5cf6, #d946ef); color: #fff; width: 100%; box-sizing: border-box; font-size: 0.72rem; padding: 6px 6px; border: none; display: inline-flex; align-items: center; justify-content: center; gap: 4px; font-weight: 700;" title="Invia ad Antigravity per elaborazione automatica">
+                <i class="ri-robot-line" style="font-size: 0.95rem;"></i> INVIA AD ANTIGRAVITY
+              </button>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; width: 100%; box-sizing: border-box;">
                 <button onclick="approvePartnerVehicle('${v.id}')" class="btn-header btn-header-green" style="width: 100%; box-sizing: border-box; font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Acconsenti e Pubblica sul Sito">
                   <i class="ri-check-line" style="font-size: 0.9rem;"></i> OK
+                </button>
+                <button onclick="openVehicleEditModal('${v.id}')" class="btn-header btn-header-primary" style="width: 100%; box-sizing: border-box; font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Modifica Vettura">
+                  <i class="ri-edit-line" style="font-size: 0.9rem;"></i> MODIFICA
                 </button>
                 <button onclick="rejectPartnerVehicle('${v.id}')" class="btn-header btn-header-outline" style="width: 100%; box-sizing: border-box; color: #ff3333; border-color: rgba(255,51,51,0.5); font-size: 0.68rem; padding: 5px 2px; display: inline-flex; align-items: center; justify-content: center; gap: 3px; font-weight: 500;" title="Rifiuta e Non Consentire">
                   <i class="ri-close-line" style="font-size: 0.9rem;"></i> RIFIUTA
@@ -2848,6 +2938,26 @@ async function approveAllPendingPartnerVehicles() {
       const { data } = await supabase.from('import_jobs').select('id').eq('status', 'pending_approval');
       pendingJobs = data || [];
       
+      const { data: pendingVehs } = await supabase.from('vehicles').select('id, is_nlt, provider_id, specs, daily_price').eq('status', 'pending_approval');
+      if (pendingVehs && pendingVehs.length > 0) {
+        for (const fullV of pendingVehs) {
+          if (fullV.is_nlt) {
+            const { data: existingNlt } = await supabase.from('nlt_offers').select('id').eq('vehicle_id', fullV.id);
+            if (!existingNlt || existingNlt.length === 0) {
+               await supabase.from('nlt_offers').insert({ vehicle_id: fullV.id, provider_id: fullV.provider_id, is_active: true, monthly_price: (fullV.specs && fullV.specs.monthly_price) ? fullV.specs.monthly_price : (fullV.daily_price || 0) });
+            } else {
+               await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', fullV.id);
+            }
+          } else {
+            const { data: existingNbt } = await supabase.from('nbt_offers').select('id').eq('vehicle_id', fullV.id);
+            if (!existingNbt || existingNbt.length === 0) {
+               await supabase.from('nbt_offers').insert({ vehicle_id: fullV.id, provider_id: fullV.provider_id, is_active: true, daily_price: fullV.daily_price || 0 });
+            } else {
+               await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', fullV.id);
+            }
+          }
+        }
+      }
       await supabase.from('vehicles').update({ status: 'approved', is_active: true, is_available: true, approval_date: new Date().toISOString() }).eq('status', 'pending_approval');
       await supabase.from('import_jobs').update({ status: 'completed' }).eq('status', 'pending_approval');
       await supabase.from('nlt_offers').update({ is_active: true }).eq('is_active', false);
@@ -2879,8 +2989,24 @@ async function approveImportJob(jobId) {
       const { data: jobVehs } = await supabase.from('vehicles').update({ status: 'approved', is_active: true, is_available: true }).eq('import_job_id', jobId).select('id');
       if (jobVehs && jobVehs.length > 0) {
         for (const jv of jobVehs) {
-          await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', jv.id);
-          await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', jv.id);
+          const fullV = window._allVehiclesCache.find(v => v.id === jv.id);
+          if (fullV) {
+            if (fullV.is_nlt) {
+              const { data: existingNlt } = await supabase.from('nlt_offers').select('id').eq('vehicle_id', jv.id);
+              if (!existingNlt || existingNlt.length === 0) {
+                 await supabase.from('nlt_offers').insert({ vehicle_id: jv.id, provider_id: fullV.provider_id, is_active: true, monthly_price: (fullV.specs && fullV.specs.monthly_price) ? fullV.specs.monthly_price : (fullV.daily_price || 0) });
+              } else {
+                 await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', jv.id);
+              }
+            } else {
+              const { data: existingNbt } = await supabase.from('nbt_offers').select('id').eq('vehicle_id', jv.id);
+              if (!existingNbt || existingNbt.length === 0) {
+                 await supabase.from('nbt_offers').insert({ vehicle_id: jv.id, provider_id: fullV.provider_id, is_active: true, daily_price: fullV.daily_price || 0 });
+              } else {
+                 await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', jv.id);
+              }
+            }
+          }
         }
       } else {
         await supabase.from('nlt_offers').update({ is_active: true }).eq('is_active', false);
@@ -2889,6 +3015,7 @@ async function approveImportJob(jobId) {
     }
     alert("Avvio email singola per job: " + jobId);
     await sendAutomatedPartnerEmail(jobId);
+    await loadAllCrmData();
     loadFleetApprovalTable();
   } catch(e) { console.warn("Errore approvazione file job:", e); }
 }
@@ -2902,6 +3029,17 @@ async function rejectImportJob(jobId) {
     }
     loadFleetApprovalTable();
   } catch(e) { console.warn("Errore rifiuto file job:", e); }
+}
+
+async function sendToAntigravity(jobId) {
+  if (!confirm("Vuoi inviare questo file ad Antigravity per l'elaborazione automatica delle auto?")) return;
+  try {
+    if (typeof supabase !== 'undefined') {
+      await supabase.from('import_jobs').update({ status: 'processing_by_ai' }).eq('id', jobId);
+    }
+    alert("Pratica inviata con successo! Scrivi ad Antigravity nella chat per far elaborare i file.");
+    loadFleetApprovalTable();
+  } catch(e) { console.warn("Errore invio ad Antigravity:", e); }
 }
 
 async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
@@ -3027,10 +3165,26 @@ async function approvePartnerVehicle(vehicleId) {
       .eq('id', vehicleId);
 
     if (errVeh) throw errVeh;
+// 2. Aggiorniamo o creiamo le offerte collegate
 
-    // 2. Aggiorniamo le offerte collegate in nlt_offers e nbt_offers per renderle live
-    await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
-    await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
+    const fullV = window._allVehiclesCache.find(v => v.id === vehicleId);
+    if (fullV) {
+      if (fullV.is_nlt) {
+        const { data: existingNlt } = await supabase.from('nlt_offers').select('id').eq('vehicle_id', vehicleId);
+        if (!existingNlt || existingNlt.length === 0) {
+           await supabase.from('nlt_offers').insert({ vehicle_id: vehicleId, provider_id: fullV.provider_id, is_active: true, monthly_price: (fullV.specs && fullV.specs.monthly_price) ? fullV.specs.monthly_price : (fullV.daily_price || 0) });
+        } else {
+           await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
+        }
+      } else {
+        const { data: existingNbt } = await supabase.from('nbt_offers').select('id').eq('vehicle_id', vehicleId);
+        if (!existingNbt || existingNbt.length === 0) {
+           await supabase.from('nbt_offers').insert({ vehicle_id: vehicleId, provider_id: fullV.provider_id, is_active: true, daily_price: fullV.daily_price || 0 });
+        } else {
+           await supabase.from('nbt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
+        }
+      }
+    }
 
     alert(" VEICOLO ACCONSENTITO E PUBBLICATO CON SUCCESSO!\nL'auto è ora ufficialmente LIVE e visibile ai clienti sul sito web principale e nei comparatori NLT/NBT.");
     await loadAllCrmData();
@@ -3288,7 +3442,7 @@ async function loadActivePartnersTab() {
       tbody.innerHTML += `
         <tr>
           <td><strong style="color: #fff;">${p.name || p.company_name || 'N.D.'}</strong><br><small style="color: var(--text-muted); font-family: monospace;">${p.code || 'N.D.'}</small></td>
-          <td><div>${p.contact_email || p.partner_email || p.email || 'N.D.'}</div><small style="color: var(--text-muted);">${p.company_phone || p.phone || 'N.D.'}</small></td>
+          <td><div>${p.contact_email || p.partner_email || p.email || 'N.D.'}</div><small style="color: var(--text-muted);">${p.contact_phone || p.company_phone || p.phone || 'N.D.'}</small></td>
           <td><span style="color: var(--accent-purple); font-weight: 700;">${p.saas_plan || 'Pro'}</span></td>
           <td>${p.company_vat || p.vat_number || 'N.D.'}</td>
           <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px;">${actualFleetCount} Auto</span></td>
@@ -3413,34 +3567,33 @@ async function sendAutomatedPartnerEmail(jobId) {
       return;
     }
     
-    // Simula l'invio della mail tramite un webhook o un servizio come SendGrid/EmailJS
     console.log(`[EMAIL SYSTEM] Preparazione invio email a ${partnerEmail}...`);
     
-    const linkFlotta = `${window.location.origin}/noleggio-breve-termine.html`;
+    const { data: { session } } = await supabase.auth.getSession();
+    const token = session?.access_token;
     
-    const emailBody = `
-Gentile ${partnerName},
-
-Ti confermiamo che il file della tua flotta è stato elaborato e approvato con successo dalla Direzione Centrale ITERCARS.
-Tutte le tue vetture sono ora attive e pubblicate ufficialmente sulla nostra piattaforma.
-
-Puoi visionare la tua flotta online cliccando su questo link:
-${linkFlotta}
-
-Grazie per la collaborazione.
-Il Team ITERCARS
-    `;
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/accettazione_azienda`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token || SUPABASE_ANON_KEY}`
+      },
+      body: JSON.stringify({
+        email: partnerEmail,
+        nomeAzienda: partnerName
+      })
+    });
     
-    // Mostra la notifica visiva nella console di amministrazione
-    alert(`AUTOMAZIONE MAIL:
-Un'email di conferma è stata inviata al Mandante: ${partnerName}
-Indirizzo: ${partnerEmail}
-Contenuto: La tua flotta è stata approvata e pubblicata.`);
+    if (!res.ok) {
+      throw new Error(`Errore HTTP: ${res.status}`);
+    }
     
+    alert(`AUTOMAZIONE MAIL: Un'email di conferma ufficiale è stata inviata al Mandante: ${partnerName} (${partnerEmail}) tramite la funzione accettazione_azienda.`);
     console.log("[EMAIL SYSTEM] Email inviata con successo!");
     
   } catch(err) {
     console.error("Errore durante l'invio dell'email automatica:", err);
+    alert(`Errore nell'invio dell'email automatica. Assicurati che la function 'accettazione_azienda' sia deployata.`);
   }
 }
 
@@ -3456,4 +3609,130 @@ function toggleMobileSidebar() {
   if (overlay) {
     overlay.classList.toggle('active');
   }
+}
+
+
+/* ==========================================================================
+   EDIT VEICOLO IN APPROVAZIONE
+   ========================================================================== */
+function openVehicleEditModal(vehicleId) {
+  if (!window._allVehiclesCache) return;
+  const v = window._allVehiclesCache.find(x => x.id === vehicleId);
+  if (!v) return;
+
+  document.getElementById('editVehicleId').textContent = '#' + vehicleId.substring(0,6);
+  document.getElementById('editVehicleId').dataset.id = vehicleId;
+
+  document.getElementById('editVehicleImage').value = v.image_url || '';
+  document.getElementById('editVehicleBrand').value = v.brand || '';
+  document.getElementById('editVehicleModel').value = v.model || v.name || '';
+  document.getElementById('editVehicleCategory').value = v.category || '';
+  
+  let price = v.daily_price || 0;
+  if (v.is_nlt && v.specs && v.specs.monthly_price) price = v.specs.monthly_price;
+  document.getElementById('editVehiclePrice').value = price;
+  document.getElementById('editVehicleDeposit').value = v.deposit || 0;
+
+  const modal = document.getElementById('vehicleEditModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('active'), 10);
+  }
+}
+
+function closeVehicleEditModal() {
+  const modal = document.getElementById('vehicleEditModal');
+  if (modal) {
+    modal.classList.remove('active');
+    setTimeout(() => modal.style.display = 'none', 300);
+  }
+}
+
+async function saveVehicleEdits() {
+  const vehicleId = document.getElementById('editVehicleId').dataset.id;
+  if (!vehicleId) return;
+
+  const v = window._allVehiclesCache.find(x => x.id === vehicleId);
+  if (!v) return;
+
+  const image_url = document.getElementById('editVehicleImage').value.trim();
+  const brand = document.getElementById('editVehicleBrand').value.trim();
+  const model = document.getElementById('editVehicleModel').value.trim();
+  const category = document.getElementById('editVehicleCategory').value.trim();
+  const price = Number(document.getElementById('editVehiclePrice').value) || 0;
+  const deposit = Number(document.getElementById('editVehicleDeposit').value) || 0;
+
+  try {
+    const updatePayload = {
+      image_url,
+      brand,
+      model,
+      name: brand + ' ' + model,
+      category,
+      deposit
+    };
+
+    if (v.is_nlt) {
+      const specs = v.specs || {};
+      specs.monthly_price = price;
+      updatePayload.specs = specs;
+      // Optionally update daily_price for consistency
+      updatePayload.daily_price = price; 
+    } else {
+      updatePayload.daily_price = price;
+    }
+
+    const { error } = await supabase.from('vehicles').update(updatePayload).eq('id', vehicleId);
+    if (error) throw error;
+
+    closeVehicleEditModal();
+    // Re-render the table
+    if (typeof loadFleetApprovalTable === 'function') {
+      loadFleetApprovalTable();
+    }
+    
+    // Also notify
+    alert('Veicolo aggiornato con successo! È ancora in attesa di approvazione finale.');
+
+  } catch(err) {
+    console.error('Errore salvataggio veicolo:', err);
+    alert('Errore durante il salvataggio: ' + err.message);
+  }
+}
+
+
+
+async function handleVehicleImageUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  
+  document.getElementById('editVehicleImage').value = 'Caricamento e compressione in corso...';
+  
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width;
+      let h = img.height;
+      if (w > 800) {
+        h = Math.round((800 / w) * h);
+        w = 800;
+      }
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+      
+      document.getElementById('editVehicleImage').value = dataUrl;
+      alert('Immagine compressa e pronta per il salvataggio!');
+    };
+    img.src = e.target.result;
+  };
+  reader.onerror = () => {
+    document.getElementById('editVehicleImage').value = '';
+    alert('Errore durante la lettura dell\'immagine.');
+  };
+  reader.readAsDataURL(file);
 }

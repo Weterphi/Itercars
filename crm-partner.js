@@ -196,12 +196,33 @@ async function loadPartnerDashboard() {
 
   await Promise.all([
     fetchPartnerVehicles(),
-    fetchPartnerBookings()
+    fetchPartnerBookings(),
+    fetchPartnerImportJobs()
   ]);
 
   renderPartnerVehiclesTable();
   renderPartnerBookingsKanban();
   updatePartnerKpis();
+}
+
+
+async function fetchPartnerImportJobs() {
+  if (!supabase || !CurrentPartner) return;
+  try {
+    const { data, error } = await supabase
+      .from('import_jobs')
+      .select('*')
+      .eq('provider_id', CurrentPartner.id)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      PartnerImportJobs = data;
+    } else {
+      PartnerImportJobs = [];
+    }
+  } catch(e) {
+    PartnerImportJobs = [];
+  }
 }
 
 async function fetchPartnerVehicles() {
@@ -267,23 +288,76 @@ function renderPartnerVehiclesTable() {
   if (!tbody) return;
 
   tbody.innerHTML = '';
-  if (PartnerVehicles.length === 0) {
-    tbody.innerHTML = `
+  
+  let pendingJob = null;
+  let rejectedJob = null;
+  if (typeof PartnerImportJobs !== 'undefined' && Array.isArray(PartnerImportJobs)) {
+    pendingJob = PartnerImportJobs.find(j => j.status === 'pending_approval' || j.status === 'processing_by_direzione' || !j.status);
+    rejectedJob = PartnerImportJobs.find(j => j.status === 'rejected');
+  }
+
+  let bannerHtml = '';
+  if (pendingJob) {
+    bannerHtml = `
       <tr>
-        <td colspan="6">
-          <div class="upload-dropzone" style="margin: 20px 0; padding: 32px;" onclick="switchPartnerTab('tab-import', document.querySelectorAll('.sidebar-item')[1])">
-            <i class="ri-upload-cloud-2-line" style="font-size: 2.4rem;"></i>
-            <h4>La tua flotta è vuota</h4>
-            <p style="margin-bottom: 0;">Clicca qui per caricare il tuo primo file Excel/CSV e generare foto studio AI in un click.</p>
+        <td colspan="6" style="padding: 0; border: none;">
+          <div class="glass-card" style="margin: 10px 0 24px 0; border: 1px dashed var(--accent-gold); background: rgba(212, 175, 55, 0.05); padding: 22px; border-radius: 0px; display: flex; align-items: center; gap: 18px; text-align: left; cursor: default;">
+            <i class="ri-time-line ri-spin" style="font-size: 2.8rem; color: var(--accent-gold); flex-shrink: 0;"></i>
+            <div>
+              <h4 style="margin: 0; color: var(--accent-gold); font-size: 1.15rem; font-weight: 700;">
+                FILE INVIATO CON SUCCESSO
+              </h4>
+              <p style="margin: 6px 0 0 0; color: #fff; font-size: 0.88rem; line-height: 1.45;">
+                In attesa di approvazione da parte della Direzione.
+              </p>
+            </div>
           </div>
         </td>
       </tr>
     `;
+  } else if (rejectedJob) {
+    bannerHtml = `
+      <tr>
+        <td colspan="6" style="padding: 0; border: none;">
+          <div class="glass-card" style="margin: 10px 0 24px 0; border: 1px dashed #ef4444; background: rgba(239, 68, 68, 0.05); padding: 22px; border-radius: 0px; display: flex; align-items: center; gap: 18px; text-align: left; cursor: pointer;" onclick="switchPartnerTab('tab-import', document.querySelectorAll('.sidebar-item')[1])">
+            <i class="ri-close-circle-line" style="font-size: 2.8rem; color: #ef4444; flex-shrink: 0;"></i>
+            <div>
+              <h4 style="margin: 0; color: #ef4444; font-size: 1.15rem; font-weight: 700;">
+                FILE RIFIUTATO
+              </h4>
+              <p style="margin: 6px 0 0 0; color: #fff; font-size: 0.88rem; line-height: 1.45;">
+                La tua flotta è stata rifiutata dalla Direzione. Clicca qui per ricaricare un nuovo file corretto.
+              </p>
+            </div>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  if (PartnerVehicles.length === 0) {
+    if (bannerHtml) {
+      tbody.innerHTML = bannerHtml;
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6">
+            <div class="upload-dropzone" style="margin: 20px 0; padding: 32px;" onclick="switchPartnerTab('tab-import', document.querySelectorAll('.sidebar-item')[1])">
+              <i class="ri-upload-cloud-2-line" style="font-size: 2.4rem;"></i>
+              <h4>La tua flotta è vuota</h4>
+              <p style="margin-bottom: 0;">Clicca qui per caricare il tuo primo file Excel/CSV.</p>
+            </div>
+          </td>
+        </tr>
+      `;
+    }
     return;
   }
 
+  tbody.innerHTML = bannerHtml;
+
   const hasPending = PartnerVehicles.some(v => v.status === 'pending_approval');
-  if (hasPending) {
+  if (hasPending && !pendingJob) {
     const prepBanner = `
       <tr>
         <td colspan="6" style="padding: 0; border: none;">
@@ -399,7 +473,6 @@ function renderPartnerVehiclesTable() {
     `;
   });
 }
-
 // TOGGLE SWITCH HANDLER (ZERO LATENZA - OPTIMISTIC UI UPDATE)
 async function togglePartnerVehicleStatus(vehicleId, newStatus) {
   const v = PartnerVehicles.find(x => x.id === vehicleId);
@@ -584,31 +657,7 @@ async function submitSelectedPartnerFile() {
       } else {
         addLog(` TRASMISSIONE COMPLETATA! Il file '${file.name}' inviato da '${CurrentPartner.name}' è arrivato alla Console Centrale.`, 'success');
         
-        // Creazione scheda dossier su vehicles in attesa di moderazione così appare immediatamente nella tabella di crm-admin.html
-        try {
-          const vehicleUUID = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
-          await supabase.from('vehicles').insert([{
-            id: vehicleUUID,
-            provider_id: CurrentPartner.id,
-            import_job_id: jobId,
-            brand: CurrentPartner.name || 'Mandante Partner',
-            model: `Dossier Excel: ${file.name}`,
-            trim: 'File in Esame',
-            name: `Flotta (${file.name})`,
-            category: 'Dossier Originale (Excel/PDF)',
-            daily_price: 350,
-            deposit: 2000,
-            rating: 5.0,
-            fuel_type: 'File Listino',
-            transmission: 'Download Excel',
-            image_url: 'logo_tricolore.png',
-            specs: { description: `DESTINAZIONE RICHIESTA: ${uploadCategory}. Dossier autentico '${file.name}' inviato da '${CurrentPartner.name}' il ${new Date().toLocaleString('it-IT')}. Clicca il pulsante SCARICA FILE qui a destra per consultare il file sul tuo computer.` },
-            badge: 'Nuovo File Flotta ',
-            status: 'pending_approval',
-            is_available: false,
-            is_active: false
-          }]);
-        } catch(eVeh) { console.warn("Dossier vehicle sync warn:", eVeh); }
+        // Ora il backend processa direttamente l'import_job_id, non serve più creare un veicolo fittizio per l'Excel.
 
         if (typeof loadPartnerImportsHistory === 'function') loadPartnerImportsHistory();
 
@@ -618,7 +667,13 @@ async function submitSelectedPartnerFile() {
         if (box) box.style.display = 'none';
 
         setTimeout(() => {
-          alert(` TRASMISSIONE COMPLETATA CON SUCCESSO!\n\nGentile Mandante (${CurrentPartner.name}),\nil file della tua flotta ('${file.name}') è stato inviato e recapitato alla Console Centrale della Direzione.\n\nStato Pratica:  IN VERIFICA PRESSO LA DIREZIONE\n\nAppena la Direzione acconsentirà, la tua flotta sarà pubblicata sul portale Itercars.`);
+          alert(`TRASMISSIONE COMPLETATA CON SUCCESSO!\n\nIl file della tua flotta ('${file.name}') è stato inviato in approvazione alla Direzione.`);
+          // Aggiungiamo un ritardo minimo per assicurarci che l'upload appaia nella history prima dello switch
+          setTimeout(async () => {
+            if (typeof fetchPartnerImportJobs === 'function') await fetchPartnerImportJobs();
+            renderPartnerVehiclesTable();
+            switchPartnerTab('tab-myfleet', document.querySelectorAll('.sidebar-item')[0]);
+          }, 100);
         }, 300);
       }
     } catch (errSync) {
@@ -785,6 +840,17 @@ async function advanceBookingStatus(bookingId, nextStatus) {
   if (supabase) {
     try {
       await supabase.from('bookings').update({ status: nextStatus }).eq('id', bookingId);
+      
+      // Sincronizza lo stato verso la CRM Admin se la prenotazione è collegata a un lead
+      if (bk && bk.external_booking_ref) {
+        let mappedLeadStatus = null;
+        if (nextStatus === 'confirmed') mappedLeadStatus = 'approved_by_provider';
+        else if (nextStatus === 'paid' || nextStatus === 'delivered' || nextStatus === 'closed') mappedLeadStatus = 'contract_signed';
+        
+        if (mappedLeadStatus) {
+          await supabase.from('crm_leads').update({ pipeline_status: mappedLeadStatus }).eq('id', bk.external_booking_ref);
+        }
+      }
     } catch(e) { console.warn("Errore update booking status:", e); }
   }
 }

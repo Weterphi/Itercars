@@ -49,127 +49,7 @@ const OFFICIAL_RATES = {
   }
 };
 
-const SAMPLE_DETAIL_OFFERS = [
-  {
-    id: 'bmw-s1',
-    brand: 'BMW',
-    model: 'Serie 1',
-    trim: '118d MSport Automatico',
-    category: 'Sportiva',
-    fuel: 'Diesel ⛽',
-    transmission: 'Automatico 8M',
-    image: 'bmw_serie_1_msport.webp',
-    hp: '150 CV',
-    speed: '216 km/h',
-    accel: '8.3s',
-    readyDelivery: true,
-    deliveryWeeks: 2,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-x1',
-    brand: 'BMW',
-    model: 'X1',
-    trim: 'sDrive18d xLine DCT',
-    category: 'SUV Luxury',
-    fuel: 'Diesel ⛽',
-    transmission: 'DCT 7M',
-    image: 'bmw_x1_xline.webp',
-    hp: '150 CV',
-    speed: '210 km/h',
-    accel: '8.9s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-s3t',
-    brand: 'BMW',
-    model: 'Serie 3 Touring',
-    trim: '320d xDrive MSport',
-    category: 'Sportiva',
-    fuel: 'Diesel Mild-Hybrid',
-    transmission: 'Steptronic 8M',
-    image: 'bmw_serie_3_touring.webp',
-    hp: '190 CV',
-    speed: '230 km/h',
-    accel: '7.1s',
-    readyDelivery: true,
-    deliveryWeeks: 2,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-x3',
-    brand: 'BMW',
-    model: 'X3',
-    trim: 'xDrive20d MSport Mild-Hybrid',
-    category: 'SUV Luxury',
-    fuel: 'Diesel Mild-Hybrid',
-    transmission: 'Steptronic xDrive',
-    image: 'bmw_x3_msport.webp',
-    hp: '190 CV',
-    speed: '213 km/h',
-    accel: '7.9s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-s5',
-    brand: 'BMW',
-    model: 'Serie 5',
-    trim: '520d Mild Hybrid Eccelsa',
-    category: 'Supercar',
-    fuel: 'Diesel Mild-Hybrid',
-    transmission: 'Steptronic 8M',
-    image: 'bmw_serie_5_eccelsa.webp',
-    hp: '197 CV',
-    speed: '233 km/h',
-    accel: '7.3s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-x5',
-    brand: 'BMW',
-    model: 'X5',
-    trim: 'xDrive30d MSport MHEV',
-    category: 'SUV Luxury',
-    fuel: 'Diesel MHEV',
-    transmission: 'Steptronic Sport xDrive',
-    image: 'bmw_x5_msport.webp',
-    hp: '298 CV',
-    speed: '233 km/h',
-    accel: '6.1s',
-    readyDelivery: true,
-    deliveryWeeks: 2,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  },
-  {
-    id: 'bmw-i4',
-    brand: 'BMW',
-    model: 'i4 Gran Coupé',
-    trim: 'eDrive40 Sport Elettrica',
-    category: 'Supercar',
-    fuel: 'Elettrico',
-    transmission: 'Automatico Single Speed',
-    image: 'bmw_i4_grancoupe.webp',
-    hp: '340 CV',
-    speed: '190 km/h',
-    accel: '5.7s',
-    readyDelivery: true,
-    deliveryWeeks: 3,
-    providerName: 'Mandante Ufficiale BMW',
-    baseDuration: 36,
-  }
-];
+const SAMPLE_DETAIL_OFFERS = [];
 
 // Stato della configurazione attiva per l'auto corrente
 const ConfigState = {
@@ -185,20 +65,41 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   let carId = params.get('id') || 'bmw-x3-48-3k';
   const paramModel = params.get('model');
-  
+  const paramBrand = params.get('brand');
+  const paramImg = params.get('img');
+  const paramTrim = params.get('trim');
+
+  // Eager load per velocizzare il sito (Zero-Layout-Shift)
+  if (paramImg) {
+    const imgEl = document.getElementById('detailMainImg');
+    if (imgEl) imgEl.src = paramImg;
+  }
+  if (paramBrand) {
+    const brandEl = document.getElementById('detailBrand');
+    if (brandEl) brandEl.innerText = paramBrand;
+  }
+  if (paramModel) {
+    const modelEl = document.getElementById('detailModel');
+    if (modelEl) modelEl.innerText = paramModel;
+  }
+  if (paramTrim) {
+    const trimEl = document.getElementById('detailTrim');
+    if (trimEl) trimEl.innerText = paramTrim;
+  }
+
   let found = null;
   // 1. Tenta da cache locale salvata da nbt-app.js (cerca per id, vehicle_id o model esatto)
   try {
     const cached = JSON.parse(localStorage.getItem('itercars_nbt_cache') || '[]');
     found = cached.find(o => String(o.id) === String(carId) || String(o.vehicle_id) === String(carId) || (paramModel && String(o.model).toLowerCase() === String(paramModel).toLowerCase()));
-  } catch(e) {}
+  } catch (e) { }
 
   // 2. Cerca live sul DB se connesso a Supabase (dando priorità al dato live aggiornato dal partner)
   if (typeof window.supabase !== 'undefined' && window.supabase) {
     try {
       const selectFields = `
-        id, provider_offer_code, duration_months, km_per_year, deposit_mandante, deposit_required, daily_price, client_monthly_price, is_ready_delivery, delivery_weeks, services_included,
-        vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit),
+        *,
+        vehicles (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, daily_price, deposit, provider_id),
         providers (name)
       `;
       let { data, error } = await window.supabase
@@ -206,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         .select(selectFields)
         .eq('id', carId)
         .maybeSingle();
-        
+
       if (!data) {
         const res = await window.supabase
           .from('nbt_offers')
@@ -215,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           .maybeSingle();
         if (res.data) data = res.data;
       }
-        
+
       let vDb = (data && data.vehicles) ? data.vehicles : null;
       if (!vDb && carId) {
         const resVeh = await window.supabase
@@ -256,6 +157,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           deliveryWeeks: specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : ((data && data.delivery_weeks !== undefined) ? Number(data.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 1)),
           deliveryDate: specsObj.delivery_date || v.delivery_date || (data && data.delivery_date) || '',
           providerName: (data && data.providers && data.providers.name) ? data.providers.name : (v.providerName || 'Mandante NBT'),
+          provider_id: v.provider_id || (data && data.provider_id ? data.provider_id : null),
           nbtDailyPrice: dailyP,
           basePrice: (data && Number(data.client_monthly_price)) || Math.round(dailyP * 20) || 699,
           baseDuration: 7,
@@ -263,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           baseDeposit: depositP
         };
       }
-    } catch(err) {
+    } catch (err) {
       console.warn("Dettaglio live da DB non raggiungibile, fallback in corso.");
     }
   }
@@ -299,7 +201,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (!found && SAMPLE_DETAIL_OFFERS.length > 0) found = SAMPLE_DETAIL_OFFERS[0];
-  
+
   if (found) {
     if (found.basePrice === undefined && found.baseOffer?.monthlyPrice !== undefined) found.basePrice = Number(found.baseOffer.monthlyPrice);
     if (found.baseDuration === undefined && found.baseOffer?.duration !== undefined) found.baseDuration = Number(found.baseOffer.duration);
@@ -311,7 +213,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ConfigState.kmDailyLimit = (found.baseKm && found.baseKm <= 500) ? found.baseKm : 150;
     ConfigState.depositAmount = found.baseDeposit !== undefined ? found.baseDeposit : 3000;
   }
-  
+
   renderCarDetails();
   calculateAndRenderPrice();
 });
@@ -319,32 +221,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 function renderCarDetails() {
   const c = ConfigState.car;
   if (!c) return;
-  
+
   document.title = `${c.brand} ${c.model} (${c.trim}) — Configura NBT | ITERCARS`;
-  
+
   // Breadcrumb & Titoli
   const breadcrumb = document.getElementById('nltBreadcrumb');
   if (breadcrumb) {
     breadcrumb.innerHTML = `<a href="noleggio-breve-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NBT</a> <i class="ri-arrow-right-s-line"></i> <span>${c.brand}</span> <i class="ri-arrow-right-s-line"></i> <strong>${c.model}</strong>`;
   }
-  
+
   const brandElem = document.getElementById('detailBrand');
   const modelElem = document.getElementById('detailModel');
   const trimElem = document.getElementById('detailTrim');
   const providerElem = document.getElementById('detailProvider');
   const imgElem = document.getElementById('detailMainImg');
-  
+
   if (brandElem) brandElem.textContent = c.brand;
   if (modelElem) modelElem.textContent = c.model;
   if (trimElem) trimElem.textContent = c.trim;
   if (providerElem) providerElem.innerHTML = `<i class="ri-shield-star-fill text-green"></i> Listino Mandante: <strong>${c.providerName}</strong>`;
   if (imgElem) imgElem.src = c.image;
-  
+
   const badgeContainer = document.getElementById('detailBadgeContainer');
   if (badgeContainer) {
     if (c.deliveryDate && c.deliveryDate !== '') {
       let fDate = c.deliveryDate;
-      try { const p = c.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+      try { const p = c.deliveryDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch (e) { }
       badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
     } else if (c.readyDelivery && (c.deliveryWeeks === 1 || c.deliveryWeeks <= 1)) {
       badgeContainer.innerHTML = `<span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
@@ -367,7 +269,7 @@ function renderCarDetails() {
   if (hpEl) hpEl.textContent = c.hp;
   if (fuelEl) fuelEl.textContent = c.fuel;
   if (transEl) transEl.textContent = c.transmission;
-  
+
   // Sincronizza i selettori attivi nella GUI
   syncActiveButtons('configDurationGroup', ConfigState.durationDays);
   syncActiveButtons('configKmGroup', ConfigState.kmDailyLimit);
@@ -407,7 +309,7 @@ function setConfigDuration(days, btnElem) {
   if (btnElem) {
     btnElem.parentElement.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
     btnElem.classList.add('active');
-    
+
     const customInput = document.getElementById('customDurationInput');
     if (customInput) customInput.value = ''; // clear custom input
   }
@@ -419,15 +321,15 @@ function setConfigDuration(days, btnElem) {
 function handleCustomDuration(val) {
   let days = parseInt(val);
   if (isNaN(days) || days <= 0) return;
-  
+
   ConfigState.durationDays = days;
-  
+
   // deselect preset buttons
   const group = document.getElementById('configDurationGroup');
   if (group) {
     group.querySelectorAll('.config-option-btn').forEach(b => b.classList.remove('active'));
   }
-  
+
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
   calculateAndRenderPrice();
@@ -501,18 +403,18 @@ function calculateAndRenderPrice() {
 
   // Calcolo prezzo per i giorni selezionati
   let price = baseDailyPrice * ConfigState.durationDays;
-  
+
   if (ConfigState.kmDailyLimit === 100) {
-      price *= 0.9;
+    price *= 0.9;
   } else if (ConfigState.kmDailyLimit === 200) {
-      price *= 1.15;
+    price *= 1.15;
   } else if (ConfigState.kmDailyLimit === 99999) {
-      price *= 1.4;
+    price *= 1.4;
   }
 
   // Aggiustamento in base al deposito (es. sconto giornaliero se deposito alto)
   // Per ora manteniamo il prezzo base, ma possiamo fare logiche avanzate.
-  
+
   // Supplemento Kasko Franchigia Zero (+ € 15 / giorno)
   if (ConfigState.kaskoFranchigia === 'zero') {
     price += 15.00 * ConfigState.durationDays;
@@ -522,7 +424,7 @@ function calculateAndRenderPrice() {
   price = price * BROKER_MARGIN;
 
   ConfigState.finalMonthlyPrice = Math.round(price); // usiamo la stessa variabile per compatibilità col PDF
-  
+
   const priceDisplay = document.getElementById('liveMonthlyPrice');
   const summaryDisplay = document.getElementById('liveConfigSummary');
   const boxElem = document.getElementById('livePriceBox');
@@ -533,7 +435,7 @@ function calculateAndRenderPrice() {
     setTimeout(() => {
       priceDisplay.innerHTML = `€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')} <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Totale</small>`;
       summaryDisplay.innerHTML = `<strong>${ConfigState.durationDays} Giorni</strong> • Deposito Cauzionale <strong>€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</strong>`;
-      
+
       boxElem.style.transform = 'scale(1)';
       boxElem.style.opacity = '1';
     }, 150);
@@ -543,13 +445,13 @@ function calculateAndRenderPrice() {
 // Gestione submit finale "Genera Preventivo" (Apre e mostra il preventivo ufficiale PDF/Stampabile)
 async function handleQuoteSubmit(event) {
   event.preventDefault();
-  
+
   const submitBtn = event.target.querySelector('button[type="submit"]');
   const originalBtnText = submitBtn.innerHTML;
-  
+
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Elaborazione Preventivo...';
-  
+
   const name = document.getElementById('quoteClientName').value;
   const email = document.getElementById('quoteClientEmail').value;
   const phone = document.getElementById('quoteClientPhone').value;
@@ -565,7 +467,8 @@ async function handleQuoteSubmit(event) {
     carTitle: `${c.brand} ${c.model}`,
     selected_duration_months: ConfigState.durationDays,
     selected_deposit: ConfigState.depositAmount,
-    crm_leads: { first_name: name, email: email, customer_type: type }
+    crm_leads: { first_name: name, email: email, customer_type: type },
+    vehicles: { provider_id: c.provider_id, brand: c.brand, model: c.model, trim: c.trim }
   }));
 
   // 1. Visualizza SUBITO la scheda Preventivo Ufficiale senza bloccare la pagina!
@@ -756,10 +659,10 @@ async function handleQuoteSubmit(event) {
           selected_deposit: ConfigState.depositAmount,
           final_monthly_price: ConfigState.finalMonthlyPrice,
           services_snapshot: {
-             kasko: ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard',
-             maintenance: 'Full',
-             road_tax: 'Included',
-             rca: 'Included'
+            kasko: ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard',
+            maintenance: 'Full',
+            road_tax: 'Included',
+            rca: 'Included'
           },
           status: 'sent'
         }]);
@@ -781,21 +684,21 @@ async function handleQuoteSubmit(event) {
         } catch (stripeErr) { console.warn("Stripe url gen fail in background:", stripeErr); }
 
         const emailPayload = {
-           email: email,
-           nome: name,
-           dettagli: `${c.brand} ${c.model} - ${ConfigState.durationDays} Giorni, ${ConfigState.kmDailyLimit} km/giorno, Anticipo €${ConfigState.depositAmount}`,
-           totale: ConfigState.finalMonthlyPrice,
-           pdfBase64: pdfBase64,
-           pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),
-           quoteCode: quoteCode,
-           dossierUrl: window.location.origin + '/upload-documenti.html?code=' + quoteCode,
-           checkoutUrl: checkoutUrl
+          email: email,
+          nome: name,
+          dettagli: `${c.brand} ${c.model} - ${ConfigState.durationDays} Giorni, ${ConfigState.kmDailyLimit} km/giorno, Anticipo €${ConfigState.depositAmount}`,
+          totale: ConfigState.finalMonthlyPrice,
+          pdfBase64: pdfBase64,
+          pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),
+          quoteCode: quoteCode,
+          dossierUrl: window.location.origin + '/upload-documenti.html?code=' + quoteCode,
+          checkoutUrl: checkoutUrl
         };
 
         await fetch(`${supabaseUrl}/functions/v1/preventivo_itercars`, {
-           method: 'POST',
-           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabaseKey}` },
-           body: JSON.stringify(emailPayload)
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabaseKey}` },
+          body: JSON.stringify(emailPayload)
         });
       }
     } catch (err) {
@@ -857,7 +760,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
     const targetH = 100;
     const imgRatio = img.width / img.height;
     const boxRatio = targetW / targetH;
-    
+
     let drawW, drawH;
     if (imgRatio > boxRatio) {
       drawW = targetW;
@@ -866,14 +769,14 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
       drawH = targetH;
       drawW = targetH * imgRatio;
     }
-    
+
     // Center inside the 180x100 bounding box
     const drawX = ((210 - targetW) / 2) + ((targetW - drawW) / 2);
     const drawY = 42 + ((targetH - drawH) / 2);
-    
+
     doc.addImage(img, 'JPEG', drawX, drawY, drawW, drawH);
     const finalH = targetH; // FORZATO RETTANGOLARE per layout
-    
+
     // Calcoliamo le coordinate successive dinamicamente in base a quanto è alta l'immagine
     specsY = 42 + finalH + 10;
     boxY = specsY + 30;
@@ -885,7 +788,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFillColor(249, 249, 249);
   doc.setDrawColor(220, 220, 220);
   doc.roundedRect(15, specsY, 180, 20, 2, 2, 'FD');
-  
+
   const drawSpec = (label, value, x) => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
@@ -897,7 +800,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
     const splitValue = doc.splitTextToSize(value, 30);
     doc.text(splitValue, x, specsY + 11, { align: 'center' });
   };
-  
+
   drawSpec("VELOCITÀ", c.speed || "N/A", 25);
   drawSpec("0-100", c.accel || "N/A", 60);
   drawSpec("POTENZA", c.hp || "N/A", 95);
@@ -941,12 +844,12 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFontSize(10);
   doc.setTextColor(50, 50, 50);
   doc.text("CONFIGURAZIONE CONTRATTO NBT", 20, finalY + 10);
-  
+
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
   const kaskoType = ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard';
   doc.text(`Durata: ${ConfigState.durationDays} Giorni   -   Km giornalieri: ${ConfigState.kmDailyLimit.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
-  
+
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
@@ -956,11 +859,11 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
   doc.text("CANONE TOTALE", 185, finalY + 10, { align: 'right' });
-  
+
   doc.setFontSize(26);
   doc.setTextColor(0, 146, 70);
   doc.text(`€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`, 185, finalY + 22, { align: 'right' });
-  
+
   doc.setFontSize(8);
   doc.text("Totale (IVA esc.)", 185, finalY + 28, { align: 'right' });
 
@@ -972,7 +875,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   return doc;
 }
 
-window.payQuoteStripe = async function(quoteCode, event) {
+window.payQuoteStripe = async function (quoteCode, event) {
   const btn = event.currentTarget;
   const originalText = btn.innerHTML;
   btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Connessione a Stripe...';
@@ -1009,12 +912,12 @@ window.payQuoteStripe = async function(quoteCode, event) {
   }
 }
 
-window.acceptQuoteAndRedirect = function(quoteCode, event) {
-    if (event && event.currentTarget) {
-        event.currentTarget.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Apertura Dossier Documenti...';
-        event.currentTarget.disabled = true;
-    }
-    setTimeout(() => {
-        window.location.href = `upload-documenti.html?code=${quoteCode}`;
-    }, 250);
+window.acceptQuoteAndRedirect = function (quoteCode, event) {
+  if (event && event.currentTarget) {
+    event.currentTarget.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Apertura Dossier Documenti...';
+    event.currentTarget.disabled = true;
+  }
+  setTimeout(() => {
+    window.location.href = `upload-documenti.html?code=${quoteCode}`;
+  }, 250);
 };
