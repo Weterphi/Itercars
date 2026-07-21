@@ -136,11 +136,11 @@ serve(async (req) => {
       ],
       mode: "payment",
       payment_intent_data: {
-        capture_method: "manual", // Preaddebito: blocca i soldi senza prelevarli fino alla stipula
+        capture_method: "automatic", // Addebito diretto per blocco vettura
         metadata: {
           quote_id: quote.id,
           quote_code: quote.quote_code,
-          note: "Pre-autorizzazione fee istruttoria. Prelevato solo a delibera e stipula contratto."
+          note: "Addebito diretto fee blocco vettura. Rimborso previsto in caso di disdetta entro 48h dal ritiro."
         }
       },
       ui_mode: uiMode === "embedded" ? "embedded" : undefined,
