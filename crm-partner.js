@@ -388,9 +388,11 @@ function renderPartnerVehiclesTable() {
             <button class="btn-header btn-header-outline" style="padding: 6px 10px; font-size: 0.78rem;" onclick="openEditTariffModal('${v.id}')" title="Modifica Tariffa">
               <i class="ri-edit-line text-muted"></i>
             </button>
+            ${!isPending ? `
             <button class="btn-header btn-header-danger" style="padding: 6px 10px; font-size: 0.78rem;" onclick="deletePartnerVehicle('${v.id}')" title="Elimina dal CRM e dal Database">
               <i class="ri-delete-bin-line"></i>
             </button>
+            ` : ''}
           </div>
         </td>
       </tr>
