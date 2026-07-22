@@ -149,6 +149,9 @@ function renderQuoteDetails() {
   const feeTextEl = document.getElementById('stripeFeeTextDisplay');
   if (feeTextEl) feeTextEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
+  const actualChargeEl = document.getElementById('actualChargeDisplay');
+  if (actualChargeEl) actualChargeEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Oggi`;
+
   const incomeBox = document.getElementById('dz_income_doc');
   if (incomeBox) {
     if (CurrentQuote.isNbt) {
