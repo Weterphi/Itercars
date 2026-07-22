@@ -1032,14 +1032,19 @@ async function saveTariffChanges(event) {
 
       // 2. Aggiornamento in base al tab selezionato
       if (currentTab === 'nbt') {
-        const { data: nbtUpdated, error: nbtErr } = await supabase
+        let { data: nbtUpdated, error: nbtErr } = await supabase
           .from('nbt_offers')
           .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal })
-          .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`)
+          .eq('vehicle_id', ActiveEditVehicleId)
           .select();
 
-        if (nbtErr || !nbtUpdated || nbtUpdated.length === 0) {
-          const { error: upsertErr } = await supabase.from('nbt_offers').upsert([{
+        if (!nbtErr && (!nbtUpdated || nbtUpdated.length === 0)) {
+          const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal }).eq('id', ActiveEditVehicleId).select();
+          nbtUpdated = res2.data;
+        }
+
+        if (!nbtUpdated || nbtUpdated.length === 0) {
+          const { error: insErr } = await supabase.from('nbt_offers').insert([{
             vehicle_id: ActiveEditVehicleId,
             provider_id: CurrentPartner ? CurrentPartner.id : null,
             daily_price: newDay,
@@ -1049,14 +1054,15 @@ async function saveTariffChanges(event) {
             is_ready_delivery: isReady,
             delivery_weeks: weeksVal,
             is_active: true
-          }], { onConflict: 'vehicle_id' });
+          }]);
+          if (insErr) console.error("Insert nbt_offers error:", insErr);
         }
       } else if (currentTab === 'nlt') {
         const newMonthly = Number(document.getElementById('editMonthlyPrice').value) || 0;
         const newMonths = Number(document.getElementById('editNltMonths').value) || 36;
         const newAdvance = Number(document.getElementById('editNltAdvance').value) || 0;
 
-        const { data: nltUpdated, error: nltErr } = await supabase
+        let { data: nltUpdated, error: nltErr } = await supabase
           .from('nlt_offers')
           .update({ 
             client_monthly_price: newMonthly, 
@@ -1066,11 +1072,16 @@ async function saveTariffChanges(event) {
             is_ready_delivery: isReady, 
             delivery_weeks: weeksVal 
           })
-          .or(`vehicle_id.eq.${ActiveEditVehicleId},id.eq.${ActiveEditVehicleId}`)
+          .eq('vehicle_id', ActiveEditVehicleId)
           .select();
 
-        if (nltErr || !nltUpdated || nltUpdated.length === 0) {
-          const { error: upsertErr } = await supabase.from('nlt_offers').upsert([{
+        if (!nltErr && (!nltUpdated || nltUpdated.length === 0)) {
+          const res2 = await supabase.from('nlt_offers').update({ client_monthly_price: newMonthly, months: newMonths, advance_payment: newAdvance, deposit_required: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal }).eq('id', ActiveEditVehicleId).select();
+          nltUpdated = res2.data;
+        }
+
+        if (!nltUpdated || nltUpdated.length === 0) {
+          const { error: insErr } = await supabase.from('nlt_offers').insert([{
             vehicle_id: ActiveEditVehicleId,
             provider_id: CurrentPartner ? CurrentPartner.id : null,
             client_monthly_price: newMonthly,
@@ -1081,7 +1092,8 @@ async function saveTariffChanges(event) {
             is_ready_delivery: isReady,
             delivery_weeks: weeksVal,
             is_active: true
-          }], { onConflict: 'vehicle_id' });
+          }]);
+          if (insErr) console.error("Insert nlt_offers error:", insErr);
         }
       }
 
