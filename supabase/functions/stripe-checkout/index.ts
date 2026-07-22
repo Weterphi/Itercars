@@ -118,12 +118,6 @@ serve(async (req) => {
       throw new Error("Invalid fee amount");
     }
 
-    // --- TEMPORARY OVERRIDE PER TEST CLIENTE ---
-    // Forza l'importo a 0.50€ (il minimo consentito da Stripe) per permettere i test
-    feeAmount = 0.50;
-    productName = `[TEST MODE] ${productName}`;
-    // -------------------------------------------
-
     // Crea la sessione Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
