@@ -8,52 +8,60 @@ const BROKER_MARGIN = 1.0; // Rimosso doppio ricarico (+15%), le tariffe base e 
 
 const OFFICIAL_RATES = {
   '32226fdb-ba8c-4e46-8e21-e303e0a0fe3d': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 650, extraKmPrice: 0.16, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 580, extraKmPrice: 0.15, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 2000, price: 450, extraKmPrice: 0.14, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 2000, price: 390, extraKmPrice: 0.12, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 2000, price: 390, extraKmPrice: 0.12, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 2000, price: 351, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'bmw-s1': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 650, extraKmPrice: 0.16, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 580, extraKmPrice: 0.15, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 2000, price: 450, extraKmPrice: 0.14, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 2000, price: 390, extraKmPrice: 0.12, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 2000, price: 390, extraKmPrice: 0.12, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 2000, price: 351, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'ccaa728f-9b2d-4480-9f1c-76d7c97ccc79': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 750, extraKmPrice: 0.18, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 680, extraKmPrice: 0.16, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 3000, price: 520, extraKmPrice: 0.15, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 3000, price: 460, extraKmPrice: 0.14, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3000, price: 460, extraKmPrice: 0.14, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 3000, price: 414, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'bmw-x1': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 750, extraKmPrice: 0.18, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 680, extraKmPrice: 0.16, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 3000, price: 520, extraKmPrice: 0.15, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 3000, price: 460, extraKmPrice: 0.14, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3000, price: 460, extraKmPrice: 0.14, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 3000, price: 414, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'e3f556d9-8c52-43fd-9d81-ffb9c1551928': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 820, extraKmPrice: 0.18, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 3500, price: 660, extraKmPrice: 0.16, status: 'In Arrivo' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 3500, price: 580, extraKmPrice: 0.15, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3500, price: 580, extraKmPrice: 0.15, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 3500, price: 522, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'bmw-s3t': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 820, extraKmPrice: 0.18, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 3500, price: 660, extraKmPrice: 0.16, status: 'In Arrivo' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 3500, price: 580, extraKmPrice: 0.15, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 3500, price: 580, extraKmPrice: 0.15, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 3500, price: 522, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   '1933cb66-5804-45ef-b997-8e038059f0b4': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 990, extraKmPrice: 0.22, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 920, extraKmPrice: 0.20, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 740, extraKmPrice: 0.18, status: 'In Arrivo' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 650, extraKmPrice: 0.16, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 650, extraKmPrice: 0.16, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 4000, price: 585, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'bmw-x3': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 990, extraKmPrice: 0.22, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 920, extraKmPrice: 0.20, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 740, extraKmPrice: 0.18, status: 'In Arrivo' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 650, extraKmPrice: 0.16, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 650, extraKmPrice: 0.16, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 4000, price: 585, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   '3b99316f-29bb-4392-86d3-98cc6e77485d': {
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1150, extraKmPrice: 0.25, status: 'Disponibile' },
@@ -63,7 +71,8 @@ const OFFICIAL_RATES = {
   'bmw-s5': {
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1150, extraKmPrice: 0.25, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 5000, price: 890, extraKmPrice: 0.22, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 5000, price: 790, extraKmPrice: 0.20, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 5000, price: 790, extraKmPrice: 0.20, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 5000, price: 711, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'f4c1e663-a663-4fba-81c1-8ed424caf0ba': {
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28, status: 'Disponibile' },
@@ -73,19 +82,22 @@ const OFFICIAL_RATES = {
   'bmw-x5': {
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 1450, extraKmPrice: 0.28, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 6000, price: 1180, extraKmPrice: 0.25, status: 'In Arrivo' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 6000, price: 1050, extraKmPrice: 0.22, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 6000, price: 1050, extraKmPrice: 0.22, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 6000, price: 945, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'efce36a9-41fc-4285-a167-4badbcbbb2c6': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 790, extraKmPrice: 0.18, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 640, extraKmPrice: 0.16, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 570, extraKmPrice: 0.15, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 570, extraKmPrice: 0.15, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 4000, price: 513, extraKmPrice: 0.13, status: \'Disponibile\' }
   },
   'bmw-i4': {
-    6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: 890, extraKmPrice: 0.20, status: 'Disponibile' },
+    
     12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: 790, extraKmPrice: 0.18, status: 'Disponibile' },
     24: { baseKm: 25000, kmTotal: 50000, deposit: 4000, price: 640, extraKmPrice: 0.16, status: 'Disponibile' },
-    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 570, extraKmPrice: 0.15, status: 'Disponibile' }
+    36: { baseKm: 25000, kmTotal: 75000, deposit: 4000, price: 570, extraKmPrice: 0.15, status: 'Disponibile' },
+    48: { baseKm: 25000, kmTotal: 100000, deposit: 4000, price: 513, extraKmPrice: 0.13, status: \'Disponibile\' }
   }
 };
 
@@ -342,7 +354,7 @@ function getRatesForCar(c) {
     const base = Number(c.basePrice) || 699;
     const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
     rates = {
-      6: { baseKm: 30000, kmTotal: 15000, deposit: 0, price: Math.round(base * 1.45), extraKmPrice: 0.20, status: 'Disponibile' },
+      48: { baseKm: 25000, kmTotal: 100000, deposit: baseDep, price: Math.round(base * 0.90), extraKmPrice: 0.14, status: \'Disponibile\' },
       12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: Math.round(base * 1.25), extraKmPrice: 0.18, status: 'Disponibile' },
       24: { baseKm: 25000, kmTotal: 50000, deposit: baseDep, price: Math.round(base * 1.10), extraKmPrice: 0.16, status: 'Disponibile' },
       36: { baseKm: 25000, kmTotal: 75000, deposit: baseDep, price: Math.round(base), extraKmPrice: 0.15, status: 'Disponibile' }
