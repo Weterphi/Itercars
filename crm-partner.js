@@ -1311,6 +1311,22 @@ window.handlePartnerReg = async function(event) {
 
     if (dbErr) throw dbErr;
     
+    // Invia email di notifica al CEO chiamando la Edge Function
+    try {
+      await supabase.functions.invoke('notify_new_partner', {
+        body: {
+          companyName,
+          vat,
+          contactName,
+          phone,
+          email,
+          address
+        }
+      });
+    } catch (fnErr) {
+      console.warn("Errore nell'invio della notifica email (ma la registrazione  andata a buon fine):", fnErr);
+    }
+
     await supabase.auth.signOut();
 
     alert("Richiesta inviata con successo! Il team ti contatter al pi presto. Non potrai accedere fino ad approvazione avvenuta.");
