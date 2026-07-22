@@ -1715,7 +1715,7 @@ function openNewPartnerOfferModal() {
     select.innerHTML += `<option value="${p.id}">${p.name} (${p.code || 'partner'})</option>`;
   });
   if (select.options.length <= 1) {
-    select.innerHTML += `<option value="e5555555-5555-5555-5555-555555555555">Toribio Rent & Drive S.R.L.</option>`;
+    select.innerHTML += `<option value="e5555555-5555-5555-5555-555555555555">Partner Esempio 1 S.R.L.</option>`;
     select.innerHTML += `<option value="f6666666-6666-6666-6666-666666666666">Elite Supercars Club Italia</option>`;
   }
 

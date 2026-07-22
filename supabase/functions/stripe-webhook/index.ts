@@ -42,7 +42,7 @@ serve(async (req) => {
       if (resendApiKey) {
         const resendPayload = {
           from: "Itercars <info@itercars.com>",
-          to: ["toribiowillie@gmail.com"],
+          to: ["admin@itercars.com"],
           subject: `✅ Pagamento Ricevuto: Pratica ${quoteCode}`,
           html: `
             <div style="font-family: sans-serif; padding: 20px; color: #333;">

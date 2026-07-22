@@ -859,13 +859,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Sincronizzazione obbligatoria in tempo reale tra sito e database SQL Supabase
   if (typeof loadFleetFromSupabase === 'function') loadFleetFromSupabase();
   
-  const navBtn = document.getElementById("navAreaBtn");
-  if (navBtn) {
-    navBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      openAuthModal();
-    });
-  }
 });
 
 async function loadFleetFromSupabase() {
@@ -1831,9 +1824,15 @@ window.handleRegister = handleRegister;
 
 // Added for Hero Search
 window.handleHeroSearch = async function(event) {
-  event.preventDefault();
+  if (event) { event.preventDefault(); }
   const loc = document.getElementById('searchLocation') ? document.getElementById('searchLocation').value.trim() : '';
   const type = document.getElementById('searchType') ? document.getElementById('searchType').value : 'tutti';
+
+  const chkLuxury = document.getElementById('filterLuxury') ? document.getElementById('filterLuxury').checked : false;
+  const chkPiccola = document.getElementById('filterPiccola') ? document.getElementById('filterPiccola').checked : false;
+  const chkMedia = document.getElementById('filterMedia') ? document.getElementById('filterMedia').checked : false;
+  const chkGrande = document.getElementById('filterGrande') ? document.getElementById('filterGrande').checked : false;
+
   
   const resultsSection = document.getElementById("heroSearchResultsSection");
   const container = document.getElementById("heroSearchResultsGrid");
@@ -1856,6 +1855,25 @@ window.handleHeroSearch = async function(event) {
   if (type === 'nbt') query = query.eq('is_nbt', true);
   else if (type === 'nlt') query = query.eq('is_nlt', true);
   else if (type === 'luxury') query = query.eq('is_luxury', true);
+
+  // Applica filtri categorie solo se almeno uno  selezionato (se necessario) 
+  // Usa OR per le categorie selezionate? No, l'utente ha chiesto che "quando una macchina ha questa casella spuntata su true viene inserita in quella categoria". Se le spunta tutte, cerca le auto che hanno ALMENO una di queste spunte vere?
+  // Oppure facciamo dei filtri precisi in AND? Solitamente nei filtri checkbox multipli per tipologia e' un OR.
+  // Tuttavia, siccome supabase eq aggiunge sempre un AND, se selezioni Luxury AND Piccola cercher auto che sono SIA luxury SIA piccola.
+  // Per fare OR in supabase: query = query.or('luxury.eq.true,macchina_piccola.eq.true...')
+  // Ma se usiamo gli AND  pi restrittivo. Implementiamo OR che ha pi senso logico: "Voglio vedere le luxury e le piccole".
+  // Let's implement OR filter if any is checked.
+  
+  let categoryOrFilters = [];
+  if (chkLuxury) categoryOrFilters.push('luxury.eq.true');
+  if (chkPiccola) categoryOrFilters.push('macchina_piccola.eq.true');
+  if (chkMedia) categoryOrFilters.push('macchina_media.eq.true');
+  if (chkGrande) categoryOrFilters.push('macchina_grande.eq.true');
+  
+  if (categoryOrFilters.length > 0) {
+    query = query.or(categoryOrFilters.join(','));
+  }
+
 
   if (loc) {
     query = query.ilike('city', `%${loc}%`);
@@ -2014,3 +2032,28 @@ async function handleDossierRecoverySubmit(e) {
   }
 }
 window.handleDossierRecoverySubmit = handleDossierRecoverySubmit;
+
+
+// Dropdown Area Riservata
+window.toggleAreaMenu = function(event) {
+  event.preventDefault();
+  event.stopPropagation();
+  const menu = document.getElementById('areaDropdownMenu');
+  if (menu) {
+    menu.style.display = (menu.style.display === 'flex' || menu.style.display === 'block') ? 'none' : 'flex';
+  }
+};
+
+window.closeAreaMenu = function() {
+  const menu = document.getElementById('areaDropdownMenu');
+  if (menu) {
+    menu.style.display = 'none';
+  }
+};
+
+document.addEventListener('click', function(e) {
+  const areaWrapper = e.target.closest('.area-dropdown-wrapper');
+  if (!areaWrapper) {
+    closeAreaMenu();
+  }
+});

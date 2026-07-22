@@ -59,6 +59,20 @@ async function checkPartnerAuth() {
   if (saved) {
     try {
       CurrentPartner = JSON.parse(saved);
+      
+      if (supabase && CurrentPartner && CurrentPartner.id) {
+        const { data, error } = await supabase
+          .from('providers')
+          .select('id')
+          .eq('id', CurrentPartner.id)
+          .eq('is_active', true)
+          .single();
+          
+        if (error || !data) {
+          throw new Error("Partner eliminato o disattivato");
+        }
+      }
+      
       if (overlay) overlay.classList.remove('active');
       if (supabase && supabase.auth) {
         try { await supabase.auth.getSession(); } catch(err){}
@@ -67,6 +81,7 @@ async function checkPartnerAuth() {
       return;
     } catch(e) {
       localStorage.removeItem('itercars_partner_auth');
+      CurrentPartner = null;
     }
   }
 
@@ -1220,3 +1235,94 @@ async function savePartnerProfile(event) {
 
 // Log initial boot
 
+
+
+/* ==========================================================================
+   PARTNER REGISTRATION & AUTH SWITCH
+   ========================================================================== */
+window.switchPartnerAuthMode = function(mode) {
+  const loginBox = document.getElementById('partnerLoginBox');
+  const regBox = document.getElementById('partnerRegFormBox');
+  if (mode === 'register') {
+    if(loginBox) loginBox.style.display = 'none';
+    if(regBox) regBox.style.display = 'block';
+  } else {
+    if(loginBox) loginBox.style.display = 'block';
+    if(regBox) regBox.style.display = 'none';
+  }
+};
+
+window.handlePartnerReg = async function(event) {
+  event.preventDefault();
+  if (!supabase) {
+    alert("Errore di connessione al database. Riprovare pi tardi.");
+    return;
+  }
+
+  const companyName = document.getElementById('partRegCompany').value.trim();
+  const vat = document.getElementById('partRegVat').value.trim();
+  const contactName = document.getElementById('partRegName').value.trim();
+  const phone = document.getElementById('partRegPhone').value.trim();
+  const email = document.getElementById('partRegEmail').value.trim();
+  const address = document.getElementById('partRegAddress').value.trim();
+  const password = document.getElementById('partRegPassword').value;
+  const passwordConfirm = document.getElementById('partRegPasswordConfirm').value;
+
+  if (password !== passwordConfirm) {
+    alert("Le password non coincidono.");
+    return;
+  }
+
+  const submitBtn = event.target.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> <span>Invio in corso...</span>`;
+    submitBtn.disabled = true;
+  }
+
+  try {
+    const { data: authData, error: authErr } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          full_name: contactName,
+          company: companyName,
+          role: 'pending_partner'
+        }
+      }
+    });
+
+    if (authErr) throw authErr;
+    const authId = authData.user ? authData.user.id : null;
+
+    const { error: dbErr } = await supabase.from('supplier_applications').insert([{
+      auth_id: authId,
+      company_name: companyName,
+      partita_iva: vat,
+      referent_name: contactName,
+      email: email,
+      phone: phone,
+      fleet_size: 'Non specificato',
+      city: address,
+      models: 'Richiesta dal popup CRM Partner',
+      status: 'new',
+      data: new Date().toLocaleString('it-IT')
+    }]);
+
+    if (dbErr) throw dbErr;
+    
+    await supabase.auth.signOut();
+
+    alert("Richiesta inviata con successo! Il team ti contatter al pi presto. Non potrai accedere fino ad approvazione avvenuta.");
+    window.switchPartnerAuthMode('login');
+    event.target.reset();
+  } catch (error) {
+    console.error("Errore invio candidatura partner:", error);
+    alert("Si  verificato un errore durante l'invio della richiesta: " + (error.message || "Riprova pi tardi."));
+  } finally {
+    if (submitBtn) {
+      submitBtn.innerHTML = `<span>Invia Richiesta</span> <i class="ri-send-plane-fill"></i>`;
+      submitBtn.disabled = false;
+    }
+  }
+};

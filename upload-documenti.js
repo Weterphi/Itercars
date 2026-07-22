@@ -1030,7 +1030,7 @@ async function inviaMailDossierMandante() {
     }
 
     // 4. Selezione automatica Email del Mandante e Provider
-    let mandanteEmail = 'toribiowillie@gmail.com';
+    let mandanteEmail = 'admin@itercars.com';
     let idAzienda = 'Non specificato';
     let nomeAzienda = 'ITERCARS Partner';
 

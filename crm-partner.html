@@ -30,7 +30,7 @@
 
   <!-- GATE DI AUTENTICAZIONE RISERVATO Al PARTNER / NOLEGGIATORE -->
   <div class="partner-auth-overlay active" id="partnerAuthOverlay">
-    <div class="partner-auth-box">
+    <div class="partner-auth-box" id="partnerLoginBox">
       <div style="text-align: center; margin-bottom: 24px;">
         <img src="logo_tricolore.png" alt="ITERCARS" style="height: 48px; margin-bottom: 14px;" onerror="this.src='logo-text.png'" />
         <h2 style="font-size: 1.35rem; font-weight: 300; color: #fff;">Console Partner</h2>
@@ -50,12 +50,78 @@
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px;">
           <i class="ri-shield-user-line"></i> Accedi alla Tua Console Flotta
         </button>
-      </form>
+            </form>
+      <div style="border-top: 1px dashed rgba(250, 204, 21, 0.4); padding-top: 12px; text-align: center; margin-top: 20px;">
+        <span style="color: var(--text-muted); font-size: 0.85rem;">Non sei ancora partner?</span>
+        <button type="button" onclick="switchPartnerAuthMode('register')" style="background: none; border: none; color: #facc15; font-weight: 700; cursor: pointer; margin-left: 6px; text-decoration: underline; font-size: 0.85rem;">Diventa partner</button>
+      </div>
 
       <div style="margin-top: 22px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 0.76rem; color: var(--text-muted); text-align: center;">
         <i class="ri-lock-password-line text-muted"></i> Connessione Protetta </span>
       </div>
     </div>
+
+    <!-- PARTNER REGISTRATION VIEW -->
+    <div class="partner-auth-box" id="partnerRegFormBox" style="display: none; max-width: 500px; max-height: 90vh; overflow-y: auto;">
+      <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner</h3>
+      <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la richiesta di adesione.</p>
+      
+      <form onsubmit="handlePartnerReg(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome Azienda *</label>
+            <input type="text" class="admin-input" id="partRegCompany" required placeholder="Luxury SRL">
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Partita IVA *</label>
+            <input type="text" class="admin-input" id="partRegVat" required placeholder="IT1234567890">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Referente *</label>
+            <input type="text" class="admin-input" id="partRegName" required placeholder="Mario Rossi">
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Telefono *</label>
+            <input type="tel" class="admin-input" id="partRegPhone" required placeholder="+39 340 0000000">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email *</label>
+            <input type="email" class="admin-input" id="partRegEmail" required placeholder="info@azienda.com">
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Città *</label>
+            <input type="text" class="admin-input" id="partRegAddress" required placeholder="Milano">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password *</label>
+            <input type="password" class="admin-input" id="partRegPassword" required minlength="6" placeholder="••••••••">
+          </div>
+          <div class="form-group" style="text-align: left;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Conferma *</label>
+            <input type="password" class="admin-input" id="partRegPasswordConfirm" required minlength="6" placeholder="••••••••">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px; border-color: #facc15; color: #111; background: #facc15;">
+          <span>Invia Richiesta</span> <i class="ri-send-plane-fill"></i>
+        </button>
+      </form>
+
+      <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1);">
+        <span style="color: var(--text-muted); font-size: 0.95rem;">Vuoi accedere alla console?</span>
+        <button type="button" onclick="switchPartnerAuthMode('login')" style="background: none; border: none; color: #facc15; font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna al Login</button>
+      </div>
+    </div>
+
   </div>
 
   <!-- APP LAYOUT (SIDEBAR SINISTRA + WORKSPACE CENTRALE) -->
@@ -511,6 +577,6 @@
     </div>
   </div>
 
-  <script src="crm-partner.js?v=4"></script>
+  <script src="crm-partner.js?v=5"></script>
 </body>
 </html>
