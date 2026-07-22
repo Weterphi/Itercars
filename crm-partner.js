@@ -1034,7 +1034,7 @@ async function saveTariffChanges(event) {
       if (currentTab === 'nbt') {
         let { data: nbtUpdated, error: nbtErr } = await supabase
           .from('nbt_offers')
-          .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady })
+          .update({ daily_price: newDay, deposit_required: newDep, is_ready_delivery: isReady })
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
 
@@ -1043,7 +1043,7 @@ async function saveTariffChanges(event) {
         }
 
         if (!nbtErr && (!nbtUpdated || nbtUpdated.length === 0)) {
-          const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady }).eq('id', ActiveEditVehicleId).select();
+          const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep, is_ready_delivery: isReady }).eq('id', ActiveEditVehicleId).select();
           nbtUpdated = res2.data;
           if (res2.error) alert("Errore aggiornamento NBT (id): " + res2.error.message);
         }
@@ -1054,7 +1054,6 @@ async function saveTariffChanges(event) {
             provider_id: CurrentPartner ? CurrentPartner.id : null,
             daily_price: newDay,
             deposit_required: newDep,
-            deposit_mandante: newDep,
             km_daily_limit: 150,
             is_ready_delivery: isReady,
             is_active: true
