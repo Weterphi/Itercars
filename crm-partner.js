@@ -578,16 +578,8 @@ async function submitSelectedPartnerFile() {
   addLog(`Preparazione trasmissione del file '${file.name}' (${Math.round(file.size / 1024)} KB)...`, 'info');
 
   if (!CurrentPartner || !CurrentPartner.id) {
-    // Se non loggato, assegniamo il partner predefinito o chiediamo login
-    CurrentPartner = {
-      id: 'fa4f1a20-3b8c-4a11-8e99-000000000001',
-      name: 'Toribio Rent & Drive S.R.L.',
-      code: 'toribio_rent',
-      company_vat: 'IT12345670158',
-      saas_plan: 'pro_partner',
-      partner_email: 'toribio@itercars.it'
-    };
-    addLog(`Profilo Mandante attivo: ${CurrentPartner.name} (P.IVA: ${CurrentPartner.company_vat})`, 'info');
+    alert("Errore: devi effettuare l'accesso con le tue credenziali prima di poter inviare un file.");
+    return;
   }
 
   const readerUrl = new FileReader();
