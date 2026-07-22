@@ -62,12 +62,69 @@ const ConfigState = {
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const params = new URLSearchParams(window.location.search);
-  let carId = params.get('id') || 'bmw-x3-48-3k';
-  const paramModel = params.get('model');
-  const paramBrand = params.get('brand');
-  const paramImg = params.get('img');
-  const paramTrim = params.get('trim');
+  const urlParams = new URLSearchParams(window.location.search);
+
+  // Inizializza calendario Flatpickr separato per Ritiro e Consegna
+  const dateStartEl = document.getElementById('nbtDateStart');
+  const dateEndEl = document.getElementById('nbtDateEnd');
+  
+  let fpStart, fpEnd;
+
+  const calculateDays = () => {
+    if (fpStart && fpEnd && fpStart.selectedDates[0] && fpEnd.selectedDates[0]) {
+      const start = fpStart.selectedDates[0];
+      const end = fpEnd.selectedDates[0];
+      if (end >= start) {
+        const diffTime = Math.abs(end - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // inclusi start ed end
+        
+        ConfigState.durationDays = diffDays;
+        ConfigState.startDate = fpStart.formatDate(start, "d/m/Y");
+        ConfigState.endDate = fpEnd.formatDate(end, "d/m/Y");
+        
+        document.getElementById('nbtDurationInfo').style.display = 'flex';
+        document.getElementById('nbtDaysCount').innerText = diffDays;
+        
+        if (typeof calculateAndRenderPrice === 'function') calculateAndRenderPrice();
+      } else {
+        document.getElementById('nbtDurationInfo').style.display = 'none';
+      }
+    } else {
+      document.getElementById('nbtDurationInfo').style.display = 'none';
+    }
+  };
+
+  if (dateStartEl && dateEndEl) {
+    fpStart = flatpickr(dateStartEl, {
+      dateFormat: "d/m/Y",
+      locale: "it",
+      minDate: "today",
+      onChange: function(selectedDates) {
+        if (selectedDates.length > 0 && fpEnd) {
+          fpEnd.set('minDate', selectedDates[0]);
+          // Se la data di fine attuale è minore della nuova data di inizio, la resettiamo
+          if (fpEnd.selectedDates[0] && fpEnd.selectedDates[0] < selectedDates[0]) {
+            fpEnd.clear();
+          }
+        }
+        calculateDays();
+      }
+    });
+
+    fpEnd = flatpickr(dateEndEl, {
+      dateFormat: "d/m/Y",
+      locale: "it",
+      minDate: "today",
+      onChange: function() {
+        calculateDays();
+      }
+    });
+  }
+  let carId = urlParams.get('id') || 'bmw-x3-48-3k';
+  const paramModel = urlParams.get('model');
+  const paramBrand = urlParams.get('brand');
+  const paramImg = urlParams.get('img');
+  const paramTrim = urlParams.get('trim');
 
   // Eager load per velocizzare il sito (Zero-Layout-Shift)
   if (paramImg) {
@@ -122,7 +179,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const resVeh = await window.supabase
           .from('vehicles')
           .select('*, providers(name)')
-          .or(`id.eq.${carId},model.ilike."%${carId}%"`)
+          .or(`id.eq.${carId},model.ilike.%${carId}%`)
           .maybeSingle();
         if (resVeh && resVeh.data) {
           vDb = resVeh.data;
@@ -533,7 +590,7 @@ async function handleQuoteSubmit(event) {
           <div>
             <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Configurazione Contratto NBT</span>
             <div style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 4px;">
-              Durata: <span style="color: #2ecc71;">${ConfigState.durationDays} Giorni</span> • 
+              Durata: <span style="color: #2ecc71;">${ConfigState.durationDays} Giorni</span> (Dal ${ConfigState.startDate || '-'} al ${ConfigState.endDate || '-'}) • 
               Km compresi: <span style="color: #2ecc71;">${ConfigState.kmDailyLimit.toLocaleString('it-IT')} km/giorno</span> • 
               Anticipo: <span style="color: #2ecc71;">€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</span>
             </div>
@@ -686,7 +743,7 @@ async function handleQuoteSubmit(event) {
         const emailPayload = {
           email: email,
           nome: name,
-          dettagli: `${c.brand} ${c.model} - ${ConfigState.durationDays} Giorni, ${ConfigState.kmDailyLimit} km/giorno, Anticipo €${ConfigState.depositAmount}`,
+          dettagli: `${c.brand} ${c.model} - Dal ${ConfigState.startDate || '-'} al ${ConfigState.endDate || '-'} (${ConfigState.durationDays} Giorni), ${ConfigState.kmDailyLimit} km/giorno, Anticipo €${ConfigState.depositAmount}`,
           totale: ConfigState.finalMonthlyPrice,
           pdfBase64: pdfBase64,
           pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),
@@ -848,7 +905,7 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
   const kaskoType = ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard';
-  doc.text(`Durata: ${ConfigState.durationDays} Giorni   -   Km giornalieri: ${ConfigState.kmDailyLimit.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
+  doc.text(`Dal ${ConfigState.startDate || '-'} al ${ConfigState.endDate || '-'} (${ConfigState.durationDays} gg)   -   Km: ${ConfigState.kmDailyLimit.toLocaleString('it-IT')} km/g   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);

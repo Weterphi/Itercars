@@ -6,6 +6,7 @@
 const SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk';
 var supabase = (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : window.supabase;
+window.supabase = supabase;
 
 const langFlags = {
   it: "🇮🇹",
@@ -811,7 +812,7 @@ function changeLanguage(lang, silent = false) {
     else if (text.includes("Elettr") || text.includes("Electr")) filterCat = "Elettrica";
   }
   
-  if (window.location.pathname.includes('fleet.html')) {
+  if (window.location.pathname.includes('fleet')) {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category') || 'Tutti';
     filterFleetPage(category);
@@ -947,7 +948,7 @@ async function loadFleetFromSupabase() {
     else if (text.includes("Elettr") || text.includes("Electr")) filterCat = "Elettrica";
   }
   
-  if (window.location.pathname.includes('fleet.html')) {
+  if (window.location.pathname.includes('fleet')) {
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category') || 'Tutti';
     filterFleetPage(category);
@@ -1147,7 +1148,7 @@ function renderCarCard(car, dict) {
         <div class="car-image-container">
           <span class="car-badge">${cleanBadge}</span>
           <span class="car-rating"><i class="ri-star-fill"></i> ${car.rating}</span>
-          <img src="${car.image}" alt="${car.name}" class="car-img" loading="lazy">
+          <img src="${car.image}" alt="${car.name}" class="car-img" loading="lazy" onerror="this.onerror=null; this.src='logo_tricolore.png';">
         </div>
       </a>
       
@@ -1212,7 +1213,7 @@ function filterFleet(category, btnElement) {
     
     // Scroll alla griglia solo se siamo in home
     const grid = document.getElementById("fleetGrid");
-    if (grid && !window.location.pathname.includes('fleet.html')) {
+    if (grid && !window.location.pathname.includes('fleet')) {
       grid.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }

@@ -38,6 +38,12 @@
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   
+  <!-- Flatpickr per il calendario -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" type="text/css" href="https://npmcdn.com/flatpickr/dist/themes/dark.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://npmcdn.com/flatpickr/dist/l10n/it.js"></script>
+  
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=50">
   <link rel="stylesheet" href="nbt-dettaglio.css?v=3">
@@ -219,26 +225,23 @@
                 <strong>48 Mesi</strong> • <strong>15.000 Km/giorno</strong> • Anticipo <strong>€ 3.000</strong>
               </div>
             </div>
-
-            <!-- STEP 1: DURATA GIORNI -->
-            <div class="config-section">
-              <div class="config-section-title"><i class="ri-calendar-schedule-line"></i> 1. Durata Contratto (Giorni)</div>
-              <div class="config-options-grid-3" id="configDurationGroup">
-                <button type="button" class="config-option-btn" data-value="1" onclick="setConfigDuration(1, this)">1 Giorno</button>
-                <button type="button" class="config-option-btn" data-value="3" onclick="setConfigDuration(3, this)">3 Giorni</button>
-                <button type="button" class="config-option-btn active" data-value="7" onclick="setConfigDuration(7, this)">7 Giorni<br><small style="font-weight: 400; font-size:0.7rem; color:#2ecc71">Settimana</small></button>
-                <button type="button" class="config-option-btn" data-value="14" onclick="setConfigDuration(14, this)">14 Giorni</button>
-                <button type="button" class="config-option-btn" data-value="30" onclick="setConfigDuration(30, this)">30 Giorni<br><small style="font-weight: 400; font-size:0.7rem; color:var(--text-muted)">Mese</small></button>
+            <!-- STEP 1: DURATA GIORNI (CALENDARIO) -->
+            <div class="config-section" style="margin-top: 15px;">
+              <div class="config-section-title"><i class="ri-calendar-schedule-line"></i> 1. Seleziona Date Noleggio</div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; margin-bottom: 5px;">
+                <div>
+                  <label style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Data di Ritiro</label>
+                  <input type="text" id="nbtDateStart" class="form-control" placeholder="Seleziona data" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer;">
+                </div>
+                <div>
+                  <label style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 4px; display: block;">Data di Consegna</label>
+                  <input type="text" id="nbtDateEnd" class="form-control" placeholder="Seleziona data" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid rgba(255,255,255,0.1); padding: 14px; border-radius: 8px; width: 100%; font-size: 1rem; cursor: pointer;">
+                </div>
               </div>
-              <div style="margin-top: 12px; display: flex; align-items: center; gap: 10px;">
-                <label for="customDurationInput" style="font-size: 0.85rem; color: var(--text-muted);">Oppure inserisci giorni:</label>
-                <input type="number" id="customDurationInput" min="1" max="180" placeholder="Es. 4" style="background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 8px 12px; border-radius: 8px; color: #fff; font-size: 0.9rem; width: 100px;" oninput="handleCustomDuration(this.value)">
+              <div id="nbtDurationInfo" style="margin-top: 10px; color: #2ecc71; font-weight: 600; display: none; align-items: center; gap: 8px; font-size: 0.95rem;">
+                <i class="ri-time-line" style="font-size: 1.2rem;"></i> Durata selezionata: <span id="nbtDaysCount" style="font-size: 1.2rem;">0</span> Giorni
               </div>
             </div>
-
-            
-
-                        <!-- STEP 1.5: LIMITE KM GIORNALIERI -->
             <div class="config-section">
               <div class="config-section-title"><i class="ri-road-map-line"></i> 2. Limite Km Giornalieri</div>
               <div class="config-options-grid" id="configKmDailyGroup">
@@ -546,8 +549,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="app.js?v=38"></script>
-  <script src="nbt-dettaglio.js?v=9"></script>
+  <script src="app.js?v=999"></script>
+  <script src="nbt-dettaglio.js?v=999"></script>
   <script src="cookie-banner.js?v=5"></script>
   <!-- ================= DOSSIER RECOVERY MODAL ================= -->
   <div class="modal-overlay" id="dossierRecoveryModal">
