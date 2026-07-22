@@ -3572,7 +3572,7 @@ async function sendAutomatedPartnerEmail(jobId) {
     const { data: { session } } = await supabase.auth.getSession();
     const token = session?.access_token;
     
-    const res = await fetch(`${SUPABASE_URL}/functions/v1/accettazione_azienda`, {
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/notifica_pubblicazione_flotta`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -3588,7 +3588,7 @@ async function sendAutomatedPartnerEmail(jobId) {
       throw new Error(`Errore HTTP: ${res.status}`);
     }
     
-    alert(`AUTOMAZIONE MAIL: Un'email di conferma ufficiale è stata inviata al Mandante: ${partnerName} (${partnerEmail}) tramite la funzione accettazione_azienda.`);
+    alert(`AUTOMAZIONE MAIL: Un'email di conferma ufficiale è stata inviata al Mandante: ${partnerName} (${partnerEmail}) tramite la funzione notifica_pubblicazione_flotta.`);
     console.log("[EMAIL SYSTEM] Email inviata con successo!");
     
   } catch(err) {
