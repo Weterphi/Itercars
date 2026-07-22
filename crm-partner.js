@@ -1034,7 +1034,7 @@ async function saveTariffChanges(event) {
       if (currentTab === 'nbt') {
         let { data: nbtUpdated, error: nbtErr } = await supabase
           .from('nbt_offers')
-          .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal })
+          .update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady })
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
 
@@ -1043,7 +1043,7 @@ async function saveTariffChanges(event) {
         }
 
         if (!nbtErr && (!nbtUpdated || nbtUpdated.length === 0)) {
-          const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal }).eq('id', ActiveEditVehicleId).select();
+          const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady }).eq('id', ActiveEditVehicleId).select();
           nbtUpdated = res2.data;
           if (res2.error) alert("Errore aggiornamento NBT (id): " + res2.error.message);
         }
@@ -1057,7 +1057,6 @@ async function saveTariffChanges(event) {
             deposit_mandante: newDep,
             km_daily_limit: 150,
             is_ready_delivery: isReady,
-            delivery_weeks: weeksVal,
             is_active: true
           }]);
           if (insErr) alert("Errore inserimento NBT: " + insErr.message);
@@ -1074,8 +1073,7 @@ async function saveTariffChanges(event) {
             months: newMonths, 
             advance_payment: newAdvance,
             deposit_required: newDep,
-            is_ready_delivery: isReady, 
-            delivery_weeks: weeksVal 
+            is_ready_delivery: isReady
           })
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
@@ -1083,7 +1081,7 @@ async function saveTariffChanges(event) {
         if (nltErr) alert("Errore aggiornamento NLT (vehicle_id): " + nltErr.message);
 
         if (!nltErr && (!nltUpdated || nltUpdated.length === 0)) {
-          const res2 = await supabase.from('nlt_offers').update({ client_monthly_price: newMonthly, months: newMonths, advance_payment: newAdvance, deposit_required: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal }).eq('id', ActiveEditVehicleId).select();
+          const res2 = await supabase.from('nlt_offers').update({ client_monthly_price: newMonthly, months: newMonths, advance_payment: newAdvance, deposit_required: newDep, is_ready_delivery: isReady }).eq('id', ActiveEditVehicleId).select();
           nltUpdated = res2.data;
           if (res2.error) alert("Errore aggiornamento NLT (id): " + res2.error.message);
         }
@@ -1098,7 +1096,6 @@ async function saveTariffChanges(event) {
             deposit_required: newDep,
             km_yearly_limit: 15000,
             is_ready_delivery: isReady,
-            delivery_weeks: weeksVal,
             is_active: true
           }]);
           if (insErr) alert("Errore inserimento NLT: " + insErr.message);
