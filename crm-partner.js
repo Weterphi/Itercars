@@ -1038,9 +1038,14 @@ async function saveTariffChanges(event) {
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
 
+        if (nbtErr) {
+          alert("Errore aggiornamento NBT (vehicle_id): " + nbtErr.message);
+        }
+
         if (!nbtErr && (!nbtUpdated || nbtUpdated.length === 0)) {
           const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay, deposit_required: newDep, deposit_mandante: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal }).eq('id', ActiveEditVehicleId).select();
           nbtUpdated = res2.data;
+          if (res2.error) alert("Errore aggiornamento NBT (id): " + res2.error.message);
         }
 
         if (!nbtUpdated || nbtUpdated.length === 0) {
@@ -1055,7 +1060,7 @@ async function saveTariffChanges(event) {
             delivery_weeks: weeksVal,
             is_active: true
           }]);
-          if (insErr) console.error("Insert nbt_offers error:", insErr);
+          if (insErr) alert("Errore inserimento NBT: " + insErr.message);
         }
       } else if (currentTab === 'nlt') {
         const newMonthly = Number(document.getElementById('editMonthlyPrice').value) || 0;
@@ -1074,10 +1079,13 @@ async function saveTariffChanges(event) {
           })
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
+        
+        if (nltErr) alert("Errore aggiornamento NLT (vehicle_id): " + nltErr.message);
 
         if (!nltErr && (!nltUpdated || nltUpdated.length === 0)) {
           const res2 = await supabase.from('nlt_offers').update({ client_monthly_price: newMonthly, months: newMonths, advance_payment: newAdvance, deposit_required: newDep, is_ready_delivery: isReady, delivery_weeks: weeksVal }).eq('id', ActiveEditVehicleId).select();
           nltUpdated = res2.data;
+          if (res2.error) alert("Errore aggiornamento NLT (id): " + res2.error.message);
         }
 
         if (!nltUpdated || nltUpdated.length === 0) {
@@ -1093,7 +1101,7 @@ async function saveTariffChanges(event) {
             delivery_weeks: weeksVal,
             is_active: true
           }]);
-          if (insErr) console.error("Insert nlt_offers error:", insErr);
+          if (insErr) alert("Errore inserimento NLT: " + insErr.message);
         }
       }
 
