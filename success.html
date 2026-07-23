@@ -25,7 +25,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pratica Inviata con Successo - ITERCARS</title>
   <meta name="description"
-    content="I tuoi documenti sono stati ricevuti e la fee Ã¨ prenotata. Esito delibera in 48 ore lavorative.">
+    content="I tuoi documenti sono stati ricevuti e la fee è prenotata. Esito delibera in 48 ore lavorative.">
 
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
@@ -181,7 +181,7 @@
 
       <!-- STATUS BREAKDOWN -->
       <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 32px;">
-        Il nostro dipartimento istruttorio ha preso in carico il tuo dossier. I documenti di identitÃ  e reddituali sono
+        Il nostro dipartimento istruttorio ha preso in carico il tuo dossier. I documenti di identità  e reddituali sono
         attualmente in fase di verifica informatica presso l'istituto di credito / mandante ufficiale.<br>
         In caso di esito positivo della delibera, verrai contattato dal tuo Concierge personale per la firma telematica
         del contratto di noleggio e la pianificazione della consegna.
@@ -336,7 +336,7 @@
 
         <div
           style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
-          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai giÃ  un account?</span>
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già  un account?</span>
           <button type="button" onclick="switchAuthMode('login')"
             style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi
             qui</button>
@@ -348,12 +348,12 @@
         <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i
             class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
         <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la
-          richiesta di adesione. Il nostro team ti contatterÃ  per completare l'onboarding.</p>
+          richiesta di adesione. Il nostro team ti contatterà  per completare l'onboarding.</p>
 
         <form onsubmit="handlePartnerReg(event)" style="display: flex; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
-              <label>Nome Azienda / SocietÃ  *</label>
+              <label>Nome Azienda / Società  *</label>
               <input type="text" class="form-control" id="partRegCompany" required placeholder="Luxury SRL">
             </div>
             <div class="form-group">
@@ -379,7 +379,7 @@
               <input type="email" class="form-control" id="partRegEmail" required placeholder="info@azienda.com">
             </div>
             <div class="form-group">
-              <label>Indirizzo Sede / CittÃ  *</label>
+              <label>Indirizzo Sede / Città  *</label>
               <input type="text" class="form-control" id="partRegAddress" required placeholder="Via Roma 1, Milano">
             </div>
           </div>
@@ -464,7 +464,7 @@
                   rental_days: quote.selected_duration_days || 1
                 };
                 
-                // Controlla se esiste giÃ  una prenotazione per questo lead
+                // Controlla se esiste già  una prenotazione per questo lead
                 const { data: existingBk } = await window.supabase
                   .from('bookings')
                   .select('id')
