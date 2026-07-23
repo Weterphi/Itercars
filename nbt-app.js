@@ -994,7 +994,7 @@ function renderOffersGrid() {
 
           <div class="nbt-card-actions">
 
-            <a href="nbt-dettaglio.html?id=${offer.id}&vid=${offer.vehicle_id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="nbt-dettaglio.html?id=${offer.id}&vid=${offer.vehicle_id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}&loc=${encodeURIComponent(document.getElementById('searchLocation') ? document.getElementById('searchLocation').value : '')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
 
               <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
 
@@ -1279,6 +1279,8 @@ async function handleGeneratePDFSubmit(event) {
       let rawProvId = offer.provider_id || (offer.vehicles && offer.vehicles.provider_id) || null;
       let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
       let provName = offer.providerName || offer.provider_company_name || 'Mandante NBT';
+      const locElem = document.getElementById('searchLocation');
+      const locText = (locElem && locElem.value) ? ' [Località: ' + locElem.value + ']' : '';
 
       const leadPayload = {
         first_name: name.split(' ')[0] || name,

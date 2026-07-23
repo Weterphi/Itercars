@@ -117,6 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   let carId = params.get('id') || 'bmw-x3-48-3k';
   const paramModel = params.get('model');
+  const paramLoc = params.get('loc') || '';
   const paramBrand = params.get('brand');
   const paramImg = params.get('img');
   const paramTrim = params.get('trim');
@@ -548,6 +549,7 @@ function calculateAndRenderPrice() {
 
 // Gestione submit finale "Genera Preventivo" (Apre e mostra il preventivo ufficiale PDF/Stampabile)
 async function handleQuoteSubmit(event) {
+  const paramLoc = new URLSearchParams(window.location.search).get('loc') || '';
   event.preventDefault();
 
   const submitBtn = event.target.querySelector('button[type="submit"]');
@@ -723,13 +725,13 @@ async function handleQuoteSubmit(event) {
           phone: phone,
           email: email,
           customer_type: type || 'Privato',
-          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (${ConfigState.durationMonths} Mesi / ${ConfigState.kmPerYear} km/anno - Rata €${ConfigState.finalMonthlyPrice}/mese)`,
+          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (${ConfigState.durationMonths} Mesi / ${ConfigState.kmPerYear} km/anno - Rata €${ConfigState.finalMonthlyPrice}/mese)` + (paramLoc ? ` [Località: ${paramLoc}]` : ''),
           pipeline_status: 'new_lead',
           assigned_broker_agent: 'Consulente Senior ITERCARS',
           provider_id: provUuid,
           interested_offer_id: offerUuid,
           interested_vehicle_id: vehicleUuid,
-          notes: `Preventivo NLT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/mese [Mandante: ${provName}]`
+          notes: `Preventivo NLT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/mese [Mandante: ${provName}]` + (paramLoc ? ` [Località: ${paramLoc}]` : '')
         };
 
         let leadData = null;
@@ -790,7 +792,7 @@ async function handleQuoteSubmit(event) {
         const emailPayload = {
           email: email,
           nome: name,
-          dettagli: `${c.brand} ${c.model} - ${ConfigState.durationMonths} Mesi, ${ConfigState.kmPerYear} km/anno, Anticipo €${ConfigState.depositAmount}`,
+          dettagli: `${c.brand} ${c.model} - ${ConfigState.durationMonths} Mesi, ${ConfigState.kmPerYear} km/anno, Anticipo €${ConfigState.depositAmount}` + (paramLoc ? ` - Luogo di Ritiro: ${paramLoc}` : ''),
           totale: ConfigState.finalMonthlyPrice,
           pdfBase64: pdfBase64,
           pdfName: `Preventivo_ITERCARS_${c.brand}_${c.model}.pdf`.replace(/ /g, '_'),

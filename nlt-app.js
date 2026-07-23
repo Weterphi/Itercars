@@ -1140,7 +1140,7 @@ window.generateNltCardHTML = function(offer) {
 
           <!-- Pulsanti d'Azione -->
           <div class="nlt-card-actions">
-            <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}&p12=${encodeURIComponent(offer.p12||'')}&p24=${encodeURIComponent(offer.p24||'')}&p36=${encodeURIComponent(offer.p36||'')}&p46=${encodeURIComponent(offer.p46||'')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}&p12=${encodeURIComponent(offer.p12||'')}&p24=${encodeURIComponent(offer.p24||'')}&p36=${encodeURIComponent(offer.p36||'')}&p46=${encodeURIComponent(offer.p46||'')}&loc=${encodeURIComponent(document.getElementById('searchLocation') ? document.getElementById('searchLocation').value : '')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
               <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
             </a>
             <button type="button" class="btn btn-outline" onclick="openWhatsAppForCard('${offer.id}')" title="Contatta su WhatsApp" style="padding: 12px 14px; color: #2ecc71; border-color: rgba(46, 204, 113, 0.4);">
@@ -1418,6 +1418,8 @@ async function handleGeneratePDFSubmit(event) {
       let rawProvId = offer.provider_id || (offer.vehicles && offer.vehicles.provider_id) || null;
       let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
       let provName = offer.providerName || offer.provider_company_name || 'Mandante NLT';
+      const locElem = document.getElementById('searchLocation');
+      const locText = (locElem && locElem.value) ? ' [Località: ' + locElem.value + ']' : '';
 
       const leadPayload = {
         first_name: name.split(' ')[0] || name,
@@ -1425,13 +1427,13 @@ async function handleGeneratePDFSubmit(event) {
         phone: phone,
         email: email,
         customer_type: type || 'Privato',
-        vehicle_interest: `${offer.brand} ${offer.model} ${offer.trim || ''}`.trim() + ` (${priceInfo.details || ''} - Rata €${priceInfo.price}/mese)`,
+        vehicle_interest: `${offer.brand} ${offer.model} ${offer.trim || ''}`.trim() + ` (${priceInfo.details || ''} - Rata €${priceInfo.price}/mese)` + locText,
         pipeline_status: 'new_lead',
         assigned_broker_agent: 'Consulente Senior ITERCARS',
         provider_id: provUuid,
         interested_offer_id: offerUuid,
         interested_vehicle_id: vehicleUuid,
-        notes: `Preventivo 1-Click NLT per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/mese [Mandante: ${provName}]`
+        notes: `Preventivo 1-Click NLT per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/mese [Mandante: ${provName}]` + locText
       };
 
       const { error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]);

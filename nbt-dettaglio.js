@@ -501,6 +501,7 @@ function calculateAndRenderPrice() {
 
 // Gestione submit finale "Genera Preventivo" (Apre e mostra il preventivo ufficiale PDF/Stampabile)
 async function handleQuoteSubmit(event) {
+  const paramLoc = new URLSearchParams(window.location.search).get('loc') || '';
   event.preventDefault();
 
   const submitBtn = event.target.querySelector('button[type="submit"]');
@@ -681,7 +682,7 @@ async function handleQuoteSubmit(event) {
           provider_id: provUuid,
           interested_offer_id: null,
           interested_vehicle_id: vehicleUuid,
-          notes: `Preventivo NBT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/periodo [Mandante: ${provName}]`
+          notes: `Preventivo NBT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationDays}g/${ConfigState.kmDailyLimit}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/periodo [Mandante: ${provName}]` + (paramLoc ? ` [Località: ${paramLoc}]` : '')
         };
 
         let leadData = null;
