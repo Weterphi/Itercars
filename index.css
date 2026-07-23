@@ -62,10 +62,6 @@ body {
   width: 100%;
   max-width: 100%;
   position: relative;
-  background-image: 
-    radial-gradient(circle at 15% 20%, rgba(0, 146, 70, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 85% 80%, rgba(206, 43, 55, 0.06) 0%, transparent 40%);
-  background-attachment: fixed;
 }
 
 h1, h2, h3, h4, .font-heading {
