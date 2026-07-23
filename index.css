@@ -2171,7 +2171,7 @@ footer {
   display: none;
   background: var(--bg-glass);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid var(--border-glass);
   border-radius: 16px;
   padding: 16px;
   margin-top: 20px;

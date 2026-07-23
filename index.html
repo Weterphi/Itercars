@@ -142,7 +142,7 @@
       <form onsubmit="handleMobileHeroSearch(event)">
         <div class="mhs-row-full">
           <div class="input-wrapper" style="position: relative;">
-            <i class="ri-building-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
+            <i class="ri-building-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-primary); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
             <select class="form-control" id="mobileSearchLocation" style="appearance: none; padding-left: 45px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22><path fill=%22none%22 d=%22M0 0h24v24H0z%22/><path d=%22M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z%22 fill=%22%23D4AF37%22/></svg>'); background-repeat: no-repeat; background-position: right 16px center; background-size: 20px; cursor: pointer; border: 1px solid rgba(212, 175, 55, 0.3); transition: all 0.3s ease;">
                       <option value="" disabled selected>Seleziona Luogo di Ritiro</option>
                       
@@ -274,16 +274,16 @@
         </div>
         <div class="mhs-row-split">
           <div class="input-wrapper" style="position: relative;">
-            <i class="ri-calendar-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
+            <i class="ri-calendar-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-primary); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
             <input type="date" id="mobileSearchDateStart" class="form-control" value="2026-07-01" required>
           </div>
           <div class="input-wrapper" style="position: relative;">
-            <i class="ri-calendar-check-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
+            <i class="ri-calendar-check-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-primary); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
             <input type="date" id="mobileSearchDateEnd" class="form-control" value="2026-07-15" required>
           </div>
         </div>
         <div class="mhs-row-full" style="margin-top: 12px;">
-          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-gold); font-weight: 800;">
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; background: rgba(212, 175, 55, 0.15); border: 1px solid var(--accent-gold); color: var(--accent-primary); font-weight: 800;">
             Consulta disponibilità <i class="ri-search-line"></i>
           </button>
         </div>
@@ -308,7 +308,7 @@
               <div class="form-group">
                   <label><i class="ri-map-pin-line"></i> <span data-i18n="search.location">Luogo di Ritiro</span></label>
                   <div class="input-wrapper" style="position: relative;">
-                    <i class="ri-building-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
+                    <i class="ri-building-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-primary); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
                     <select class="form-control" id="searchLocation" style="appearance: none; padding-left: 45px; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22><path fill=%22none%22 d=%22M0 0h24v24H0z%22/><path d=%22M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z%22 fill=%22%23D4AF37%22/></svg>'); background-repeat: no-repeat; background-position: right 16px center; background-size: 20px; cursor: pointer; border: 1px solid rgba(212, 175, 55, 0.3); transition: all 0.3s ease;">
                       <option value="" disabled selected>Seleziona Luogo di Ritiro</option>
                       
@@ -482,19 +482,19 @@
       <div id="postSearchFilters" style="margin-bottom: 24px; padding: 16px; background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 12px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center;">
         <span style="color: var(--text-muted); font-size: 0.9rem; font-weight: 600;"><i class="ri-filter-3-line"></i> Filtra i Risultati:</span>
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #fff; font-size: 0.9rem;">
-          <input type="checkbox" id="filterLuxury" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-gold); width: 16px; height: 16px;">
+          <input type="checkbox" id="filterLuxury" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-primary); width: 16px; height: 16px;">
           <span>Luxury</span>
         </label>
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #fff; font-size: 0.9rem;">
-          <input type="checkbox" id="filterPiccola" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-gold); width: 16px; height: 16px;">
+          <input type="checkbox" id="filterPiccola" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-primary); width: 16px; height: 16px;">
           <span>Macchina Piccola</span>
         </label>
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #fff; font-size: 0.9rem;">
-          <input type="checkbox" id="filterMedia" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-gold); width: 16px; height: 16px;">
+          <input type="checkbox" id="filterMedia" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-primary); width: 16px; height: 16px;">
           <span>Macchina Media</span>
         </label>
         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: #fff; font-size: 0.9rem;">
-          <input type="checkbox" id="filterGrande" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-gold); width: 16px; height: 16px;">
+          <input type="checkbox" id="filterGrande" value="true" onchange="handleHeroSearch()" style="accent-color: var(--accent-primary); width: 16px; height: 16px;">
           <span>Macchina Grande</span>
         </label>
       </div>
