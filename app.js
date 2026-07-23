@@ -1077,53 +1077,84 @@ function renderCarCard(car, dict) {
   
   // Se è Noleggio a Lungo Termine, usa la vera card NLT
   if (car.is_nlt && car.raw) {
-    const offer = car.raw;
-    let variants = [];
-    if (typeof offer.variants === 'string') {
-      try { variants = JSON.parse(offer.variants); } catch(e){}
-    } else if (offer.variants) {
-      variants = offer.variants;
+    const v = car.raw;
+    const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
+    
+    let minPrice = car.price || v.daily_price || 0;
+    if (specsObj.monthly_price_36) minPrice = Number(specsObj.monthly_price_36);
+    else if (specsObj.monthly_price) minPrice = Number(specsObj.monthly_price);
+    else if (v.client_monthly_price) minPrice = Number(v.client_monthly_price);
+    
+    let minDeposit = v.deposit !== undefined ? Number(v.deposit) : 3000;
+    
+    const hp = specsObj.hp || '300 CV';
+    const speed = specsObj.speed || '240 km/h';
+    const accel = specsObj.accel || '5.5s';
+    const fuel = v.fuel_type || 'Ibrido / Diesel';
+    const transmission = v.transmission || 'Automatico';
+    const providerName = v.providerName || 'Mandante NLT';
+    const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true);
+    const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 4);
+    
+    let badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    if (readyDeliv && delivWeeks <= 1) {
+      badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    } else if (readyDeliv) {
+      badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${delivWeeks} sett.)</span>`;
+    } else {
+      badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${delivWeeks} sett.</span>`;
     }
     
-    let minPrice = offer.monthly_price || 0;
-    let minDeposit = offer.deposit || 0;
-    if (variants && variants.length > 0) {
-      let lowest = variants[0];
-      variants.forEach(v => {
-        if (v.price < lowest.price) lowest = v;
-      });
-      minPrice = lowest.price;
-      minDeposit = lowest.deposit !== undefined ? lowest.deposit : minDeposit;
-    }
-    
+    let targetLink = `nlt-dettaglio.html?id=${encodeURIComponent(v.id || '')}&model=${encodeURIComponent(v.model || '')}&brand=${encodeURIComponent(v.brand || '')}&trim=${encodeURIComponent(v.trim || '')}&img=${encodeURIComponent(car.image || '')}&hp=${encodeURIComponent(hp)}&speed=${encodeURIComponent(speed)}&accel=${encodeURIComponent(accel)}&price=${minPrice}&deposit=${minDeposit}&km=15000&dur=48&cat=${encodeURIComponent(v.category || 'Luxury')}&fuel=${encodeURIComponent(fuel)}&trans=${encodeURIComponent(transmission)}&p12=${encodeURIComponent(specsObj.monthly_price_12||'')}&p24=${encodeURIComponent(specsObj.monthly_price_24||'')}&p36=${encodeURIComponent(specsObj.monthly_price_36||'')}&p46=${encodeURIComponent(specsObj.monthly_price_46||'')}`;
+
     return `
-      <div class="glass-card nbt-card" style="display:flex; flex-direction:column; overflow:hidden; transition:transform 0.3s ease; height:100%;">
-        <div class="nbt-card-img-wrapper" style="position:relative; width:100%; height:200px;">
-          <img src="${offer.image_url || 'category-suv.jpg'}" alt="${offer.brand} ${offer.model}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='category-suv.jpg'">
-          <span class="card-badge" style="font-size:0.7rem; padding:3px 8px; border-radius:4px; background:rgba(212, 175, 55, 0.15); color:var(--accent-gold); border:1px solid rgba(212, 175, 55, 0.3); position:absolute; top:10px; left:10px; z-index:2;"><i class="ri-calendar-line"></i> Lungo Termine</span>
+      <div class="glass-card nlt-card" id="card-${v.id}">
+        <div class="nlt-card-img-wrapper">
+          <img src="${car.image}" alt="${v.brand || ''} ${v.model || ''}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
+          <div class="nlt-card-badges">
+            ${badgeText}
+          </div>
+          <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${providerName}</div>
         </div>
-        <div class="nbt-card-content" style="padding:20px; display:flex; flex-direction:column; flex:1;">
-          <h3 style="margin:0 0 4px 0; font-size:1.2rem; color:#fff;">${offer.brand || ''} ${offer.model || offer.name || ''}</h3>
-          <p style="margin:0 0 16px 0; font-size:0.9rem; color:var(--text-muted);">${offer.trim || ''}</p>
-          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:20px; font-size:0.8rem; color:var(--text-muted); text-align:center;">
-            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-gas-station-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.fuel_type || 'Diesel'}</div>
-            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-steering-2-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.transmission || 'Auto'}</div>
-            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-roadster-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.category || 'SUV'}</div>
+
+        <div class="nlt-card-body">
+          <div class="nlt-card-header">
+            <span class="nlt-brand-tag">${v.brand || ''}</span>
+            <h3 class="nlt-model-title">${v.model || car.name} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${v.trim || ''}</small></h3>
           </div>
-          <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
-            <div>
-              <div style="font-size:1.5rem; font-weight:700; color:#fff;">
-                <span style="font-size:1rem; color:var(--text-muted);">€</span>${minPrice}
-                <span style="font-size:0.8rem; color:var(--text-muted); font-weight:400;">/mese</span>
-              </div>
-              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">
-                ${minDeposit > 0 ? `Anticipo: €${minDeposit}` : `<span style="color:var(--accent-gold);font-weight:600;"><i class="ri-flashlight-fill"></i> Anticipo Zero</span>`}
-              </div>
-            </div>
+
+          <!-- Specifiche Veloci -->
+          <div class="nlt-specs-row">
+            <span><i class="ri-speed-up-line"></i> ${hp}</span>
+            <span><i class="ri-dashboard-2-line"></i> ${accel} (0-100)</span>
+            <span><i class="ri-gas-station-line"></i> ${fuel}</span>
+            <span><i class="ri-settings-4-line"></i> ${transmission}</span>
           </div>
-          <a href="nlt-dettaglio.html?id=${offer.id}" class="btn btn-primary" style="width:100%; text-align:center; padding:12px; font-weight:600;">
-            Vedi Offerta Completa
-          </a>
+
+          <!-- Box Rata Finale / Prezzo -->
+          <div class="nlt-price-box">
+            <div class="nlt-price-num text-gradient">€ <span>${minPrice.toLocaleString('it-IT')}</span></div>
+            <div class="nlt-price-label">€ / mese (IVA esclusa)</div>
+            <div class="nlt-price-details">48 mesi — Anticipo € ${minDeposit.toLocaleString('it-IT')} — 15.000 km/anno</div>
+          </div>
+
+          <!-- Elenco Servizi Inclusi -->
+          <div class="nlt-services-list">
+            <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assicurazione RCA & Kasko completa</span></div>
+            <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Manutenzione Ordinaria e Straordinaria</span></div>
+            <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Soccorso stradale H24 europea</span></div>
+            <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 2px;">+ Bollo, Gestione Pratiche & Assistenza H24</div>
+          </div>
+
+          <!-- Pulsanti d'Azione -->
+          <div class="nlt-card-actions">
+            <a href="${targetLink}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
+            </a>
+            <a href="https://wa.me/393392451458?text=${encodeURIComponent('Ciao, vorrei informazioni sull\'offerta NLT per ' + (v.brand||'') + ' ' + (v.model||'') + ' a ' + minPrice + '€/mese')}" target="_blank" class="btn btn-outline" title="Contatta su WhatsApp" style="padding: 12px 14px; color: #2ecc71; border-color: rgba(46, 204, 113, 0.4); display: flex; align-items: center; justify-content: center;">
+              <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i>
+            </a>
+          </div>
         </div>
       </div>
     `;
