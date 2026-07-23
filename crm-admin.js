@@ -122,22 +122,32 @@ async function fetchLeadsFromDatabase() {
       .order('created_at', { ascending: false });
 
     if (!error && data) {
-      CurrentLeads = data.map(l => ({
-        id: l.id,
-        first_name: l.first_name || 'Cliente',
-        last_name: l.last_name || '',
-        phone: l.phone || '',
-        email: l.email || '',
-        customer_type: l.customer_type || 'Privato',
-        pipeline_status: l.pipeline_status || 'new_lead',
-        car_name: l.vehicle_interest || (l.notes ? l.notes.split('-')[0].trim() : 'Richiesta NLT'),
-        monthly_price: Number(l.annual_income_or_revenue) || 799,
-        provider_code: l.assigned_broker_agent || 'Consulente ITERCARS',
-        provider_id: l.provider_id || null,
-        interested_vehicle_id: l.interested_vehicle_id || null,
-        notes: l.notes || '',
-        created_at: l.created_at
-      }));
+      CurrentLeads = data.map(l => {
+        // Extract real price from text instead of defaulting to 799
+        let extractedPrice = 0;
+        const textToSearch = (l.vehicle_interest || '') + ' ' + (l.notes || '');
+        const priceMatch = textToSearch.match(/Rata\s*€\s*([\d.,]+)/i) || textToSearch.match(/€\s*([\d.,]+)/i) || textToSearch.match(/Canone\s*([\d.,]+)/i);
+        if (priceMatch) {
+            extractedPrice = Number(priceMatch[1].replace(/\./g, '').replace(',', '.'));
+        }
+        
+        return {
+          id: l.id,
+          first_name: l.first_name || 'Cliente',
+          last_name: l.last_name || '',
+          phone: l.phone || '',
+          email: l.email || '',
+          customer_type: l.customer_type || 'Privato',
+          pipeline_status: l.pipeline_status || 'new_lead',
+          car_name: l.vehicle_interest || (l.notes ? l.notes.split('-')[0].trim() : 'Richiesta NLT'),
+          monthly_price: Number(l.annual_income_or_revenue) || extractedPrice || 0,
+          provider_code: l.assigned_broker_agent || 'Consulente ITERCARS',
+          provider_id: l.provider_id || null,
+          interested_vehicle_id: l.interested_vehicle_id || null,
+          notes: l.notes || '',
+          created_at: l.created_at
+        };
+      });
     } else {
       CurrentLeads = [];
     }

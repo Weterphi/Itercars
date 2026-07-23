@@ -270,7 +270,21 @@ async function fetchPartnerBookings() {
       .order('created_at', { ascending: false });
 
     if (!error && data) {
-      PartnerBookings = data;
+      PartnerBookings = data.map(b => {
+        // Extract real price if it defaulted to 799 or 0
+        let extractedPrice = Number(b.total_price);
+        if (extractedPrice === 799 || extractedPrice === 0) {
+          const match = (b.vehicle_name || '').match(/Rata\s*€\s*([\d.,]+)/i) || (b.vehicle_name || '').match(/€\s*([\d.,]+)/i) || (b.vehicle_name || '').match(/Canone\s*([\d.,]+)/i);
+          if (match) {
+            extractedPrice = Number(match[1].replace(/\./g, '').replace(',', '.'));
+          }
+        }
+        
+        return {
+          ...b,
+          total_price: extractedPrice
+        };
+      });
     } else {
       PartnerBookings = [];
     }
