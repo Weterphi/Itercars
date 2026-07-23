@@ -53,39 +53,38 @@ document.addEventListener('DOMContentLoaded', () => {
    1. AUTENTICAZIONE E LOGOUT PARTNER
    ========================================================================== */
 async function checkPartnerAuth() {
-  const saved = localStorage.getItem('itercars_partner_auth');
   const overlay = document.getElementById('partnerAuthOverlay');
+  const mainApp = document.getElementById('mainAppLayout');
   
-  if (saved) {
-    try {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    const saved = localStorage.getItem('itercars_partner_auth');
+
+    if (session && session.user && saved) {
       CurrentPartner = JSON.parse(saved);
       
-      if (supabase && CurrentPartner && CurrentPartner.id) {
-        const { data, error } = await supabase
-          .from('providers')
-          .select('id')
-          .eq('id', CurrentPartner.id)
-          .eq('is_active', true)
-          .single();
-          
-        if (error || !data) {
-          throw new Error("Partner eliminato o disattivato");
-        }
+      const { data, error } = await supabase
+        .from('providers')
+        .select('id')
+        .eq('id', CurrentPartner.id)
+        .eq('is_active', true)
+        .single();
+        
+      if (!error && data) {
+        if (overlay) overlay.style.display = 'none';
+        if (mainApp) mainApp.style.display = 'flex';
+        await loadPartnerDashboard();
+        return;
       }
-      
-      if (overlay) overlay.classList.remove('active');
-      if (supabase && supabase.auth) {
-        try { await supabase.auth.getSession(); } catch(err){}
-      }
-      await loadPartnerDashboard();
-      return;
-    } catch(e) {
-      localStorage.removeItem('itercars_partner_auth');
-      CurrentPartner = null;
     }
+  } catch(e) {
+    console.error("Partner auth check error:", e);
   }
 
+  localStorage.removeItem('itercars_partner_auth');
+  CurrentPartner = null;
   if (overlay) overlay.classList.add('active');
+  if (mainApp) mainApp.style.display = 'none';
 }
 
 async function handlePartnerLogin(event) {
@@ -139,7 +138,9 @@ async function handlePartnerLogin(event) {
     CurrentPartner = providerData[0];
     localStorage.setItem('itercars_partner_auth', JSON.stringify(CurrentPartner));
     const overlay = document.getElementById('partnerAuthOverlay');
-    if (overlay) overlay.classList.remove('active');
+    const mainApp = document.getElementById('mainAppLayout');
+    if (overlay) overlay.style.display = 'none';
+    if (mainApp) mainApp.style.display = 'flex';
     
     loadPartnerDashboard();
   } catch(e) {
@@ -260,6 +261,17 @@ async function fetchPartnerVehicles() {
   }
 }
 
+// Sanitizzazione input per prevenire XSS
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 async function fetchPartnerBookings() {
   if (!supabase || !CurrentPartner) return;
   try {
@@ -282,6 +294,11 @@ async function fetchPartnerBookings() {
         
         return {
           ...b,
+          client_name: escapeHTML(b.client_name),
+          client_email: escapeHTML(b.client_email),
+          client_phone: escapeHTML(b.client_phone),
+          vehicle_name: escapeHTML(b.vehicle_name),
+          pickup_location: escapeHTML(b.pickup_location),
           total_price: extractedPrice
         };
       });

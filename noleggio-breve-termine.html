@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; img-src 'self' https: data: blob:;">
   <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
   <script>
@@ -32,7 +33,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITERCARS — Noleggio Breve Termine & Breve Termine | Catalogo Multi-Mandante</title>
+  <title>ITERCARS â€” Noleggio Breve Termine & Breve Termine | Catalogo Multi-Mandante</title>
   <meta name="description" content="Noleggio Breve Termine e Breve Termine di auto di lusso, sportive ed elettriche. Canone tutto incluso: Assicurazione Kasko, Manutenzione e Bollo. Offerte Pronta Consegna anche ad Anticipo Zero.">
   
   <!-- Remix Icons CDN -->
@@ -80,14 +81,14 @@
         <!-- Custom Language Selector -->
         <div class="lang-dropdown-wrapper" style="position: relative;">
           <button class="btn btn-outline" id="langDropdownBtn" onclick="toggleLangMenu(event)" style="padding: 8px 16px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; border-radius: var(--radius-full);">
-            <span id="currentLangFlag" style="font-size: 1.2rem;">🇮🇹</span>
+            <span id="currentLangFlag" style="font-size: 1.2rem;">ðŸ‡®ðŸ‡¹</span>
             <span id="currentLangCode" style="font-weight: 700;">IT</span>
             <i class="ri-arrow-down-s-line"></i>
           </button>
           <div class="glass-card lang-dropdown-menu" id="langDropdownMenu">
-            <button onclick="selectLang('it')"><span class="lang-flag">🇮🇹</span> <strong>IT</strong> - Italiano</button>
-            <button onclick="selectLang('en')"><span class="lang-flag">🇬🇧</span> <strong>EN</strong> - English</button>
-            <button onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <strong>ES</strong> - Español</button>
+            <button onclick="selectLang('it')"><span class="lang-flag">ðŸ‡®ðŸ‡¹</span> <strong>IT</strong> - Italiano</button>
+            <button onclick="selectLang('en')"><span class="lang-flag">ðŸ‡¬ðŸ‡§</span> <strong>EN</strong> - English</button>
+            <button onclick="selectLang('es')"><span class="lang-flag">ðŸ‡ªðŸ‡¸</span> <strong>ES</strong> - EspaÃ±ol</button>
           </div>
         </div>
 
@@ -143,9 +144,9 @@
           <!-- Luogo di Ritiro -->
           <div style="position: relative; display: flex; align-items: center;" class="fleet-pill-wrapper">
             <i class="ri-map-pin-line" style="position: absolute; left: 16px; color: #cbd5e1; font-size: 1.1rem; pointer-events: none;"></i>
-            <input type="text" id="searchLocation" list="italian-cities" placeholder="Luogo o Città" class="fleet-pill-btn" style="width: 100%; padding-left: 42px; min-width: 160px;" autocomplete="off">
+            <input type="text" id="searchLocation" list="italian-cities" placeholder="Luogo o CittÃ " class="fleet-pill-btn" style="width: 100%; padding-left: 42px; min-width: 160px;" autocomplete="off">
             <datalist id="italian-cities">
-              <option value="Agrigento"></option><option value="Alessandria"></option><option value="Ancona"></option><option value="Aosta"></option><option value="Arezzo"></option><option value="Ascoli Piceno"></option><option value="Asti"></option><option value="Avellino"></option><option value="Bari"></option><option value="Barletta-Andria-Trani"></option><option value="Belluno"></option><option value="Benevento"></option><option value="Bergamo"></option><option value="Biella"></option><option value="Bologna"></option><option value="Bolzano"></option><option value="Brescia"></option><option value="Brindisi"></option><option value="Cagliari"></option><option value="Caltanissetta"></option><option value="Campobasso"></option><option value="Carbonia-Iglesias"></option><option value="Caserta"></option><option value="Catania"></option><option value="Catanzaro"></option><option value="Chieti"></option><option value="Como"></option><option value="Cosenza"></option><option value="Cremona"></option><option value="Crotone"></option><option value="Cuneo"></option><option value="Enna"></option><option value="Fermo"></option><option value="Ferrara"></option><option value="Firenze"></option><option value="Foggia"></option><option value="Forlì-Cesena"></option><option value="Frosinone"></option><option value="Genova"></option><option value="Gorizia"></option><option value="Grosseto"></option><option value="Imperia"></option><option value="Isernia"></option><option value="L'Aquila"></option><option value="La Spezia"></option><option value="Latina"></option><option value="Lecce"></option><option value="Lecco"></option><option value="Livorno"></option><option value="Lodi"></option><option value="Lucca"></option><option value="Macerata"></option><option value="Mantova"></option><option value="Massa-Carrara"></option><option value="Matera"></option><option value="Medio Campidano"></option><option value="Messina"></option><option value="Milano"></option><option value="Modena"></option><option value="Monza e della Brianza"></option><option value="Napoli"></option><option value="Novara"></option><option value="Nuoro"></option><option value="Ogliastra"></option><option value="Olbia-Tempio"></option><option value="Oristano"></option><option value="Padova"></option><option value="Palermo"></option><option value="Parma"></option><option value="Pavia"></option><option value="Perugia"></option><option value="Pesaro e Urbino"></option><option value="Pescara"></option><option value="Piacenza"></option><option value="Pisa"></option><option value="Pistoia"></option><option value="Pordenone"></option><option value="Potenza"></option><option value="Prato"></option><option value="Ragusa"></option><option value="Ravenna"></option><option value="Reggio Calabria"></option><option value="Reggio Emilia"></option><option value="Rieti"></option><option value="Rimini"></option><option value="Roma"></option><option value="Rovigo"></option><option value="Salerno"></option><option value="Sassari"></option><option value="Savona"></option><option value="Siena"></option><option value="Siracusa"></option><option value="Sondrio"></option><option value="Taranto"></option><option value="Teramo"></option><option value="Terni"></option><option value="Torino"></option><option value="Trapani"></option><option value="Trento"></option><option value="Treviso"></option><option value="Trieste"></option><option value="Udine"></option><option value="Varese"></option><option value="Venezia"></option><option value="Verbano-Cusio-Ossola"></option><option value="Vercelli"></option><option value="Verona"></option><option value="Vibo Valentia"></option><option value="Vicenza"></option><option value="Viterbo"></option>
+              <option value="Agrigento"></option><option value="Alessandria"></option><option value="Ancona"></option><option value="Aosta"></option><option value="Arezzo"></option><option value="Ascoli Piceno"></option><option value="Asti"></option><option value="Avellino"></option><option value="Bari"></option><option value="Barletta-Andria-Trani"></option><option value="Belluno"></option><option value="Benevento"></option><option value="Bergamo"></option><option value="Biella"></option><option value="Bologna"></option><option value="Bolzano"></option><option value="Brescia"></option><option value="Brindisi"></option><option value="Cagliari"></option><option value="Caltanissetta"></option><option value="Campobasso"></option><option value="Carbonia-Iglesias"></option><option value="Caserta"></option><option value="Catania"></option><option value="Catanzaro"></option><option value="Chieti"></option><option value="Como"></option><option value="Cosenza"></option><option value="Cremona"></option><option value="Crotone"></option><option value="Cuneo"></option><option value="Enna"></option><option value="Fermo"></option><option value="Ferrara"></option><option value="Firenze"></option><option value="Foggia"></option><option value="ForlÃ¬-Cesena"></option><option value="Frosinone"></option><option value="Genova"></option><option value="Gorizia"></option><option value="Grosseto"></option><option value="Imperia"></option><option value="Isernia"></option><option value="L'Aquila"></option><option value="La Spezia"></option><option value="Latina"></option><option value="Lecce"></option><option value="Lecco"></option><option value="Livorno"></option><option value="Lodi"></option><option value="Lucca"></option><option value="Macerata"></option><option value="Mantova"></option><option value="Massa-Carrara"></option><option value="Matera"></option><option value="Medio Campidano"></option><option value="Messina"></option><option value="Milano"></option><option value="Modena"></option><option value="Monza e della Brianza"></option><option value="Napoli"></option><option value="Novara"></option><option value="Nuoro"></option><option value="Ogliastra"></option><option value="Olbia-Tempio"></option><option value="Oristano"></option><option value="Padova"></option><option value="Palermo"></option><option value="Parma"></option><option value="Pavia"></option><option value="Perugia"></option><option value="Pesaro e Urbino"></option><option value="Pescara"></option><option value="Piacenza"></option><option value="Pisa"></option><option value="Pistoia"></option><option value="Pordenone"></option><option value="Potenza"></option><option value="Prato"></option><option value="Ragusa"></option><option value="Ravenna"></option><option value="Reggio Calabria"></option><option value="Reggio Emilia"></option><option value="Rieti"></option><option value="Rimini"></option><option value="Roma"></option><option value="Rovigo"></option><option value="Salerno"></option><option value="Sassari"></option><option value="Savona"></option><option value="Siena"></option><option value="Siracusa"></option><option value="Sondrio"></option><option value="Taranto"></option><option value="Teramo"></option><option value="Terni"></option><option value="Torino"></option><option value="Trapani"></option><option value="Trento"></option><option value="Treviso"></option><option value="Trieste"></option><option value="Udine"></option><option value="Varese"></option><option value="Venezia"></option><option value="Verbano-Cusio-Ossola"></option><option value="Vercelli"></option><option value="Verona"></option><option value="Vibo Valentia"></option><option value="Vicenza"></option><option value="Viterbo"></option>
             </datalist>
             <ul id="searchLocationSuggestions" class="autocomplete-suggestions"></ul>
           </div>
@@ -163,9 +164,9 @@
           <select id="filterTipologia" class="fleet-pill-btn" style="appearance: none; text-align: center;">
             <option value="all" style="background: #111; color: #fff;">Cat: Tutte</option>
             <option value="SUV Luxury" style="background: #111; color: #fff;">SUV Luxury</option>
-            <option value="Sportiva" style="background: #111; color: #fff;">Sportiva & Coupé</option>
+            <option value="Sportiva" style="background: #111; color: #fff;">Sportiva & CoupÃ©</option>
             <option value="Supercar" style="background: #111; color: #fff;">Supercar</option>
-            <option value="Elettrico" style="background: #111; color: #fff;">Elettriche ⚡</option>
+            <option value="Elettrico" style="background: #111; color: #fff;">Elettriche âš¡</option>
           </select>
 
           <!-- Alimentazione -->
@@ -243,11 +244,11 @@
       <div style="background: rgba(0, 146, 70, 0.12); border: 1px solid rgba(0, 146, 70, 0.35); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
         <div>
           <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Configurazione Selezionata:</span>
-          <strong id="quoteModalDetailsText" style="color: #fff; font-size: 0.95rem;">48 Mesi — Anticipo € 3.000 — 15.000 km/anno</strong>
+          <strong id="quoteModalDetailsText" style="color: #fff; font-size: 0.95rem;">48 Mesi â€” Anticipo â‚¬ 3.000 â€” 15.000 km/anno</strong>
         </div>
         <div style="text-align: right;">
           <span style="font-size: 0.8rem; color: var(--text-muted); display: block;">Canone Calcolato:</span>
-          <div id="quoteModalPriceText" style="font-size: 1.6rem; font-weight: 900; color: #2ecc71;">€ 150 / giorno <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Tutto Incluso</small></div>
+          <div id="quoteModalPriceText" style="font-size: 1.6rem; font-weight: 900; color: #2ecc71;">â‚¬ 150 / giorno <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Tutto Incluso</small></div>
         </div>
       </div>
 
@@ -278,7 +279,7 @@
             <select id="quoteClientType" class="form-control" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass); padding: 10px; border-radius: 8px; color: #fff;">
               <option value="Privato">Privato</option>
               <option value="Partita IVA">Partita IVA / Ditta Individuale</option>
-              <option value="Azienda SRL/SPA">Azienda SRL / SPA / Società</option>
+              <option value="Azienda SRL/SPA">Azienda SRL / SPA / SocietÃ </option>
             </select>
           </div>
         </div>
@@ -298,7 +299,7 @@
           <span>Emetti Preventivo PDF in 1-Click</span> <i class="ri-file-pdf-fill"></i>
         </button>
         <button type="button" onclick="openDossierRecoveryModal()" class="btn btn-outline" style="width: 100%; height: 42px; font-size: 0.88rem; font-weight: 700; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px; border-color: rgba(46, 204, 113, 0.4); color: #2ecc71; background: rgba(46, 204, 113, 0.05); border-radius: 8px;">
-          <i class="ri-folder-shield-2-fill"></i> <span>Hai già un preventivo? Recupera Pratica</span>
+          <i class="ri-folder-shield-2-fill"></i> <span>Hai giÃ  un preventivo? Recupera Pratica</span>
         </button>
       </form>
 
@@ -432,7 +433,7 @@
           </div>
           <div class="form-group">
             <label>Password *</label>
-            <input type="password" class="form-control" id="authLoginPassword" required placeholder="••••••••">
+            <input type="password" class="form-control" id="authLoginPassword" required placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 8px;">
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
@@ -487,11 +488,11 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
-              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
 
@@ -501,7 +502,7 @@
         </form>
 
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
-          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai giÃ  un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
@@ -527,7 +528,7 @@
 
       <h3 style="font-size: 1.6rem; margin-bottom: 6px;">Recupera la Tua Pratica</h3>
       <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
-        Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
+        Hai giÃ  generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
       </p>
 
       <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
@@ -536,7 +537,7 @@
           <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-NLT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
         </div>
 
-        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">— OPPURE —</div>
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">â€” OPPURE â€”</div>
 
         <div class="form-group">
           <label><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
@@ -587,3 +588,4 @@
 
 </body>
 </html>
+

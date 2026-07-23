@@ -113,6 +113,17 @@ async function loadAllCrmData() {
   loadFleetApprovalTable();
 }
 
+// Sanitizzazione input per evitare XSS
+function escapeHTML(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // 1. Fetch Leads (`public.crm_leads`)
 async function fetchLeadsFromDatabase() {
   try {
@@ -132,19 +143,19 @@ async function fetchLeadsFromDatabase() {
         }
         
         return {
-          id: l.id,
-          first_name: l.first_name || 'Cliente',
-          last_name: l.last_name || '',
-          phone: l.phone || '',
-          email: l.email || '',
-          customer_type: l.customer_type || 'Privato',
-          pipeline_status: l.pipeline_status || 'new_lead',
-          car_name: l.vehicle_interest || (l.notes ? l.notes.split('-')[0].trim() : 'Richiesta NLT'),
+          id: escapeHTML(l.id),
+          first_name: escapeHTML(l.first_name) || 'Cliente',
+          last_name: escapeHTML(l.last_name) || '',
+          phone: escapeHTML(l.phone) || '',
+          email: escapeHTML(l.email) || '',
+          customer_type: escapeHTML(l.customer_type) || 'Privato',
+          pipeline_status: escapeHTML(l.pipeline_status) || 'new_lead',
+          car_name: escapeHTML(l.vehicle_interest || (l.notes ? l.notes.split('-')[0].trim() : 'Richiesta NLT')),
           monthly_price: Number(l.annual_income_or_revenue) || extractedPrice || 0,
-          provider_code: l.assigned_broker_agent || 'Consulente ITERCARS',
+          provider_code: escapeHTML(l.assigned_broker_agent) || 'Consulente ITERCARS',
           provider_id: l.provider_id || null,
           interested_vehicle_id: l.interested_vehicle_id || null,
-          notes: l.notes || '',
+          notes: escapeHTML(l.notes) || '',
           created_at: l.created_at
         };
       });
@@ -248,31 +259,31 @@ async function fetchBookingsFromDatabase() {
     let combined = [];
     if (!bkRes.error && bkRes.data) {
       combined = combined.concat(bkRes.data.map(b => ({
-        id: b.id,
+        id: escapeHTML(b.id),
         source: 'booking',
         created_at: b.created_at,
-        vehicle_name: b.vehicle_name || 'Vettura Flotta',
-        client_name: b.client_name || 'Cliente',
-        client_phone: b.client_phone || '',
-        client_email: b.client_email || '',
-        pickup_location: b.pickup_location || 'Milano / Consegna',
-        rental_days: b.rental_days || 1,
-        status: b.status || 'pending',
+        vehicle_name: escapeHTML(b.vehicle_name) || 'Vettura Flotta',
+        client_name: escapeHTML(b.client_name) || 'Cliente',
+        client_phone: escapeHTML(b.client_phone) || '',
+        client_email: escapeHTML(b.client_email) || '',
+        pickup_location: escapeHTML(b.pickup_location) || 'Milano / Consegna',
+        rental_days: escapeHTML(b.rental_days) || 1,
+        status: escapeHTML(b.status) || 'pending',
         total_price: b.total_price || 0
       })));
     }
     if (!avRes.error && avRes.data) {
       combined = combined.concat(avRes.data.map(a => ({
-        id: a.id,
+        id: escapeHTML(a.id),
         source: 'availability',
         created_at: a.created_at,
-        vehicle_name: a.category ? `Richiesta ${a.category}` : 'Richiesta Disponibilità VIP',
-        client_name: a.name || 'Cliente Richiedente',
-        client_phone: a.phone || '',
-        client_email: a.email || '',
-        pickup_location: a.location || 'Consegna Italia/Europa',
-        rental_days: a.dates || 'Date da concordare',
-        status: a.status || 'new',
+        vehicle_name: a.category ? `Richiesta ${escapeHTML(a.category)}` : 'Richiesta Disponibilità VIP',
+        client_name: escapeHTML(a.name) || 'Cliente Richiedente',
+        client_phone: escapeHTML(a.phone) || '',
+        client_email: escapeHTML(a.email) || '',
+        pickup_location: escapeHTML(a.location) || 'Consegna Italia/Europa',
+        rental_days: escapeHTML(a.dates) || 'Date da concordare',
+        status: escapeHTML(a.status) || 'new',
         total_price: 0
       })));
     }
@@ -299,18 +310,18 @@ async function fetchBookingsFromDatabase() {
         }
 
         return {
-          id: l.id,
+          id: escapeHTML(l.id),
           source: 'crm_lead',
           created_at: l.created_at,
-          vehicle_name: vName,
-          client_name: `${l.first_name || ''} ${l.last_name || ''}`.trim() || 'Cliente Lead CRM',
-          client_phone: l.phone || '',
-          client_email: l.email || '',
+          vehicle_name: escapeHTML(vName),
+          client_name: escapeHTML(`${l.first_name || ''} ${l.last_name || ''}`.trim()) || 'Cliente Lead CRM',
+          client_phone: escapeHTML(l.phone) || '',
+          client_email: escapeHTML(l.email) || '',
           pickup_location: 'Consegna CRM Partner',
           rental_days: l.pipeline_status === 'contract_signed' ? 'Contratto Firmato' : 'Approvato Mandante',
           status: l.pipeline_status === 'contract_signed' ? 'confirmed' : 'approved',
           total_price: Number(l.annual_income_or_revenue) || 0,
-          category: cat // Forza la categoria corretta nei tab
+          category: escapeHTML(cat) // Forza la categoria corretta nei tab
         };
       }));
     }
@@ -2609,21 +2620,33 @@ function updateKpiSummary() {
 /* ==========================================================================
    GESTIONE AUTENTICAZIONE E LOGOUT ADMIN BROKER CONSOLE
    ========================================================================== */
-function checkAdminAuth() {
+async function checkAdminAuth() {
   const overlay = document.getElementById('adminAuthOverlay');
+  const mainApp = document.querySelector('.app-layout');
   if (!overlay) return;
 
-  let isLogged = false;
   try {
-    isLogged = sessionStorage.getItem('itercars_admin_logged') === 'true';
-  } catch(e) {}
-
-  if (isLogged) {
-    overlay.classList.remove('active');
-    overlay.style.display = 'none';
-  } else {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session && session.user) {
+      overlay.classList.remove('active');
+      overlay.style.display = 'none';
+      if(mainApp) mainApp.style.display = 'flex';
+      
+      // Auto-load data if authenticated
+      if (typeof fetchLeadsFromDatabase === 'function') fetchLeadsFromDatabase();
+      if (typeof fetchVehiclesFromDatabase === 'function') fetchVehiclesFromDatabase();
+      if (typeof fetchPartnersFromDatabase === 'function') fetchPartnersFromDatabase();
+      if (typeof fetchNltOffersFromDatabase === 'function') fetchNltOffersFromDatabase();
+    } else {
+      overlay.style.display = 'flex';
+      overlay.classList.add('active');
+      if(mainApp) mainApp.style.display = 'none';
+    }
+  } catch(e) {
+    console.error("Auth check error:", e);
     overlay.style.display = 'flex';
     overlay.classList.add('active');
+    if(mainApp) mainApp.style.display = 'none';
   }
 }
 
@@ -2678,20 +2701,9 @@ async function handleAdminLogin(event) {
   }
 }
 
-function unlockConsoleSuccess(userEmail) {
-  try {
-    sessionStorage.setItem('itercars_admin_logged', 'true');
-    sessionStorage.setItem('itercars_admin_email', userEmail);
-  } catch (e) {}
 
-  const overlay = document.getElementById('adminAuthOverlay');
-  if (overlay) {
-    overlay.style.opacity = '0';
-    setTimeout(() => {
-      overlay.classList.remove('active');
-      overlay.style.display = 'none';
-    }, 300);
-  }
+function unlockConsoleSuccess(userEmail) {
+  checkAdminAuth();
 
   const statusEl = document.getElementById('connectionStatus');
   if (statusEl) {

@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; img-src 'self' https: data: blob:;">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ITERCARS BROKER CONSOLE | Stripe-Inspired Backoffice Engine</title>
@@ -13,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   
-  <!-- RemixIcon (Vector Architectural Icons — Zero Emojis) -->
+  <!-- RemixIcon (Vector Architectural Icons â€” Zero Emojis) -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
   
   <!-- Supabase JS Client -->
@@ -42,7 +43,7 @@
 
         <div class="form-group" style="text-align: left;">
           <label style="font-size: 0.75rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password Riservata</label>
-          <input type="password" id="adminPasswordInput" required class="admin-input" placeholder="••••••••••••" />
+          <input type="password" id="adminPasswordInput" required class="admin-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" />
         </div>
 
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.95rem; margin-top: 8px;">
@@ -57,7 +58,7 @@
   </div>
 
   <!-- APP LAYOUT (SIDEBAR SINISTRA + WORKSPACE CENTRALE) -->
-  <div class="app-layout">
+  <div class="app-layout" id="mainAppLayout" style="display: none;">
 
     <!-- BARRA LATERALE SOTTILE (SIDEBAR) -->
     <aside class="sidebar">
@@ -224,7 +225,7 @@
               <span class="kpi-title">Valore Stimato Pratiche</span>
               <div class="kpi-icon icon-green"><i class="ri-money-euro-box-line"></i></div>
             </div>
-            <div class="kpi-value" id="kpiPipelineValue">€ 0</div>
+            <div class="kpi-value" id="kpiPipelineValue">â‚¬ 0</div>
             <div class="kpi-subtext"><i class="ri-check-double-line"></i> Calcolato sui contratti in corso</div>
           </div>
 
@@ -336,7 +337,7 @@
                 <thead>
                   <tr>
                     <th>Veicolo NBT & Categoria</th>
-                    <th>Tariffa Giornaliera (€/giorno)</th>
+                    <th>Tariffa Giornaliera (â‚¬/giorno)</th>
                     <th>Canone Mese / Deposito Cauzionale</th>
                     <th>Durata Base & Km</th>
                     <th>Pronta Consegna</th>
@@ -365,7 +366,7 @@
                 <thead>
                   <tr>
                     <th>Veicolo NLT & Mandante</th>
-                    <th>Canone Mese Tutto Incluso (€/m)</th>
+                    <th>Canone Mese Tutto Incluso (â‚¬/m)</th>
                     <th>Durata Contratto & Km Annui</th>
                     <th>Anticipo Mandante</th>
                     <th>Pronta Consegna</th>
@@ -395,7 +396,7 @@
                   <tr>
                     <th>Modello Luxury e Marca</th>
                     <th>Prestazioni & Motore</th>
-                    <th>Tariffa Giornaliera (€/giorno)</th>
+                    <th>Tariffa Giornaliera (â‚¬/giorno)</th>
                     <th>Cauzione Richiesta</th>
                     <th>Stato Luxury</th>
                     <th style="text-align: right;">Azioni Luxury</th>
@@ -543,12 +544,12 @@
               </div>
 
               <div class="control-group">
-                <label>Anticipo Cliente (€)</label>
+                <label>Anticipo Cliente (â‚¬)</label>
                 <input type="number" id="compareDeposit" value="3000" oninput="runLiveComparison()" />
               </div>
 
               <div class="control-group">
-                <label>Markup / Ricarico Broker Itercars (€/mese)</label>
+                <label>Markup / Ricarico Broker Itercars (â‚¬/mese)</label>
                 <input type="number" id="compareBrokerMarkup" value="45" oninput="runLiveComparison()" style="border-color: var(--accent-green); color: var(--accent-green); font-weight: 300;" />
               </div>
 
@@ -595,7 +596,7 @@
                   <th>Ragione Sociale / Nome</th>
                   <th>Referente & Contatti</th>
                   <th>Tipologia Partner</th>
-                  <th>Zona / Città</th>
+                  <th>Zona / CittÃ </th>
                   <th>Data Candidatura</th>
                   <th style="text-align: right;">Azioni</th>
                 </tr>
@@ -811,14 +812,14 @@
           </div>
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mese / Prezzo Vendita (*)</label>
-            <input type="text" id="vehPrice" required class="admin-input" placeholder="Es. € 789 / mese oppure € 65.000" />
+            <input type="text" id="vehPrice" required class="admin-input" placeholder="Es. â‚¬ 789 / mese oppure â‚¬ 65.000" />
           </div>
         </div>
 
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Alimentazione / Motore</label>
-            <input type="text" id="vehSpecs" class="admin-input" placeholder="Es. Hybrid 48V • Automatico 8M • Q4" />
+            <input type="text" id="vehSpecs" class="admin-input" placeholder="Es. Hybrid 48V â€¢ Automatico 8M â€¢ Q4" />
           </div>
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Tipologia Offerta (Tag Badge)</label>
@@ -854,7 +855,7 @@
         </div>
 
         <div style="margin-bottom: 14px;">
-          <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Città / Sede di Ritiro (Opzionale)</label>
+          <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">CittÃ  / Sede di Ritiro (Opzionale)</label>
           <input type="text" id="vehCity" class="admin-input" placeholder="Es. Milano, Roma..." />
         </div>
 
@@ -903,7 +904,7 @@
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Tipologia Cliente</label>
             <select id="newLeadType" class="admin-input">
-              <option value="Azienda / Società">Azienda / Società</option>
+              <option value="Azienda / SocietÃ ">Azienda / SocietÃ </option>
               <option value="Libero Professionista P.IVA">Libero Professionista P.IVA</option>
               <option value="Privato con Reddito">Privato con Reddito</option>
             </select>
@@ -912,7 +913,7 @@
 
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Veicolo Richiesto / Budget</label>
-          <input type="text" id="newLeadCar" class="admin-input" placeholder="Es. Porsche Macan GTS o Budget € 1.200/mese" />
+          <input type="text" id="newLeadCar" class="admin-input" placeholder="Es. Porsche Macan GTS o Budget â‚¬ 1.200/mese" />
         </div>
 
         <div style="margin-bottom: 20px;">
@@ -955,18 +956,18 @@
 
         <div class="form-grid-2col">
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: #f1c40f; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (€/giorno) (*)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: #f1c40f; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (â‚¬/giorno) (*)</label>
             <input type="number" id="nbtDailyPrice" required class="admin-input" placeholder="Es. 140" style="border-color: rgba(241,196,15,0.4); font-weight: 300; color: #f1c40f;" />
           </div>
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mese Indicativo (€/mese)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mese Indicativo (â‚¬/mese)</label>
             <input type="number" id="nbtMonthlyPrice" class="admin-input" placeholder="Es. 1200" />
           </div>
         </div>
 
         <div class="form-grid-2col">
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (€)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (â‚¬)</label>
             <input type="number" id="nbtDeposit" required class="admin-input" value="3000" />
           </div>
           <div>
@@ -983,8 +984,8 @@
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Pronta Consegna</label>
             <select id="nbtReadyDelivery" class="admin-input">
-              <option value="true">Sì — Pronta Consegna Subito</option>
-              <option value="false">No — Su Misura / Ordinabile</option>
+              <option value="true">SÃ¬ â€” Pronta Consegna Subito</option>
+              <option value="false">No â€” Su Misura / Ordinabile</option>
             </select>
           </div>
         </div>
@@ -1035,11 +1036,11 @@
 
         <div class="form-grid-2col">
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mese NLT (€/mese) (*)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mese NLT (â‚¬/mese) (*)</label>
             <input type="number" id="nltMonthlyPrice" required class="admin-input" placeholder="Es. 580" style="border-color: rgba(56,189,248,0.4); font-weight: 300; color: #ffffff;" />
           </div>
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo Mandante (€) (*)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo Mandante (â‚¬) (*)</label>
             <input type="number" id="nltDeposit" required class="admin-input" value="3000" />
           </div>
         </div>
@@ -1069,8 +1070,8 @@
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Pronta Consegna</label>
             <select id="nltReadyDelivery" class="admin-input">
-              <option value="true">Sì — Pronta Consegna</option>
-              <option value="false">No — Ordinabile</option>
+              <option value="true">SÃ¬ â€” Pronta Consegna</option>
+              <option value="false">No â€” Ordinabile</option>
             </select>
           </div>
           <div>
@@ -1114,11 +1115,11 @@
 
         <div class="form-grid-2col">
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: #f39c12; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (€/giorno) (*)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: #f39c12; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (â‚¬/giorno) (*)</label>
             <input type="number" id="luxuryDailyPrice" required class="admin-input" placeholder="Es. 1400" style="border-color: rgba(243,156,18,0.5); font-weight: 300; color: #f39c12;" />
           </div>
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (€) (*)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (â‚¬) (*)</label>
             <input type="number" id="luxuryDeposit" required class="admin-input" placeholder="Es. 5000" value="5000" />
           </div>
         </div>
@@ -1145,7 +1146,7 @@
             <input type="text" id="luxuryAccel" required class="admin-input" placeholder="Es. 2.9s 0-100" value="3.1s 0-100" />
           </div>
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Velocità Massima</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">VelocitÃ  Massima</label>
             <input type="text" id="luxurySpeed" required class="admin-input" placeholder="Es. 340 km/h" value="320 km/h" />
           </div>
         </div>
@@ -1202,11 +1203,11 @@
 
         <div class="form-grid-2col">
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (€/giorno) (*)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (â‚¬/giorno) (*)</label>
             <input type="number" id="partnerVehPrice" required class="admin-input" placeholder="Es. 220" style="border-color: rgba(16,185,129,0.4); font-weight: 300; color: #ffffff;" />
           </div>
           <div>
-            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (€)</label>
+            <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (â‚¬)</label>
             <input type="number" id="partnerVehDeposit" required class="admin-input" value="1500" />
           </div>
         </div>
@@ -1214,7 +1215,7 @@
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Alimentazione & Motore</label>
-            <input type="text" id="partnerVehSpecs" class="admin-input" placeholder="Es. Ibrido Plug-in • Automatico 8M" />
+            <input type="text" id="partnerVehSpecs" class="admin-input" placeholder="Es. Ibrido Plug-in â€¢ Automatico 8M" />
           </div>
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Stato Pubblicazione</label>
@@ -1375,3 +1376,4 @@
   <script src="crm-admin.js?v=45"></script>
 </body>
 </html>
+

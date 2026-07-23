@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; img-src 'self' https: data: blob:;">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ITERCARS PARTNER CONSOLE | Piattaforma SaaS Multi-Mandante e Noleggiatori</title>
@@ -44,7 +45,7 @@
         </div>
         <div style="text-align: left;">
           <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password</label>
-          <input type="password" id="partnerPasswordInput" class="admin-input" placeholder="••••••••" required />
+          <input type="password" id="partnerPasswordInput" class="admin-input" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required />
         </div>
 
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px;">
@@ -95,7 +96,7 @@
             <input type="email" class="admin-input" id="partRegEmail" required placeholder="info@azienda.com">
           </div>
           <div class="form-group" style="text-align: left;">
-            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Città *</label>
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">CittÃ  *</label>
             <input type="text" class="admin-input" id="partRegAddress" required placeholder="Milano">
           </div>
         </div>
@@ -103,11 +104,11 @@
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password *</label>
-            <input type="password" class="admin-input" id="partRegPassword" required minlength="6" placeholder="••••••••">
+            <input type="password" class="admin-input" id="partRegPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
           </div>
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Conferma *</label>
-            <input type="password" class="admin-input" id="partRegPasswordConfirm" required minlength="6" placeholder="••••••••">
+            <input type="password" class="admin-input" id="partRegPasswordConfirm" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
           </div>
         </div>
 
@@ -125,7 +126,7 @@
   </div>
 
   <!-- APP LAYOUT (SIDEBAR SINISTRA + WORKSPACE CENTRALE) -->
-  <div class="app-layout">
+  <div class="app-layout" id="mainAppLayout" style="display: none;">
 
     <!-- BARRA LATERALE MANDANTE -->
     <aside class="sidebar">
@@ -257,7 +258,7 @@
               <span class="kpi-title">Valore Annuo Flotta Stimato</span>
               <div class="kpi-icon icon-purple"><i class="ri-line-chart-line"></i></div>
             </div>
-            <div class="kpi-value" id="kpiEstimatedValue">€ 0</div>
+            <div class="kpi-value" id="kpiEstimatedValue">â‚¬ 0</div>
             <div class="kpi-subtext"><i class="ri-pie-chart-line"></i> Calcolato sui canoni di listino</div>
           </div>
         </div>
@@ -284,7 +285,7 @@
                   <th>Alimentazione & Cambio</th>
                   <th>Tariffa Giorno / Cauzione</th>
                   <th>Categoria</th>
-                  <th>Disponibilità Live (Toggle Rapido)</th>
+                  <th>DisponibilitÃ  Live (Toggle Rapido)</th>
                   <th style="text-align: right;">Azioni Flotta</th>
                 </tr>
               </thead>
@@ -338,7 +339,7 @@
               <div class="upload-dropzone" id="fleetUploadDropzone">
                 <i class="ri-file-cloud-line" style="font-size: 3.2rem; color: #ffffff; margin-bottom: 12px;"></i>
                 <h4 style="font-size: 1.15rem; color: #fff; margin-bottom: 6px;">Trascina qui il file della tua flotta (Excel, PDF, CSV)</h4>
-                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 18px 0;">Formati supportati: .xlsx, .xls, .csv, .pdf, .zip • Peso massimo 25 MB</p>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 0 0 18px 0;">Formati supportati: .xlsx, .xls, .csv, .pdf, .zip â€¢ Peso massimo 25 MB</p>
                 <label for="fleetFileInput" class="btn-header" style="background: #ffffff; color: #000; font-weight: 300; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 12px 26px; font-size: 0.95rem; border-radius: 8px; box-shadow: 0 4px 14px transparent;">
                   <i class="ri-folder-open-line" style="font-size: 1.2rem;"></i> Seleziona File dal Computer
                 </label>
@@ -424,7 +425,7 @@
           <div class="data-table-container">
             <div class="data-table-toolbar">
               <div>
-                <h4 style="font-size: 1.02rem; font-weight: 300; color: #fff;"><i class="ri-calendar-event-line"></i> Calendario Disponibilità Breve Termine</h4>
+                <h4 style="font-size: 1.02rem; font-weight: 300; color: #fff;"><i class="ri-calendar-event-line"></i> Calendario DisponibilitÃ  Breve Termine</h4>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Visualizza l'occupazione della tua flotta giorno per giorno.</p>
               </div>
             </div>
@@ -439,7 +440,7 @@
         <!-- TAB 4: IMPOSTAZIONI PROFILO AZIENDALE -->
         <div id="tab-settings" class="tab-pane">
           <div class="data-table-container" style="padding: 30px; max-width: 760px; margin: 0 auto;">
-            <h3 style="font-size: 1.25rem; font-weight: 300; color: #fff; margin-bottom: 6px;"><i class="ri-building-4-line text-muted"></i> Profilo Mandante / Società di Noleggio</h3>
+            <h3 style="font-size: 1.25rem; font-weight: 300; color: #fff; margin-bottom: 6px;"><i class="ri-building-4-line text-muted"></i> Profilo Mandante / SocietÃ  di Noleggio</h3>
             <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 24px;">Questi dati appariranno nelle schede auto sulla piattaforma e nei voucher di prenotazione dei clienti.</p>
 
             <form onsubmit="savePartnerProfile(event)">
@@ -460,7 +461,7 @@
                   <input type="email" id="settingCompanyEmail" class="admin-input" value="" required />
                 </div>
                 <div>
-                  <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Standard Richiesta (€)</label>
+                  <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Standard Richiesta (â‚¬)</label>
                   <input type="number" id="settingDefaultDeposit" class="admin-input" value="1500" required />
                 </div>
               </div>
@@ -524,11 +525,11 @@
 
         <div id="nbtPricingContainer">
           <div style="margin-bottom: 14px;">
-            <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (€/giorno) (*)</label>
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (â‚¬/giorno) (*)</label>
             <input type="number" id="editDailyPrice" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
           </div>
           <div style="margin-bottom: 14px;">
-            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Richiesta sulla Carta (€) (*)</label>
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Cauzione Richiesta sulla Carta (â‚¬) (*)</label>
             <input type="number" id="editDeposit" class="admin-input" />
           </div>
         </div>
@@ -538,13 +539,13 @@
             <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px;">
               <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT 12 mesi (*)</label>
               <input type="number" id="editNltP12" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 10px;" />
-              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 12 mesi (€)</label>
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 12 mesi (â‚¬)</label>
               <input type="number" id="editNltAdv12" class="admin-input" value="0" />
             </div>
             <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px;">
               <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT 24 mesi (*)</label>
               <input type="number" id="editNltP24" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 10px;" />
-              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 24 mesi (€)</label>
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 24 mesi (â‚¬)</label>
               <input type="number" id="editNltAdv24" class="admin-input" value="0" />
             </div>
           </div>
@@ -552,20 +553,20 @@
             <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px;">
               <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT 36 mesi (*)</label>
               <input type="number" id="editNltP36" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 10px;" />
-              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 36 mesi (€)</label>
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 36 mesi (â‚¬)</label>
               <input type="number" id="editNltAdv36" class="admin-input" value="0" />
             </div>
             <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px;">
               <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT 48 mesi (*)</label>
               <input type="number" id="editNltP46" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem; margin-bottom: 10px;" />
-              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 48 mesi (€)</label>
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo 48 mesi (â‚¬)</label>
               <input type="number" id="editNltAdv48" class="admin-input" value="0" />
             </div>
           </div>
         </div>
 
         <div style="margin-bottom: 22px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
-          <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;"><i class="ri-rocket-line"></i> Disponibilità & Consegna</label>
+          <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;"><i class="ri-rocket-line"></i> DisponibilitÃ  & Consegna</label>
           <select id="editDeliveryType" class="admin-input" onchange="toggleDeliveryFields()" style="margin-bottom: 8px; font-size: 0.88rem; padding: 8px 10px; background-color: #111111 !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.2);">
             <option value="ready" style="background-color: #111111; color: #ffffff;">Pronta Consegna</option>
             <option value="weeks" style="background-color: #111111; color: #ffffff;">Consegna tra X settimane</option>
@@ -576,7 +577,7 @@
             <input type="number" id="editDeliveryWeeks" class="admin-input" placeholder="es. 2, 4, 6" min="1" max="52" style="font-size: 0.88rem; background-color: #111111 !important; color: #ffffff !important;" />
           </div>
           <div id="editDeliveryDateBox" style="display: none; margin-top: 8px;">
-            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Data di disponibilità prevista</label>
+            <label style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Data di disponibilitÃ  prevista</label>
             <input type="date" id="editDeliveryDate" class="admin-input" style="font-size: 0.88rem; background-color: #111111 !important; color: #ffffff !important; color-scheme: dark;" />
           </div>
         </div>
@@ -594,3 +595,4 @@
   <script src="crm-partner.js?v=5"></script>
 </body>
 </html>
+

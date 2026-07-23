@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; img-src 'self' https: data: blob:;">
   <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
   <script>
@@ -21,8 +22,8 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Upload Documenti e Blocco Pratica — ITERCARS</title>
-  <meta name="description" content="Carica i tuoi documenti di identità e reddituali per avviare la delibera della pratica NLT o NBT e blocca la tariffa preventivata con ITERCARS.">
+  <title>Upload Documenti e Blocco Pratica â€” ITERCARS</title>
+  <meta name="description" content="Carica i tuoi documenti di identitÃ  e reddituali per avviare la delibera della pratica NLT o NBT e blocca la tariffa preventivata con ITERCARS.">
   
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
@@ -336,11 +337,11 @@
           <i class="ri-folder-shield-2-fill"></i> Dossier Delibera Pratica
         </span>
         <h1 id="uploadCarTitle" style="font-size: 1.9rem; font-weight: 900; margin: 6px 0;">Caricamento In Corso...</h1>
-        <div style="font-size: 0.92rem; color: var(--text-muted);" id="uploadQuoteInfo">Codice Preventivo: <strong id="uploadQuoteCodeDisplay">---</strong> <span id="uploadQuoteMonthlyBox" style="display: none;">• Canone: <strong id="uploadQuoteMonthlyDisplay" style="color: #fff;">€ ---</strong></span></div>
+        <div style="font-size: 0.92rem; color: var(--text-muted);" id="uploadQuoteInfo">Codice Preventivo: <strong id="uploadQuoteCodeDisplay">---</strong> <span id="uploadQuoteMonthlyBox" style="display: none;">â€¢ Canone: <strong id="uploadQuoteMonthlyDisplay" style="color: #fff;">â‚¬ ---</strong></span></div>
       </div>
       <div style="text-align: right; background: rgba(0, 146, 70, 0.15); border: 1px solid rgba(0, 146, 70, 0.4); padding: 16px 24px; border-radius: 16px;">
         <span style="font-size: 0.8rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Fee Trattenuta Pratica</span>
-        <div style="font-size: 1.8rem; font-weight: 900; color: #2ecc71; line-height: 1.1;" id="uploadQuotePriceDisplay">€ ---</div>
+        <div style="font-size: 1.8rem; font-weight: 900; color: #2ecc71; line-height: 1.1;" id="uploadQuotePriceDisplay">â‚¬ ---</div>
       </div>
     </div>
 
@@ -358,14 +359,14 @@
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
           <button type="button" class="btn btn-outline active-type-btn" id="typeBtnPrivato" onclick="switchCustomerType('Privato')" style="border-color: #2ecc71; color: #2ecc71; font-weight: 800;"><i class="ri-user-line" style="margin-right: 6px;"></i>Privato / Lavoratore Dipendente</button>
           <button type="button" class="btn btn-outline" id="typeBtnPiva" onclick="switchCustomerType('Partita IVA')" style="font-weight: 800;"><i class="ri-briefcase-line" style="margin-right: 6px;"></i>Partita IVA / Ditta Individuale</button>
-          <button type="button" class="btn btn-outline" id="typeBtnAzienda" onclick="switchCustomerType('Azienda SRL/SPA')" style="font-weight: 800;"><i class="ri-building-line" style="margin-right: 6px;"></i>Azienda (SRL / SPA / Società)</button>
+          <button type="button" class="btn btn-outline" id="typeBtnAzienda" onclick="switchCustomerType('Azienda SRL/SPA')" style="font-weight: 800;"><i class="ri-building-line" style="margin-right: 6px;"></i>Azienda (SRL / SPA / SocietÃ )</button>
         </div>
       </div>
 
       <!-- UPLOAD GRID -->
       <div class="upload-grid" id="dropzonesGrid">
         
-        <!-- DROPZONE 1: CARTA D'IDENTITÀ (COMPATTA CON MINI TOGGLE) -->
+        <!-- DROPZONE 1: CARTA D'IDENTITÃ€ (COMPATTA CON MINI TOGGLE) -->
         <div class="upload-dropzone" id="dz_id_card">
           <!-- MINI TOGGLE DISCRETO IN ALTO -->
           <div style="display: flex; justify-content: center; gap: 4px; margin-bottom: 12px; background: rgba(0,0,0,0.4); padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 100%; box-sizing: border-box;">
@@ -377,8 +378,8 @@
           <div id="mini_view_id_pdf" onclick="triggerFileInput('file_id_card')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; width: 100%; max-width: 100%; overflow: hidden;">
             <input type="file" id="file_id_card" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_id_card', 'carta_identita', 'status_dz_id_card')">
             <div class="dropzone-icon"><i class="ri-id-card-line"></i></div>
-            <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">1. Documento d'Identità</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Carta d'identità in corso di validità o Passaporto (.pdf).</p>
+            <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">1. Documento d'IdentitÃ </strong>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Carta d'identitÃ  in corso di validitÃ  o Passaporto (.pdf).</p>
             <div class="doc-status-badge" id="status_dz_id_card">Clicca o trascina il file PDF</div>
           </div>
 
@@ -414,7 +415,7 @@
             <input type="file" id="file_driving_license" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_driving_license', 'patente', 'status_dz_driving_license')">
             <div class="dropzone-icon"><i class="ri-steering-2-line"></i></div>
             <strong style="font-size: 1.05rem; display: block; margin-bottom: 4px;">2. Patente di Guida</strong>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Patente B di chi condurrà il mezzo (.pdf).</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Patente B di chi condurrÃ  il mezzo (.pdf).</p>
             <div class="doc-status-badge" id="status_dz_driving_license">Clicca o trascina il file PDF</div>
           </div>
 
@@ -478,7 +479,7 @@
       <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px; text-align: center; margin: 30px 0;">
         <h4 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 8px;">Documentazione Pronta per il Dossier?</h4>
         <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0 auto 20px; max-width: 580px; line-height: 1.5;" id="docsReadyInstructionText">
-          Una volta selezionati i file (identità, patente ed eventuale reddito), clicca su "Verifica documenti" per il controllo istantaneo tramite Grok AI. Solo al completamento della verifica potrai accedere alla Sezione 3.
+          Una volta selezionati i file (identitÃ , patente ed eventuale reddito), clicca su "Verifica documenti" per il controllo istantaneo tramite Grok AI. Solo al completamento della verifica potrai accedere alla Sezione 3.
         </p>
         
         <!-- Tasto "Verifica documenti" (appare quando vengono inseriti i documenti) -->
@@ -491,7 +492,7 @@
         <!-- Messaggio di esito verifica Grok (appare in verde con scritta "verifica completata") -->
         <div id="verificationStatusMsg" style="display: none; margin: 20px auto; max-width: 520px; padding: 16px 24px; border-radius: 16px; font-weight: 800; font-size: 1.15rem; transition: all 0.3s ease;"></div>
 
-        <!-- Tasto conferma per procedere (appare SOLO DOPO che la verifica con Grok è completata) -->
+        <!-- Tasto conferma per procedere (appare SOLO DOPO che la verifica con Grok Ã¨ completata) -->
         <button type="button" id="btnConfirmStep2" onclick="confirmStep2AndShowStep3(event)" class="btn btn-primary" style="display: none; height: 54px; padding: 0 38px; font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; box-shadow: 0 8px 24px rgba(46, 204, 113, 0.3); align-items: center; gap: 10px; transition: all 0.3s ease;">
           <i class="ri-check-double-line" style="font-size: 1.3rem;"></i> <span>Invia documenti e vai alla Sezione 3</span> <i class="ri-arrow-right-line" style="font-size: 1.3rem;"></i>
         </button>
@@ -527,7 +528,7 @@
         <div>
           <strong style="color: #fff; font-size: 1.05rem; display: block; margin-bottom: 6px;">Deposito a Garanzia per Blocco Vettura</strong>
           <p style="color: rgba(255, 255, 255, 0.88); font-size: 0.92rem; margin: 0; line-height: 1.5;">
-            L'importo di <strong id="stripeFeeDisplay" style="color: #2ecc71;">€ ---</strong> viene versato come <strong>garanzia per bloccare ufficialmente la vettura</strong>. Qualora decidessi di non procedere con il noleggio, la quota ti verrà <strong>interamente rimborsata</strong>, purché la disdetta avvenga entro 48 ore dal ritiro. Il pagamento del saldo completo avverrà esclusivamente al momento della firma del contratto.
+            L'importo di <strong id="stripeFeeDisplay" style="color: #2ecc71;">â‚¬ ---</strong> viene versato come <strong>garanzia per bloccare ufficialmente la vettura</strong>. Qualora decidessi di non procedere con il noleggio, la quota ti verrÃ  <strong>interamente rimborsata</strong>, purchÃ© la disdetta avvenga entro 48 ore dal ritiro. Il pagamento del saldo completo avverrÃ  esclusivamente al momento della firma del contratto.
           </p>
         </div>
       </div>
@@ -545,8 +546,8 @@
   <!-- ================= FOOTER ================= -->
   <footer style="border-top: 1px solid rgba(255,255,255,0.08); padding: 40px 0; background: #040509; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
     <div class="container">
-      <p style="margin-bottom: 8px;">&copy; 2026 ITERCARS Marketplace — Sistema di Delibera Digitalizzata Multi-Mandante</p>
-      <p>Assistenza Clienti e Supporto Documentale: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a> • <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
+      <p style="margin-bottom: 8px;">&copy; 2026 ITERCARS Marketplace â€” Sistema di Delibera Digitalizzata Multi-Mandante</p>
+      <p>Assistenza Clienti e Supporto Documentale: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a> â€¢ <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
     </div>
   </footer>
 
@@ -574,7 +575,7 @@
           </div>
           <div class="form-group">
             <label>Password *</label>
-            <input type="password" class="form-control" id="authLoginPassword" required placeholder="••••••••">
+            <input type="password" class="form-control" id="authLoginPassword" required placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 8px;">
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
@@ -641,11 +642,11 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
-              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
 
@@ -655,7 +656,7 @@
         </form>
 
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
-          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai giÃ  un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
@@ -663,12 +664,12 @@
       <!-- PARTNER REGISTRATION VIEW -->
       <div id="partnerRegFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
-        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la richiesta di adesione. Il nostro team ti contatterà per completare l'onboarding.</p>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la richiesta di adesione. Il nostro team ti contatterÃ  per completare l'onboarding.</p>
         
         <form onsubmit="handlePartnerReg(event)" style="display: flex; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
-              <label>Nome Azienda / Società *</label>
+              <label>Nome Azienda / SocietÃ  *</label>
               <input type="text" class="form-control" id="partRegCompany" required placeholder="Luxury SRL">
             </div>
             <div class="form-group">
@@ -694,7 +695,7 @@
               <input type="email" class="form-control" id="partRegEmail" required placeholder="info@azienda.com">
             </div>
             <div class="form-group">
-              <label>Indirizzo Sede / Città *</label>
+              <label>Indirizzo Sede / CittÃ  *</label>
               <input type="text" class="form-control" id="partRegAddress" required placeholder="Via Roma 1, Milano">
             </div>
           </div>
@@ -702,11 +703,11 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password di Accesso *</label>
-              <input type="password" class="form-control" id="partRegPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="partRegPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
 
@@ -771,7 +772,7 @@
     function handleProfessionalNavNext() {
       const step3 = document.getElementById('embeddedCheckoutSection');
       
-      // Se siamo già nella Sezione 3 (Blocco Pratica), scrolliamo direttamente al modulo di pagamento
+      // Se siamo giÃ  nella Sezione 3 (Blocco Pratica), scrolliamo direttamente al modulo di pagamento
       if (step3 && step3.style.display && step3.style.display !== 'none') {
         const payBtn = document.getElementById('btnSubmitAndPay') || step3;
         payBtn.scrollIntoView({ behavior: 'smooth' });
@@ -802,3 +803,4 @@
   </script>
 </body>
 </html>
+

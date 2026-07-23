@@ -1,6 +1,7 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="it">
 <head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; img-src 'self' https: data: blob:;">
   <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
   <script>
@@ -32,7 +33,7 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configura Vettura NBT — ITERCARS</title>
+  <title>Configura Vettura NBT â€” ITERCARS</title>
   <meta name="description" content="Configura durata mesi, chilometraggio e anticipo per la tua nuova auto in Noleggio Breve Termine All-Inclusive. Genera preventivo ufficiale.">
   
   <!-- Remix Icons CDN -->
@@ -125,7 +126,7 @@
           <div class="detail-specs-grid">
             <div class="detail-spec-card">
               <i class="ri-speed-up-line"></i>
-              <span class="label">Velocità Max</span>
+              <span class="label">VelocitÃ  Max</span>
               <span class="value" id="detailSpeed">-</span>
             </div>
             <div class="detail-spec-card">
@@ -152,7 +153,7 @@
 
           <!-- Spiegazione I 6 Pilastri del Canone Tutto Compreso -->
           <div class="included-pillars-box">
-            <h3><i class="ri-shield-check-fill" style="color: #2ecc71;"></i> Cosa è Sempre Incluso nel Canone Totale:</h3>
+            <h3><i class="ri-shield-check-fill" style="color: #2ecc71;"></i> Cosa Ã¨ Sempre Incluso nel Canone Totale:</h3>
             
             <div class="pillars-list">
               <div class="pillar-item">
@@ -175,7 +176,7 @@
                 <i class="ri-bank-card-fill"></i>
                 <div>
                   <h4>Bollo & Messa su Strada</h4>
-                  <p>Tassa di proprietà annuale e immatricolazione interamente gestite e pagate dal mandante per tutta la durata del contratto.</p>
+                  <p>Tassa di proprietÃ  annuale e immatricolazione interamente gestite e pagate dal mandante per tutta la durata del contratto.</p>
                 </div>
               </div>
 
@@ -220,9 +221,9 @@
             <div class="live-price-box" id="livePriceBox">
               <div class="live-price-label">Totale Calcolato:</div>
               <div class="live-price-number" id="liveMonthlyPrice">...</div>
-              <div style="font-size: 0.85rem; font-weight: 700; color: #fff;">per il periodo (IVA esclusa) • Tutto Compreso</div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: #fff;">per il periodo (IVA esclusa) â€¢ Tutto Compreso</div>
               <div class="live-price-summary" id="liveConfigSummary">
-                <strong>48 Mesi</strong> • <strong>15.000 Km/giorno</strong> • Anticipo <strong>€ 3.000</strong>
+                <strong>48 Mesi</strong> â€¢ <strong>15.000 Km/giorno</strong> â€¢ Anticipo <strong>â‚¬ 3.000</strong>
               </div>
             </div>
             <!-- STEP 1: DURATA GIORNI (CALENDARIO) -->
@@ -261,7 +262,7 @@
                     <i class="ri-shield-keyhole-fill" style="color: #f59e0b; font-size: 1.6rem;"></i>
                     <div style="text-align: left;">
                       <span style="font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; display: block;">Deposito Cauzionale sulla Carta</span>
-                      <strong style="font-size: 1.2rem; color: #fff;">€ 3.000</strong>
+                      <strong style="font-size: 1.2rem; color: #fff;">â‚¬ 3.000</strong>
                     </div>
                   </div>
                   <span style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; font-size: 0.75rem; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.4); display: flex; align-items: center; gap: 5px;">
@@ -275,8 +276,8 @@
             <div class="config-section">
               <div class="config-section-title"><i class="ri-shield-star-line"></i> 4. Opzione Franchigia Assicurativa</div>
               <div class="config-options-grid" id="configKaskoGroup">
-                <button type="button" class="config-option-btn active" data-value="standard" onclick="setConfigKasko('standard', this)">Standard (500€)</button>
-                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">Franchigia Zero 0€ (+€35/m)</button>
+                <button type="button" class="config-option-btn active" data-value="standard" onclick="setConfigKasko('standard', this)">Standard (500â‚¬)</button>
+                <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">Franchigia Zero 0â‚¬ (+â‚¬35/m)</button>
               </div>
             </div>
 
@@ -310,7 +311,7 @@
                 <span>Genera Preventivo</span> <i class="ri-file-pdf-fill" style="font-size: 1.3rem;"></i>
               </button>
               <button type="button" onclick="openDossierRecoveryModal()" class="btn btn-outline" style="width: 100%; height: 44px; font-size: 0.92rem; font-weight: 700; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; border-color: rgba(46, 204, 113, 0.4); color: #2ecc71; background: rgba(46, 204, 113, 0.05); border-radius: 8px;">
-                <i class="ri-folder-shield-2-fill" style="font-size: 1.15rem;"></i> <span>Hai già un preventivo? Recupera Pratica in corso</span>
+                <i class="ri-folder-shield-2-fill" style="font-size: 1.15rem;"></i> <span>Hai giÃ  un preventivo? Recupera Pratica in corso</span>
               </button>
             </form>
 
@@ -393,7 +394,7 @@
           </div>
           <div class="form-group">
             <label>Password *</label>
-            <input type="password" class="form-control" id="authLoginPassword" required placeholder="••••••••">
+            <input type="password" class="form-control" id="authLoginPassword" required placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
           </div>
           <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 8px;">
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
@@ -460,11 +461,11 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
-              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
 
@@ -474,7 +475,7 @@
         </form>
 
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
-          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai giÃ  un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
@@ -482,12 +483,12 @@
       <!-- PARTNER REGISTRATION VIEW -->
       <div id="partnerRegFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
-        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la richiesta di adesione. Il nostro team ti contatterà per completare l'onboarding.</p>
+        <p style="color: var(--text-muted); margin-bottom: 20px; font-size: 0.9rem;">Compila il modulo per inviare la richiesta di adesione. Il nostro team ti contatterÃ  per completare l'onboarding.</p>
         
         <form onsubmit="handlePartnerReg(event)" style="display: flex; flex-direction: column; gap: 14px;">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
-              <label>Nome Azienda / Società *</label>
+              <label>Nome Azienda / SocietÃ  *</label>
               <input type="text" class="form-control" id="partRegCompany" required placeholder="Luxury SRL">
             </div>
             <div class="form-group">
@@ -513,7 +514,7 @@
               <input type="email" class="form-control" id="partRegEmail" required placeholder="info@azienda.com">
             </div>
             <div class="form-group">
-              <label>Indirizzo Sede / Città *</label>
+              <label>Indirizzo Sede / CittÃ  *</label>
               <input type="text" class="form-control" id="partRegAddress" required placeholder="Via Roma 1, Milano">
             </div>
           </div>
@@ -521,11 +522,11 @@
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password di Accesso *</label>
-              <input type="password" class="form-control" id="partRegPassword" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="partRegPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
             <div class="form-group">
               <label>Conferma Password *</label>
-              <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="••••••••">
+              <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
 
@@ -563,7 +564,7 @@
 
       <h3 style="font-size: 1.6rem; margin-bottom: 6px;">Recupera la Tua Pratica</h3>
       <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
-        Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
+        Hai giÃ  generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
       </p>
 
       <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
@@ -572,7 +573,7 @@
           <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-NLT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
         </div>
 
-        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">— OPPURE —</div>
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">â€” OPPURE â€”</div>
 
         <div class="form-group">
           <label><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
@@ -623,3 +624,4 @@
 
 </body>
 </html>
+
