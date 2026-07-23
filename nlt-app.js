@@ -190,7 +190,7 @@ async function loadOffersFromDatabase() {
 
             transmission: v.transmission || 'Automatico',
 
-            image: v.image_url || 'logo_fallback.png',
+            image: v.image_url ? v.image_url.replace(/\.(png|jpg|jpeg)$/i, '.webp') : 'logo_fallback.png',
 
             hp: specsObj.hp || '300 CV',
 
@@ -301,7 +301,7 @@ async function loadOffersFromDatabase() {
 
                 transmission: vh.transmission || 'Automatico',
 
-                image: vh.image_url || 'logo_fallback.png',
+                image: vh.image_url ? vh.image_url.replace(/\.(png|jpg|jpeg)$/i, '.webp') : 'logo_fallback.png',
 
                 hp: specsObj.hp || '300 CV',
 
@@ -412,7 +412,7 @@ async function loadOffersFromDatabase() {
 
             transmission: vh.transmission || 'Automatico',
 
-            image: vh.image_url || 'logo_fallback.png',
+            image: vh.image_url ? vh.image_url.replace(/\.(png|jpg|jpeg)$/i, '.webp') : 'logo_fallback.png',
 
             hp: specsObj.hp || '300 CV',
 
@@ -1068,7 +1068,7 @@ function renderOffersGrid() {
 
 
 
-  grid.innerHTML = filtered.map((offer, idx) => {
+  grid.innerHTML = filtered.map(offer => {
 
     const priceInfo = getCardPrice(offer);
 
@@ -1093,15 +1093,13 @@ function renderOffersGrid() {
 
 
 
-    const imageLoadingTag = idx < 4 ? 'loading="eager" decoding="sync"' : 'loading="lazy" decoding="async"';
-
     return `
 
       <div class="glass-card nlt-card" id="card-${offer.id}">
 
         <div class="nlt-card-img-wrapper">
 
-          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" ${imageLoadingTag} onerror="this.src='category-suv.jpg'">
+          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
 
           <div class="nlt-card-badges">
 
