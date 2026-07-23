@@ -20,6 +20,9 @@
 .nlt-detail-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.9fr;
+  grid-template-areas: 
+    'car config'
+    'pillars config';
   gap: 40px;
   margin-bottom: 80px;
   align-items: start;
@@ -28,11 +31,16 @@
 @media (max-width: 992px) {
   .nlt-detail-grid {
     grid-template-columns: 1fr;
+    grid-template-areas: 
+      'car'
+      'config'
+      'pillars';
   }
 }
 
 /* Colonna Sinistra: Vetrina Vettura */
 .detail-main-box {
+  grid-area: car;
   display: flex;
   flex-direction: column;
   gap: 28px;
@@ -98,6 +106,7 @@
 
 /* Elenco I 6 Pilastri All-Inclusive */
 .included-pillars-box {
+  grid-area: pillars;
   background: rgba(15, 20, 32, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
@@ -156,6 +165,7 @@
 
 /* Colonna Destra: Sticky Configuratore NLT */
 .detail-sidebar {
+  grid-area: config;
   position: sticky;
   top: 110px;
 }
