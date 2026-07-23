@@ -2165,3 +2165,47 @@ footer {
   animation: zoomBg 20s infinite alternate linear;
   z-index: 0;
 }
+
+/* Mobile Hero Search Box */
+.mobile-hero-search {
+  display: none;
+  background: rgba(15, 20, 32, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 16px;
+  padding: 16px;
+  margin-top: 20px;
+  width: 100%;
+}
+.mhs-row-full {
+  margin-bottom: 12px;
+}
+.mhs-row-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.mobile-hero-search .form-control {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 14px 14px 14px 44px;
+  border-radius: 12px;
+  width: 100%;
+}
+.mobile-hero-search select.form-control {
+  padding-left: 44px !important;
+}
+
+@media (max-width: 992px) {
+  .hero-btns {
+    display: none !important;
+  }
+  .mobile-hero-search {
+    display: block;
+  }
+  /* Hide the old search bar on mobile */
+  .search-section {
+    display: none !important;
+  }
+}
