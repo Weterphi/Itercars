@@ -1068,7 +1068,7 @@ function renderOffersGrid() {
 
 
 
-  grid.innerHTML = filtered.map(offer => {
+window.generateNltCardHTML = function(offer) {
 
     const priceInfo = getCardPrice(offer);
 
@@ -1085,139 +1085,74 @@ function renderOffersGrid() {
       badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${offer.deliveryWeeks || 4} sett.</span>`;
     }
 
-      
-
     const depositZeroTag = offer.variants.some(v => v.deposit === 0)
-
       ? `<span class="card-badge badge-zero"><i class="ri-flashlight-fill"></i> Anticipo Zero Disponibile</span>` : '';
 
-
-
     return `
-
       <div class="glass-card nlt-card" id="card-${offer.id}">
-
         <div class="nlt-card-img-wrapper">
-
           <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
-
           <div class="nlt-card-badges">
-
             ${badgeText}
-
             ${depositZeroTag}
-
           </div>
-
           <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${offer.providerName}</div>
-
         </div>
-
-
 
         <div class="nlt-card-body">
-
           <div class="nlt-card-header">
-
             <span class="nlt-brand-tag">${offer.brand}</span>
-
             <h3 class="nlt-model-title">${offer.model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${offer.trim}</small></h3>
-
           </div>
-
-
 
           <!-- Specifiche Veloci -->
-
           <div class="nlt-specs-row">
-
             <span><i class="ri-speed-up-line"></i> ${offer.hp}</span>
-
             <span><i class="ri-dashboard-2-line"></i> ${offer.accel} (0-100)</span>
-
             <span><i class="ri-gas-station-line"></i> ${offer.fuel}</span>
-
             <span><i class="ri-settings-4-line"></i> ${offer.transmission}</span>
-
           </div>
-
-
 
           <!-- Interruttore Rapido Mesi & Anticipo dentro la card (Solo in NLT) -->
-
           ${NltState.mode === 'NLT' ? `
-
           <div class="card-interactive-selector">
-
             <div class="card-selector-label">Scegli Configurazione Rata:</div>
-
             <div class="card-duration-tabs">
-
               <button class="card-tab ${NltState.durationFilter === 36 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 36, 'default', event)">36 Mesi</button>
-
               <button class="card-tab ${NltState.durationFilter === 48 ? 'active' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, 'default', event)">48 Mesi</button>
-
               <button class="card-tab ${NltState.depositFilter === '0' ? 'active-zero' : ''}" onclick="updateSingleCardPrice('${offer.id}', 48, '0', event)">0€ Anticipo</button>
-
             </div>
-
           </div>
-
           ` : ''}
 
-
-
           <!-- Box Rata Finale / Prezzo -->
-
           <div class="nlt-price-box" id="price-box-${offer.id}">
-
             <div class="nlt-price-num text-gradient">€ <span id="price-num-${offer.id}">${priceInfo.price.toLocaleString('it-IT')}</span></div>
-
             <div class="nlt-price-label">${priceInfo.label}</div>
-
             <div class="nlt-price-details" id="price-details-${offer.id}">${priceInfo.details}</div>
-
           </div>
-
-
 
           <!-- Elenco Servizi Inclusi -->
-
           <div class="nlt-services-list">
-
             ${offer.services.slice(0, 3).map(s => `<div><i class="ri-checkbox-circle-fill text-green"></i> <span>${s}</span></div>`).join('')}
-
             <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 2px;">+ Bollo, Gestione Pratiche & Assistenza H24</div>
-
           </div>
-
-
 
           <!-- Pulsanti d'Azione -->
-
           <div class="nlt-card-actions">
-
             <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}&p12=${encodeURIComponent(offer.p12||'')}&p24=${encodeURIComponent(offer.p24||'')}&p36=${encodeURIComponent(offer.p36||'')}&p46=${encodeURIComponent(offer.p46||'')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
-
               <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
-
             </a>
-
             <button type="button" class="btn btn-outline" onclick="openWhatsAppForCard('${offer.id}')" title="Contatta su WhatsApp" style="padding: 12px 14px; color: #2ecc71; border-color: rgba(46, 204, 113, 0.4);">
-
               <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i>
-
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     `;
+};
 
-  }).join('');
+  grid.innerHTML = filtered.map(offer => window.generateNltCardHTML(offer)).join('');
 
 }
 

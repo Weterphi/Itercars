@@ -1077,6 +1077,14 @@ function renderCarCard(car, dict) {
   
   // Se è Noleggio a Lungo Termine, usa la vera card NLT
   if (car.is_nlt && car.raw) {
+    // Prova a usare la funzione centralizzata di nlt-app.js se disponibile
+    if (typeof window.generateNltCardHTML === 'function' && typeof NltState !== 'undefined' && NltState.offers) {
+      const nltOffer = NltState.offers.find(o => String(o.vehicle_id) === String(car.id) || String(o.id) === String(car.raw.id));
+      if (nltOffer) {
+        return window.generateNltCardHTML(nltOffer);
+      }
+    }
+
     const v = car.raw;
     const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
     
