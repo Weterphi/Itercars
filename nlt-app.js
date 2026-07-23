@@ -88,7 +88,7 @@ async function loadOffersFromDatabase() {
       let query = window.supabase
         .from('nlt_offers')
         .select(`
-          id, monthly_price, deposit, advance_payment, duration_months, provider_id,
+          id, client_monthly_price, deposit_mandante, duration_months, provider_id, "12_mesi_prezzo", "24_mesi_prezzo", "36_mesi_prezzo", "46_mesi_prezzo",
           vehicles!inner (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, badge, city, provider_id),
           providers (name)
         `)
@@ -148,11 +148,15 @@ async function loadOffersFromDatabase() {
 
           // Diamo priorità alla tariffa canone o cauzione aggiornate dal partner sulla tabella vehicles
 
-          const monthlyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0)
+          function parseDBPrice(str, def) {
+            if(!str) return def;
+            let clean = String(str).replace(/[^0-9,.]/g, '').replace(',', '.');
+            let val = parseFloat(clean);
+            return isNaN(val) ? def : val;
+          }
 
-            ? Math.round(Number(v.daily_price) * 20)
-
-            : ((o.client_monthly_price !== undefined && o.client_monthly_price !== null && o.client_monthly_price !== '') ? Number(o.client_monthly_price) : 699);
+          const db36Price = parseDBPrice(o['36_mesi_prezzo'], null);
+          const monthlyP = db36Price || ((o.client_monthly_price !== undefined && o.client_monthly_price !== null && o.client_monthly_price !== '') ? Number(o.client_monthly_price) : 699);
 
           const depositP = (v.deposit !== undefined && v.deposit !== null && v.deposit !== '' && Number(v.deposit) >= 0)
 
@@ -210,6 +214,10 @@ async function loadOffersFromDatabase() {
             baseKm: kmY,
 
             baseDeposit: depositP,
+            p12: o['12_mesi_prezzo'],
+            p24: o['24_mesi_prezzo'],
+            p36: o['36_mesi_prezzo'],
+            p46: o['46_mesi_prezzo'],
 
             baseOffer: {
 
@@ -1185,7 +1193,7 @@ function renderOffersGrid() {
 
           <div class="nlt-card-actions">
 
-            <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <a href="nlt-dettaglio.html?id=${offer.id}&model=${encodeURIComponent(offer.model)}&brand=${encodeURIComponent(offer.brand)}&trim=${encodeURIComponent(offer.trim)}&img=${encodeURIComponent(offer.image)}&hp=${encodeURIComponent(offer.hp)}&speed=${encodeURIComponent(offer.speed)}&accel=${encodeURIComponent(offer.accel)}&price=${offer.basePrice || offer.baseOffer?.monthlyPrice || 699}&deposit=${offer.baseDeposit || offer.baseOffer?.deposit || 3000}&km=${offer.baseKm || offer.baseOffer?.km || 15000}&dur=${offer.baseDuration || offer.baseOffer?.duration || 48}&cat=${encodeURIComponent(offer.category || 'Luxury')}&fuel=${encodeURIComponent(offer.fuel || 'Ibrido / Diesel')}&trans=${encodeURIComponent(offer.transmission || 'Automatico')}&p12=${encodeURIComponent(offer.p12||'')}&p24=${encodeURIComponent(offer.p24||'')}&p36=${encodeURIComponent(offer.p36||'')}&p46=${encodeURIComponent(offer.p46||'')}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
 
               <span>Vedi Offerta</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
 

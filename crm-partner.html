@@ -534,19 +534,29 @@
         </div>
 
         <div id="nltPricingContainer" style="display: none;">
-          <div style="margin-bottom: 14px;">
-            <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT (€/mese) (*)</label>
-            <input type="number" id="editMonthlyPrice" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+          <div style="margin-bottom: 14px; display: flex; gap: 12px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT (€/mese) 12 mesi (*)</label>
+              <input type="number" id="editNltP12" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT (€/mese) 24 mesi (*)</label>
+              <input type="number" id="editNltP24" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
+            </div>
           </div>
           <div style="margin-bottom: 14px; display: flex; gap: 12px;">
             <div style="flex: 1;">
-              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Mesi (es. 36)</label>
-              <input type="number" id="editNltMonths" class="admin-input" value="36" />
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT (€/mese) 36 mesi (*)</label>
+              <input type="number" id="editNltP36" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
             </div>
             <div style="flex: 1;">
-              <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo (€)</label>
-              <input type="number" id="editNltAdvance" class="admin-input" value="0" />
+              <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mensile NLT (€/mese) 48 mesi (*)</label>
+              <input type="number" id="editNltP46" class="admin-input" style="font-weight: 300; color: var(--accent-gold); font-size: 1.1rem;" />
             </div>
+          </div>
+          <div style="margin-bottom: 14px;">
+            <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Anticipo (€)</label>
+            <input type="number" id="editNltAdvance" class="admin-input" value="0" />
           </div>
         </div>
 

@@ -3172,7 +3172,32 @@ async function approvePartnerVehicle(vehicleId) {
       if (fullV.is_nlt) {
         const { data: existingNlt } = await supabase.from('nlt_offers').select('id').eq('vehicle_id', vehicleId);
         if (!existingNlt || existingNlt.length === 0) {
-           await supabase.from('nlt_offers').insert({ vehicle_id: vehicleId, provider_id: fullV.provider_id, is_active: true, monthly_price: (fullV.specs && fullV.specs.monthly_price) ? fullV.specs.monthly_price : (fullV.daily_price || 0) });
+           const p36 = (fullV.specs && fullV.specs.monthly_price_36) ? Number(fullV.specs.monthly_price_36) : (Number(fullV.daily_price) || 699);
+           const p24 = (fullV.specs && fullV.specs.monthly_price_24) ? Number(fullV.specs.monthly_price_24) : (p36 * 1.10);
+           const p12 = (fullV.specs && fullV.specs.monthly_price_12) ? Number(fullV.specs.monthly_price_12) : (p36 * 1.25);
+           const p46 = (fullV.specs && fullV.specs.monthly_price_46) ? Number(fullV.specs.monthly_price_46) : (p36 * 0.90);
+           
+           function fmtPrice(v) { return '€ ' + Math.round(v).toLocaleString('it-IT'); }
+
+           await supabase.from('nlt_offers').insert({ 
+             vehicle_id: vehicleId, 
+             provider_id: fullV.provider_id, 
+             import_job_id: fullV.import_job_id,
+             is_active: true, 
+             duration_months: 36,
+             km_per_year: 15000,
+             client_monthly_price: p36,
+             mandante_monthly_net: p36 - 45,
+             deposit_mandante: fullV.deposit || 0,
+             luxury: fullV.luxury || false,
+             macchina_piccola: fullV.macchina_piccola || false,
+             macchina_media: fullV.macchina_media || false,
+             macchina_grande: fullV.macchina_grande || false,
+             '12_mesi_prezzo': fmtPrice(p12),
+             '24_mesi_prezzo': fmtPrice(p24),
+             '36_mesi_prezzo': fmtPrice(p36),
+             '46_mesi_prezzo': fmtPrice(p46)
+           });
         } else {
            await supabase.from('nlt_offers').update({ is_active: true }).eq('vehicle_id', vehicleId);
         }

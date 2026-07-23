@@ -939,8 +939,10 @@ async function openEditTariffModal(vehicleId) {
   if (document.getElementById('editDailyPrice')) document.getElementById('editDailyPrice').value = v.daily_price || 150;
   if (document.getElementById('editDeposit')) document.getElementById('editDeposit').value = v.deposit || 1500;
   
-  if (document.getElementById('editMonthlyPrice')) document.getElementById('editMonthlyPrice').value = Math.round((v.daily_price || 150) * 15);
-  if (document.getElementById('editNltMonths')) document.getElementById('editNltMonths').value = 36;
+  if (document.getElementById('editNltP12')) document.getElementById('editNltP12').value = '';
+  if (document.getElementById('editNltP24')) document.getElementById('editNltP24').value = '';
+  if (document.getElementById('editNltP36')) document.getElementById('editNltP36').value = '';
+  if (document.getElementById('editNltP46')) document.getElementById('editNltP46').value = '';
   if (document.getElementById('editNltAdvance')) document.getElementById('editNltAdvance').value = 0;
 
   // Try to load NLT offers from DB if available
@@ -948,9 +950,17 @@ async function openEditTariffModal(vehicleId) {
     try {
       const { data: nltData } = await supabase.from('nlt_offers').select('*').eq('vehicle_id', vehicleId).single();
       if (nltData) {
-        if (document.getElementById('editMonthlyPrice') && nltData.client_monthly_price) document.getElementById('editMonthlyPrice').value = nltData.client_monthly_price;
-        if (document.getElementById('editNltMonths') && nltData.months) document.getElementById('editNltMonths').value = nltData.months;
-        if (document.getElementById('editNltAdvance') && nltData.advance_payment !== undefined) document.getElementById('editNltAdvance').value = nltData.advance_payment;
+        const cleanPrice = (val) => {
+          if(!val) return '';
+          const cleaned = String(val).replace(/[^0-9,.]/g, '').replace(',', '.');
+          const parsed = parseFloat(cleaned);
+          return isNaN(parsed) ? '' : parsed;
+        };
+        if (document.getElementById('editNltP12') && nltData['12_mesi_prezzo']) document.getElementById('editNltP12').value = cleanPrice(nltData['12_mesi_prezzo']);
+        if (document.getElementById('editNltP24') && nltData['24_mesi_prezzo']) document.getElementById('editNltP24').value = cleanPrice(nltData['24_mesi_prezzo']);
+        if (document.getElementById('editNltP36') && nltData['36_mesi_prezzo']) document.getElementById('editNltP36').value = cleanPrice(nltData['36_mesi_prezzo']);
+        if (document.getElementById('editNltP46') && nltData['46_mesi_prezzo']) document.getElementById('editNltP46').value = cleanPrice(nltData['46_mesi_prezzo']);
+        if (document.getElementById('editNltAdvance') && nltData.deposit_mandante !== undefined) document.getElementById('editNltAdvance').value = nltData.deposit_mandante;
       }
     } catch(e) {}
   }
@@ -1073,20 +1083,34 @@ async function saveTariffChanges(event) {
           if (insErr) alert("Errore inserimento NBT: " + insErr.message);
         }
       } else if (currentTab === 'nlt') {
-        const newMonthly = Number(document.getElementById('editMonthlyPrice').value) || 0;
+        const p12 = document.getElementById('editNltP12').value;
+        const p24 = document.getElementById('editNltP24').value;
+        const p36 = document.getElementById('editNltP36').value;
+        const p46 = document.getElementById('editNltP46').value;
+        const adv = document.getElementById('editNltAdvance').value;
+
+        const updatePayload = {
+            "12_mesi_prezzo": p12 ? `€ ${p12}` : null,
+            "24_mesi_prezzo": p24 ? `€ ${p24}` : null,
+            "36_mesi_prezzo": p36 ? `€ ${p36}` : null,
+            "46_mesi_prezzo": p46 ? `€ ${p46}` : null,
+            client_monthly_price: p36 ? Number(p36) : 0,
+            deposit_mandante: adv ? Number(adv) : 0,
+            duration_months: 36,
+            km_per_year: 25000,
+            mandante_monthly_net: 0
+        };
 
         let { data: nltUpdated, error: nltErr } = await supabase
           .from('nlt_offers')
-          .update({ 
-            client_monthly_price: newMonthly
-          })
+          .update(updatePayload)
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
         
         if (nltErr) alert("Errore aggiornamento NLT (vehicle_id): " + nltErr.message);
 
         if (!nltErr && (!nltUpdated || nltUpdated.length === 0)) {
-          const res2 = await supabase.from('nlt_offers').update({ client_monthly_price: newMonthly }).eq('id', ActiveEditVehicleId).select();
+          const res2 = await supabase.from('nlt_offers').update(updatePayload).eq('id', ActiveEditVehicleId).select();
           nltUpdated = res2.data;
           if (res2.error) alert("Errore aggiornamento NLT (id): " + res2.error.message);
         }
@@ -1095,8 +1119,8 @@ async function saveTariffChanges(event) {
           const { error: insErr } = await supabase.from('nlt_offers').insert([{
             vehicle_id: ActiveEditVehicleId,
             provider_id: CurrentPartner ? CurrentPartner.id : null,
-            client_monthly_price: newMonthly,
-            is_active: true
+            is_active: true,
+            ...updatePayload
           }]);
           if (insErr) alert("Errore inserimento NLT: " + insErr.message);
         }
