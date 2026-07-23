@@ -1163,53 +1163,95 @@ function renderCarCard(car, dict) {
     return window.generateNltCardHTML(nltOffer);
   }
 
-  // Altrimenti, usa la card standard Luxury
-  const cleanBadge = (car.badge || '').replace(/[\u1F600-\u1F64F\u1F300-\u1F5FF\u1F680-\u1F6FF\u1F1E6-\u1F1FF]/g, '').trim();
-  let targetLink = `car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}`;
-  let priceText = car.price === 0 ? "Su Richiesta" : "€ " + car.price;
-  let periodText = car.price === 0 ? "" : (dict && dict["dynamic.perDay"] ? dict["dynamic.perDay"] : "/ Giorno");
+  // Altrimenti, se non è NLT, usa la nuova card Breve Termine (NBT) basata sul design oscuro/moderno
+  const v = car.raw || car;
+  const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
+  
+  const dailyPrice = Number(car.price) || Number(v.daily_price) || 120;
+  const depositPrice = (v.deposit !== undefined && v.deposit !== null) ? Number(v.deposit) : 1500;
+  
+  const brand = v.brand || '';
+  const model = v.model || car.name || 'Auto';
+  const trim = v.trim || '';
+  const fuel = v.fuel_type || v.motore || 'Ibrido / Diesel';
+  const transmission = v.transmission || 'Automatico';
+  const hp = specsObj.hp || '300 CV';
+  const accel = specsObj.accel || '5.5s';
+  const image = car.image || v.image_url || 'logo_fallback.png';
+  const providerName = v.providerName || 'Partner Flotta Live';
+  
+  const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true);
+  const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 1);
+  const delivDate = specsObj.delivery_date || v.delivery_date || '';
 
+  let badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+  if (delivDate && delivDate !== '') {
+    let fDate = delivDate;
+    try { const p = delivDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
+    badgeText = `<span class="card-badge badge-custom" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
+  } else if (readyDeliv && delivWeeks <= 1) {
+    badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+  } else if (readyDeliv) {
+    badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${delivWeeks} sett.)</span>`;
+  } else {
+    badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${delivWeeks || 1} sett.</span>`;
+  }
+
+  // Costruiamo il targetLink verso il dettaglio NBT
+  let targetLink = `nbt-dettaglio.html?id=${v.id || ''}&model=${encodeURIComponent(model)}&brand=${encodeURIComponent(brand)}&trim=${encodeURIComponent(trim)}&img=${encodeURIComponent(image)}&hp=${encodeURIComponent(hp)}&accel=${encodeURIComponent(accel)}&price=${dailyPrice}&deposit=${depositPrice}&cat=${encodeURIComponent(v.category || 'Luxury')}&fuel=${encodeURIComponent(fuel)}&trans=${encodeURIComponent(transmission)}`;
+
+  // Utilizziamo le stesse classi (nlt-card, ecc.) per sfruttare il CSS dark/modern esistente
   return `
-    <div class="glass-card car-card">
-      <a href="${targetLink}" style="display: block; position: relative;">
-        <div class="car-image-container">
-          <span class="car-badge">${cleanBadge}</span>
-          <span class="car-rating"><i class="ri-star-fill"></i> ${car.rating}</span>
-          <img src="${car.image}" alt="${car.name}" class="car-img" loading="lazy" onerror="this.onerror=null; this.src='logo_tricolore.png';">
+    <div class="glass-card nlt-card" id="card-${v.id || Math.random()}">
+      <div class="nlt-card-img-wrapper">
+        <img src="${image}" alt="${brand} ${model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
+        <div class="nlt-card-badges">
+          ${badgeText}
         </div>
-      </a>
-      
-      <div class="car-info">
-        <h3 class="car-title">${car.name}</h3>
-        <span class="car-type"><i class="ri-steering-2-line"></i> ${dict && dict["dynamic.cat"] ? dict["dynamic.cat"] : "Categoria"} ${car.category}</span>
-        
-        <div class="car-specs">
-          <div class="spec-item">
-            <i class="ri-speed-up-line"></i>
-            <span>${car.specs.speed}</span>
-          </div>
-          <div class="spec-item">
-            <i class="ri-timer-flash-line"></i>
-            <span>${car.specs.accel}</span>
-          </div>
-          <div class="spec-item">
-            <i class="ri-fire-line"></i>
-            <span>${car.specs.hp}</span>
-          </div>
+        <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${providerName}</div>
+      </div>
+
+      <div class="nlt-card-body">
+        <div class="nlt-card-header">
+          <span class="nlt-brand-tag">${brand}</span>
+          <h3 class="nlt-model-title">${model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${trim}</small></h3>
         </div>
-        
-        <div class="car-footer">
-          <div class="car-price">
-            <span class="price-amount">${priceText}</span>
-            <span class="price-period">${periodText}</span>
-          </div>
-          
-          <a href="${targetLink}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; display: flex; gap: 8px; align-items: center;">
-            <span>${dict && dict["dynamic.book"] ? dict["dynamic.book"] : "Prenota Ora"}</span> <i class="ri-arrow-right-up-line"></i>
+
+        <!-- Specifiche Veloci -->
+        <div class="nlt-specs-row">
+          <span><i class="ri-speed-up-line"></i> ${hp}</span>
+          <span><i class="ri-dashboard-2-line"></i> ${accel} (0-100)</span>
+          <span><i class="ri-gas-station-line"></i> ${fuel}</span>
+          <span><i class="ri-settings-4-line"></i> ${transmission}</span>
+        </div>
+
+        <!-- Box Prezzo NBT -->
+        <div class="nlt-price-box">
+          <div class="nlt-price-num text-gradient">€ <span>${dailyPrice.toLocaleString('it-IT')}</span></div>
+          <div class="nlt-price-label">€ / giorno (Assic. Inclusa)</div>
+          <div class="nlt-price-details">Deposito Cauzionale € ${depositPrice.toLocaleString('it-IT')}</div>
+        </div>
+
+        <!-- Elenco Servizi Inclusi NBT -->
+        <div class="nlt-services-list">
+          <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assicurazione RCA & Kasko completa</span></div>
+          <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Manutenzione Ordinaria e Straordinaria</span></div>
+          <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assistenza Stradale H24 ed Auto Sostitutiva</span></div>
+          <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 2px;">+ Tasse, Oneri e Gestione Pneumatici</div>
+        </div>
+
+        <!-- Pulsanti d'Azione -->
+        <div class="nlt-card-actions">
+          <a href="${targetLink}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>Prenota Ora</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
+          </a>
+          <a href="https://wa.me/393392451458?text=${encodeURIComponent('Ciao, vorrei informazioni per noleggiare a breve termine: ' + brand + ' ' + model + ' a ' + dailyPrice + '€/giorno')}" target="_blank" class="btn btn-outline" title="Contatta su WhatsApp" style="padding: 12px 14px; color: #2ecc71; border-color: rgba(46, 204, 113, 0.4); display: flex; align-items: center; justify-content: center;">
+            <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i>
           </a>
         </div>
       </div>
-    </div>`;
+    </div>
+  `;
 }
 // Filtro Categorie (Pills)
 function filterFleet(category, btnElement) {
