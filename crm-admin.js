@@ -226,12 +226,13 @@ async function fetchQuotesFromDatabase() {
   }
 }
 
-// 4. Fetch Bookings & Availability (`public.bookings` + `public.availability_requests`)
+// 4. Fetch Bookings & Availability (`public.bookings` + `public.availability_requests`) + Leads Approvati
 async function fetchBookingsFromDatabase() {
   try {
-    const [bkRes, avRes] = await Promise.all([
+    const [bkRes, avRes, leadsRes] = await Promise.all([
       supabase.from('bookings').select('*').order('created_at', { ascending: false }),
-      supabase.from('availability_requests').select('*').order('created_at', { ascending: false })
+      supabase.from('availability_requests').select('*').order('created_at', { ascending: false }),
+      supabase.from('crm_leads').select('*').in('pipeline_status', ['approved_by_provider', 'contract_signed']).order('created_at', { ascending: false })
     ]);
 
     let combined = [];
@@ -265,6 +266,45 @@ async function fetchBookingsFromDatabase() {
         total_price: 0
       })));
     }
+    if (!leadsRes.error && leadsRes.data) {
+      combined = combined.concat(leadsRes.data.map(l => {
+        let cat = 'NLT'; // Defaults to NLT for CRM leads generally
+        let vName = l.vehicle_interest || (l.notes ? l.notes.split('-')[0].trim() : 'Vettura NLT');
+        
+        // Cerca di dedurre la categoria esatta dal veicolo associato
+        if (l.interested_vehicle_id && typeof CurrentVehicles !== 'undefined') {
+          const v = CurrentVehicles.find(x => x.id === l.interested_vehicle_id);
+          if (v) {
+            vName = `${v.brand || ''} ${v.model || ''}`.trim() || vName;
+            if (v.is_luxury) cat = 'Luxury';
+            else if (typeof CurrentNbtOffers !== 'undefined' && CurrentNbtOffers.some(n => n.vehicle_id === v.id)) cat = 'NBT';
+            else if (typeof CurrentNltOffers !== 'undefined' && CurrentNltOffers.some(n => n.vehicle_id === v.id)) cat = 'NLT';
+          }
+        } else {
+           const lowerName = vName.toLowerCase();
+           if (lowerName.includes('nbt') || lowerName.includes('breve')) cat = 'NBT';
+           else if (lowerName.includes('luxury') || lowerName.includes('supercar') || lowerName.includes('porsche') || lowerName.includes('ferrari')) cat = 'Luxury';
+           else if (l.notes && l.notes.toLowerCase().includes('nbt')) cat = 'NBT';
+           else if (l.notes && l.notes.toLowerCase().includes('luxury')) cat = 'Luxury';
+        }
+
+        return {
+          id: l.id,
+          source: 'crm_lead',
+          created_at: l.created_at,
+          vehicle_name: vName,
+          client_name: `${l.first_name || ''} ${l.last_name || ''}`.trim() || 'Cliente Lead CRM',
+          client_phone: l.phone || '',
+          client_email: l.email || '',
+          pickup_location: 'Consegna CRM Partner',
+          rental_days: l.pipeline_status === 'contract_signed' ? 'Contratto Firmato' : 'Approvato Mandante',
+          status: l.pipeline_status === 'contract_signed' ? 'confirmed' : 'approved',
+          total_price: Number(l.annual_income_or_revenue) || 0,
+          category: cat // Forza la categoria corretta nei tab
+        };
+      }));
+    }
+    
     CurrentBookings = combined.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
   } catch(e) {
     console.warn("Errore fetch bookings:", e);

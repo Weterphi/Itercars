@@ -360,20 +360,20 @@ function getRatesForCar(c) {
     const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
     const defBase = Number(c.basePrice) || 699;
     rates = {
-      48: { baseKm: 25000, kmTotal: 100000, deposit: baseDep, price: parseDBPrice(c.p46, Math.round(defBase * 0.90)), extraKmPrice: 0.14, status: 'Disponibile' },
-      12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: parseDBPrice(c.p12, Math.round(defBase * 1.25)), extraKmPrice: 0.18, status: 'Disponibile' },
-      24: { baseKm: 25000, kmTotal: 50000, deposit: baseDep, price: parseDBPrice(c.p24, Math.round(defBase * 1.10)), extraKmPrice: 0.16, status: 'Disponibile' },
-      36: { baseKm: 25000, kmTotal: 75000, deposit: baseDep, price: parseDBPrice(c.p36, Math.round(defBase)), extraKmPrice: 0.15, status: 'Disponibile' }
+      48: { baseKm: 25000, kmTotal: 100000, deposit: (c.adv48 != null) ? Number(c.adv48) : baseDep, price: parseDBPrice(c.p46, Math.round(defBase * 0.90)), extraKmPrice: 0.14, status: 'Disponibile' },
+      12: { baseKm: 25000, kmTotal: 25000, deposit: (c.adv12 != null) ? Number(c.adv12) : 0, price: parseDBPrice(c.p12, Math.round(defBase * 1.25)), extraKmPrice: 0.18, status: 'Disponibile' },
+      24: { baseKm: 25000, kmTotal: 50000, deposit: (c.adv24 != null) ? Number(c.adv24) : baseDep, price: parseDBPrice(c.p24, Math.round(defBase * 1.10)), extraKmPrice: 0.16, status: 'Disponibile' },
+      36: { baseKm: 25000, kmTotal: 75000, deposit: (c.adv36 != null) ? Number(c.adv36) : baseDep, price: parseDBPrice(c.p36, Math.round(defBase)), extraKmPrice: 0.15, status: 'Disponibile' }
     };
   } else if (!rates) {
     // Generazione automatica di 4 pacchetti rettangolari (6, 12, 24, 36 mesi)
     const base = Number(c.basePrice) || 699;
     const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
     rates = {
-      48: { baseKm: 25000, kmTotal: 100000, deposit: baseDep, price: Math.round(base * 0.90), extraKmPrice: 0.14, status: 'Disponibile' },
-      12: { baseKm: 25000, kmTotal: 25000, deposit: 0, price: Math.round(base * 1.25), extraKmPrice: 0.18, status: 'Disponibile' },
-      24: { baseKm: 25000, kmTotal: 50000, deposit: baseDep, price: Math.round(base * 1.10), extraKmPrice: 0.16, status: 'Disponibile' },
-      36: { baseKm: 25000, kmTotal: 75000, deposit: baseDep, price: Math.round(base), extraKmPrice: 0.15, status: 'Disponibile' }
+      48: { baseKm: 25000, kmTotal: 100000, deposit: (c.adv48 != null) ? Number(c.adv48) : baseDep, price: Math.round(base * 0.90), extraKmPrice: 0.14, status: 'Disponibile' },
+      12: { baseKm: 25000, kmTotal: 25000, deposit: (c.adv12 != null) ? Number(c.adv12) : 0, price: Math.round(base * 1.25), extraKmPrice: 0.18, status: 'Disponibile' },
+      24: { baseKm: 25000, kmTotal: 50000, deposit: (c.adv24 != null) ? Number(c.adv24) : baseDep, price: Math.round(base * 1.10), extraKmPrice: 0.16, status: 'Disponibile' },
+      36: { baseKm: 25000, kmTotal: 75000, deposit: (c.adv36 != null) ? Number(c.adv36) : baseDep, price: Math.round(base), extraKmPrice: 0.15, status: 'Disponibile' }
     };
   }
   return rates;

@@ -943,7 +943,10 @@ async function openEditTariffModal(vehicleId) {
   if (document.getElementById('editNltP24')) document.getElementById('editNltP24').value = '';
   if (document.getElementById('editNltP36')) document.getElementById('editNltP36').value = '';
   if (document.getElementById('editNltP46')) document.getElementById('editNltP46').value = '';
-  if (document.getElementById('editNltAdvance')) document.getElementById('editNltAdvance').value = 0;
+  if (document.getElementById('editNltAdv12')) document.getElementById('editNltAdv12').value = 0;
+  if (document.getElementById('editNltAdv24')) document.getElementById('editNltAdv24').value = 0;
+  if (document.getElementById('editNltAdv36')) document.getElementById('editNltAdv36').value = 0;
+  if (document.getElementById('editNltAdv48')) document.getElementById('editNltAdv48').value = 0;
 
   // Try to load NLT offers from DB if available
   if (supabase) {
@@ -960,7 +963,10 @@ async function openEditTariffModal(vehicleId) {
         if (document.getElementById('editNltP24') && nltData['24_mesi_prezzo']) document.getElementById('editNltP24').value = cleanPrice(nltData['24_mesi_prezzo']);
         if (document.getElementById('editNltP36') && nltData['36_mesi_prezzo']) document.getElementById('editNltP36').value = cleanPrice(nltData['36_mesi_prezzo']);
         if (document.getElementById('editNltP46') && nltData['46_mesi_prezzo']) document.getElementById('editNltP46').value = cleanPrice(nltData['46_mesi_prezzo']);
-        if (document.getElementById('editNltAdvance') && nltData.deposit_mandante !== undefined) document.getElementById('editNltAdvance').value = nltData.deposit_mandante;
+        if (document.getElementById('editNltAdv12') && nltData['12_mesi_anticipo'] !== undefined) document.getElementById('editNltAdv12').value = nltData['12_mesi_anticipo'];
+        if (document.getElementById('editNltAdv24') && nltData['24_mesi_anticipo'] !== undefined) document.getElementById('editNltAdv24').value = nltData['24_mesi_anticipo'];
+        if (document.getElementById('editNltAdv36') && nltData['36_mesi_anticipo'] !== undefined) document.getElementById('editNltAdv36').value = nltData['36_mesi_anticipo'];
+        if (document.getElementById('editNltAdv48') && nltData['46_mesi_anticipo'] !== undefined) document.getElementById('editNltAdv48').value = nltData['46_mesi_anticipo'];
       }
     } catch(e) {}
   }
@@ -1087,15 +1093,22 @@ async function saveTariffChanges(event) {
         const p24 = document.getElementById('editNltP24').value;
         const p36 = document.getElementById('editNltP36').value;
         const p46 = document.getElementById('editNltP46').value;
-        const adv = document.getElementById('editNltAdvance').value;
+        const adv12 = document.getElementById('editNltAdv12').value;
+        const adv24 = document.getElementById('editNltAdv24').value;
+        const adv36 = document.getElementById('editNltAdv36').value;
+        const adv48 = document.getElementById('editNltAdv48').value;
 
         const updatePayload = {
             "12_mesi_prezzo": p12 ? `€ ${p12}` : null,
             "24_mesi_prezzo": p24 ? `€ ${p24}` : null,
             "36_mesi_prezzo": p36 ? `€ ${p36}` : null,
             "46_mesi_prezzo": p46 ? `€ ${p46}` : null,
+            "12_mesi_anticipo": adv12 ? Number(adv12) : 0,
+            "24_mesi_anticipo": adv24 ? Number(adv24) : 0,
+            "36_mesi_anticipo": adv36 ? Number(adv36) : 0,
+            "46_mesi_anticipo": adv48 ? Number(adv48) : 0,
             client_monthly_price: p36 ? Number(p36) : 0,
-            deposit_mandante: adv ? Number(adv) : 0,
+            deposit_mandante: adv36 ? Number(adv36) : 0,
             duration_months: 36,
             km_per_year: 25000,
             mandante_monthly_net: 0

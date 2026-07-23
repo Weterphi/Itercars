@@ -88,7 +88,7 @@ async function loadOffersFromDatabase() {
       let query = window.supabase
         .from('nlt_offers')
         .select(`
-          id, client_monthly_price, deposit_mandante, duration_months, provider_id, "12_mesi_prezzo", "24_mesi_prezzo", "36_mesi_prezzo", "46_mesi_prezzo",
+          id, client_monthly_price, deposit_mandante, duration_months, provider_id, "12_mesi_prezzo", "24_mesi_prezzo", "36_mesi_prezzo", "46_mesi_prezzo", "12_mesi_anticipo", "24_mesi_anticipo", "36_mesi_anticipo", "46_mesi_anticipo",
           vehicles!inner (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, badge, city, provider_id),
           providers (name)
         `)
@@ -218,6 +218,10 @@ async function loadOffersFromDatabase() {
             p24: o['24_mesi_prezzo'],
             p36: o['36_mesi_prezzo'],
             p46: o['46_mesi_prezzo'],
+            adv12: o['12_mesi_anticipo'],
+            adv24: o['24_mesi_anticipo'],
+            adv36: o['36_mesi_anticipo'],
+            adv48: o['46_mesi_anticipo'],
 
             baseOffer: {
 
