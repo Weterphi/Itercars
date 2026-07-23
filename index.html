@@ -275,11 +275,11 @@
         <div class="mhs-row-split">
           <div class="input-wrapper" style="position: relative;">
             <i class="ri-calendar-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
-            <input type="text" id="mobileSearchDateStart" class="form-control mhs-date" placeholder="Data Ritiro" required>
+            <input type="date" id="mobileSearchDateStart" class="form-control" value="2026-07-01" required>
           </div>
           <div class="input-wrapper" style="position: relative;">
             <i class="ri-calendar-check-line" style="position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--accent-gold); font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
-            <input type="text" id="mobileSearchDateEnd" class="form-control mhs-date" placeholder="Data Consegna" required>
+            <input type="date" id="mobileSearchDateEnd" class="form-control" value="2026-07-15" required>
           </div>
         </div>
         <div class="mhs-row-full" style="margin-top: 12px;">
@@ -1155,15 +1155,6 @@
       const loc = document.getElementById('mobileSearchLocation').value;
       window.location.href = 'fleet.html?location=' + encodeURIComponent(loc);
     }
-    document.addEventListener('DOMContentLoaded', function() {
-      if (typeof flatpickr !== 'undefined') {
-        flatpickr(".mhs-date", {
-          locale: "it",
-          dateFormat: "d/m/Y",
-          minDate: "today"
-        });
-      }
-    });
     </script>
     \n</body>
 </html>
