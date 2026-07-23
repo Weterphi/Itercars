@@ -1068,7 +1068,7 @@ function renderOffersGrid() {
 
 
 
-  grid.innerHTML = filtered.map(offer => {
+  grid.innerHTML = filtered.map((offer, idx) => {
 
     const priceInfo = getCardPrice(offer);
 
@@ -1093,13 +1093,15 @@ function renderOffersGrid() {
 
 
 
+    const imageLoadingTag = idx < 4 ? 'loading="eager" decoding="sync"' : 'loading="lazy" decoding="async"';
+
     return `
 
       <div class="glass-card nlt-card" id="card-${offer.id}">
 
         <div class="nlt-card-img-wrapper">
 
-          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
+          <img src="${offer.image}" alt="${offer.brand} ${offer.model}" class="nlt-card-img" ${imageLoadingTag} onerror="this.src='category-suv.jpg'">
 
           <div class="nlt-card-badges">
 
