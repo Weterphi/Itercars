@@ -820,6 +820,16 @@ function renderPartnerBookingsKanban() {
     const phoneClean = (b.client_phone || '').replace(/[^0-9]/g, '');
     const waLink = `https://api.whatsapp.com/send?phone=${phoneClean}&text=Buongiorno ${b.client_name}, la contatto per la conferma della sua prenotazione per ${b.vehicle_name}.`;
 
+    let isNlt = (b.vehicle_name || '').toLowerCase().includes('nlt') || (b.vehicle_name || '').toLowerCase().includes('lungo');
+    let periodText = '';
+    if (isNlt) {
+      periodText = '/mese';
+    } else {
+      let match = (b.vehicle_name || '').match(/(\d+)\s*giorni/i);
+      let days = match ? match[1] : (b.rental_days || 3);
+      periodText = `(${days} gg)`;
+    }
+
     const cardHtml = `
       <div class="kanban-card">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
@@ -830,7 +840,7 @@ function renderPartnerBookingsKanban() {
         <div class="kanban-card-title">${b.client_name}</div>
         <div class="kanban-card-subtitle"><i class="ri-roadster-line"></i> ${b.vehicle_name}</div>
         
-        <div class="kanban-card-price">€ ${Number(b.total_price || 0).toLocaleString('it-IT')} <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">(${b.rental_days || 3} gg)</span></div>
+        <div class="kanban-card-price">€ ${Number(b.total_price || 0).toLocaleString('it-IT')} <span style="font-size:0.75rem; color:var(--text-muted); font-weight:400;">${periodText}</span></div>
         
         <div class="kanban-card-actions">
           <a href="${waLink}" target="_blank" class="btn-header btn-header-outline" style="justify-content: center; font-size: 0.78rem; padding: 6px;">
