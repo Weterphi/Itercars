@@ -1014,66 +1014,7 @@ function renderFleet(cars) {
 }
 
 function renderCarCard(car, dict) {
-  // Se è Noleggio a Breve Termine, usa la vera card NBT
-  if (car.is_nbt && car.raw) {
-    const offer = car.raw;
-    let variants = [];
-    if (typeof offer.variants === 'string') {
-      try { variants = JSON.parse(offer.variants); } catch(e){}
-    } else if (offer.variants) {
-      variants = offer.variants;
-    }
-    
-    // Trova il prezzo minimo e relativo anticipo
-    let minPrice = offer.daily_price || 0;
-    let minDeposit = offer.deposit || 0;
-    if (variants && variants.length > 0) {
-      let lowest = variants[0];
-      variants.forEach(v => {
-        if (v.price < lowest.price) lowest = v;
-      });
-      minPrice = lowest.price;
-      minDeposit = lowest.deposit !== undefined ? lowest.deposit : minDeposit;
-    }
 
-    let badgeText = `<span class="card-badge badge-ready" style="font-size:0.7rem; padding:3px 8px; border-radius:4px; background:rgba(16, 185, 129, 0.15); color:#10b981; border:1px solid rgba(16, 185, 129, 0.3); position:absolute; top:10px; left:10px; z-index:2;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
-    
-    const depositZeroTag = (variants && variants.some(v => v.deposit === 0))
-      ? `<span class="card-badge badge-zero" style="font-size:0.7rem; padding:3px 8px; border-radius:4px; background:rgba(212, 175, 55, 0.15); color:var(--accent-gold); border:1px solid rgba(212, 175, 55, 0.3); position:absolute; top:35px; left:10px; z-index:2;"><i class="ri-flashlight-fill"></i> Anticipo Zero Disponibile</span>` : '';
-
-    return `
-      <div class="glass-card nbt-card" style="display:flex; flex-direction:column; overflow:hidden; transition:transform 0.3s ease; height:100%;">
-        <div class="nbt-card-img-wrapper" style="position:relative; width:100%; height:200px;">
-          <img src="${offer.image_url || 'category-suv.jpg'}" alt="${offer.brand} ${offer.model}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='category-suv.jpg'">
-          ${badgeText}
-          ${depositZeroTag}
-        </div>
-        <div class="nbt-card-content" style="padding:20px; display:flex; flex-direction:column; flex:1;">
-          <h3 style="margin:0 0 4px 0; font-size:1.2rem; color:#fff;">${offer.brand || ''} ${offer.model || offer.name || ''}</h3>
-          <p style="margin:0 0 16px 0; font-size:0.9rem; color:var(--text-muted);">${offer.trim || ''}</p>
-          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:20px; font-size:0.8rem; color:var(--text-muted); text-align:center;">
-            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-gas-station-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.fuel_type || 'Diesel'}</div>
-            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-steering-2-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.transmission || 'Auto'}</div>
-            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-car-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.category || 'SUV'}</div>
-          </div>
-          <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
-            <div>
-              <div style="font-size:1.5rem; font-weight:700; color:#fff;">
-                <span style="font-size:1rem; color:var(--text-muted);">€</span>${minPrice}
-                <span style="font-size:0.8rem; color:var(--text-muted); font-weight:400;">/giorno</span>
-              </div>
-              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">
-                ${minDeposit > 0 ? `Anticipo: €${minDeposit}` : `<span style="color:var(--accent-gold);font-weight:600;"><i class="ri-flashlight-fill"></i> Anticipo Zero</span>`}
-              </div>
-            </div>
-          </div>
-          <a href="nbt-dettaglio.html?id=${offer.id}" class="btn btn-primary" style="width:100%; text-align:center; padding:12px; font-weight:600;">
-            Personalizza e Prenota
-          </a>
-        </div>
-      </div>
-    `;
-  }
   
   // Se è Noleggio a Lungo Termine, forziamo l'uso della card NLT (Image 1)
   if (car.is_nlt && car.raw && typeof window.generateNltCardHTML === 'function') {
