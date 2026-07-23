@@ -1075,14 +1075,92 @@ function renderCarCard(car, dict) {
     `;
   }
   
-  // Se è Noleggio a Lungo Termine, usa la vera card NLT centralizzata SOLO se esiste l'offerta reale
-  if (car.is_nlt && car.raw) {
-    if (typeof window.generateNltCardHTML === 'function' && typeof NltState !== 'undefined' && NltState.offers) {
-      const nltOffer = NltState.offers.find(o => String(o.vehicle_id) === String(car.id) || String(o.id) === String(car.raw.id));
-      if (nltOffer) {
-        return window.generateNltCardHTML(nltOffer);
+  // Se è Noleggio a Lungo Termine, forziamo l'uso della card NLT (Image 1)
+  if (car.is_nlt && car.raw && typeof window.generateNltCardHTML === 'function') {
+    let nltOffer = null;
+    
+    // 1. Cerchiamo se c'è un'offerta reale associata nel DB (caricata tramite la query heroSearch)
+    if (car.raw.nlt_offers && car.raw.nlt_offers.length > 0) {
+      const dbOffer = car.raw.nlt_offers.find(o => o.is_active !== false) || car.raw.nlt_offers[0];
+      
+      const v = car.raw;
+      const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
+      
+      let db36 = null;
+      if (dbOffer['36_mesi_prezzo']) {
+        let clean = String(dbOffer['36_mesi_prezzo']).replace(/[^0-9,.]/g, '').replace(',', '.');
+        if (!isNaN(parseFloat(clean))) db36 = parseFloat(clean);
       }
+      
+      let monthlyP = db36 || ((dbOffer.client_monthly_price !== undefined && dbOffer.client_monthly_price !== null) ? Number(dbOffer.client_monthly_price) : 699);
+      let depositP = (v.deposit !== undefined && v.deposit !== null) ? Number(v.deposit) : ((dbOffer.deposit_mandante !== undefined && dbOffer.deposit_mandante !== null) ? Number(dbOffer.deposit_mandante) : 3000);
+      
+      nltOffer = {
+        id: dbOffer.id,
+        vehicle_id: v.id,
+        brand: v.brand || 'Veicolo',
+        model: v.model || 'NLT',
+        trim: v.trim || '',
+        category: v.category || 'SUV Luxury',
+        fuel: v.motore || v.fuel_type || 'Ibrido / Diesel',
+        transmission: v.transmission || 'Automatico',
+        image: car.image,
+        hp: specsObj.hp || '300 CV',
+        speed: specsObj.speed || '240 km/h',
+        accel: specsObj.accel || '5.5s',
+        readyDelivery: v.is_ready_delivery !== false,
+        deliveryWeeks: v.delivery_weeks || 4,
+        providerName: v.providerName || 'Mandante NLT',
+        basePrice: monthlyP,
+        baseDeposit: depositP,
+        variants: [
+          { duration: 36, deposit: depositP, price: Math.round(monthlyP * 1.06) },
+          { duration: 36, deposit: 0, price: Math.round(monthlyP * 1.06 + (depositP / 36)) },
+          { duration: 48, deposit: depositP, price: monthlyP },
+          { duration: 48, deposit: 0, price: Math.round(monthlyP + (depositP / 48)) }
+        ],
+        services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Bollo e Messa su strada', 'Soccorso stradale H24 europea', 'Gestione sinistri e pneumatici']
+      };
     }
+    
+    // 2. Se non c'è un'offerta nel DB, o la query non l'ha presa, creiamo un fallback perfetto che rispetti il VERO prezzo (daily_price o client_monthly_price)
+    if (!nltOffer) {
+      const v = car.raw;
+      const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
+      
+      // Calcoliamo il vero prezzo evitando monthly_price_36 che causava 1100€
+      let monthlyP = v.client_monthly_price ? Number(v.client_monthly_price) : (specsObj.monthly_price ? Number(specsObj.monthly_price) : (Number(car.price) || 699));
+      let depositP = (v.deposit !== undefined && v.deposit !== null) ? Number(v.deposit) : 3000;
+      
+      nltOffer = {
+        id: v.id,
+        vehicle_id: v.id,
+        brand: v.brand || 'Veicolo',
+        model: v.model || 'NLT',
+        trim: v.trim || '',
+        category: v.category || 'SUV Luxury',
+        fuel: v.motore || v.fuel_type || 'Ibrido / Diesel',
+        transmission: v.transmission || 'Automatico',
+        image: car.image,
+        hp: specsObj.hp || '300 CV',
+        speed: specsObj.speed || '240 km/h',
+        accel: specsObj.accel || '5.5s',
+        readyDelivery: v.is_ready_delivery !== false,
+        deliveryWeeks: v.delivery_weeks || 4,
+        providerName: v.providerName || 'Mandante NLT',
+        basePrice: monthlyP,
+        baseDeposit: depositP,
+        variants: [
+          { duration: 36, deposit: depositP, price: Math.round(monthlyP * 1.06) },
+          { duration: 36, deposit: 0, price: Math.round(monthlyP * 1.06 + (depositP / 36)) },
+          { duration: 48, deposit: depositP, price: monthlyP },
+          { duration: 48, deposit: 0, price: Math.round(monthlyP + (depositP / 48)) }
+        ],
+        services: ['Assicurazione RCA & Kasko completa', 'Manutenzione Ordinaria e Straordinaria', 'Bollo e Messa su strada', 'Soccorso stradale H24 europea', 'Gestione sinistri e pneumatici']
+      };
+    }
+    
+    return window.generateNltCardHTML(nltOffer);
   }
 
   // Altrimenti, usa la card standard Luxury
@@ -1806,7 +1884,7 @@ window.handleHeroSearch = async function(event) {
 
   if (!supabase) return;
 
-  let query = supabase.from('vehicles').select('*').eq('is_active', true);
+  let query = supabase.from('vehicles').select('*, nlt_offers(*)').eq('is_active', true);
   
   if (type === 'nbt') query = query.eq('is_nbt', true);
   else if (type === 'nlt') query = query.eq('is_nlt', true);
