@@ -1042,7 +1042,7 @@ header.scrolled .nav-actions {
 /* Fleet Grid */
 .fleet-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
   gap: 30px;
 }
 
@@ -2209,3 +2209,4 @@ footer {
     display: none !important;
   }
 }
+@media (max-width: 640px) { .fleet-grid { grid-template-columns: 1fr !important; } }

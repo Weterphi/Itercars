@@ -159,7 +159,7 @@
 /* Griglia Vetture NLT */
 .nlt-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
   gap: 28px;
   margin-bottom: 60px;
 }
@@ -429,3 +429,4 @@
   color: #fff;
   box-shadow: 0 4px 20px rgba(0, 146, 70, 0.4);
 }
+@media (max-width: 640px) { .nlt-grid { grid-template-columns: 1fr !important; } }
