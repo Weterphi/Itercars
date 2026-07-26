@@ -16,25 +16,7 @@ const NltState = {
 
   mode: 'NLT', // 'NLT' (Lungo Termine) oppure 'NBT' (Breve Termine)
 
-  maxBudget: 4000,
-
-  maxAnticipo: 15000,
-
-  brandFilter: 'all',
-
-  fuelFilter: 'all',
-
-  transmissionFilter: 'all',
-
-  depositFilter: 'all', // 'all', '0', '3000', '5000'
-
-  durationFilter: 48, // 24, 36, 48, 60 mesi
-
-  categoryFilter: 'all',
-
-  visualCategory: 'all',
-
-  readyDeliveryOnly: false,
+  carSizeFilter: 'all',
 
   searchQuery: '',
 
@@ -88,8 +70,8 @@ async function loadOffersFromDatabase() {
       let query = window.supabase
         .from('nlt_offers')
         .select(`
-          id, client_monthly_price, deposit_mandante, duration_months, provider_id, "12_mesi_prezzo", "24_mesi_prezzo", "36_mesi_prezzo", "46_mesi_prezzo", "12_mesi_anticipo", "24_mesi_anticipo", "36_mesi_anticipo", "46_mesi_anticipo",
-          vehicles!inner (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, badge, city, provider_id),
+          id, client_monthly_price, deposit_mandante, duration_months, provider_id, "12_mesi_prezzo", "24_mesi_prezzo", "36_mesi_prezzo", "46_mesi_prezzo", "12_mesi_anticipo", "24_mesi_anticipo", "36_mesi_anticipo", "46_mesi_anticipo", macchina_piccola, macchina_media, macchina_grande,
+          vehicles!inner (id, brand, model, trim, category, fuel_type, transmission, image_url, specs, badge, city, provider_id, macchina_piccola, macchina_media, macchina_grande),
           providers (name)
         `)
         .eq('is_active', true);
@@ -185,6 +167,9 @@ async function loadOffersFromDatabase() {
             trim: v.trim || 'Executive',
 
             category: v.category || 'SUV Luxury',
+            macchina_piccola: o.macchina_piccola || v.macchina_piccola || false,
+            macchina_media: o.macchina_media || v.macchina_media || false,
+            macchina_grande: o.macchina_grande || v.macchina_grande || false,
 
             fuel: v.motore || v.fuel_type || 'Ibrido / Diesel',
 
@@ -296,6 +281,9 @@ async function loadOffersFromDatabase() {
                 trim: vh.trim || 'Executive',
 
                 category: vh.category || 'SUV Luxury',
+                macchina_piccola: vh.macchina_piccola || false,
+                macchina_media: vh.macchina_media || false,
+                macchina_grande: vh.macchina_grande || false,
 
                 fuel: vh.motore || vh.fuel_type || 'Ibrido / Diesel',
 
@@ -407,6 +395,12 @@ async function loadOffersFromDatabase() {
             trim: vh.trim || 'Executive',
 
             category: vh.category || 'SUV Luxury',
+
+            macchina_piccola: vh.macchina_piccola || false,
+
+            macchina_media: vh.macchina_media || false,
+
+            macchina_grande: vh.macchina_grande || false,
 
             fuel: vh.motore || vh.fuel_type || 'Ibrido / Diesel',
 
@@ -587,267 +581,17 @@ function setRentalMode(mode) {
 // Inizializza i filtri della barra
 
 function initFilterListeners() {
-
-  const budgetSlider = document.getElementById('heroBudgetSlider');
-
-  const budgetValueDisplay = document.getElementById('budgetValueDisplayText');
-
-  
-
-  if (budgetSlider) {
-
-    budgetSlider.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value, 10);
-      NltState.maxBudget = isNaN(val) ? 999999 : val;
-      if (budgetValueDisplay) {
-
-        budgetValueDisplay.textContent = NltState.maxBudget >= 4000 ? 'Illimitato' : `fino a € ${NltState.maxBudget}/mese`;
-
-      }
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  const anticipoSlider = document.getElementById('heroAnticipoSlider');
-
-  const anticipoValueDisplay = document.getElementById('anticipoValueDisplayText');
-
-
-
-  if (anticipoSlider) {
-
-    anticipoSlider.addEventListener('input', (e) => {
-      const val = parseInt(e.target.value, 10);
-      NltState.maxAnticipo = isNaN(val) ? 999999 : val;
-      if (anticipoValueDisplay) {
-
-        anticipoValueDisplay.textContent = NltState.maxAnticipo >= 15000 ? 'Qualsiasi' : `fino a € ${NltState.maxAnticipo}`;
-
-      }
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  const filterMarca = document.getElementById('filterMarca');
-
-  if (filterMarca) {
-
-    filterMarca.addEventListener('change', (e) => {
-
-      NltState.brandFilter = e.target.value;
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  const filterTipologia = document.getElementById('filterTipologia');
-
-  if (filterTipologia) {
-
-    filterTipologia.addEventListener('change', (e) => {
-
-      NltState.categoryFilter = e.target.value;
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  const filterAlimentazione = document.getElementById('filterAlimentazione');
-
-  if (filterAlimentazione) {
-
-    filterAlimentazione.addEventListener('change', (e) => {
-
-      NltState.fuelFilter = e.target.value;
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  const filterCambio = document.getElementById('filterCambio');
-
-  if (filterCambio) {
-
-    filterCambio.addEventListener('change', (e) => {
-
-      NltState.transmissionFilter = e.target.value;
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  const searchInput = document.getElementById('nltSearchInput');
-
-  const heroSearchInput = document.getElementById('heroSearchInput');
-
-
-
-  if (searchInput) {
-
-    searchInput.addEventListener('input', (e) => {
-
-      NltState.searchQuery = e.target.value.toLowerCase().trim();
-
-      if (heroSearchInput) heroSearchInput.value = e.target.value;
-
-      renderOffersGrid();
-
-    });
-
-  }
-
-
-
-  if (heroSearchInput) {
-
-    heroSearchInput.addEventListener('input', (e) => {
-
-      NltState.searchQuery = e.target.value.toLowerCase().trim();
-
-      if (searchInput) searchInput.value = e.target.value;
-
-      renderOffersGrid();
-
-    });
-
-
-
-    heroSearchInput.addEventListener('keydown', (e) => {
-
-      if (e.key === 'Enter') {
-
-        e.preventDefault();
-
-        triggerHeroSearch();
-
-      }
-
-    });
-
-  }
-
-}
-
-
-
-function triggerHeroSearch() {
-
-  const heroInput = document.getElementById('heroSearchInput');
-
-  if (heroInput) {
-
-    NltState.searchQuery = heroInput.value.toLowerCase().trim();
-
-    const searchInput = document.getElementById('nltSearchInput');
-
-    if (searchInput) searchInput.value = heroInput.value;
-
+  window.setCarSizeFilter = function(size, btnElem) {
+    if (NltState.carSizeFilter === size) {
+      NltState.carSizeFilter = 'all';
+      if (btnElem) btnElem.classList.remove('active');
+    } else {
+      NltState.carSizeFilter = size;
+      document.querySelectorAll('.filter-car-size').forEach(el => el.classList.remove('active'));
+      if (btnElem) btnElem.classList.add('active');
+    }
     renderOffersGrid();
-
-  }
-
-  const gridSection = document.getElementById('nltGrid');
-
-  if (gridSection) {
-
-    gridSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-  }
-
-}
-
-
-
-function setDepositFilter(val, btnElem) {
-
-  NltState.depositFilter = val;
-
-  document.querySelectorAll('.filter-pill-deposit').forEach(el => el.classList.remove('active'));
-
-  if (btnElem) btnElem.classList.add('active');
-
-  renderOffersGrid();
-
-}
-
-
-
-function setDurationFilter(val, btnElem) {
-
-  NltState.durationFilter = parseInt(val, 10);
-
-  document.querySelectorAll('.filter-pill-duration').forEach(el => el.classList.remove('active'));
-
-  if (btnElem) btnElem.classList.add('active');
-
-  renderOffersGrid();
-
-}
-
-
-
-function setCategoryFilter(val, btnElem) {
-
-  NltState.categoryFilter = val;
-
-  document.querySelectorAll('.filter-pill-category').forEach(el => el.classList.remove('active'));
-
-  if (btnElem) btnElem.classList.add('active');
-
-  renderOffersGrid();
-
-}
-
-
-
-function setVisualCategory(val, btnElem) {
-
-  NltState.visualCategory = val;
-
-  document.querySelectorAll('.category-pill').forEach(el => el.classList.remove('active'));
-
-  if (btnElem) btnElem.classList.add('active');
-
-  renderOffersGrid();
-
-}
-
-
-
-function toggleReadyDelivery(btnElem) {
-
-  NltState.readyDeliveryOnly = !NltState.readyDeliveryOnly;
-
-  if (btnElem) btnElem.classList.toggle('active', NltState.readyDeliveryOnly);
-
-  renderOffersGrid();
-
+  };
 }
 
 
@@ -936,92 +680,11 @@ function renderOffersGrid() {
 
     }
 
-    // Dropdowns
-
-    const brandF = NltState.brandFilter || 'all';
-
-    if (brandF !== 'all' && offer.brand !== brandF) return false;
-
-
-
-    const fuelF = (NltState.fuelFilter || 'all');
-
-    if (fuelF !== 'all' && offer.fuel !== fuelF) return false;
-
-
-
-    const transF = (NltState.transmissionFilter || 'all');
-
-    if (transF !== 'all' && offer.transmission !== transF) return false;
-
-
-
-    const catF = NltState.categoryFilter || 'all';
-
-    if (catF !== 'all' && offer.category !== catF) return false;
-
-
-
-    // Visual Category Pills
-
-    if (NltState.visualCategory !== 'all') {
-
-      if (NltState.visualCategory === 'Elettrico') {
-
-        if (!offer.fuel.toLowerCase().includes('elettric') && !offer.trim.toLowerCase().includes('elettric')) return false;
-
-      } else if (NltState.visualCategory === 'ready') {
-
-        if (!offer.readyDelivery) return false;
-
-      } else if (offer.category !== NltState.visualCategory) {
-
-        return false;
-
-      }
-
-    }
-
-    // Pronta Consegna
-
-    if (NltState.readyDeliveryOnly && !offer.readyDelivery) {
-
-      return false;
-
-    }
-
-    
-
-    const priceInfo = getCardPrice(offer);
-
-    // Budget
-
-    if (NltState.mode === 'NLT' && priceInfo.price > NltState.maxBudget && NltState.maxBudget < 4000) {
-
-      return false;
-
-    }
-
-    // Anticipo
-
-    const currentDeposit = offer.baseDeposit || offer.baseOffer?.deposit || 3000; // rough check, matching current variant would be better but this is acceptable for filtering max
-
-    let targetDeposit = 3000;
-
-    if (NltState.depositFilter === '0') targetDeposit = 0;
-
-    else if (NltState.depositFilter === '5000') targetDeposit = 5000;
-
-    const match = offer.variants.find(v => v.duration === NltState.durationFilter && (targetDeposit === 0 ? v.deposit === 0 : v.deposit > 0));
-
-    const activeDeposit = match ? match.deposit : currentDeposit;
-
-
-
-    if (NltState.mode === 'NLT' && activeDeposit > NltState.maxAnticipo && NltState.maxAnticipo < 15000) {
-
-      return false;
-
+    // Filtro per dimensione auto
+    if (NltState.carSizeFilter !== 'all') {
+      if (NltState.carSizeFilter === 'piccola' && !offer.macchina_piccola) return false;
+      if (NltState.carSizeFilter === 'media' && !offer.macchina_media) return false;
+      if (NltState.carSizeFilter === 'grande' && !offer.macchina_grande) return false;
     }
 
 
@@ -1242,7 +905,11 @@ function resetAllFilters() {
 
   NltState.readyDeliveryOnly = false;
 
+  NltState.carSizeFilter = 'all';
+
   NltState.searchQuery = '';
+
+  document.querySelectorAll('.filter-car-size').forEach(el => el.classList.remove('active'));
 
   
 

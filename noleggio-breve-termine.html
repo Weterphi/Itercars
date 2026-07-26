@@ -134,188 +134,30 @@
       </div>
 
       <h1 style="font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 950; line-height: 1.1; margin-bottom: 14px;" id="nltHeroTitle">
-        Auto <span class="text-gradient">NBT / NBT</span>
+        Noleggio <span class="text-gradient">Breve Termine</span>
       </h1>
       
 
       <div class="fleet-hero-filters-anim" style="margin-top: 10px;">
-        <div class="fleet-glass-filters" id="nltFilterPills">
+        <div class="fleet-glass-filters" id="nltFilterPills" style="justify-content: center; gap: 12px; display: flex; flex-wrap: wrap;">
           
-          <!-- Luogo di Ritiro -->
-          <div style="position: relative; display: flex; align-items: center;" class="fleet-pill-wrapper">
-            <i class="ri-map-pin-line" style="position: absolute; left: 16px; color: #cbd5e1; font-size: 1.1rem; pointer-events: none; z-index: 2;"></i>
-            <select id="searchLocation" class="fleet-pill-btn" style="width: 100%; padding-left: 42px; min-width: 160px; appearance: none; background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 width=%2224%22 height=%2224%22><path fill=%22none%22 d=%22M0 0h24v24H0z%22/><path d=%22M12 13.172l4.95-4.95 1.414 1.414L12 16 5.636 9.636 7.05 8.222z%22 fill=%22%23cbd5e1%22/></svg>'); background-repeat: no-repeat; background-position: right 12px center; background-size: 20px; cursor: pointer;">
-              <option value="" disabled selected>Luogo o Città</option>
-              <optgroup label="Principali Hub & Aeroporti (VIP)">
-                <option value="Milano">Milano & Aeroporti (Linate, Malpensa)</option>
-                <option value="Roma">Roma & Aeroporti (Fiumicino, Ciampino)</option>
-                <option value="Firenze">Firenze (Aeroporto Peretola)</option>
-                <option value="Venezia">Venezia (Aeroporto Marco Polo)</option>
-                <option value="Napoli">Napoli (Aeroporto Capodichino)</option>
-                <option value="Torino">Torino (Aeroporto Caselle)</option>
-                <option value="Bologna">Bologna (Aeroporto G. Marconi)</option>
-              </optgroup>
-              
-              <optgroup label="Località Esclusive & Resort">
-                <option value="Porto Cervo">Porto Cervo (Costa Smeralda)</option>
-                <option value="Forte dei Marmi">Forte dei Marmi</option>
-                <option value="Como">Como & Lago di Como</option>
-                <option value="Cortina">Cortina d'Ampezzo</option>
-                <option value="Portofino">Portofino & Santa Margherita Ligure</option>
-                <option value="Capri">Capri & Costiera Amalfitana</option>
-              </optgroup>
+          <!-- Macchina Piccola -->
+          <button type="button" class="btn btn-outline filter-car-size" data-size="piccola" onclick="setCarSizeFilter('piccola', this)" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 10px; border-radius: 16px; flex: 1; min-width: 90px; max-width: 140px; border-color: rgba(255,255,255,0.2);">
+            <img src="icon_sports_car.png" alt="Piccola" style="width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+            <span style="font-size: 0.85rem; font-weight: 600;">Piccola</span>
+          </button>
 
-              <optgroup label="Tutte le Città">
-                <option value="Agrigento">Agrigento</option>
-                <option value="Alessandria">Alessandria</option>
-                <option value="Ancona">Ancona</option>
-                <option value="Aosta">Aosta</option>
-                <option value="Arezzo">Arezzo</option>
-                <option value="Ascoli Piceno">Ascoli Piceno</option>
-                <option value="Asti">Asti</option>
-                <option value="Avellino">Avellino</option>
-                <option value="Bari">Bari</option>
-                <option value="Barletta-Andria-Trani">Barletta-Andria-Trani</option>
-                <option value="Belluno">Belluno</option>
-                <option value="Benevento">Benevento</option>
-                <option value="Bergamo">Bergamo</option>
-                <option value="Biella">Biella</option>
-                <option value="Bolzano">Bolzano</option>
-                <option value="Brescia">Brescia</option>
-                <option value="Brindisi">Brindisi</option>
-                <option value="Cagliari">Cagliari</option>
-                <option value="Caltanissetta">Caltanissetta</option>
-                <option value="Campobasso">Campobasso</option>
-                <option value="Carbonia-Iglesias">Carbonia-Iglesias</option>
-                <option value="Caserta">Caserta</option>
-                <option value="Catania">Catania</option>
-                <option value="Catanzaro">Catanzaro</option>
-                <option value="Chieti">Chieti</option>
-                <option value="Cosenza">Cosenza</option>
-                <option value="Cremona">Cremona</option>
-                <option value="Crotone">Crotone</option>
-                <option value="Cuneo">Cuneo</option>
-                <option value="Enna">Enna</option>
-                <option value="Fermo">Fermo</option>
-                <option value="Ferrara">Ferrara</option>
-                <option value="Foggia">Foggia</option>
-                <option value="Forlì-Cesena">Forlì-Cesena</option>
-                <option value="Frosinone">Frosinone</option>
-                <option value="Genova">Genova</option>
-                <option value="Gorizia">Gorizia</option>
-                <option value="Grosseto">Grosseto</option>
-                <option value="Imperia">Imperia</option>
-                <option value="Isernia">Isernia</option>
-                <option value="L'Aquila">L'Aquila</option>
-                <option value="La Spezia">La Spezia</option>
-                <option value="Latina">Latina</option>
-                <option value="Lecce">Lecce</option>
-                <option value="Lecco">Lecco</option>
-                <option value="Livorno">Livorno</option>
-                <option value="Lodi">Lodi</option>
-                <option value="Lucca">Lucca</option>
-                <option value="Macerata">Macerata</option>
-                <option value="Mantova">Mantova</option>
-                <option value="Massa-Carrara">Massa-Carrara</option>
-                <option value="Matera">Matera</option>
-                <option value="Medio Campidano">Medio Campidano</option>
-                <option value="Messina">Messina</option>
-                <option value="Modena">Modena</option>
-                <option value="Monza e della Brianza">Monza e della Brianza</option>
-                <option value="Novara">Novara</option>
-                <option value="Nuoro">Nuoro</option>
-                <option value="Ogliastra">Ogliastra</option>
-                <option value="Olbia-Tempio">Olbia-Tempio</option>
-                <option value="Oristano">Oristano</option>
-                <option value="Padova">Padova</option>
-                <option value="Palermo">Palermo</option>
-                <option value="Parma">Parma</option>
-                <option value="Pavia">Pavia</option>
-                <option value="Perugia">Perugia</option>
-                <option value="Pesaro e Urbino">Pesaro e Urbino</option>
-                <option value="Pescara">Pescara</option>
-                <option value="Piacenza">Piacenza</option>
-                <option value="Pisa">Pisa</option>
-                <option value="Pistoia">Pistoia</option>
-                <option value="Pordenone">Pordenone</option>
-                <option value="Potenza">Potenza</option>
-                <option value="Prato">Prato</option>
-                <option value="Ragusa">Ragusa</option>
-                <option value="Ravenna">Ravenna</option>
-                <option value="Reggio Calabria">Reggio Calabria</option>
-                <option value="Reggio Emilia">Reggio Emilia</option>
-                <option value="Rieti">Rieti</option>
-                <option value="Rimini">Rimini</option>
-                <option value="Rovigo">Rovigo</option>
-                <option value="Salerno">Salerno</option>
-                <option value="Sassari">Sassari</option>
-                <option value="Savona">Savona</option>
-                <option value="Siena">Siena</option>
-                <option value="Siracusa">Siracusa</option>
-                <option value="Sondrio">Sondrio</option>
-                <option value="Taranto">Taranto</option>
-                <option value="Teramo">Teramo</option>
-                <option value="Terni">Terni</option>
-                <option value="Trapani">Trapani</option>
-                <option value="Trento">Trento</option>
-                <option value="Treviso">Treviso</option>
-                <option value="Trieste">Trieste</option>
-                <option value="Udine">Udine</option>
-                <option value="Varese">Varese</option>
-                <option value="Verbano-Cusio-Ossola">Verbano-Cusio-Ossola</option>
-                <option value="Vercelli">Vercelli</option>
-                <option value="Verona">Verona</option>
-                <option value="Vibo Valentia">Vibo Valentia</option>
-                <option value="Vicenza">Vicenza</option>
-                <option value="Viterbo">Viterbo</option>
-              </optgroup>
-            </select>
-          </div>
-          
-          <!-- Marca -->
-          <select id="filterMarca" class="fleet-pill-btn" style="appearance: none; text-align: center;">
-            <option value="all" style="background: #111; color: #fff;">Marca: Tutte</option>
-            <option value="BMW" style="background: #111; color: #fff;">BMW</option>
-            <option value="Audi" style="background: #111; color: #fff;">Audi</option>
-            <option value="Mercedes" style="background: #111; color: #fff;">Mercedes</option>
-            <option value="Porsche" style="background: #111; color: #fff;">Porsche</option>
-          </select>
-          
-          <!-- Tipologia -->
-          <select id="filterTipologia" class="fleet-pill-btn" style="appearance: none; text-align: center;">
-            <option value="all" style="background: #111; color: #fff;">Cat: Tutte</option>
-            <option value="SUV Luxury" style="background: #111; color: #fff;">SUV Luxury</option>
-            <option value="Sportiva" style="background: #111; color: #fff;">Sportiva & Coupé</option>
-            <option value="Supercar" style="background: #111; color: #fff;">Supercar</option>
-            <option value="Elettrico" style="background: #111; color: #fff;">Elettriche âš¡</option>
-          </select>
+          <!-- Macchina Media -->
+          <button type="button" class="btn btn-outline filter-car-size" data-size="media" onclick="setCarSizeFilter('media', this)" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 10px; border-radius: 16px; flex: 1; min-width: 90px; max-width: 140px; border-color: rgba(255,255,255,0.2);">
+            <img src="icon_sedan_car.png" alt="Media" style="width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+            <span style="font-size: 0.85rem; font-weight: 600;">Media</span>
+          </button>
 
-          <!-- Alimentazione -->
-          <select id="filterAlimentazione" class="fleet-pill-btn" style="appearance: none; text-align: center;">
-            <option value="all" style="background: #111; color: #fff;">Motore: Tutti</option>
-            <option value="Mild-Hybrid / Diesel" style="background: #111; color: #fff;">Diesel M-Hybrid</option>
-            <option value="Plug-in Hybrid" style="background: #111; color: #fff;">Plug-In Hybrid</option>
-            <option value="Elettrico" style="background: #111; color: #fff;">100% Elettrico</option>
-          </select>
-
-          <!-- Cambio -->
-          <select id="filterCambio" class="fleet-pill-btn" style="appearance: none; text-align: center;">
-            <option value="all" style="background: #111; color: #fff;">Cambio: Tutti</option>
-            <option value="Automatico" style="background: #111; color: #fff;">Automatico</option>
-            <option value="Manuale" style="background: #111; color: #fff;">Manuale</option>
-          </select>
-
-          <!-- Budget -->
-          <div style="position: relative; display: flex; align-items: center;" class="fleet-pill-wrapper">
-            <i class="ri-money-euro-circle-line" style="position: absolute; left: 16px; color: #cbd5e1; font-size: 1.1rem; pointer-events: none;"></i>
-            <input type="number" id="heroBudgetSlider" min="150" placeholder="Budget Max" class="fleet-pill-btn" style="width: 100%; padding-left: 42px;">
-          </div>
-
-          <!-- Anticipo -->
-          <div style="position: relative; display: flex; align-items: center;" class="fleet-pill-wrapper">
-            <i class="ri-wallet-3-line" style="position: absolute; left: 16px; color: #cbd5e1; font-size: 1.1rem; pointer-events: none;"></i>
-            <input type="number" id="heroAnticipoSlider" min="0" placeholder="Anticipo Max" class="fleet-pill-btn" style="width: 100%; padding-left: 42px;">
-          </div>
+          <!-- Macchina Grande / SUV -->
+          <button type="button" class="btn btn-outline filter-car-size" data-size="grande" onclick="setCarSizeFilter('grande', this)" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 10px; border-radius: 16px; flex: 1; min-width: 90px; max-width: 140px; border-color: rgba(255,255,255,0.2);">
+            <img src="icon_suv_car.png" alt="SUV/Grande" style="width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
+            <span style="font-size: 0.85rem; font-weight: 600;">SUV/Grande</span>
+          </button>
 
         </div>
       </div>

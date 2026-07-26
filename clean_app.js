@@ -1,4 +1,4 @@
-/* ==========================================================================
+﻿/* ==========================================================================
    LUXURY CAR RENTAL - LOGIC & INTERACTIVITY (AutoRent Replica + Multi-Flag i18n)
    ========================================================================== */
 
@@ -9,16 +9,16 @@ var supabase = (typeof window.supabase !== 'undefined' && typeof window.supabase
 window.supabase = supabase;
 
 const langFlags = {
-  it: "🇮🇹",
-  en: "🇬🇧",
-  es: "🇪🇸",
-  fr: "🇫🇷",
-  de: "🇩🇪",
-  ru: "🇷🇺",
-  zh: "🇨🇳",
-  ar: "🇸🇦",
-  ja: "🇯🇵",
-  pt: "🇵🇹"
+  it: "­ƒç«­ƒç╣",
+  en: "­ƒç¼­ƒçº",
+  es: "­ƒç¬­ƒç©",
+  fr: "­ƒç½­ƒçÀ",
+  de: "­ƒç®­ƒç¬",
+  ru: "­ƒçÀ­ƒç║",
+  zh: "­ƒç¿­ƒç│",
+  ar: "­ƒç©­ƒçª",
+  ja: "­ƒç»­ƒçÁ",
+  pt: "­ƒçÁ­ƒç╣"
 };
 
 // DIZIONARIO DI TRADUZIONE MULTILINGUA
@@ -26,13 +26,13 @@ const translations = {
   it: {
     "nav.home": "Home",
     "nav.fleet": "Luxury Car",
-    "nav.why": "Perché Noi",
+    "nav.why": "Perch├® Noi",
     "nav.vip": "Servizi VIP",
     "nav.contacts": "Contatti",
     "nav.area": "Area Riservata",
     "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DI NOLEGGIO AUTO PREMIUM',
     "hero.title": 'Guidare l\'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span>',
-    "hero.subtitle": "Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.",
+    "hero.subtitle": "Scegli tra le supercar e le berline pi├╣ esclusive del pianeta. Consegna personalizzata ovunque tu sia.",
     "hero.btnDiscover": "Scopri i Veicoli",
     "hero.btnQuote": "Calcola Preventivo",
     "hero.stat1": "Supercar Esclusive",
@@ -44,23 +44,23 @@ const translations = {
     "vip.check1": "Consegna in Villa",
     "vip.check2": "Zero Franchigia",
     "search.location": "Luogo di Ritiro",
-    "search.locAny": "Qualsiasi Città / Aeroporto",
+    "search.locAny": "Qualsiasi Citt├á / Aeroporto",
     "search.dateFrom": "Data Ritiro",
     "search.dateTo": "Data Riconsegna",
     "search.category": "Categoria Auto",
     "search.catAll": "Tutte le Categorie",
-    "search.btn": "Consulta Disponibilità",
+    "search.btn": "Consulta Disponibilit├á",
     "fleet.tag": "Luxury Car",
     "fleet.title": 'Guidare l\'Eccellenza <br><span class="text-gradient">Non ha Limiti.</span>',
-    "fleet.subtitle": "Scegli tra le supercar e le berline più esclusive del pianeta. Consegna personalizzata ovunque tu sia.",
+    "fleet.subtitle": "Scegli tra le supercar e le berline pi├╣ esclusive del pianeta. Consegna personalizzata ovunque tu sia.",
     "filter.all": "Tutti i Modelli",
     "why.tag": "I Nostri Vantaggi",
-    "why.title": 'Perché Scegliere <span class="text-gold">ITERCARS</span>',
+    "why.title": 'Perch├® Scegliere <span class="text-gold">ITERCARS</span>',
     "why.subtitle": "Ridefiniamo il concetto di autonoleggio combinando flotta proprietaria di prim'ordine e accoglienza a 5 stelle.",
     "why.box1Title": "Consegna Ovunque",
     "why.box1Desc": "Consegniamo la vettura direttamente al tuo hotel, villa privata o terminal jet privato con il nostro staff.",
     "why.box2Title": "Copertura Totale VIP",
-    "why.box2Desc": "Viaggia in assoluta serenità con franchigia zero e copertura assicurativa completa su tutti i nostri veicoli.",
+    "why.box2Desc": "Viaggia in assoluta serenit├á con franchigia zero e copertura assicurativa completa su tutti i nostri veicoli.",
     "why.box3Title": "Concierge 24/7",
     "why.box3Desc": "Assistenza dedicata giorno e notte. Prenotazioni ristoranti, itinerari su misura e supporto tecnico immediato.",
     "why.box4Title": "Garanzia Modello",
@@ -71,8 +71,8 @@ const translations = {
     "modal.days": "Giorni di Noleggio",
     "modal.extras": "Servizi Aggiuntivi",
     "modal.extra0": "Consegna Standard (Inclusa)",
-    "modal.extra150": "Consegna in Villa / Aeroporto (+€150)",
-    "modal.extra300": "Autista Privato mezza giornata (+€300)",
+    "modal.extra150": "Consegna in Villa / Aeroporto (+Ôé¼150)",
+    "modal.extra300": "Autista Privato mezza giornata (+Ôé¼300)",
     "modal.estimate": "Stima Totale Preventivo:",
     "modal.kaskoInc": "Assicurazione Inclusa",
     "modal.btnConfirm": "Conferma Richiesta Prenotazione",
@@ -91,8 +91,8 @@ const translations = {
     "lang.other": "Altre lingue...",
     "lang.modalTitle": "Seleziona Lingua",
     "lang.modalSub": "Scegli la lingua di visualizzazione per il marketplace ITERCARS.",
-    "toast.lang": "Lingua impostata su Italiano 🇮🇹",
-    "toast.bookingSuccess": "✨ Richiesta inviata con successo per {car}! Un concierge ti contatterà a breve."
+    "toast.lang": "Lingua impostata su Italiano ­ƒç«­ƒç╣",
+    "toast.bookingSuccess": "Ô£¿ Richiesta inviata con successo per {car}! Un concierge ti contatter├á a breve."
   },
   en: {
     "nav.home": "Home",
@@ -142,8 +142,8 @@ const translations = {
     "modal.days": "Rental Days",
     "modal.extras": "Additional Services",
     "modal.extra0": "Standard Delivery (Included)",
-    "modal.extra150": "Villa / Airport Delivery (+€150)",
-    "modal.extra300": "Private Driver half day (+€300)",
+    "modal.extra150": "Villa / Airport Delivery (+Ôé¼150)",
+    "modal.extra300": "Private Driver half day (+Ôé¼300)",
     "modal.estimate": "Estimated Total Quote:",
     "modal.kaskoInc": "Insurance Included",
     "modal.btnConfirm": "Confirm Booking Request",
@@ -162,79 +162,79 @@ const translations = {
     "lang.other": "Other languages...",
     "lang.modalTitle": "Select Language",
     "lang.modalSub": "Choose your preferred display language for ITERCARS marketplace.",
-    "toast.lang": "Language set to English 🇬🇧",
-    "toast.bookingSuccess": "✨ Request successfully sent for {car}! A concierge will contact you shortly."
+    "toast.lang": "Language set to English ­ƒç¼­ƒçº",
+    "toast.bookingSuccess": "Ô£¿ Request successfully sent for {car}! A concierge will contact you shortly."
   },
   es: {
     "nav.home": "Inicio",
     "nav.fleet": "Luxury Car",
-    "nav.why": "Por Qué Nosotros",
+    "nav.why": "Por Qu├® Nosotros",
     "nav.vip": "Servicios VIP",
     "nav.contacts": "Contacto",
-    "nav.area": "Área VIP",
+    "nav.area": "├ürea VIP",
     "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DE ALQUILER DE COCHES PREMIUM',
-    "hero.title": 'Conducir la Excelencia <br><span class="text-gradient">No tiene Límites.</span>',
-    "hero.subtitle": "Elige entre los superdeportivos y berlinas más exclusivos del planeta. Entrega personalizada donde estés, cobertura a todo riesgo y una experiencia inolvidable.",
-    "hero.btnDiscover": "Descubrir Vehículos",
+    "hero.title": 'Conducir la Excelencia <br><span class="text-gradient">No tiene L├¡mites.</span>',
+    "hero.subtitle": "Elige entre los superdeportivos y berlinas m├ís exclusivos del planeta. Entrega personalizada donde est├®s, cobertura a todo riesgo y una experiencia inolvidable.",
+    "hero.btnDiscover": "Descubrir Veh├¡culos",
     "hero.btnQuote": "Calcular Presupuesto",
     "hero.stat1": "Superdeportivos Exclusivos",
     "hero.stat2": "Conserje Dedicado",
     "hero.stat3": "Modelo Garantizado",
-    "vip.title": "Garantía VIP a Todo Riesgo",
+    "vip.title": "Garant├¡a VIP a Todo Riesgo",
     "vip.subtitle": "Cobertura 100% Incluida",
-    "vip.desc": "Cada alquiler incluye asistencia en carretera 24/7 con helicóptero o superdeportivo de sustitución en 60 minutos en toda Europa.",
+    "vip.desc": "Cada alquiler incluye asistencia en carretera 24/7 con helic├│ptero o superdeportivo de sustituci├│n en 60 minutos en toda Europa.",
     "vip.check1": "Entrega en Villa",
     "vip.check2": "Sin Franquicia",
     "search.location": "Lugar de Recogida",
     "search.locAny": "Cualquier Ciudad / Aeropuerto",
     "search.dateFrom": "Fecha Recogida",
-    "search.dateTo": "Fecha Devolución",
-    "search.category": "Categoría",
-    "search.catAll": "Todas las Categorías",
+    "search.dateTo": "Fecha Devoluci├│n",
+    "search.category": "Categor├¡a",
+    "search.catAll": "Todas las Categor├¡as",
     "search.btn": "Buscar Coches",
     "fleet.tag": "Luxury Car",
-    "fleet.title": 'Vehículos Seleccionados para <span class="text-gradient">Emociones Puras</span>',
-    "fleet.subtitle": "Elige el modelo perfecto para tu próximo viaje de negocios, fin de semana exclusivo o evento especial.",
+    "fleet.title": 'Veh├¡culos Seleccionados para <span class="text-gradient">Emociones Puras</span>',
+    "fleet.subtitle": "Elige el modelo perfecto para tu pr├│ximo viaje de negocios, fin de semana exclusivo o evento especial.",
     "filter.all": "Todos los Modelos",
     "why.tag": "Nuestras Ventajas",
-    "why.title": 'Por Qué Elegir <span class="text-gold">ITERCARS</span>',
+    "why.title": 'Por Qu├® Elegir <span class="text-gold">ITERCARS</span>',
     "why.subtitle": "Redefinimos el alquiler de coches combinando una flota propia de primer nivel con hospitalidad 5 estrellas.",
     "why.box1Title": "Entrega en Cualquier Lugar",
-    "why.box1Desc": "Entregamos el vehículo directamente en tu hotel, villa privada o terminal de jet privado con nuestro personal.",
+    "why.box1Desc": "Entregamos el veh├¡culo directamente en tu hotel, villa privada o terminal de jet privado con nuestro personal.",
     "why.box2Title": "Seguro VIP a Todo Riesgo",
-    "why.box2Desc": "Viaja con absoluta tranquilidad con franquicia cero y cobertura completa en todos nuestros vehículos.",
+    "why.box2Desc": "Viaja con absoluta tranquilidad con franquicia cero y cobertura completa en todos nuestros veh├¡culos.",
     "why.box3Title": "Conserje 24/7",
-    "why.box3Desc": "Asistencia dedicada día y noche. Reservas en restaurantes, itinerarios a medida y soporte técnico inmediato.",
+    "why.box3Desc": "Asistencia dedicada d├¡a y noche. Reservas en restaurantes, itinerarios a medida y soporte t├®cnico inmediato.",
     "why.box4Title": "Modelo Garantizado",
-    "why.box4Desc": "Sin sorpresas: recibirás exactamente la marca, el modelo y el motor especificados al reservar.",
+    "why.box4Desc": "Sin sorpresas: recibir├ís exactamente la marca, el modelo y el motor especificados al reservar.",
     "modal.name": "Nombre Completo *",
-    "modal.phone": "Teléfono / WhatsApp *",
-    "modal.email": "Correo Electrónico *",
-    "modal.days": "Días de Alquiler",
+    "modal.phone": "Tel├®fono / WhatsApp *",
+    "modal.email": "Correo Electr├│nico *",
+    "modal.days": "D├¡as de Alquiler",
     "modal.extras": "Servicios Adicionales",
-    "modal.extra0": "Entrega Estándar (Incluida)",
-    "modal.extra150": "Entrega Villa / Aeropuerto (+€150)",
-    "modal.extra300": "Chofer Privado medio día (+€300)",
+    "modal.extra0": "Entrega Est├índar (Incluida)",
+    "modal.extra150": "Entrega Villa / Aeropuerto (+Ôé¼150)",
+    "modal.extra300": "Chofer Privado medio d├¡a (+Ôé¼300)",
     "modal.estimate": "Presupuesto Total Estimado:",
     "modal.kaskoInc": "Seguro Incluido",
     "modal.btnConfirm": "Confirmar Solicitud",
-    "footer.desc": "El marketplace de referencia para el alquiler de coches de lujo, deportivos y exclusivos en Italia y Europa. Impulsado por pasión y diseño.",
-    "footer.col1Title": "Categorías Flota",
-    "footer.col2Title": "Enlaces Útiles",
+    "footer.desc": "El marketplace de referencia para el alquiler de coches de lujo, deportivos y exclusivos en Italia y Europa. Impulsado por pasi├│n y dise├▒o.",
+    "footer.col1Title": "Categor├¡as Flota",
+    "footer.col2Title": "Enlaces ├Ütiles",
     "footer.linkConditions": "Condiciones de Alquiler",
     "footer.linkFaq": "Preguntas Frecuentes",
     "footer.linkPartner": "Trabaja con nosotros / Socios",
     "footer.col3Title": "Sedes Principales",
-    "dynamic.cat": "Categoría",
-    "dynamic.perDay": "/ día (Seguro inc.)",
+    "dynamic.cat": "Categor├¡a",
+    "dynamic.perDay": "/ d├¡a (Seguro inc.)",
     "dynamic.book": "Reservar",
-    "dynamic.noVehicles": "No se encontraron vehículos",
-    "dynamic.tryChange": "Prueba a cambiar los filtros de búsqueda o categoría.",
+    "dynamic.noVehicles": "No se encontraron veh├¡culos",
+    "dynamic.tryChange": "Prueba a cambiar los filtros de b├║squeda o categor├¡a.",
     "lang.other": "Otras idiomas...",
     "lang.modalTitle": "Seleccionar Idioma",
-    "lang.modalSub": "Elige el idioma de visualización para el marketplace ITERCARS.",
-    "toast.lang": "Idioma configurado en Español 🇪🇸",
-    "toast.bookingSuccess": "✨ ¡Solicitud enviada con éxito para {car}! Un conserje te contactará pronto."
+    "lang.modalSub": "Elige el idioma de visualizaci├│n para el marketplace ITERCARS.",
+    "toast.lang": "Idioma configurado en Espa├▒ol ­ƒç¬­ƒç©",
+    "toast.bookingSuccess": "Ô£¿ ┬íSolicitud enviada con ├®xito para {car}! Un conserje te contactar├í pronto."
   },
   fr: {
     "nav.home": "Accueil",
@@ -245,67 +245,67 @@ const translations = {
     "nav.area": "Espace VIP",
     "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DE LOCATION DE VOITURES DE LUXE',
     "hero.title": 'Conduire l\'Excellence <br><span class="text-gradient">Sans Limites.</span>',
-    "hero.subtitle": "Choisissez parmi les supercars et berlines les plus exclusives de la planète. Livraison personnalisée où que vous soyez, assurance tous risques et une expérience de conduite inoubliable.",
-    "hero.btnDiscover": "Découvrir la Flotte",
-    "hero.btnQuote": "Devis Instantané",
+    "hero.subtitle": "Choisissez parmi les supercars et berlines les plus exclusives de la plan├¿te. Livraison personnalis├®e o├╣ que vous soyez, assurance tous risques et une exp├®rience de conduite inoubliable.",
+    "hero.btnDiscover": "D├®couvrir la Flotte",
+    "hero.btnQuote": "Devis Instantan├®",
     "hero.stat1": "Supercars Exclusives",
-    "hero.stat2": "Concierge Dédié",
-    "hero.stat3": "Modèle Garanti",
+    "hero.stat2": "Concierge D├®di├®",
+    "hero.stat3": "Mod├¿le Garanti",
     "vip.title": "Garantie VIP Assurance",
     "vip.subtitle": "Couverture 100% Incluse",
-    "vip.desc": "Chaque location comprend une assistance routière 24h/24 et 7j/7 avec hélicoptère ou supercar de remplacement en 60 minutes dans toute l'Europe.",
+    "vip.desc": "Chaque location comprend une assistance routi├¿re 24h/24 et 7j/7 avec h├®licopt├¿re ou supercar de remplacement en 60 minutes dans toute l'Europe.",
     "vip.check1": "Livraison en Villa",
-    "vip.check2": "Zéro Franchise",
+    "vip.check2": "Z├®ro Franchise",
     "search.location": "Lieu de Prise",
-    "search.locAny": "Toute Ville / Aéroport",
-    "search.dateFrom": "Date de Départ",
+    "search.locAny": "Toute Ville / A├®roport",
+    "search.dateFrom": "Date de D├®part",
     "search.dateTo": "Date de Retour",
-    "search.category": "Catégorie",
-    "search.catAll": "Toutes Catégories",
+    "search.category": "Cat├®gorie",
+    "search.catAll": "Toutes Cat├®gories",
     "search.btn": "Rechercher",
     "fleet.tag": "Luxury Car",
-    "fleet.title": 'Véhicules Sélectionnés pour des <span class="text-gradient">Émotions Pures</span>',
-    "fleet.subtitle": "Choisissez le modèle parfait pour votre prochain voyage d'affaires, week-end exclusif ou événement spécial.",
-    "filter.all": "Tous les Modèles",
+    "fleet.title": 'V├®hicules S├®lectionn├®s pour des <span class="text-gradient">├ëmotions Pures</span>',
+    "fleet.subtitle": "Choisissez le mod├¿le parfait pour votre prochain voyage d'affaires, week-end exclusif ou ├®v├®nement sp├®cial.",
+    "filter.all": "Tous les Mod├¿les",
     "why.tag": "Nos Avantages",
     "why.title": 'Pourquoi Choisir <span class="text-gold">ITERCARS</span>',
-    "why.subtitle": "Redéfinir la location de voitures en combinant une flotte propriétaire de premier ordre et un accueil 5 étoiles.",
+    "why.subtitle": "Red├®finir la location de voitures en combinant une flotte propri├®taire de premier ordre et un accueil 5 ├®toiles.",
     "why.box1Title": "Livraison Partout",
-    "why.box1Desc": "Nous livrons la voiture directement à votre hôtel, villa privée ou terminal de jet privé avec notre personnel.",
+    "why.box1Desc": "Nous livrons la voiture directement ├á votre h├┤tel, villa priv├®e ou terminal de jet priv├® avec notre personnel.",
     "why.box2Title": "Assurance VIP Tous Risques",
-    "why.box2Desc": "Voyagez en toute sérénité avec une franchise zéro et une couverture d'assurance complète sur tous nos véhicules.",
+    "why.box2Desc": "Voyagez en toute s├®r├®nit├® avec une franchise z├®ro et une couverture d'assurance compl├¿te sur tous nos v├®hicules.",
     "why.box3Title": "Concierge 24/7",
-    "why.box3Desc": "Assistance dédiée jour et nuit. Réservations de restaurants, itinéraires sur mesure et support technique immédiat.",
-    "why.box4Title": "Modèle Garanti",
-    "why.box4Desc": "Pas de surprises : vous recevrez exactement la marque, le modèle et la motorisation spécifiés lors de la réservation.",
+    "why.box3Desc": "Assistance d├®di├®e jour et nuit. R├®servations de restaurants, itin├®raires sur mesure et support technique imm├®diat.",
+    "why.box4Title": "Mod├¿le Garanti",
+    "why.box4Desc": "Pas de surprises : vous recevrez exactement la marque, le mod├¿le et la motorisation sp├®cifi├®s lors de la r├®servation.",
     "modal.name": "Nom Complet *",
-    "modal.phone": "Téléphone / WhatsApp *",
+    "modal.phone": "T├®l├®phone / WhatsApp *",
     "modal.email": "Adresse Email *",
     "modal.days": "Jours de Location",
     "modal.extras": "Services Additionnels",
     "modal.extra0": "Livraison Standard (Incluse)",
-    "modal.extra150": "Livraison Villa / Aéroport (+€150)",
-    "modal.extra300": "Chauffeur Privé demi-journée (+€300)",
+    "modal.extra150": "Livraison Villa / A├®roport (+Ôé¼150)",
+    "modal.extra300": "Chauffeur Priv├® demi-journ├®e (+Ôé¼300)",
     "modal.estimate": "Estimation Totale Devis :",
     "modal.kaskoInc": "Assurance Incluse",
     "modal.btnConfirm": "Confirmer la Demande",
-    "footer.desc": "La marketplace de référence pour la location de voitures de luxe, sportives et exclusives en Italie et en Europe. Propulsé par la passion.",
-    "footer.col1Title": "Catégories Flotte",
+    "footer.desc": "La marketplace de r├®f├®rence pour la location de voitures de luxe, sportives et exclusives en Italie et en Europe. Propuls├® par la passion.",
+    "footer.col1Title": "Cat├®gories Flotte",
     "footer.col2Title": "Liens Utiles",
     "footer.linkConditions": "Conditions de Location",
     "footer.linkFaq": "FAQ & Support",
     "footer.linkPartner": "Travailler avec nous / Partenaires",
-    "footer.col3Title": "Sièges Principaux",
-    "dynamic.cat": "Catégorie",
+    "footer.col3Title": "Si├¿ges Principaux",
+    "dynamic.cat": "Cat├®gorie",
     "dynamic.perDay": "/ jour (Assurance inc.)",
-    "dynamic.book": "Réserver",
-    "dynamic.noVehicles": "Aucun véhicule trouvé",
-    "dynamic.tryChange": "Essayez de modifier les filtres de recherche ou la catégorie.",
+    "dynamic.book": "R├®server",
+    "dynamic.noVehicles": "Aucun v├®hicule trouv├®",
+    "dynamic.tryChange": "Essayez de modifier les filtres de recherche ou la cat├®gorie.",
     "lang.other": "Autres langues...",
-    "lang.modalTitle": "Sélectionner la Langue",
+    "lang.modalTitle": "S├®lectionner la Langue",
     "lang.modalSub": "Choisissez votre langue d'affichage pour la marketplace ITERCARS.",
-    "toast.lang": "Langue définie sur Français 🇫🇷",
-    "toast.bookingSuccess": "✨ Demande envoyée avec succès pour {car} ! Un concierge vous contactera sous peu."
+    "toast.lang": "Langue d├®finie sur Fran├ºais ­ƒç½­ƒçÀ",
+    "toast.bookingSuccess": "Ô£¿ Demande envoy├®e avec succ├¿s pour {car} ! Un concierge vous contactera sous peu."
   },
   de: {
     "nav.home": "Startseite",
@@ -316,7 +316,7 @@ const translations = {
     "nav.area": "VIP Bereich",
     "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 PREMIUMLUXUS-MIETWAGEN-MARKTPLATZ',
     "hero.title": 'Exzellenz fahren <br><span class="text-gradient">Kennt Keine Grenzen.</span>',
-    "hero.subtitle": "Wählen Sie aus den exklusivsten Supercars und Limousinen des Planeten. Individuelle Lieferung, wo immer Sie sind, Vollversicherung und ein unvergessliches Fahrerlebnis.",
+    "hero.subtitle": "W├ñhlen Sie aus den exklusivsten Supercars und Limousinen des Planeten. Individuelle Lieferung, wo immer Sie sind, Vollversicherung und ein unvergessliches Fahrerlebnis.",
     "hero.btnDiscover": "Fahrzeuge entdecken",
     "hero.btnQuote": "Sofortangebot",
     "hero.stat1": "Exklusive Supercars",
@@ -330,39 +330,39 @@ const translations = {
     "search.location": "Abholort",
     "search.locAny": "Jede Stadt / Flughafen",
     "search.dateFrom": "Abholdatum",
-    "search.dateTo": "Rückgabedatum",
+    "search.dateTo": "R├╝ckgabedatum",
     "search.category": "Fahrzeugkategorie",
     "search.catAll": "Alle Kategorien",
     "search.btn": "Fahrzeug Suchen",
     "fleet.tag": "Luxury Car",
-    "fleet.title": 'Ausgewählte Fahrzeuge für <span class="text-gradient">Reine Emotionen</span>',
-    "fleet.subtitle": "Wählen Sie das perfekte Modell für Ihre nächste Geschäftsreise, ein exklusives Wochenende oder ein besonderes Event.",
+    "fleet.title": 'Ausgew├ñhlte Fahrzeuge f├╝r <span class="text-gradient">Reine Emotionen</span>',
+    "fleet.subtitle": "W├ñhlen Sie das perfekte Modell f├╝r Ihre n├ñchste Gesch├ñftsreise, ein exklusives Wochenende oder ein besonderes Event.",
     "filter.all": "Alle Modelle",
     "why.tag": "Unsere Vorteile",
-    "why.title": 'Warum <span class="text-gold">ITERCARS</span> Wählen',
+    "why.title": 'Warum <span class="text-gold">ITERCARS</span> W├ñhlen',
     "why.subtitle": "Wir definieren die Autovermietung neu, indem wir eine erstklassige eigene Flotte mit 5-Sterne-Gastfreundschaft kombinieren.",
-    "why.box1Title": "Lieferung Überall",
+    "why.box1Title": "Lieferung ├£berall",
     "why.box1Desc": "Wir liefern das Auto mit unserem Personal direkt an Ihr Hotel, Ihre Privatvilla oder Ihren Jet-Terminal.",
     "why.box2Title": "VIP Vollversicherung",
-    "why.box2Desc": "Reisen Sie in absoluter Sorglosigkeit ohne Selbstbeteiligung und mit vollem Versicherungsschutz für alle unsere Fahrzeuge.",
+    "why.box2Desc": "Reisen Sie in absoluter Sorglosigkeit ohne Selbstbeteiligung und mit vollem Versicherungsschutz f├╝r alle unsere Fahrzeuge.",
     "why.box3Title": "24/7 Concierge",
-    "why.box3Desc": "Engagierte Unterstützung Tag und Nacht. Restaurantbuchungen, maßgeschneiderte Reiserouten und sofortiger technischer Support.",
+    "why.box3Desc": "Engagierte Unterst├╝tzung Tag und Nacht. Restaurantbuchungen, ma├ƒgeschneiderte Reiserouten und sofortiger technischer Support.",
     "why.box4Title": "Garantiertes Modell",
-    "why.box4Desc": "Keine Überraschungen: Sie erhalten genau die Marke, das Modell und den Motor, die Sie bei der Buchung angegeben haben.",
-    "modal.name": "Vollständiger Name *",
+    "why.box4Desc": "Keine ├£berraschungen: Sie erhalten genau die Marke, das Modell und den Motor, die Sie bei der Buchung angegeben haben.",
+    "modal.name": "Vollst├ñndiger Name *",
     "modal.phone": "Telefon / WhatsApp *",
     "modal.email": "E-Mail-Adresse *",
     "modal.days": "Miettage",
     "modal.extras": "Zusatzleistungen",
     "modal.extra0": "Standardlieferung (Inklusive)",
-    "modal.extra150": "Lieferung Villa / Flughafen (+€150)",
-    "modal.extra300": "Privatchauffeur halber Tag (+€300)",
-    "modal.estimate": "Geschätzter Gesamtbetrag:",
+    "modal.extra150": "Lieferung Villa / Flughafen (+Ôé¼150)",
+    "modal.extra300": "Privatchauffeur halber Tag (+Ôé¼300)",
+    "modal.estimate": "Gesch├ñtzter Gesamtbetrag:",
     "modal.kaskoInc": "Versicherung Inklusive",
-    "modal.btnConfirm": "Buchungsanfrage Bestätigen",
-    "footer.desc": "Der führende Marktplatz für die Miete von Luxus-, Sport- und exklusiven Autos in Italien und Europa. Angetrieben von Leidenschaft und Design.",
+    "modal.btnConfirm": "Buchungsanfrage Best├ñtigen",
+    "footer.desc": "Der f├╝hrende Marktplatz f├╝r die Miete von Luxus-, Sport- und exklusiven Autos in Italien und Europa. Angetrieben von Leidenschaft und Design.",
     "footer.col1Title": "Flottenkategorien",
-    "footer.col2Title": "Nützliche Links",
+    "footer.col2Title": "N├╝tzliche Links",
     "footer.linkConditions": "Mietbedingungen",
     "footer.linkFaq": "FAQ & Support",
     "footer.linkPartner": "Arbeiten Sie mit uns / Partner",
@@ -371,367 +371,367 @@ const translations = {
     "dynamic.perDay": "/ Tag (Versicherung inkl.)",
     "dynamic.book": "Buchen",
     "dynamic.noVehicles": "Keine Fahrzeuge gefunden",
-    "dynamic.tryChange": "Versuchen Sie, die Suchfilter oder Kategorie zu ändern.",
+    "dynamic.tryChange": "Versuchen Sie, die Suchfilter oder Kategorie zu ├ñndern.",
     "lang.other": "Andere Sprachen...",
-    "lang.modalTitle": "Sprache Auswählen",
-    "lang.modalSub": "Wählen Sie Ihre bevorzugte Anzeigesprache für den ITERCARS-Marktplatz.",
-    "toast.lang": "Sprache auf Deutsch eingestellt 🇩🇪",
-    "toast.bookingSuccess": "✨ Anfrage für {car} erfolgreich gesendet! Ein Concierge wird Sie in Kürze kontaktieren."
+    "lang.modalTitle": "Sprache Ausw├ñhlen",
+    "lang.modalSub": "W├ñhlen Sie Ihre bevorzugte Anzeigesprache f├╝r den ITERCARS-Marktplatz.",
+    "toast.lang": "Sprache auf Deutsch eingestellt ­ƒç®­ƒç¬",
+    "toast.bookingSuccess": "Ô£¿ Anfrage f├╝r {car} erfolgreich gesendet! Ein Concierge wird Sie in K├╝rze kontaktieren."
   },
   ru: {
-    "nav.home": "Главная",
+    "nav.home": "ðôð╗ð░ð▓ð¢ð░ÐÅ",
     "nav.fleet": "Luxury Car",
-    "nav.why": "Преимущества",
-    "nav.vip": "VIP Сервис",
-    "nav.contacts": "Контакты",
-    "nav.area": "VIP Зона",
-    "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 МАРКЕТПЛЕЙС АРЕНДЫ ПРЕМИУМ АВТОМОБИЛЕЙ',
-    "hero.title": 'Совершенство за рулем <br><span class="text-gradient">Без Границ.</span>',
-    "hero.subtitle": "Выбирайте из самых эксклюзивных суперкаров и седанов планеты. Персональная доставка куда угодно, полная страховка КАСКО и незабываемый опыт.",
-    "hero.btnDiscover": "Смотреть Автопарк",
-    "hero.btnQuote": "Рассчитать Стоимость",
-    "hero.stat1": "Эксклюзивные Суперкары",
-    "hero.stat2": "Личный Консьерж",
-    "hero.stat3": "Гарантия Модели",
-    "vip.title": "VIP Гарантия КАСКО",
-    "vip.subtitle": "100% Покрытие Включено",
-    "vip.desc": "Каждая аренда включает помощь на дороге 24/7 с вертолетом или заменой суперкара в течение 60 минут по всей Европе.",
-    "vip.check1": "Доставка к Вилле",
-    "vip.check2": "Без Франшизы",
-    "search.location": "Место Получения",
-    "search.locAny": "Любой Город / Аэропорт",
-    "search.dateFrom": "Дата Получения",
-    "search.dateTo": "Дата Возврата",
-    "search.category": "Категория",
-    "search.catAll": "Все Категории",
-    "search.btn": "Найти Автомобиль",
+    "nav.why": "ðƒÐÇðÁð©ð╝ÐâÐëðÁÐüÐéð▓ð░",
+    "nav.vip": "VIP ðíðÁÐÇð▓ð©Ðü",
+    "nav.contacts": "ðÜð¥ð¢Ðéð░ð║ÐéÐï",
+    "nav.area": "VIP ðùð¥ð¢ð░",
+    "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 ð£ðÉðáðÜðòðóðƒðøðòðÖðí ðÉðáðòðØðöð½ ðƒðáðòð£ðÿðúð£ ðÉðÆðóð×ð£ð×ðæðÿðøðòðÖ',
+    "hero.title": 'ðíð¥ð▓ðÁÐÇÐêðÁð¢ÐüÐéð▓ð¥ ðÀð░ ÐÇÐâð╗ðÁð╝ <br><span class="text-gradient">ðæðÁðÀ ðôÐÇð░ð¢ð©Ðå.</span>',
+    "hero.subtitle": "ðÆÐïð▒ð©ÐÇð░ð╣ÐéðÁ ð©ðÀ Ðüð░ð╝ÐïÐà Ðìð║Ðüð║ð╗ÐÄðÀð©ð▓ð¢ÐïÐà ÐüÐâð┐ðÁÐÇð║ð░ÐÇð¥ð▓ ð© ÐüðÁð┤ð░ð¢ð¥ð▓ ð┐ð╗ð░ð¢ðÁÐéÐï. ðƒðÁÐÇÐüð¥ð¢ð░ð╗Ðîð¢ð░ÐÅ ð┤ð¥ÐüÐéð░ð▓ð║ð░ ð║Ðâð┤ð░ Ðâð│ð¥ð┤ð¢ð¥, ð┐ð¥ð╗ð¢ð░ÐÅ ÐüÐéÐÇð░Ðàð¥ð▓ð║ð░ ðÜðÉðíðÜð× ð© ð¢ðÁðÀð░ð▒Ðïð▓ð░ðÁð╝Ðïð╣ ð¥ð┐ÐïÐé.",
+    "hero.btnDiscover": "ðíð╝ð¥ÐéÐÇðÁÐéÐî ðÉð▓Ðéð¥ð┐ð░ÐÇð║",
+    "hero.btnQuote": "ðáð░ÐüÐüÐçð©Ðéð░ÐéÐî ðíÐéð¥ð©ð╝ð¥ÐüÐéÐî",
+    "hero.stat1": "ð¡ð║Ðüð║ð╗ÐÄðÀð©ð▓ð¢ÐïðÁ ðíÐâð┐ðÁÐÇð║ð░ÐÇÐï",
+    "hero.stat2": "ðøð©Ðçð¢Ðïð╣ ðÜð¥ð¢ÐüÐîðÁÐÇðÂ",
+    "hero.stat3": "ðôð░ÐÇð░ð¢Ðéð©ÐÅ ð£ð¥ð┤ðÁð╗ð©",
+    "vip.title": "VIP ðôð░ÐÇð░ð¢Ðéð©ÐÅ ðÜðÉðíðÜð×",
+    "vip.subtitle": "100% ðƒð¥ð║ÐÇÐïÐéð©ðÁ ðÆð║ð╗ÐÄÐçðÁð¢ð¥",
+    "vip.desc": "ðÜð░ðÂð┤ð░ÐÅ ð░ÐÇðÁð¢ð┤ð░ ð▓ð║ð╗ÐÄÐçð░ðÁÐé ð┐ð¥ð╝ð¥ÐëÐî ð¢ð░ ð┤ð¥ÐÇð¥ð│ðÁ 24/7 Ðü ð▓ðÁÐÇÐéð¥ð╗ðÁÐéð¥ð╝ ð©ð╗ð© ðÀð░ð╝ðÁð¢ð¥ð╣ ÐüÐâð┐ðÁÐÇð║ð░ÐÇð░ ð▓ ÐéðÁÐçðÁð¢ð©ðÁ 60 ð╝ð©ð¢ÐâÐé ð┐ð¥ ð▓ÐüðÁð╣ ðòð▓ÐÇð¥ð┐ðÁ.",
+    "vip.check1": "ðöð¥ÐüÐéð░ð▓ð║ð░ ð║ ðÆð©ð╗ð╗ðÁ",
+    "vip.check2": "ðæðÁðÀ ðñÐÇð░ð¢Ðêð©ðÀÐï",
+    "search.location": "ð£ðÁÐüÐéð¥ ðƒð¥ð╗ÐâÐçðÁð¢ð©ÐÅ",
+    "search.locAny": "ðøÐÄð▒ð¥ð╣ ðôð¥ÐÇð¥ð┤ / ðÉÐìÐÇð¥ð┐ð¥ÐÇÐé",
+    "search.dateFrom": "ðöð░Ðéð░ ðƒð¥ð╗ÐâÐçðÁð¢ð©ÐÅ",
+    "search.dateTo": "ðöð░Ðéð░ ðÆð¥ðÀð▓ÐÇð░Ðéð░",
+    "search.category": "ðÜð░ÐéðÁð│ð¥ÐÇð©ÐÅ",
+    "search.catAll": "ðÆÐüðÁ ðÜð░ÐéðÁð│ð¥ÐÇð©ð©",
+    "search.btn": "ðØð░ð╣Ðéð© ðÉð▓Ðéð¥ð╝ð¥ð▒ð©ð╗Ðî",
     "fleet.tag": "Luxury Car",
-    "fleet.title": 'Отборные Автомобили для <span class="text-gradient">Чистых Эмоций</span>',
-    "fleet.subtitle": "Выберите идеальную модель для деловой поездки, эксклюзивного уикенда или особого мероприятия.",
-    "filter.all": "Все Модели",
-    "why.tag": "Наши Преимущества",
-    "why.title": 'Почему Выбирают <span class="text-gold">ITERCARS</span>',
-    "why.subtitle": "Мы переосмысливаем аренду авто, объединяя собственный парк высшего класса с 5-звездочным сервисом.",
-    "why.box1Title": "Доставка Куда Угодно",
-    "why.box1Desc": "Доставим автомобиль прямо к вашему отелю, частной вилле или терминалу бизнес-авиации.",
-    "why.box2Title": "Полная VIP Страховка",
-    "why.box2Desc": "Путешествуйте с абсолютным спокойствием с нулевой франшизой и полным страховым покрытием.",
-    "why.box3Title": "Консьерж 24/7",
-    "why.box3Desc": "Круглосуточная поддержка. Бронирование ресторанов, индивидуальные маршруты и мгновенная помощь.",
-    "why.box4Title": "Гарантия Модели",
-    "why.box4Desc": "Никаких сюрпризов: вы получите именно ту марку, модель и двигатель, которые указали при бронировании.",
-    "modal.name": "ФИО *",
-    "modal.phone": "Телефон / WhatsApp *",
-    "modal.email": "Электронная Почта *",
-    "modal.days": "Дни Аренды",
-    "modal.extras": "Дополнительные Услуги",
-    "modal.extra0": "Стандартная доставка (Включено)",
-    "modal.extra150": "Доставка на Виллу / Аэропорт (+€150)",
-    "modal.extra300": "Личный Водитель полдня (+€300)",
-    "modal.estimate": "Ориентировочная Стоимость:",
-    "modal.kaskoInc": "Страховка Включена",
-    "modal.btnConfirm": "Подтвердить Запрос бронирования",
-    "footer.desc": "Ведущий маркетплейс аренды люксовых, спортивных и эксклюзивных автомобилей в Италии и Европе. Создано с любовью к дизайну.",
-    "footer.col1Title": "Категории Авто",
-    "footer.col2Title": "Полезные Ссылки",
-    "footer.linkConditions": "Условия Аренды",
-    "footer.linkFaq": "Вопросы и Поддержка",
-    "footer.linkPartner": "Сотрудничество / Партнеры",
-    "footer.col3Title": "Главные Офисы",
-    "dynamic.cat": "Категория",
-    "dynamic.perDay": "/ день (Страховка вкл.)",
-    "dynamic.book": "Забронировать",
-    "dynamic.noVehicles": "Автомобили не найдены",
-    "dynamic.tryChange": "Попробуйте изменить фильтры поиска или категорию.",
-    "lang.other": "Другие языки...",
-    "lang.modalTitle": "Выберите Язык",
-    "lang.modalSub": "Выберите предпочитаемый язык отображения для маркетплейса ITERCARS.",
-    "toast.lang": "Язык установлен на Русский 🇷🇺",
-    "toast.bookingSuccess": "✨ Запрос успешно отправлен для {car}! Консьерж скоро свяжется с вами."
+    "fleet.title": 'ð×Ðéð▒ð¥ÐÇð¢ÐïðÁ ðÉð▓Ðéð¥ð╝ð¥ð▒ð©ð╗ð© ð┤ð╗ÐÅ <span class="text-gradient">ðºð©ÐüÐéÐïÐà ð¡ð╝ð¥Ðåð©ð╣</span>',
+    "fleet.subtitle": "ðÆÐïð▒ðÁÐÇð©ÐéðÁ ð©ð┤ðÁð░ð╗Ðîð¢ÐâÐÄ ð╝ð¥ð┤ðÁð╗Ðî ð┤ð╗ÐÅ ð┤ðÁð╗ð¥ð▓ð¥ð╣ ð┐ð¥ðÁðÀð┤ð║ð©, Ðìð║Ðüð║ð╗ÐÄðÀð©ð▓ð¢ð¥ð│ð¥ Ðâð©ð║ðÁð¢ð┤ð░ ð©ð╗ð© ð¥Ðüð¥ð▒ð¥ð│ð¥ ð╝ðÁÐÇð¥ð┐ÐÇð©ÐÅÐéð©ÐÅ.",
+    "filter.all": "ðÆÐüðÁ ð£ð¥ð┤ðÁð╗ð©",
+    "why.tag": "ðØð░Ðêð© ðƒÐÇðÁð©ð╝ÐâÐëðÁÐüÐéð▓ð░",
+    "why.title": 'ðƒð¥ÐçðÁð╝Ðâ ðÆÐïð▒ð©ÐÇð░ÐÄÐé <span class="text-gold">ITERCARS</span>',
+    "why.subtitle": "ð£Ðï ð┐ðÁÐÇðÁð¥Ðüð╝ÐïÐüð╗ð©ð▓ð░ðÁð╝ ð░ÐÇðÁð¢ð┤Ðâ ð░ð▓Ðéð¥, ð¥ð▒ÐèðÁð┤ð©ð¢ÐÅÐÅ Ðüð¥ð▒ÐüÐéð▓ðÁð¢ð¢Ðïð╣ ð┐ð░ÐÇð║ ð▓ÐïÐüÐêðÁð│ð¥ ð║ð╗ð░ÐüÐüð░ Ðü 5-ðÀð▓ðÁðÀð┤ð¥Ðçð¢Ðïð╝ ÐüðÁÐÇð▓ð©Ðüð¥ð╝.",
+    "why.box1Title": "ðöð¥ÐüÐéð░ð▓ð║ð░ ðÜÐâð┤ð░ ðúð│ð¥ð┤ð¢ð¥",
+    "why.box1Desc": "ðöð¥ÐüÐéð░ð▓ð©ð╝ ð░ð▓Ðéð¥ð╝ð¥ð▒ð©ð╗Ðî ð┐ÐÇÐÅð╝ð¥ ð║ ð▓ð░ÐêðÁð╝Ðâ ð¥ÐéðÁð╗ÐÄ, Ðçð░ÐüÐéð¢ð¥ð╣ ð▓ð©ð╗ð╗ðÁ ð©ð╗ð© ÐéðÁÐÇð╝ð©ð¢ð░ð╗Ðâ ð▒ð©ðÀð¢ðÁÐü-ð░ð▓ð©ð░Ðåð©ð©.",
+    "why.box2Title": "ðƒð¥ð╗ð¢ð░ÐÅ VIP ðíÐéÐÇð░Ðàð¥ð▓ð║ð░",
+    "why.box2Desc": "ðƒÐâÐéðÁÐêðÁÐüÐéð▓Ðâð╣ÐéðÁ Ðü ð░ð▒Ðüð¥ð╗ÐÄÐéð¢Ðïð╝ Ðüð┐ð¥ð║ð¥ð╣ÐüÐéð▓ð©ðÁð╝ Ðü ð¢Ðâð╗ðÁð▓ð¥ð╣ ÐäÐÇð░ð¢Ðêð©ðÀð¥ð╣ ð© ð┐ð¥ð╗ð¢Ðïð╝ ÐüÐéÐÇð░Ðàð¥ð▓Ðïð╝ ð┐ð¥ð║ÐÇÐïÐéð©ðÁð╝.",
+    "why.box3Title": "ðÜð¥ð¢ÐüÐîðÁÐÇðÂ 24/7",
+    "why.box3Desc": "ðÜÐÇÐâð│ð╗ð¥ÐüÐâÐéð¥Ðçð¢ð░ÐÅ ð┐ð¥ð┤ð┤ðÁÐÇðÂð║ð░. ðæÐÇð¥ð¢ð©ÐÇð¥ð▓ð░ð¢ð©ðÁ ÐÇðÁÐüÐéð¥ÐÇð░ð¢ð¥ð▓, ð©ð¢ð┤ð©ð▓ð©ð┤Ðâð░ð╗Ðîð¢ÐïðÁ ð╝ð░ÐÇÐêÐÇÐâÐéÐï ð© ð╝ð│ð¢ð¥ð▓ðÁð¢ð¢ð░ÐÅ ð┐ð¥ð╝ð¥ÐëÐî.",
+    "why.box4Title": "ðôð░ÐÇð░ð¢Ðéð©ÐÅ ð£ð¥ð┤ðÁð╗ð©",
+    "why.box4Desc": "ðØð©ð║ð░ð║ð©Ðà ÐüÐÄÐÇð┐ÐÇð©ðÀð¥ð▓: ð▓Ðï ð┐ð¥ð╗ÐâÐçð©ÐéðÁ ð©ð╝ðÁð¢ð¢ð¥ ÐéÐâ ð╝ð░ÐÇð║Ðâ, ð╝ð¥ð┤ðÁð╗Ðî ð© ð┤ð▓ð©ð│ð░ÐéðÁð╗Ðî, ð║ð¥Ðéð¥ÐÇÐïðÁ Ðâð║ð░ðÀð░ð╗ð© ð┐ÐÇð© ð▒ÐÇð¥ð¢ð©ÐÇð¥ð▓ð░ð¢ð©ð©.",
+    "modal.name": "ðñðÿð× *",
+    "modal.phone": "ðóðÁð╗ðÁÐäð¥ð¢ / WhatsApp *",
+    "modal.email": "ð¡ð╗ðÁð║ÐéÐÇð¥ð¢ð¢ð░ÐÅ ðƒð¥ÐçÐéð░ *",
+    "modal.days": "ðöð¢ð© ðÉÐÇðÁð¢ð┤Ðï",
+    "modal.extras": "ðöð¥ð┐ð¥ð╗ð¢ð©ÐéðÁð╗Ðîð¢ÐïðÁ ðúÐüð╗Ðâð│ð©",
+    "modal.extra0": "ðíÐéð░ð¢ð┤ð░ÐÇÐéð¢ð░ÐÅ ð┤ð¥ÐüÐéð░ð▓ð║ð░ (ðÆð║ð╗ÐÄÐçðÁð¢ð¥)",
+    "modal.extra150": "ðöð¥ÐüÐéð░ð▓ð║ð░ ð¢ð░ ðÆð©ð╗ð╗Ðâ / ðÉÐìÐÇð¥ð┐ð¥ÐÇÐé (+Ôé¼150)",
+    "modal.extra300": "ðøð©Ðçð¢Ðïð╣ ðÆð¥ð┤ð©ÐéðÁð╗Ðî ð┐ð¥ð╗ð┤ð¢ÐÅ (+Ôé¼300)",
+    "modal.estimate": "ð×ÐÇð©ðÁð¢Ðéð©ÐÇð¥ð▓ð¥Ðçð¢ð░ÐÅ ðíÐéð¥ð©ð╝ð¥ÐüÐéÐî:",
+    "modal.kaskoInc": "ðíÐéÐÇð░Ðàð¥ð▓ð║ð░ ðÆð║ð╗ÐÄÐçðÁð¢ð░",
+    "modal.btnConfirm": "ðƒð¥ð┤Ðéð▓ðÁÐÇð┤ð©ÐéÐî ðùð░ð┐ÐÇð¥Ðü ð▒ÐÇð¥ð¢ð©ÐÇð¥ð▓ð░ð¢ð©ÐÅ",
+    "footer.desc": "ðÆðÁð┤ÐâÐëð©ð╣ ð╝ð░ÐÇð║ðÁÐéð┐ð╗ðÁð╣Ðü ð░ÐÇðÁð¢ð┤Ðï ð╗ÐÄð║Ðüð¥ð▓ÐïÐà, Ðüð┐ð¥ÐÇÐéð©ð▓ð¢ÐïÐà ð© Ðìð║Ðüð║ð╗ÐÄðÀð©ð▓ð¢ÐïÐà ð░ð▓Ðéð¥ð╝ð¥ð▒ð©ð╗ðÁð╣ ð▓ ðÿÐéð░ð╗ð©ð© ð© ðòð▓ÐÇð¥ð┐ðÁ. ðíð¥ðÀð┤ð░ð¢ð¥ Ðü ð╗ÐÄð▒ð¥ð▓ÐîÐÄ ð║ ð┤ð©ðÀð░ð╣ð¢Ðâ.",
+    "footer.col1Title": "ðÜð░ÐéðÁð│ð¥ÐÇð©ð© ðÉð▓Ðéð¥",
+    "footer.col2Title": "ðƒð¥ð╗ðÁðÀð¢ÐïðÁ ðíÐüÐïð╗ð║ð©",
+    "footer.linkConditions": "ðúÐüð╗ð¥ð▓ð©ÐÅ ðÉÐÇðÁð¢ð┤Ðï",
+    "footer.linkFaq": "ðÆð¥ð┐ÐÇð¥ÐüÐï ð© ðƒð¥ð┤ð┤ðÁÐÇðÂð║ð░",
+    "footer.linkPartner": "ðíð¥ÐéÐÇÐâð┤ð¢ð©ÐçðÁÐüÐéð▓ð¥ / ðƒð░ÐÇÐéð¢ðÁÐÇÐï",
+    "footer.col3Title": "ðôð╗ð░ð▓ð¢ÐïðÁ ð×Ðäð©ÐüÐï",
+    "dynamic.cat": "ðÜð░ÐéðÁð│ð¥ÐÇð©ÐÅ",
+    "dynamic.perDay": "/ ð┤ðÁð¢Ðî (ðíÐéÐÇð░Ðàð¥ð▓ð║ð░ ð▓ð║ð╗.)",
+    "dynamic.book": "ðùð░ð▒ÐÇð¥ð¢ð©ÐÇð¥ð▓ð░ÐéÐî",
+    "dynamic.noVehicles": "ðÉð▓Ðéð¥ð╝ð¥ð▒ð©ð╗ð© ð¢ðÁ ð¢ð░ð╣ð┤ðÁð¢Ðï",
+    "dynamic.tryChange": "ðƒð¥ð┐ÐÇð¥ð▒Ðâð╣ÐéðÁ ð©ðÀð╝ðÁð¢ð©ÐéÐî Ðäð©ð╗ÐîÐéÐÇÐï ð┐ð¥ð©Ðüð║ð░ ð©ð╗ð© ð║ð░ÐéðÁð│ð¥ÐÇð©ÐÄ.",
+    "lang.other": "ðöÐÇÐâð│ð©ðÁ ÐÅðÀÐïð║ð©...",
+    "lang.modalTitle": "ðÆÐïð▒ðÁÐÇð©ÐéðÁ ð»ðÀÐïð║",
+    "lang.modalSub": "ðÆÐïð▒ðÁÐÇð©ÐéðÁ ð┐ÐÇðÁð┤ð┐ð¥Ðçð©Ðéð░ðÁð╝Ðïð╣ ÐÅðÀÐïð║ ð¥Ðéð¥ð▒ÐÇð░ðÂðÁð¢ð©ÐÅ ð┤ð╗ÐÅ ð╝ð░ÐÇð║ðÁÐéð┐ð╗ðÁð╣Ðüð░ ITERCARS.",
+    "toast.lang": "ð»ðÀÐïð║ ÐâÐüÐéð░ð¢ð¥ð▓ð╗ðÁð¢ ð¢ð░ ðáÐâÐüÐüð║ð©ð╣ ­ƒçÀ­ƒç║",
+    "toast.bookingSuccess": "Ô£¿ ðùð░ð┐ÐÇð¥Ðü ÐâÐüð┐ðÁÐêð¢ð¥ ð¥Ðéð┐ÐÇð░ð▓ð╗ðÁð¢ ð┤ð╗ÐÅ {car}! ðÜð¥ð¢ÐüÐîðÁÐÇðÂ Ðüð║ð¥ÐÇð¥ Ðüð▓ÐÅðÂðÁÐéÐüÐÅ Ðü ð▓ð░ð╝ð©."
   },
   zh: {
-    "nav.home": "首页",
+    "nav.home": "ÚªûÚíÁ",
     "nav.fleet": "Luxury Car",
-    "nav.why": "为什么选择我们",
-    "nav.vip": "VIP 服务",
-    "nav.contacts": "联系方式",
-    "nav.area": "VIP 贵宾区",
-    "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 高端豪华汽车租赁平台',
-    "hero.title": '驾驭卓越 <br><span class="text-gradient">探索无界。</span>',
-    "hero.subtitle": "从全球最尊贵的超级跑车与豪华轿车中挑选。无论身在何处，专人送车上门，享受全额保险与难忘驾驶体验。",
-    "hero.btnDiscover": "探索车队",
-    "hero.btnQuote": "实时报价",
-    "hero.stat1": "顶级超跑",
-    "hero.stat2": "专属管家",
-    "hero.stat3": "车型保证",
-    "vip.title": "VIP 全险保障",
-    "vip.subtitle": "包含 100% 全额保障",
-    "vip.desc": "每次租赁均包含欧洲全境 24/7 道路救援，60分钟内提供直升机或替换超跑服务。",
-    "vip.check1": "别墅送车",
-    "vip.check2": "零免赔额",
-    "search.location": "取车地点",
-    "search.locAny": "任意城市 / 机场",
-    "search.dateFrom": "取车日期",
-    "search.dateTo": "还车日期",
-    "search.category": "车型类别",
-    "search.catAll": "全部类别",
-    "search.btn": "搜索车辆",
+    "nav.why": "õ©║õ╗Çõ╣êÚÇëµï®µêæõ╗¼",
+    "nav.vip": "VIP µ£ìÕèí",
+    "nav.contacts": "Þüöþ│╗µû╣Õ╝Å",
+    "nav.area": "VIP Þ┤ÁÕ«¥Õî║",
+    "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 Ú½ÿþ½»Þ▒¬ÕìÄµ▒¢Þ¢ªþºƒÞÁüÕ╣│ÕÅ░',
+    "hero.title": 'Ú®¥Ú®¡ÕìôÞÂè <br><span class="text-gradient">µÄóþ┤óµùáþòîÒÇé</span>',
+    "hero.subtitle": "õ╗ÄÕà¿þÉâµ£ÇÕ░èÞ┤ÁþÜäÞÂàþ║ºÞÀæÞ¢ªõ©ÄÞ▒¬ÕìÄÞ¢┐Þ¢ªõ©¡µîæÚÇëÒÇéµùáÞ«║Þ║½Õ£¿õ¢òÕñä´╝îõ©ôõ║║ÚÇüÞ¢ªõ©èÚù¿´╝îõ║½ÕÅùÕà¿ÚóØõ┐ØÚÖ®õ©ÄÚÜ¥Õ┐ÿÚ®¥Ú®Âõ¢ôÚ¬îÒÇé",
+    "hero.btnDiscover": "µÄóþ┤óÞ¢ªÚÿƒ",
+    "hero.btnQuote": "Õ«×µùÂµèÑõ╗À",
+    "hero.stat1": "ÚíÂþ║ºÞÂàÞÀæ",
+    "hero.stat2": "õ©ôÕ▒×þ«íÕ«Â",
+    "hero.stat3": "Þ¢ªÕ×ïõ┐ØÞ»ü",
+    "vip.title": "VIP Õà¿ÚÖ®õ┐ØÚÜ£",
+    "vip.subtitle": "ÕîàÕÉ½ 100% Õà¿ÚóØõ┐ØÚÜ£",
+    "vip.desc": "µ»Åµ¼íþºƒÞÁüÕØçÕîàÕÉ½µ¼ºµ┤▓Õà¿Õóâ 24/7 ÚüôÞÀ»µòæµÅ┤´╝î60ÕêåÚÆƒÕåàµÅÉõ¥øþø┤Õìçµ£║µêûµø┐µìóÞÂàÞÀæµ£ìÕèíÒÇé",
+    "vip.check1": "Õê½ÕóàÚÇüÞ¢ª",
+    "vip.check2": "ÚøÂÕàìÞÁöÚóØ",
+    "search.location": "ÕÅûÞ¢ªÕ£░þé╣",
+    "search.locAny": "õ╗╗µäÅÕƒÄÕ©é / µ£║Õ£║",
+    "search.dateFrom": "ÕÅûÞ¢ªµùÑµ£ƒ",
+    "search.dateTo": "Þ┐ÿÞ¢ªµùÑµ£ƒ",
+    "search.category": "Þ¢ªÕ×ïþ▒╗Õê½",
+    "search.catAll": "Õà¿Úâ¿þ▒╗Õê½",
+    "search.btn": "µÉ£þ┤óÞ¢ªÞ¥å",
     "fleet.tag": "Luxury Car",
-    "fleet.title": '精选座驾 为<span class="text-gradient">纯粹激情</span>而生',
-    "fleet.subtitle": "为您接下来的商务差旅、尊享周末或特殊活动选择最完美的座驾。",
-    "filter.all": "全部车型",
-    "why.tag": "核心优势",
-    "why.title": '为什么选择 <span class="text-gold">ITERCARS</span>',
-    "why.subtitle": "我们将顶尖的自有车队与五星级待客之道结合，重新定义租车体验。",
-    "why.box1Title": "全境专人送达",
-    "why.box1Desc": "我们的专业团队可将车辆直接送到您下榻的酒店、私人别墅或私人飞机航站楼。",
-    "why.box2Title": "VIP 全额保险",
-    "why.box2Desc": "所有车辆均享有零免赔额及全额保险保障，让您的旅程尽享无忧。",
-    "why.box3Title": "24/7 专属礼宾",
-    "why.box3Desc": "全天候专属协助。餐厅预订、定制行程安排以及即时技术支持。",
-    "why.box4Title": "绝对车型保证",
-    "why.box4Desc": "绝无意外：您收到的将与预订时指定的品牌、型号及发动机配置完全一致。",
-    "modal.name": "真实姓名 *",
-    "modal.phone": "电话 / 微信 / WhatsApp *",
-    "modal.email": "电子邮箱 *",
-    "modal.days": "租赁天数",
-    "modal.extras": "增值服务",
-    "modal.extra0": "标准送车服务 (免费)",
-    "modal.extra150": "别墅 / 机场专送 (+€150)",
-    "modal.extra300": "半日私人司机服务 (+€300)",
-    "modal.estimate": "预计总报价:",
-    "modal.kaskoInc": "包含全险",
-    "modal.btnConfirm": "提交预订申请",
-    "footer.desc": "意大利及欧洲领先的豪华汽车、跑车及稀有车型租赁服务平台。由热情与卓越设计驱动。",
-    "footer.col1Title": "车队类别",
-    "footer.col2Title": "实用链接",
-    "footer.linkConditions": "租赁条款",
-    "footer.linkFaq": "常见问题与支持",
-    "footer.linkPartner": "商务合作 / 招商",
-    "footer.col3Title": "主要总部",
-    "dynamic.cat": "类别",
-    "dynamic.perDay": "/ 天 (含全险)",
-    "dynamic.book": "立即预订",
-    "dynamic.noVehicles": "未找到符合条件的车辆",
-    "dynamic.tryChange": "请尝试筛选其他搜索条件或类别。",
-    "lang.other": "更多语言...",
-    "lang.modalTitle": "选择语言",
-    "lang.modalSub": "选择您偏好的 ITERCARS 平台显示语言。",
-    "toast.lang": "语言已切换至 中文 🇨🇳",
-    "toast.bookingSuccess": "✨ {car} 预订申请提交成功！专属礼宾管家将很快与您联系。"
+    "fleet.title": 'þ▓¥ÚÇëÕ║ºÚ®¥ õ©║<span class="text-gradient">þ║»þ▓╣µ┐Çµâà</span>ÞÇîþöƒ',
+    "fleet.subtitle": "õ©║µé¿µÄÑõ©ïµØÑþÜäÕòåÕèíÕÀ«µùàÒÇüÕ░èõ║½Õæ¿µ£½µêûþë╣µ«èµ┤╗Õè¿ÚÇëµï®µ£ÇÕ«îþ¥ÄþÜäÕ║ºÚ®¥ÒÇé",
+    "filter.all": "Õà¿Úâ¿Þ¢ªÕ×ï",
+    "why.tag": "µá©Õ┐âõ╝ÿÕè┐",
+    "why.title": 'õ©║õ╗Çõ╣êÚÇëµï® <span class="text-gold">ITERCARS</span>',
+    "why.subtitle": "µêæõ╗¼Õ░åÚíÂÕ░ûþÜäÞç¬µ£ëÞ¢ªÚÿƒõ©Äõ║öµÿƒþ║ºÕ¥àÕ«óõ╣ïÚüôþ╗ôÕÉê´╝îÚçìµû░Õ«Üõ╣ëþºƒÞ¢ªõ¢ôÚ¬îÒÇé",
+    "why.box1Title": "Õà¿Õóâõ©ôõ║║ÚÇüÞ¥¥",
+    "why.box1Desc": "µêæõ╗¼þÜäõ©ôõ©ÜÕøóÚÿƒÕÅ»Õ░åÞ¢ªÞ¥åþø┤µÄÑÚÇüÕê░µé¿õ©ïµª╗þÜäÚàÆÕ║ùÒÇüþºüõ║║Õê½Õóàµêûþºüõ║║Úú×µ£║Þê¬þ½ÖµÑ╝ÒÇé",
+    "why.box2Title": "VIP Õà¿ÚóØõ┐ØÚÖ®",
+    "why.box2Desc": "µëÇµ£ëÞ¢ªÞ¥åÕØçõ║½µ£ëÚøÂÕàìÞÁöÚóØÕÅèÕà¿ÚóØõ┐ØÚÖ®õ┐ØÚÜ£´╝îÞ«®µé¿þÜäµùàþ¿ïÕ░¢õ║½µùáÕ┐ºÒÇé",
+    "why.box3Title": "24/7 õ©ôÕ▒×þñ╝Õ«¥",
+    "why.box3Desc": "Õà¿Õñ®ÕÇÖõ©ôÕ▒×ÕìÅÕè®ÒÇéÚñÉÕÄàÚóäÞ«óÒÇüÕ«ÜÕêÂÞíîþ¿ïÕ«ëµÄÆõ╗ÑÕÅèÕì│µùÂµèÇµ£»µö»µîüÒÇé",
+    "why.box4Title": "þ╗ØÕ»╣Þ¢ªÕ×ïõ┐ØÞ»ü",
+    "why.box4Desc": "þ╗ØµùáµäÅÕñû´╝Üµé¿µöÂÕê░þÜäÕ░åõ©ÄÚóäÞ«óµùÂµîçÕ«ÜþÜäÕôüþëîÒÇüÕ×ïÕÅÀÕÅèÕÅæÕè¿µ£║Úàìþ¢«Õ«îÕà¿õ©ÇÞç┤ÒÇé",
+    "modal.name": "þ£ƒÕ«×ÕºôÕÉì *",
+    "modal.phone": "þöÁÞ»Ø / Õ¥«õ┐í / WhatsApp *",
+    "modal.email": "þöÁÕ¡ÉÚé«þ«▒ *",
+    "modal.days": "þºƒÞÁüÕñ®µò░",
+    "modal.extras": "Õó×ÕÇ╝µ£ìÕèí",
+    "modal.extra0": "µáçÕçåÚÇüÞ¢ªµ£ìÕèí (ÕàìÞ┤╣)",
+    "modal.extra150": "Õê½Õóà / µ£║Õ£║õ©ôÚÇü (+Ôé¼150)",
+    "modal.extra300": "ÕìèµùÑþºüõ║║ÕÅ©µ£║µ£ìÕèí (+Ôé¼300)",
+    "modal.estimate": "ÚóäÞ«íµÇ╗µèÑõ╗À:",
+    "modal.kaskoInc": "ÕîàÕÉ½Õà¿ÚÖ®",
+    "modal.btnConfirm": "µÅÉõ║ñÚóäÞ«óþö│Þ»À",
+    "footer.desc": "µäÅÕñºÕê®ÕÅèµ¼ºµ┤▓ÚóåÕàêþÜäÞ▒¬ÕìÄµ▒¢Þ¢ªÒÇüÞÀæÞ¢ªÕÅèþ¿Çµ£ëÞ¢ªÕ×ïþºƒÞÁüµ£ìÕèíÕ╣│ÕÅ░ÒÇéþö▒þâ¡µâàõ©ÄÕìôÞÂèÞ«¥Þ«íÚ®▒Õè¿ÒÇé",
+    "footer.col1Title": "Þ¢ªÚÿƒþ▒╗Õê½",
+    "footer.col2Title": "Õ«×þö¿Úô¥µÄÑ",
+    "footer.linkConditions": "þºƒÞÁüµØíµ¼¥",
+    "footer.linkFaq": "Õ©©ÞºüÚù«Úóÿõ©Äµö»µîü",
+    "footer.linkPartner": "ÕòåÕèíÕÉêõ¢£ / µïøÕòå",
+    "footer.col3Title": "õ©╗ÞªüµÇ╗Úâ¿",
+    "dynamic.cat": "þ▒╗Õê½",
+    "dynamic.perDay": "/ Õñ® (ÕÉ½Õà¿ÚÖ®)",
+    "dynamic.book": "þ½ïÕì│ÚóäÞ«ó",
+    "dynamic.noVehicles": "µ£¬µë¥Õê░þ¼ªÕÉêµØíõ╗ÂþÜäÞ¢ªÞ¥å",
+    "dynamic.tryChange": "Þ»ÀÕ░ØÞ»òþ¡øÚÇëÕàÂõ╗ûµÉ£þ┤óµØíõ╗Âµêûþ▒╗Õê½ÒÇé",
+    "lang.other": "µø┤ÕñÜÞ»¡Þ¿Ç...",
+    "lang.modalTitle": "ÚÇëµï®Þ»¡Þ¿Ç",
+    "lang.modalSub": "ÚÇëµï®µé¿ÕüÅÕÑ¢þÜä ITERCARS Õ╣│ÕÅ░µÿ¥þñ║Þ»¡Þ¿ÇÒÇé",
+    "toast.lang": "Þ»¡Þ¿ÇÕÀ▓ÕêçµìóÞç│ õ©¡µûç ­ƒç¿­ƒç│",
+    "toast.bookingSuccess": "Ô£¿ {car} ÚóäÞ«óþö│Þ»ÀµÅÉõ║ñµêÉÕèƒ´╝üõ©ôÕ▒×þñ╝Õ«¥þ«íÕ«ÂÕ░åÕ¥êÕ┐½õ©Äµé¿Þüöþ│╗ÒÇé"
   },
   ar: {
-    "nav.home": "الرئيسية",
+    "nav.home": "Ïº┘äÏ▒Ïª┘èÏ│┘èÏ®",
     "nav.fleet": "Luxury Car",
-    "nav.why": "لماذا نحن",
-    "nav.vip": "خدمات VIP",
-    "nav.contacts": "اتصل بنا",
-    "nav.area": "صالة كبار الشخصيات",
-    "hero.badge": '<i class="ri-vip-crown-fill"></i> المنصة رقم 1 لتأجير السيارات الفاخرة',
-    "hero.title": 'قيادة التميز <br><span class="text-gradient">بلا حدود.</span>',
-    "hero.subtitle": "اختر من بين أكثر السيارات الخارقة وسيارات السيدان حصرية على وجه الأرض. توصيل مخصص أينما كنت، تأمين شامل وتجربة قيادة لا تُنسى.",
-    "hero.btnDiscover": "اكتشف الأسطول",
-    "hero.btnQuote": "تسعير فوري",
-    "hero.stat1": "سيارات خارقة حصرية",
-    "hero.stat2": "خدمة كونسيرج مخصصة",
-    "hero.stat3": "ضمان الموديل",
-    "vip.title": "ضمان التأمين الشامل VIP",
-    "vip.subtitle": "تغطية بنسبة 100% متضمنة",
-    "vip.desc": "كل إيجار يشمل مساعدة على الطريق على مدار 24 ساعة مع مروحية أو سيارة بديلة خارقة خلال 60 دقيقة في جميع أنحاء أوروبا.",
-    "vip.check1": "توصيل للفيلا",
-    "vip.check2": "بدون نسبة تحمل",
-    "search.location": "مكان الاستلام",
-    "search.locAny": "أي مدينة / مطار",
-    "search.dateFrom": "تاريخ الاستلام",
-    "search.dateTo": "تاريخ العودة",
-    "search.category": "فئة السيارة",
-    "search.catAll": "جميع الفئات",
-    "search.btn": "ابحث عن سيارة",
+    "nav.why": "┘ä┘àÏºÏ░Ïº ┘åÏ¡┘å",
+    "nav.vip": "Ï«Ï»┘àÏºÏ¬ VIP",
+    "nav.contacts": "ÏºÏ¬ÏÁ┘ä Ï¿┘åÏº",
+    "nav.area": "ÏÁÏº┘äÏ® ┘âÏ¿ÏºÏ▒ Ïº┘äÏ┤Ï«ÏÁ┘èÏºÏ¬",
+    "hero.badge": '<i class="ri-vip-crown-fill"></i> Ïº┘ä┘à┘åÏÁÏ® Ï▒┘é┘à 1 ┘äÏ¬ÏúÏ¼┘èÏ▒ Ïº┘äÏ│┘èÏºÏ▒ÏºÏ¬ Ïº┘ä┘üÏºÏ«Ï▒Ï®',
+    "hero.title": '┘é┘èÏºÏ»Ï® Ïº┘äÏ¬┘à┘èÏ▓ <br><span class="text-gradient">Ï¿┘äÏº Ï¡Ï»┘êÏ».</span>',
+    "hero.subtitle": "ÏºÏ«Ï¬Ï▒ ┘à┘å Ï¿┘è┘å Ïú┘âÏ½Ï▒ Ïº┘äÏ│┘èÏºÏ▒ÏºÏ¬ Ïº┘äÏ«ÏºÏ▒┘éÏ® ┘êÏ│┘èÏºÏ▒ÏºÏ¬ Ïº┘äÏ│┘èÏ»Ïº┘å Ï¡ÏÁÏ▒┘èÏ® Ï╣┘ä┘ë ┘êÏ¼┘ç Ïº┘äÏúÏ▒ÏÂ. Ï¬┘êÏÁ┘è┘ä ┘àÏ«ÏÁÏÁ Ïú┘è┘å┘àÏº ┘â┘åÏ¬Ïî Ï¬Ïú┘à┘è┘å Ï┤Ïº┘à┘ä ┘êÏ¬Ï¼Ï▒Ï¿Ï® ┘é┘èÏºÏ»Ï® ┘äÏº Ï¬┘Å┘åÏ│┘ë.",
+    "hero.btnDiscover": "Ïº┘âÏ¬Ï┤┘ü Ïº┘äÏúÏ│ÏÀ┘ê┘ä",
+    "hero.btnQuote": "Ï¬Ï│Ï╣┘èÏ▒ ┘ü┘êÏ▒┘è",
+    "hero.stat1": "Ï│┘èÏºÏ▒ÏºÏ¬ Ï«ÏºÏ▒┘éÏ® Ï¡ÏÁÏ▒┘èÏ®",
+    "hero.stat2": "Ï«Ï»┘àÏ® ┘â┘ê┘åÏ│┘èÏ▒Ï¼ ┘àÏ«ÏÁÏÁÏ®",
+    "hero.stat3": "ÏÂ┘àÏº┘å Ïº┘ä┘à┘êÏ»┘è┘ä",
+    "vip.title": "ÏÂ┘àÏº┘å Ïº┘äÏ¬Ïú┘à┘è┘å Ïº┘äÏ┤Ïº┘à┘ä VIP",
+    "vip.subtitle": "Ï¬Ï║ÏÀ┘èÏ® Ï¿┘åÏ│Ï¿Ï® 100% ┘àÏ¬ÏÂ┘à┘åÏ®",
+    "vip.desc": "┘â┘ä ÏÑ┘èÏ¼ÏºÏ▒ ┘èÏ┤┘à┘ä ┘àÏ│ÏºÏ╣Ï»Ï® Ï╣┘ä┘ë Ïº┘äÏÀÏ▒┘è┘é Ï╣┘ä┘ë ┘àÏ»ÏºÏ▒ 24 Ï│ÏºÏ╣Ï® ┘àÏ╣ ┘àÏ▒┘êÏ¡┘èÏ® Ïú┘ê Ï│┘èÏºÏ▒Ï® Ï¿Ï»┘è┘äÏ® Ï«ÏºÏ▒┘éÏ® Ï«┘äÏº┘ä 60 Ï»┘é┘è┘éÏ® ┘ü┘è Ï¼┘à┘èÏ╣ Ïú┘åÏ¡ÏºÏí Ïú┘êÏ▒┘êÏ¿Ïº.",
+    "vip.check1": "Ï¬┘êÏÁ┘è┘ä ┘ä┘ä┘ü┘è┘äÏº",
+    "vip.check2": "Ï¿Ï»┘ê┘å ┘åÏ│Ï¿Ï® Ï¬Ï¡┘à┘ä",
+    "search.location": "┘à┘âÏº┘å Ïº┘äÏºÏ│Ï¬┘äÏº┘à",
+    "search.locAny": "Ïú┘è ┘àÏ»┘è┘åÏ® / ┘àÏÀÏºÏ▒",
+    "search.dateFrom": "Ï¬ÏºÏ▒┘èÏ« Ïº┘äÏºÏ│Ï¬┘äÏº┘à",
+    "search.dateTo": "Ï¬ÏºÏ▒┘èÏ« Ïº┘äÏ╣┘êÏ»Ï®",
+    "search.category": "┘üÏªÏ® Ïº┘äÏ│┘èÏºÏ▒Ï®",
+    "search.catAll": "Ï¼┘à┘èÏ╣ Ïº┘ä┘üÏªÏºÏ¬",
+    "search.btn": "ÏºÏ¿Ï¡Ï½ Ï╣┘å Ï│┘èÏºÏ▒Ï®",
     "fleet.tag": "Luxury Car",
-    "fleet.title": 'سيارات مختارة من أجل <span class="text-gradient">عواطف خالصة</span>',
-    "fleet.subtitle": "اختر الموديل المثالي لرحلة عملك القادمة، عطلة نهاية أسبوع حصرية أو حدث خاص.",
-    "filter.all": "جميع الموديلات",
-    "why.tag": "مزايانا",
-    "why.title": 'لماذا تختار <span class="text-gold">ITERCARS</span>',
-    "why.subtitle": "نحن نعيد تعريف تأجير السيارات من خلال الجمع بين أسطول خاص من الدرجة الأولى مع ضيافة 5 نجوم.",
-    "why.box1Title": "التوصيل في أي مكان",
-    "why.box1Desc": "نقوم بتسليم السيارة مباشرة إلى فندقك، فيلتك الخاصة، أو صالة الطيران الخاص عبر فريقنا.",
-    "why.box2Title": "تأمين VIP شامل",
-    "why.box2Desc": "سافر براحة بال تامة مع إعفاء كامل من تحمل الأضرار وتغطية تأمينية شاملة على جميع سياراتنا.",
-    "why.box3Title": "كونسيرج 24/7",
-    "why.box3Desc": "مساعدة مخصصة ليل نهار. حجوزات المطاعم، مسارات مخصصة ودعم فني فوري.",
-    "why.box4Title": "ضمان الموديل المحدد",
-    "why.box4Desc": "لا مفاجآت: ستستلم بالضبط نفس العلامة التجارية، الموديل والمحرك المحدد عند الحجز.",
-    "modal.name": "الاسم الكامل *",
-    "modal.phone": "الهاتف / واتساب *",
-    "modal.email": "البريد الإلكتروني *",
-    "modal.days": "أيام الإيجار",
-    "modal.extras": "خدمات إضافية",
-    "modal.extra0": "التوصيل القياسي (مجاناً)",
-    "modal.extra150": "توصيل للفيلا / المطار (+€150)",
-    "modal.extra300": "سائق خاص لنصف يوم (+€300)",
-    "modal.estimate": "إجمالي التسعير المقدر:",
-    "modal.kaskoInc": "التأمين مشمول",
-    "modal.btnConfirm": "تأكيد طلب الحجز",
-    "footer.desc": "المنصة الرائدة لتأجير السيارات الفاخرة، الرياضية والحصرية في إيطاليا وأوروبا. مدفوع بالشغف والتصميم.",
-    "footer.col1Title": "فئات الأسطول",
-    "footer.col2Title": "روابط مفيدة",
-    "footer.linkConditions": "شروط التأجير",
-    "footer.linkFaq": "الأسئلة الشائعة والدعم",
-    "footer.linkPartner": "اعمل معنا / شركاء",
-    "footer.col3Title": "المقر الرئيسي",
-    "dynamic.cat": "الفئة",
-    "dynamic.perDay": "/ يوم (التأمين مشمول)",
-    "dynamic.book": "احجز الآن",
-    "dynamic.noVehicles": "لم يتم العثور على سيارات",
-    "dynamic.tryChange": "حاول تغيير فلاتر البحث أو الفئة.",
-    "lang.other": "لغات أخرى...",
-    "lang.modalTitle": "اختر اللغة",
-    "lang.modalSub": "اختر لغة العرض المفضلة لديك لمنصة ITERCARS.",
-    "toast.lang": "تم تعيين اللغة إلى العربية 🇸🇦",
-    "toast.bookingSuccess": "✨ تم إرسال الطلب بنجاح لـ {car}! سيتصل بك فريق الكونسيرج قريباً."
+    "fleet.title": 'Ï│┘èÏºÏ▒ÏºÏ¬ ┘àÏ«Ï¬ÏºÏ▒Ï® ┘à┘å ÏúÏ¼┘ä <span class="text-gradient">Ï╣┘êÏºÏÀ┘ü Ï«Ïº┘äÏÁÏ®</span>',
+    "fleet.subtitle": "ÏºÏ«Ï¬Ï▒ Ïº┘ä┘à┘êÏ»┘è┘ä Ïº┘ä┘àÏ½Ïº┘ä┘è ┘äÏ▒Ï¡┘äÏ® Ï╣┘à┘ä┘â Ïº┘ä┘éÏºÏ»┘àÏ®Ïî Ï╣ÏÀ┘äÏ® ┘å┘çÏº┘èÏ® ÏúÏ│Ï¿┘êÏ╣ Ï¡ÏÁÏ▒┘èÏ® Ïú┘ê Ï¡Ï»Ï½ Ï«ÏºÏÁ.",
+    "filter.all": "Ï¼┘à┘èÏ╣ Ïº┘ä┘à┘êÏ»┘è┘äÏºÏ¬",
+    "why.tag": "┘àÏ▓Ïº┘èÏº┘åÏº",
+    "why.title": '┘ä┘àÏºÏ░Ïº Ï¬Ï«Ï¬ÏºÏ▒ <span class="text-gold">ITERCARS</span>',
+    "why.subtitle": "┘åÏ¡┘å ┘åÏ╣┘èÏ» Ï¬Ï╣Ï▒┘è┘ü Ï¬ÏúÏ¼┘èÏ▒ Ïº┘äÏ│┘èÏºÏ▒ÏºÏ¬ ┘à┘å Ï«┘äÏº┘ä Ïº┘äÏ¼┘àÏ╣ Ï¿┘è┘å ÏúÏ│ÏÀ┘ê┘ä Ï«ÏºÏÁ ┘à┘å Ïº┘äÏ»Ï▒Ï¼Ï® Ïº┘äÏú┘ê┘ä┘ë ┘àÏ╣ ÏÂ┘èÏº┘üÏ® 5 ┘åÏ¼┘ê┘à.",
+    "why.box1Title": "Ïº┘äÏ¬┘êÏÁ┘è┘ä ┘ü┘è Ïú┘è ┘à┘âÏº┘å",
+    "why.box1Desc": "┘å┘é┘ê┘à Ï¿Ï¬Ï│┘ä┘è┘à Ïº┘äÏ│┘èÏºÏ▒Ï® ┘àÏ¿ÏºÏ┤Ï▒Ï® ÏÑ┘ä┘ë ┘ü┘åÏ»┘é┘âÏî ┘ü┘è┘äÏ¬┘â Ïº┘äÏ«ÏºÏÁÏ®Ïî Ïú┘ê ÏÁÏº┘äÏ® Ïº┘äÏÀ┘èÏ▒Ïº┘å Ïº┘äÏ«ÏºÏÁ Ï╣Ï¿Ï▒ ┘üÏ▒┘è┘é┘åÏº.",
+    "why.box2Title": "Ï¬Ïú┘à┘è┘å VIP Ï┤Ïº┘à┘ä",
+    "why.box2Desc": "Ï│Ïº┘üÏ▒ Ï¿Ï▒ÏºÏ¡Ï® Ï¿Ïº┘ä Ï¬Ïº┘àÏ® ┘àÏ╣ ÏÑÏ╣┘üÏºÏí ┘âÏº┘à┘ä ┘à┘å Ï¬Ï¡┘à┘ä Ïº┘äÏúÏÂÏ▒ÏºÏ▒ ┘êÏ¬Ï║ÏÀ┘èÏ® Ï¬Ïú┘à┘è┘å┘èÏ® Ï┤Ïº┘à┘äÏ® Ï╣┘ä┘ë Ï¼┘à┘èÏ╣ Ï│┘èÏºÏ▒ÏºÏ¬┘åÏº.",
+    "why.box3Title": "┘â┘ê┘åÏ│┘èÏ▒Ï¼ 24/7",
+    "why.box3Desc": "┘àÏ│ÏºÏ╣Ï»Ï® ┘àÏ«ÏÁÏÁÏ® ┘ä┘è┘ä ┘å┘çÏºÏ▒. Ï¡Ï¼┘êÏ▓ÏºÏ¬ Ïº┘ä┘àÏÀÏºÏ╣┘àÏî ┘àÏ│ÏºÏ▒ÏºÏ¬ ┘àÏ«ÏÁÏÁÏ® ┘êÏ»Ï╣┘à ┘ü┘å┘è ┘ü┘êÏ▒┘è.",
+    "why.box4Title": "ÏÂ┘àÏº┘å Ïº┘ä┘à┘êÏ»┘è┘ä Ïº┘ä┘àÏ¡Ï»Ï»",
+    "why.box4Desc": "┘äÏº ┘à┘üÏºÏ¼ÏóÏ¬: Ï│Ï¬Ï│Ï¬┘ä┘à Ï¿Ïº┘äÏÂÏ¿ÏÀ ┘å┘üÏ│ Ïº┘äÏ╣┘äÏº┘àÏ® Ïº┘äÏ¬Ï¼ÏºÏ▒┘èÏ®Ïî Ïº┘ä┘à┘êÏ»┘è┘ä ┘êÏº┘ä┘àÏ¡Ï▒┘â Ïº┘ä┘àÏ¡Ï»Ï» Ï╣┘åÏ» Ïº┘äÏ¡Ï¼Ï▓.",
+    "modal.name": "Ïº┘äÏºÏ│┘à Ïº┘ä┘âÏº┘à┘ä *",
+    "modal.phone": "Ïº┘ä┘çÏºÏ¬┘ü / ┘êÏºÏ¬Ï│ÏºÏ¿ *",
+    "modal.email": "Ïº┘äÏ¿Ï▒┘èÏ» Ïº┘äÏÑ┘ä┘âÏ¬Ï▒┘ê┘å┘è *",
+    "modal.days": "Ïú┘èÏº┘à Ïº┘äÏÑ┘èÏ¼ÏºÏ▒",
+    "modal.extras": "Ï«Ï»┘àÏºÏ¬ ÏÑÏÂÏº┘ü┘èÏ®",
+    "modal.extra0": "Ïº┘äÏ¬┘êÏÁ┘è┘ä Ïº┘ä┘é┘èÏºÏ│┘è (┘àÏ¼Ïº┘åÏº┘ï)",
+    "modal.extra150": "Ï¬┘êÏÁ┘è┘ä ┘ä┘ä┘ü┘è┘äÏº / Ïº┘ä┘àÏÀÏºÏ▒ (+Ôé¼150)",
+    "modal.extra300": "Ï│ÏºÏª┘é Ï«ÏºÏÁ ┘ä┘åÏÁ┘ü ┘è┘ê┘à (+Ôé¼300)",
+    "modal.estimate": "ÏÑÏ¼┘àÏº┘ä┘è Ïº┘äÏ¬Ï│Ï╣┘èÏ▒ Ïº┘ä┘à┘éÏ»Ï▒:",
+    "modal.kaskoInc": "Ïº┘äÏ¬Ïú┘à┘è┘å ┘àÏ┤┘à┘ê┘ä",
+    "modal.btnConfirm": "Ï¬Ïú┘â┘èÏ» ÏÀ┘äÏ¿ Ïº┘äÏ¡Ï¼Ï▓",
+    "footer.desc": "Ïº┘ä┘à┘åÏÁÏ® Ïº┘äÏ▒ÏºÏªÏ»Ï® ┘äÏ¬ÏúÏ¼┘èÏ▒ Ïº┘äÏ│┘èÏºÏ▒ÏºÏ¬ Ïº┘ä┘üÏºÏ«Ï▒Ï®Ïî Ïº┘äÏ▒┘èÏºÏÂ┘èÏ® ┘êÏº┘äÏ¡ÏÁÏ▒┘èÏ® ┘ü┘è ÏÑ┘èÏÀÏº┘ä┘èÏº ┘êÏú┘êÏ▒┘êÏ¿Ïº. ┘àÏ»┘ü┘êÏ╣ Ï¿Ïº┘äÏ┤Ï║┘ü ┘êÏº┘äÏ¬ÏÁ┘à┘è┘à.",
+    "footer.col1Title": "┘üÏªÏºÏ¬ Ïº┘äÏúÏ│ÏÀ┘ê┘ä",
+    "footer.col2Title": "Ï▒┘êÏºÏ¿ÏÀ ┘à┘ü┘èÏ»Ï®",
+    "footer.linkConditions": "Ï┤Ï▒┘êÏÀ Ïº┘äÏ¬ÏúÏ¼┘èÏ▒",
+    "footer.linkFaq": "Ïº┘äÏúÏ│Ïª┘äÏ® Ïº┘äÏ┤ÏºÏªÏ╣Ï® ┘êÏº┘äÏ»Ï╣┘à",
+    "footer.linkPartner": "ÏºÏ╣┘à┘ä ┘àÏ╣┘åÏº / Ï┤Ï▒┘âÏºÏí",
+    "footer.col3Title": "Ïº┘ä┘à┘éÏ▒ Ïº┘äÏ▒Ïª┘èÏ│┘è",
+    "dynamic.cat": "Ïº┘ä┘üÏªÏ®",
+    "dynamic.perDay": "/ ┘è┘ê┘à (Ïº┘äÏ¬Ïú┘à┘è┘å ┘àÏ┤┘à┘ê┘ä)",
+    "dynamic.book": "ÏºÏ¡Ï¼Ï▓ Ïº┘äÏó┘å",
+    "dynamic.noVehicles": "┘ä┘à ┘èÏ¬┘à Ïº┘äÏ╣Ï½┘êÏ▒ Ï╣┘ä┘ë Ï│┘èÏºÏ▒ÏºÏ¬",
+    "dynamic.tryChange": "Ï¡Ïº┘ê┘ä Ï¬Ï║┘è┘èÏ▒ ┘ü┘äÏºÏ¬Ï▒ Ïº┘äÏ¿Ï¡Ï½ Ïú┘ê Ïº┘ä┘üÏªÏ®.",
+    "lang.other": "┘äÏ║ÏºÏ¬ ÏúÏ«Ï▒┘ë...",
+    "lang.modalTitle": "ÏºÏ«Ï¬Ï▒ Ïº┘ä┘äÏ║Ï®",
+    "lang.modalSub": "ÏºÏ«Ï¬Ï▒ ┘äÏ║Ï® Ïº┘äÏ╣Ï▒ÏÂ Ïº┘ä┘à┘üÏÂ┘äÏ® ┘äÏ»┘è┘â ┘ä┘à┘åÏÁÏ® ITERCARS.",
+    "toast.lang": "Ï¬┘à Ï¬Ï╣┘è┘è┘å Ïº┘ä┘äÏ║Ï® ÏÑ┘ä┘ë Ïº┘äÏ╣Ï▒Ï¿┘èÏ® ­ƒç©­ƒçª",
+    "toast.bookingSuccess": "Ô£¿ Ï¬┘à ÏÑÏ▒Ï│Ïº┘ä Ïº┘äÏÀ┘äÏ¿ Ï¿┘åÏ¼ÏºÏ¡ ┘ä┘Ç {car}! Ï│┘èÏ¬ÏÁ┘ä Ï¿┘â ┘üÏ▒┘è┘é Ïº┘ä┘â┘ê┘åÏ│┘èÏ▒Ï¼ ┘éÏ▒┘èÏ¿Ïº┘ï."
   },
   ja: {
-    "nav.home": "ホーム",
+    "nav.home": "ÒâøÒâ╝Òâá",
     "nav.fleet": "Luxury Car",
-    "nav.why": "選ばれる理由",
-    "nav.vip": "VIPサービス",
-    "nav.contacts": "お問い合わせ",
-    "nav.area": "VIPラウンジ",
-    "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 高級ラグジュアリーレンタカー・マーケットプレイス',
-    "hero.title": '卓越したドライビング <br><span class="text-gradient">無限の可能性。</span>',
-    "hero.subtitle": "世界で最も希少なスーパーカーや高級セダンからお選びください。指定場所へのオーダーメイド配車、完全補償保険、そして忘れられない運転体験を。",
-    "hero.btnDiscover": "車両を見る",
-    "hero.btnQuote": "即時見積もり",
-    "hero.stat1": "最高峰スーパーカー",
-    "hero.stat2": "専属コンシェルジュ",
-    "hero.stat3": "モデル確約",
-    "vip.title": "VIPフル補償保証",
-    "vip.subtitle": "100%補償込み",
-    "vip.desc": "すべてのレンタルに24時間365日のロードサービスが付属。ヨーロッパ全土で60分以内にヘリコプターまたは代替スーパーカーを手配します。",
-    "vip.check1": "別荘・ホテル配車",
-    "vip.check2": "免責額ゼロ",
-    "search.location": "配車場所",
-    "search.locAny": "すべての都市・空港",
-    "search.dateFrom": "貸出日",
-    "search.dateTo": "返却日",
-    "search.category": "カテゴリー",
-    "search.catAll": "すべてのカテゴリー",
-    "search.btn": "車両を検索",
+    "nav.why": "Úü©Òü░ÒéîÒéïþÉåþö▒",
+    "nav.vip": "VIPÒéÁÒâ╝ÒâôÒé╣",
+    "nav.contacts": "ÒüèÕòÅÒüäÕÉêÒéÅÒüø",
+    "nav.area": "VIPÒâ®ÒéªÒâ│Òé©",
+    "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 Ú½ÿþ┤ÜÒâ®Òé░Òé©ÒâÑÒéóÒâ¬Òâ╝Òâ¼Òâ│Òé┐Òé½Òâ╝Òâ╗Òâ×Òâ╝Òé▒ÒââÒâêÒâùÒâ¼ÒéñÒé╣',
+    "hero.title": 'ÕìôÞÂèÒüùÒüƒÒâëÒâ®ÒéñÒâôÒâ│Òé░ <br><span class="text-gradient">þäíÚÖÉÒü«ÕÅ»Þâ¢µÇºÒÇé</span>',
+    "hero.subtitle": "õ©ûþòîÒüºµ£ÇÒééÕ©îÕ░æÒü¬Òé╣Òâ╝ÒâæÒâ╝Òé½Òâ╝ÒéäÚ½ÿþ┤ÜÒé╗ÒâÇÒâ│ÒüïÒéëÒüèÚü©Òü│ÒüÅÒüáÒüòÒüäÒÇéµîçÕ«ÜÕá┤µëÇÒü©Òü«Òé¬Òâ╝ÒâÇÒâ╝ÒâíÒéñÒâëÚàìÞ╗èÒÇüÕ«îÕà¿Þú£Õäƒõ┐ØÚÖ║ÒÇüÒüØÒüùÒüªÕ┐ÿÒéîÒéëÒéîÒü¬ÒüäÚüïÞ╗óõ¢ôÚ¿ôÒéÆÒÇé",
+    "hero.btnDiscover": "Þ╗èõ©íÒéÆÞªïÒéï",
+    "hero.btnQuote": "Õì│µÖéÞªïþ®ìÒééÒéè",
+    "hero.stat1": "µ£ÇÚ½ÿÕ│░Òé╣Òâ╝ÒâæÒâ╝Òé½Òâ╝",
+    "hero.stat2": "Õ░éÕ▒×Òé│Òâ│ÒéÀÒéºÒâ½Òé©ÒâÑ",
+    "hero.stat3": "ÒâóÒâçÒâ½þó║þ┤ä",
+    "vip.title": "VIPÒâòÒâ½Þú£Õäƒõ┐ØÞ¿╝",
+    "vip.subtitle": "100%Þú£ÕäƒÞ¥╝Òü┐",
+    "vip.desc": "ÒüÖÒü╣ÒüªÒü«Òâ¼Òâ│Òé┐Òâ½Òü½24µÖéÚûô365µùÑÒü«Òâ¡Òâ╝ÒâëÒéÁÒâ╝ÒâôÒé╣Òüîõ╗ÿÕ▒×ÒÇéÒâ¿Òâ╝Òâ¡ÒââÒâæÕà¿Õ£ƒÒüº60Õêåõ╗ÑÕåàÒü½ÒâÿÒâ¬Òé│ÒâùÒé┐Òâ╝Òü¥ÒüƒÒü»õ╗úµø┐Òé╣Òâ╝ÒâæÒâ╝Òé½Òâ╝ÒéÆµëïÚàìÒüùÒü¥ÒüÖÒÇé",
+    "vip.check1": "ÕêÑÞìÿÒâ╗ÒâøÒâåÒâ½ÚàìÞ╗è",
+    "vip.check2": "ÕàìÞ▓¼ÚíìÒé╝Òâ¡",
+    "search.location": "ÚàìÞ╗èÕá┤µëÇ",
+    "search.locAny": "ÒüÖÒü╣ÒüªÒü«Úâ¢Õ©éÒâ╗þ®║µ©»",
+    "search.dateFrom": "Þ▓©Õç║µùÑ",
+    "search.dateTo": "Þ┐öÕì┤µùÑ",
+    "search.category": "Òé½ÒâåÒé┤Òâ¬Òâ╝",
+    "search.catAll": "ÒüÖÒü╣ÒüªÒü«Òé½ÒâåÒé┤Òâ¬Òâ╝",
+    "search.btn": "Þ╗èõ©íÒéÆµñ£þ┤ó",
     "fleet.tag": "Luxury Car",
-    "fleet.title": '純粋な感動を呼ぶ <span class="text-gradient">厳選された名車たち</span>',
-    "fleet.subtitle": "次のビジネス出張、特別な週末、または記念イベントに最適なモデルをお選びください。",
-    "filter.all": "すべてのモデル",
-    "why.tag": "当社の強み",
-    "why.title": '<span class="text-gold">ITERCARS</span> が選ばれる理由',
-    "why.subtitle": "最高峰の自社保有フリートと5つ星のおもてなしを組み合わせ、レンタカーの概念を再定義します。",
-    "why.box1Title": "どこへでも指定配車",
-    "why.box1Desc": "専門スタッフがご滞在先のホテル、プライベートヴィラ、またはプライベートジェットのターミナルまで直接お車をお届けします。",
-    "why.box2Title": "VIP安心フル補償",
-    "why.box2Desc": "すべての車両に免責額ゼロの完全保険補償が適用され、絶対的な安心感とともにお旅をお楽しみいただけます。",
-    "why.box3Title": "24時間コンシェルジュ",
-    "why.box3Desc": "昼夜を問わず専属サポート。レストランのご予約、オーダーメイドの旅程提案、即時の技術サポートを提供します。",
-    "why.box4Title": "確実なモデル確約",
-    "why.box4Desc": "驚きはありません：ご予約時に指定されたブランド、モデル、エンジン仕様と全く同じ車両をお届けします。",
-    "modal.name": "お名前 (フルネーム) *",
-    "modal.phone": "お電話番号 / WhatsApp *",
-    "modal.email": "メールアドレス *",
-    "modal.days": "ご利用日数",
-    "modal.extras": "追加サービス",
-    "modal.extra0": "標準配車サービス (無料)",
-    "modal.extra150": "ヴィラ・空港指定配車 (+€150)",
-    "modal.extra300": "半日プライベート運転手 (+€300)",
-    "modal.estimate": "お見積もり総額:",
-    "modal.kaskoInc": "保険料込み",
-    "modal.btnConfirm": "予約リクエストを送信",
-    "footer.desc": "イタリアおよびヨーロッパにおける高級車、スポーツカー、希少車のレンタルをリードするマーケットプレイス。情熱とデザインによって駆動されています。",
-    "footer.col1Title": "車両カテゴリー",
-    "footer.col2Title": "お役立ちリンク",
-    "footer.linkConditions": "レンタル利用規約",
-    "footer.linkFaq": "よくある質問とサポート",
-    "footer.linkPartner": "採用情報 / パートナー",
-    "footer.col3Title": "主要拠点",
-    "dynamic.cat": "カテゴリー",
-    "dynamic.perDay": "/ 日 (保険込み)",
-    "dynamic.book": "予約する",
-    "dynamic.noVehicles": "条件に合う車両が見つかりません",
-    "dynamic.tryChange": "検索条件やカテゴリーを変更してお試しください。",
-    "lang.other": "その他の言語...",
-    "lang.modalTitle": "言語を選択",
-    "lang.modalSub": "ITERCARS マーケットプレイスの表示言語をお選びください。",
-    "toast.lang": "日本語 🇯🇵 に設定しました",
-    "toast.bookingSuccess": "✨ {car} の予約リクエストが正常に送信されました！コンシェルジュより間もなくご連絡いたします。"
+    "fleet.title": 'þ┤öþ▓ïÒü¬µäƒÕïòÒéÆÕæ╝ÒüÂ <span class="text-gradient">ÕÄ│Úü©ÒüòÒéîÒüƒÕÉìÞ╗èÒüƒÒüí</span>',
+    "fleet.subtitle": "µ¼íÒü«ÒâôÒé©ÒâìÒé╣Õç║Õ╝ÁÒÇüþë╣ÕêÑÒü¬ÚÇ▒µ£½ÒÇüÒü¥ÒüƒÒü»Þ¿ÿÕ┐ÁÒéñÒâÖÒâ│ÒâêÒü½µ£ÇÚü®Òü¬ÒâóÒâçÒâ½ÒéÆÒüèÚü©Òü│ÒüÅÒüáÒüòÒüäÒÇé",
+    "filter.all": "ÒüÖÒü╣ÒüªÒü«ÒâóÒâçÒâ½",
+    "why.tag": "Õ¢ôþñ¥Òü«Õ╝ÀÒü┐",
+    "why.title": '<span class="text-gold">ITERCARS</span> ÒüîÚü©Òü░ÒéîÒéïþÉåþö▒',
+    "why.subtitle": "µ£ÇÚ½ÿÕ│░Òü«Þç¬þñ¥õ┐Øµ£ëÒâòÒâ¬Òâ╝ÒâêÒü¿5ÒüñµÿƒÒü«ÒüèÒééÒüªÒü¬ÒüùÒéÆþÁäÒü┐ÕÉêÒéÅÒüøÒÇüÒâ¼Òâ│Òé┐Òé½Òâ╝Òü«µªéÕ┐ÁÒéÆÕåìÕ«Üþ¥®ÒüùÒü¥ÒüÖÒÇé",
+    "why.box1Title": "Òü®ÒüôÒü©ÒüºÒééµîçÕ«ÜÚàìÞ╗è",
+    "why.box1Desc": "Õ░éÚûÇÒé╣Òé┐ÒââÒâòÒüîÒüöµ╗×Õ£¿ÕàêÒü«ÒâøÒâåÒâ½ÒÇüÒâùÒâ®ÒéñÒâÖÒâ╝ÒâêÒâ┤ÒéúÒâ®ÒÇüÒü¥ÒüƒÒü»ÒâùÒâ®ÒéñÒâÖÒâ╝ÒâêÒé©ÒéºÒââÒâêÒü«Òé┐Òâ╝ÒâƒÒâèÒâ½Òü¥Òüºþø┤µÄÑÒüèÞ╗èÒéÆÒüèÕ▒èÒüæÒüùÒü¥ÒüÖÒÇé",
+    "why.box2Title": "VIPÕ«ëÕ┐âÒâòÒâ½Þú£Õäƒ",
+    "why.box2Desc": "ÒüÖÒü╣ÒüªÒü«Þ╗èõ©íÒü½ÕàìÞ▓¼ÚíìÒé╝Òâ¡Òü«Õ«îÕà¿õ┐ØÚÖ║Þú£ÕäƒÒüîÚü®þö¿ÒüòÒéîÒÇüþÁÂÕ»¥þÜäÒü¬Õ«ëÕ┐âµäƒÒü¿Òü¿ÒééÒü½ÒüèµùàÒéÆÒüèµÑ¢ÒüùÒü┐ÒüäÒüƒÒüáÒüæÒü¥ÒüÖÒÇé",
+    "why.box3Title": "24µÖéÚûôÒé│Òâ│ÒéÀÒéºÒâ½Òé©ÒâÑ",
+    "why.box3Desc": "µÿ╝Õñ£ÒéÆÕòÅÒéÅÒüÜÕ░éÕ▒×ÒéÁÒâØÒâ╝ÒâêÒÇéÒâ¼Òé╣ÒâêÒâ®Òâ│Òü«Òüöõ║êþ┤äÒÇüÒé¬Òâ╝ÒâÇÒâ╝ÒâíÒéñÒâëÒü«µùàþ¿ïµÅÉµíêÒÇüÕì│µÖéÒü«µèÇÞíôÒéÁÒâØÒâ╝ÒâêÒéÆµÅÉõ¥øÒüùÒü¥ÒüÖÒÇé",
+    "why.box4Title": "þó║Õ«ƒÒü¬ÒâóÒâçÒâ½þó║þ┤ä",
+    "why.box4Desc": "Ú®ÜÒüìÒü»ÒüéÒéèÒü¥ÒüøÒéô´╝ÜÒüöõ║êþ┤äµÖéÒü½µîçÕ«ÜÒüòÒéîÒüƒÒâûÒâ®Òâ│ÒâëÒÇüÒâóÒâçÒâ½ÒÇüÒé¿Òâ│Òé©Òâ│õ╗òµºÿÒü¿Õà¿ÒüÅÕÉîÒüÿÞ╗èõ©íÒéÆÒüèÕ▒èÒüæÒüùÒü¥ÒüÖÒÇé",
+    "modal.name": "ÒüèÕÉìÕëì (ÒâòÒâ½ÒâìÒâ╝Òâá) *",
+    "modal.phone": "ÒüèÚø╗Þ®▒þò¬ÕÅÀ / WhatsApp *",
+    "modal.email": "ÒâíÒâ╝Òâ½ÒéóÒâëÒâ¼Òé╣ *",
+    "modal.days": "ÒüöÕê®þö¿µùÑµò░",
+    "modal.extras": "Þ┐¢ÕèáÒéÁÒâ╝ÒâôÒé╣",
+    "modal.extra0": "µ¿Öµ║ûÚàìÞ╗èÒéÁÒâ╝ÒâôÒé╣ (þäíµûÖ)",
+    "modal.extra150": "Òâ┤ÒéúÒâ®Òâ╗þ®║µ©»µîçÕ«ÜÚàìÞ╗è (+Ôé¼150)",
+    "modal.extra300": "ÕìèµùÑÒâùÒâ®ÒéñÒâÖÒâ╝ÒâêÚüïÞ╗óµëï (+Ôé¼300)",
+    "modal.estimate": "ÒüèÞªïþ®ìÒééÒéèþÀÅÚíì:",
+    "modal.kaskoInc": "õ┐ØÚÖ║µûÖÞ¥╝Òü┐",
+    "modal.btnConfirm": "õ║êþ┤äÒâ¬Òé»Òé¿Òé╣ÒâêÒéÆÚÇüõ┐í",
+    "footer.desc": "ÒéñÒé┐Òâ¬ÒéóÒüèÒéêÒü│Òâ¿Òâ╝Òâ¡ÒââÒâæÒü½ÒüèÒüæÒéïÚ½ÿþ┤ÜÞ╗èÒÇüÒé╣ÒâØÒâ╝ÒâäÒé½Òâ╝ÒÇüÕ©îÕ░æÞ╗èÒü«Òâ¼Òâ│Òé┐Òâ½ÒéÆÒâ¬Òâ╝ÒâëÒüÖÒéïÒâ×Òâ╝Òé▒ÒââÒâêÒâùÒâ¼ÒéñÒé╣ÒÇéµâàþå▒Òü¿ÒâçÒéÂÒéñÒâ│Òü½ÒéêÒüúÒüªÚºåÕïòÒüòÒéîÒüªÒüäÒü¥ÒüÖÒÇé",
+    "footer.col1Title": "Þ╗èõ©íÒé½ÒâåÒé┤Òâ¬Òâ╝",
+    "footer.col2Title": "ÒüèÕ¢╣þ½ïÒüíÒâ¬Òâ│Òé»",
+    "footer.linkConditions": "Òâ¼Òâ│Òé┐Òâ½Õê®þö¿ÞªÅþ┤ä",
+    "footer.linkFaq": "ÒéêÒüÅÒüéÒéïÞ│¬ÕòÅÒü¿ÒéÁÒâØÒâ╝Òâê",
+    "footer.linkPartner": "µÄíþö¿µâàÕá▒ / ÒâæÒâ╝ÒâêÒâèÒâ╝",
+    "footer.col3Title": "õ©╗Þªüµïáþé╣",
+    "dynamic.cat": "Òé½ÒâåÒé┤Òâ¬Òâ╝",
+    "dynamic.perDay": "/ µùÑ (õ┐ØÚÖ║Þ¥╝Òü┐)",
+    "dynamic.book": "õ║êþ┤äÒüÖÒéï",
+    "dynamic.noVehicles": "µØíõ╗ÂÒü½ÕÉêÒüåÞ╗èõ©íÒüîÞªïÒüñÒüïÒéèÒü¥ÒüøÒéô",
+    "dynamic.tryChange": "µñ£þ┤óµØíõ╗ÂÒéäÒé½ÒâåÒé┤Òâ¬Òâ╝ÒéÆÕñëµø┤ÒüùÒüªÒüèÞ®ªÒüùÒüÅÒüáÒüòÒüäÒÇé",
+    "lang.other": "ÒüØÒü«õ╗ûÒü«Þ¿ÇÞ¬×...",
+    "lang.modalTitle": "Þ¿ÇÞ¬×ÒéÆÚü©µè×",
+    "lang.modalSub": "ITERCARS Òâ×Òâ╝Òé▒ÒââÒâêÒâùÒâ¼ÒéñÒé╣Òü«Þí¿þñ║Þ¿ÇÞ¬×ÒéÆÒüèÚü©Òü│ÒüÅÒüáÒüòÒüäÒÇé",
+    "toast.lang": "µùÑµ£¼Þ¬× ­ƒç»­ƒçÁ Òü½Þ¿¡Õ«ÜÒüùÒü¥ÒüùÒüƒ",
+    "toast.bookingSuccess": "Ô£¿ {car} Òü«õ║êþ┤äÒâ¬Òé»Òé¿Òé╣ÒâêÒüîµ¡úÕ©©Òü½ÚÇüõ┐íÒüòÒéîÒü¥ÒüùÒüƒ´╝üÒé│Òâ│ÒéÀÒéºÒâ½Òé©ÒâÑÒéêÒéèÚûôÒééÒü¬ÒüÅÒüöÚÇúþÁíÒüäÒüƒÒüùÒü¥ÒüÖÒÇé"
   },
   pt: {
-    "nav.home": "Início",
+    "nav.home": "In├¡cio",
     "nav.fleet": "Luxury Car",
-    "nav.why": "Por Que Nós",
-    "nav.vip": "Serviços VIP",
+    "nav.why": "Por Que N├│s",
+    "nav.vip": "Servi├ºos VIP",
     "nav.contacts": "Contato",
-    "nav.area": "Área VIP",
+    "nav.area": "├ürea VIP",
     "hero.badge": '<i class="ri-vip-crown-fill"></i> #1 MARKETPLACE DE ALUGUEL DE CARROS PREMIUM',
-    "hero.title": 'Conduzir a Excelência <br><span class="text-gradient">Não Tem Limites.</span>',
-    "hero.subtitle": "Escolha entre os supercarros e sedans mais exclusivos do planeta. Entrega personalizada onde você estiver, seguro total e uma experiência inesquecível.",
+    "hero.title": 'Conduzir a Excel├¬ncia <br><span class="text-gradient">N├úo Tem Limites.</span>',
+    "hero.subtitle": "Escolha entre os supercarros e sedans mais exclusivos do planeta. Entrega personalizada onde voc├¬ estiver, seguro total e uma experi├¬ncia inesquec├¡vel.",
     "hero.btnDiscover": "Descobrir Frota",
-    "hero.btnQuote": "Orçamento Instantâneo",
+    "hero.btnQuote": "Or├ºamento Instant├óneo",
     "hero.stat1": "Supercarros Exclusivos",
     "hero.stat2": "Concierge Dedicado",
     "hero.stat3": "Modelo Garantido",
     "vip.title": "Garantia VIP Seguro Total",
-    "vip.subtitle": "100% de Cobertura Incluída",
-    "vip.desc": "Cada aluguel inclui assistência 24/7 com helicóptero ou supercarro substituto em 60 minutos em toda a Europa.",
+    "vip.subtitle": "100% de Cobertura Inclu├¡da",
+    "vip.desc": "Cada aluguel inclui assist├¬ncia 24/7 com helic├│ptero ou supercarro substituto em 60 minutos em toda a Europa.",
     "vip.check1": "Entrega em Villa",
     "vip.check2": "Franquia Zero",
     "search.location": "Local de Retirada",
     "search.locAny": "Qualquer Cidade / Aeroporto",
     "search.dateFrom": "Data Retirada",
-    "search.dateTo": "Data Devolução",
+    "search.dateTo": "Data Devolu├º├úo",
     "search.category": "Categoria",
     "search.catAll": "Todas as Categorias",
     "search.btn": "Buscar Carros",
     "fleet.tag": "Luxury Car",
-    "fleet.title": 'Veículos Selecionados para <span class="text-gradient">Emoções Puras</span>',
-    "fleet.subtitle": "Escolha o modelo perfeito para sua próxima viagem de negócios, fim de semana exclusivo ou evento especial.",
+    "fleet.title": 'Ve├¡culos Selecionados para <span class="text-gradient">Emo├º├Áes Puras</span>',
+    "fleet.subtitle": "Escolha o modelo perfeito para sua pr├│xima viagem de neg├│cios, fim de semana exclusivo ou evento especial.",
     "filter.all": "Todos os Modelos",
     "why.tag": "Nossas Vantagens",
     "why.title": 'Por Que Escolher a <span class="text-gold">ITERCARS</span>',
-    "why.subtitle": "Redefinimos o aluguel de carros combinando uma frota própria de excelência com hospitalidade 5 estrelas.",
+    "why.subtitle": "Redefinimos o aluguel de carros combinando uma frota pr├│pria de excel├¬ncia com hospitalidade 5 estrelas.",
     "why.box1Title": "Entrega em Qualquer Lugar",
-    "why.box1Desc": "Entregamos o veículo diretamente em seu hotel, villa privada ou terminal de jato privado com nossa equipe.",
+    "why.box1Desc": "Entregamos o ve├¡culo diretamente em seu hotel, villa privada ou terminal de jato privado com nossa equipe.",
     "why.box2Title": "Seguro VIP Total",
-    "why.box2Desc": "Viaje com total tranquilidade com franquia zero e cobertura completa em todos os nossos veículos.",
+    "why.box2Desc": "Viaje com total tranquilidade com franquia zero e cobertura completa em todos os nossos ve├¡culos.",
     "why.box3Title": "Concierge 24/7",
-    "why.box3Desc": "Assistência dedicada dia e noite. Reservas em restaurantes, itinerários sob medida e suporte técnico imediato.",
+    "why.box3Desc": "Assist├¬ncia dedicada dia e noite. Reservas em restaurantes, itiner├írios sob medida e suporte t├®cnico imediato.",
     "why.box4Title": "Modelo Garantido",
-    "why.box4Desc": "Sem surpresas: você receberá exatamente a marca, modelo e motorização especificados ao reservar.",
+    "why.box4Desc": "Sem surpresas: voc├¬ receber├í exatamente a marca, modelo e motoriza├º├úo especificados ao reservar.",
     "modal.name": "Nome Completo *",
     "modal.phone": "Telefone / WhatsApp *",
     "modal.email": "E-mail *",
     "modal.days": "Dias de Aluguel",
-    "modal.extras": "Serviços Adicionais",
-    "modal.extra0": "Entrega Padrão (Incluída)",
-    "modal.extra150": "Entrega Villa / Aeroporto (+€150)",
-    "modal.extra300": "Motorista Privado meia diária (+€300)",
-    "modal.estimate": "Estimativa Total do Orçamento:",
-    "modal.kaskoInc": "Seguro Incluído",
-    "modal.btnConfirm": "Confirmar Solicitação",
-    "footer.desc": "O marketplace de referência para o aluguel de carros de luxo, esportivos e exclusivos na Itália e Europa. Movido pela paixão e design.",
+    "modal.extras": "Servi├ºos Adicionais",
+    "modal.extra0": "Entrega Padr├úo (Inclu├¡da)",
+    "modal.extra150": "Entrega Villa / Aeroporto (+Ôé¼150)",
+    "modal.extra300": "Motorista Privado meia di├íria (+Ôé¼300)",
+    "modal.estimate": "Estimativa Total do Or├ºamento:",
+    "modal.kaskoInc": "Seguro Inclu├¡do",
+    "modal.btnConfirm": "Confirmar Solicita├º├úo",
+    "footer.desc": "O marketplace de refer├¬ncia para o aluguel de carros de luxo, esportivos e exclusivos na It├ília e Europa. Movido pela paix├úo e design.",
     "footer.col1Title": "Categorias Frota",
-    "footer.col2Title": "Links Úteis",
-    "footer.linkConditions": "Condições de Aluguel",
+    "footer.col2Title": "Links ├Üteis",
+    "footer.linkConditions": "Condi├º├Áes de Aluguel",
     "footer.linkFaq": "FAQ & Suporte",
     "footer.linkPartner": "Trabalhe conosco / Parceiros",
     "footer.col3Title": "Sedes Principais",
     "dynamic.cat": "Categoria",
     "dynamic.perDay": "/ dia (Seguro inc.)",
     "dynamic.book": "Reservar",
-    "dynamic.noVehicles": "Nenhum veículo encontrado",
+    "dynamic.noVehicles": "Nenhum ve├¡culo encontrado",
     "dynamic.tryChange": "Tente alterar os filtros de busca ou categoria.",
     "lang.other": "Outras idiomas...",
     "lang.modalTitle": "Selecionar Idioma",
-    "lang.modalSub": "Escolha o idioma de exibição preferido para o marketplace ITERCARS.",
-    "toast.lang": "Idioma configurado para Português 🇵🇹",
-    "toast.bookingSuccess": "✨ Solicitação enviada com sucesso para {car}! Um concierge entrará em contato em breve."
+    "lang.modalSub": "Escolha o idioma de exibi├º├úo preferido para o marketplace ITERCARS.",
+    "toast.lang": "Idioma configurado para Portugu├¬s ­ƒçÁ­ƒç╣",
+    "toast.bookingSuccess": "Ô£¿ Solicita├º├úo enviada com sucesso para {car}! Um concierge entrar├í em contato em breve."
   }
 };
 
@@ -781,10 +781,10 @@ function changeLanguage(lang, silent = false) {
   // Aggiorna bandiera e codice sul pulsante del menu
   const flagEl = document.getElementById('currentLangFlag');
   const codeEl = document.getElementById('currentLangCode');
-  if (flagEl) flagEl.innerText = langFlags[lang] || "🇮🇹";
+  if (flagEl) flagEl.innerText = langFlags[lang] || "­ƒç«­ƒç╣";
   if (codeEl) codeEl.innerText = lang.toUpperCase();
 
-  // Se è arabo, imposta la direzione RTL (Right-to-Left) per un effetto WOW autentico
+  // Se ├¿ arabo, imposta la direzione RTL (Right-to-Left) per un effetto WOW autentico
   if (lang === 'ar') {
     document.documentElement.setAttribute('dir', 'rtl');
     document.body.style.textAlign = 'right';
@@ -880,7 +880,7 @@ async function loadFleetFromSupabase() {
       const { data, error } = await query;
 
       if (!error && data && data.length > 0) {
-        console.log("✅ Caricata flotta in tempo reale da Supabase DB:", data.length, "veicoli");
+        console.log("Ô£à Caricata flotta in tempo reale da Supabase DB:", data.length, "veicoli");
         const mappedCars = data.map(v => {
           let specsObj = {};
           if (typeof v.specs === 'string') {
@@ -905,7 +905,7 @@ async function loadFleetFromSupabase() {
               hp: specsObj.hp || '400 CV'
             },
             image: v.image_url || 'category-suv.jpg',
-            badge: v.badge || (v.fuel_type ? `${v.fuel_type} - ${v.transmission || 'Auto'}` : 'Esclusiva ✨'),
+            badge: v.badge || (v.fuel_type ? `${v.fuel_type} - ${v.transmission || 'Auto'}` : 'Esclusiva Ô£¿'),
             provider: v.provider_id || "provider_1",
             raw: v
           };
@@ -916,7 +916,7 @@ async function loadFleetFromSupabase() {
           fleetData = mappedCars;
           try { localStorage.setItem('itercars_fleet_cache', JSON.stringify(fleetData)); } catch(e){}
         } else {
-          fleetData = []; // Azzera la flotta se il db è vuoto
+          fleetData = []; // Azzera la flotta se il db ├¿ vuoto
           try { localStorage.removeItem('itercars_fleet_cache'); } catch(e){}
         }
       } else {
@@ -924,7 +924,7 @@ async function loadFleetFromSupabase() {
           try { localStorage.removeItem('itercars_fleet_cache'); } catch(e){}
       }
     } catch (err) {
-      console.warn("⚠️ Query Supabase fallita o offline. Utilizzo catalogo locale di fallback.");
+      console.warn("ÔÜá´©Å Query Supabase fallita o offline. Utilizzo catalogo locale di fallback.");
     }
   }
 
@@ -1014,13 +1014,72 @@ function renderFleet(cars) {
 }
 
 function renderCarCard(car, dict) {
+  // Se ├¿ Noleggio a Breve Termine, usa la vera card NBT
+  if (car.is_nbt && car.raw) {
+    const offer = car.raw;
+    let variants = [];
+    if (typeof offer.variants === 'string') {
+      try { variants = JSON.parse(offer.variants); } catch(e){}
+    } else if (offer.variants) {
+      variants = offer.variants;
+    }
+    
+    // Trova il prezzo minimo e relativo anticipo
+    let minPrice = offer.daily_price || 0;
+    let minDeposit = offer.deposit || 0;
+    if (variants && variants.length > 0) {
+      let lowest = variants[0];
+      variants.forEach(v => {
+        if (v.price < lowest.price) lowest = v;
+      });
+      minPrice = lowest.price;
+      minDeposit = lowest.deposit !== undefined ? lowest.deposit : minDeposit;
+    }
 
+    let badgeText = `<span class="card-badge badge-ready" style="font-size:0.7rem; padding:3px 8px; border-radius:4px; background:rgba(16, 185, 129, 0.15); color:#10b981; border:1px solid rgba(16, 185, 129, 0.3); position:absolute; top:10px; left:10px; z-index:2;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
+    
+    const depositZeroTag = (variants && variants.some(v => v.deposit === 0))
+      ? `<span class="card-badge badge-zero" style="font-size:0.7rem; padding:3px 8px; border-radius:4px; background:rgba(212, 175, 55, 0.15); color:var(--accent-gold); border:1px solid rgba(212, 175, 55, 0.3); position:absolute; top:35px; left:10px; z-index:2;"><i class="ri-flashlight-fill"></i> Anticipo Zero Disponibile</span>` : '';
+
+    return `
+      <div class="glass-card nbt-card" style="display:flex; flex-direction:column; overflow:hidden; transition:transform 0.3s ease; height:100%;">
+        <div class="nbt-card-img-wrapper" style="position:relative; width:100%; height:200px;">
+          <img src="${offer.image_url || 'category-suv.jpg'}" alt="${offer.brand} ${offer.model}" style="width:100%; height:100%; object-fit:cover;" onerror="this.src='category-suv.jpg'">
+          ${badgeText}
+          ${depositZeroTag}
+        </div>
+        <div class="nbt-card-content" style="padding:20px; display:flex; flex-direction:column; flex:1;">
+          <h3 style="margin:0 0 4px 0; font-size:1.2rem; color:#fff;">${offer.brand || ''} ${offer.model || offer.name || ''}</h3>
+          <p style="margin:0 0 16px 0; font-size:0.9rem; color:var(--text-muted);">${offer.trim || ''}</p>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:20px; font-size:0.8rem; color:var(--text-muted); text-align:center;">
+            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-gas-station-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.fuel_type || 'Diesel'}</div>
+            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-steering-2-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.transmission || 'Auto'}</div>
+            <div style="background:rgba(255,255,255,0.05); padding:8px 4px; border-radius:6px;"><i class="ri-car-line" style="display:block; margin-bottom:4px; font-size:1.1rem;"></i> ${offer.category || 'SUV'}</div>
+          </div>
+          <div style="margin-top:auto; display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px;">
+            <div>
+              <div style="font-size:1.5rem; font-weight:700; color:#fff;">
+                <span style="font-size:1rem; color:var(--text-muted);">Ôé¼</span>${minPrice}
+                <span style="font-size:0.8rem; color:var(--text-muted); font-weight:400;">/giorno</span>
+              </div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-top:4px;">
+                ${minDeposit > 0 ? `Anticipo: Ôé¼${minDeposit}` : `<span style="color:var(--accent-gold);font-weight:600;"><i class="ri-flashlight-fill"></i> Anticipo Zero</span>`}
+              </div>
+            </div>
+          </div>
+          <a href="nbt-dettaglio.html?id=${offer.id}" class="btn btn-primary" style="width:100%; text-align:center; padding:12px; font-weight:600;">
+            Personalizza e Prenota
+          </a>
+        </div>
+      </div>
+    `;
+  }
   
-  // Se è Noleggio a Lungo Termine, forziamo l'uso della card NLT (Image 1)
+  // Se ├¿ Noleggio a Lungo Termine, forziamo l'uso della card NLT (Image 1)
   if (car.is_nlt && car.raw && typeof window.generateNltCardHTML === 'function') {
     let nltOffer = null;
     
-    // 1. Cerchiamo se c'è un'offerta reale associata nel DB (caricata tramite la query heroSearch)
+    // 1. Cerchiamo se c'├¿ un'offerta reale associata nel DB (caricata tramite la query heroSearch)
     if (car.raw.nlt_offers && car.raw.nlt_offers.length > 0) {
       const dbOffer = car.raw.nlt_offers.find(o => o.is_active !== false) || car.raw.nlt_offers[0];
       
@@ -1064,12 +1123,12 @@ function renderCarCard(car, dict) {
       };
     }
     
-    // 2. Se non c'è un'offerta nel DB, o la query non l'ha presa, creiamo un fallback perfetto che rispetti il VERO prezzo (daily_price o client_monthly_price)
+    // 2. Se non c'├¿ un'offerta nel DB, o la query non l'ha presa, creiamo un fallback perfetto che rispetti il VERO prezzo (daily_price o client_monthly_price)
     if (!nltOffer) {
       const v = car.raw;
       const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
       
-      // Calcoliamo il vero prezzo evitando monthly_price_36 che causava 1100€
+      // Calcoliamo il vero prezzo evitando monthly_price_36 che causava 1100Ôé¼
       let monthlyP = v.client_monthly_price ? Number(v.client_monthly_price) : (specsObj.monthly_price ? Number(specsObj.monthly_price) : (Number(car.price) || 699));
       let depositP = (v.deposit !== undefined && v.deposit !== null) ? Number(v.deposit) : 3000;
       
@@ -1104,103 +1163,53 @@ function renderCarCard(car, dict) {
     return window.generateNltCardHTML(nltOffer);
   }
 
-  // Altrimenti, usa SEMPRE la nuova card dal design oscuro/moderno (Breve Termine / Standard)
-  const v = car.raw || car;
-
-  const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
-  
-  const dailyPrice = Number(car.price) || Number(v.daily_price) || 0;
-  const depositPrice = (v.deposit !== undefined && v.deposit !== null) ? Number(v.deposit) : 1500;
-  
-  const brand = v.brand || '';
-  const model = v.model || car.name || 'Auto';
-  const trim = v.trim || '';
-  const fuel = v.fuel_type || v.motore || 'Ibrido / Diesel';
-  const transmission = v.transmission || 'Automatico';
-  const hp = specsObj.hp || '300 CV';
-  const accel = specsObj.accel || '5.5s';
-  const image = car.image || v.image_url || 'logo_fallback.png';
-  const providerName = v.providerName || 'Partner Flotta Live';
-  
-  const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true);
-  const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 1);
-  const delivDate = specsObj.delivery_date || v.delivery_date || '';
-
-  let badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
-  if (delivDate && delivDate !== '') {
-    let fDate = delivDate;
-    try { const p = delivDate.split('-'); if (p.length === 3) fDate = `${p[2]}/${p[1]}/${p[0]}`; } catch(e){}
-    badgeText = `<span class="card-badge badge-custom" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3);"><i class="ri-calendar-event-line"></i> Disponibile dal ${fDate}</span>`;
-  } else if (readyDeliv && delivWeeks <= 1) {
-    badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
-  } else if (readyDeliv) {
-    badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna (${delivWeeks} sett.)</span>`;
-  } else {
-    badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${delivWeeks || 1} sett.</span>`;
-  }
-
-  // Costruiamo il targetLink
-  let targetLink = '';
-  if (car.is_nbt || v.is_nbt || v.category === 'Crossover Sportivo') {
-    targetLink = `nbt-dettaglio.html?id=${v.id || ''}&model=${encodeURIComponent(model)}&brand=${encodeURIComponent(brand)}&trim=${encodeURIComponent(trim)}&img=${encodeURIComponent(image)}&hp=${encodeURIComponent(hp)}&accel=${encodeURIComponent(accel)}&price=${dailyPrice}&deposit=${depositPrice}&cat=${encodeURIComponent(v.category || 'Luxury')}&fuel=${encodeURIComponent(fuel)}&trans=${encodeURIComponent(transmission)}`;
-  } else {
-    targetLink = `car-detail.html?v=4&car=${encodeURIComponent(car.name || model)}&id=${encodeURIComponent(v.id || '')}&cat=${encodeURIComponent(v.category || 'Luxury')}&price=${dailyPrice}&img=${encodeURIComponent(image)}`;
-  }
-
-  let priceHTML = dailyPrice === 0 ? 'Su Richiesta' : `€ <span>${dailyPrice.toLocaleString('it-IT')}</span>`;
-  let priceLabel = dailyPrice === 0 ? '' : '€ / giorno (Assic. Inclusa)';
+  // Altrimenti, usa la card standard Luxury
+  const cleanBadge = (car.badge || '').replace(/[\u1F600-\u1F64F\u1F300-\u1F5FF\u1F680-\u1F6FF\u1F1E6-\u1F1FF]/g, '').trim();
+  let targetLink = `car-detail.html?v=4&car=${encodeURIComponent(car.name)}&id=${encodeURIComponent(car.id || car.db_id || '')}&cat=${encodeURIComponent(car.category || '')}&price=${car.price || 0}&img=${encodeURIComponent(car.image || '')}`;
+  let priceText = car.price === 0 ? "Su Richiesta" : "Ôé¼ " + car.price;
+  let periodText = car.price === 0 ? "" : (dict && dict["dynamic.perDay"] ? dict["dynamic.perDay"] : "/ Giorno");
 
   return `
-    <div class="glass-card nlt-card" id="card-${v.id || Math.random()}">
-      <div class="nlt-card-img-wrapper">
-        <img src="${image}" alt="${brand} ${model}" class="nlt-card-img" onerror="this.src='category-suv.jpg'">
-        <div class="nlt-card-badges">
-          ${badgeText}
+    <div class="glass-card car-card">
+      <a href="${targetLink}" style="display: block; position: relative;">
+        <div class="car-image-container">
+          <span class="car-badge">${cleanBadge}</span>
+          <span class="car-rating"><i class="ri-star-fill"></i> ${car.rating}</span>
+          <img src="${car.image}" alt="${car.name}" class="car-img" loading="lazy" onerror="this.onerror=null; this.src='logo_tricolore.png';">
         </div>
-        <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${providerName}</div>
-      </div>
-
-      <div class="nlt-card-body">
-        <div class="nlt-card-header">
-          <span class="nlt-brand-tag">${brand}</span>
-          <h3 class="nlt-model-title">${model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${trim}</small></h3>
+      </a>
+      
+      <div class="car-info">
+        <h3 class="car-title">${car.name}</h3>
+        <span class="car-type"><i class="ri-steering-2-line"></i> ${dict && dict["dynamic.cat"] ? dict["dynamic.cat"] : "Categoria"} ${car.category}</span>
+        
+        <div class="car-specs">
+          <div class="spec-item">
+            <i class="ri-speed-up-line"></i>
+            <span>${car.specs.speed}</span>
+          </div>
+          <div class="spec-item">
+            <i class="ri-timer-flash-line"></i>
+            <span>${car.specs.accel}</span>
+          </div>
+          <div class="spec-item">
+            <i class="ri-fire-line"></i>
+            <span>${car.specs.hp}</span>
+          </div>
         </div>
-
-        <!-- Specifiche Veloci -->
-        <div class="nlt-specs-row">
-          <span><i class="ri-speed-up-line"></i> ${hp}</span>
-          <span><i class="ri-dashboard-2-line"></i> ${accel} (0-100)</span>
-          <span><i class="ri-gas-station-line"></i> ${fuel}</span>
-          <span><i class="ri-settings-4-line"></i> ${transmission}</span>
-        </div>
-
-        <!-- Box Prezzo -->
-        <div class="nlt-price-box">
-          <div class="nlt-price-num text-gradient">${priceHTML}</div>
-          <div class="nlt-price-label">${priceLabel}</div>
-          <div class="nlt-price-details">Deposito Cauzionale € ${depositPrice.toLocaleString('it-IT')}</div>
-        </div>
-
-        <!-- Elenco Servizi Inclusi -->
-        <div class="nlt-services-list">
-          <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assicurazione RCA & Kasko completa</span></div>
-          <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Manutenzione Ordinaria e Straordinaria</span></div>
-          <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assistenza Stradale H24 ed Auto Sostitutiva</span></div>
-          <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 2px;">+ Tasse, Oneri e Gestione Pneumatici</div>
-        </div>
-
-        <!-- Pulsanti d'Azione -->
-        <div class="nlt-card-actions">
-          <a href="${targetLink}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
-            <span>Prenota Ora</span> <i class="ri-arrow-right-up-line" style="font-size: 1.15rem;"></i>
-          </a>
-          <a href="https://wa.me/393392451458?text=${encodeURIComponent('Ciao, vorrei informazioni per noleggiare: ' + brand + ' ' + model + (dailyPrice > 0 ? ' a ' + dailyPrice + '€/giorno' : ''))}" target="_blank" class="btn btn-outline" title="Contatta su WhatsApp" style="padding: 12px 14px; color: #2ecc71; border-color: rgba(46, 204, 113, 0.4); display: flex; align-items: center; justify-content: center;">
-            <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i>
+        
+        <div class="car-footer">
+          <div class="car-price">
+            <span class="price-amount">${priceText}</span>
+            <span class="price-period">${periodText}</span>
+          </div>
+          
+          <a href="${targetLink}" class="btn btn-primary" style="padding: 10px 20px; text-decoration: none; display: flex; gap: 8px; align-items: center;">
+            <span>${dict && dict["dynamic.book"] ? dict["dynamic.book"] : "Prenota Ora"}</span> <i class="ri-arrow-right-up-line"></i>
           </a>
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 }
 // Filtro Categorie (Pills)
 function filterFleet(category, btnElement) {
@@ -1369,7 +1378,7 @@ function updatePriceCalculation() {
   if (currentSelectedCarPrice === 0) {
     totalDisplay.innerText = "Su Preventivo";
   } else {
-    totalDisplay.innerText = `€ ${total.toLocaleString('it-IT')}`;
+    totalDisplay.innerText = `Ôé¼ ${total.toLocaleString('it-IT')}`;
   }
 }
 
@@ -1427,7 +1436,7 @@ async function submitBooking(event) {
         status: 'pending'
       }]);
       if (error) console.error("Errore salvataggio prenotazione su Supabase:", error);
-      else console.log("✅ Prenotazione salvata con successo su Supabase!");
+      else console.log("Ô£à Prenotazione salvata con successo su Supabase!");
     } catch (err) {
       console.error("Errore connessione Supabase:", err);
     }
@@ -1436,17 +1445,17 @@ async function submitBooking(event) {
   // Invia notifica email al gestore con i dettagli e il fornitore di flotta
   const recipient = "info@itercars.com";
   const payload = {
-    _subject: `🚙 Nuova Richiesta Noleggio (Da Modal) — ${carName}`,
+    _subject: `­ƒÜÖ Nuova Richiesta Noleggio (Da Modal) ÔÇö ${carName}`,
     _template: "table",
     _captcha: "false",
     "Veicolo Richiesto": carName,
     "Giorni di Noleggio": days,
-    "Servizi Aggiuntivi": extraPrice > 0 ? `Selezionato (+€${extraPrice})` : "Nessuno",
-    "Stima Preventivo": `€ ${total}`,
+    "Servizi Aggiuntivi": extraPrice > 0 ? `Selezionato (+Ôé¼${extraPrice})` : "Nessuno",
+    "Stima Preventivo": `Ôé¼ ${total}`,
     "Nome Cliente": clientName,
     "Telefono Cliente": clientPhone,
     "Email Cliente": clientEmail,
-    "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
+    "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) ÔÇö ${providerInfo.website}`
   };
 
   try {
@@ -1603,7 +1612,7 @@ function switchAuthMode(mode) {
 async function handleLogin(event) {
   event.preventDefault();
   if (!supabase) {
-    showToast("⚠️ Connessione Supabase non attiva");
+    showToast("ÔÜá´©Å Connessione Supabase non attiva");
     return;
   }
   const email = document.getElementById("authLoginEmail").value;
@@ -1611,9 +1620,9 @@ async function handleLogin(event) {
 
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
-    showToast("❌ Errore Login: " + error.message);
+    showToast("ÔØî Errore Login: " + error.message);
   } else {
-    showToast("✨ Accesso effettuato con successo!");
+    showToast("Ô£¿ Accesso effettuato con successo!");
     closeAuthModal();
   }
 }
@@ -1621,7 +1630,7 @@ async function handleLogin(event) {
 async function handleRegister(event) {
   event.preventDefault();
   if (!supabase) {
-    showToast("⚠️ Connessione Supabase non attiva");
+    showToast("ÔÜá´©Å Connessione Supabase non attiva");
     return;
   }
   const firstName = document.getElementById("regFirstName").value;
@@ -1634,7 +1643,7 @@ async function handleRegister(event) {
   const confirmPassword = document.getElementById("regConfirmPassword").value;
 
   if (password !== confirmPassword) {
-    showToast("⚠️ Le due password non corrispondono!");
+    showToast("ÔÜá´©Å Le due password non corrispondono!");
     return;
   }
 
@@ -1653,9 +1662,9 @@ async function handleRegister(event) {
   });
 
   if (error) {
-    showToast("❌ Errore Registrazione: " + error.message);
+    showToast("ÔØî Errore Registrazione: " + error.message);
   } else {
-    showToast("🎉 Registrazione VIP completata! Benvenuto in ITERCARS.");
+    showToast("­ƒÄë Registrazione VIP completata! Benvenuto in ITERCARS.");
     closeAuthModal();
   }
 }
@@ -1699,7 +1708,7 @@ async function openVipDashboardModal() {
       }
     }
 
-    // Se l'utente è nuovo e non ha ancora noleggi nel DB, mostriamo storico VIP di esempio senza prezzi ed emoji
+    // Se l'utente ├¿ nuovo e non ha ancora noleggi nel DB, mostriamo storico VIP di esempio senza prezzi ed emoji
     if (userBookings.length === 0) {
       userBookings = [
         { vehicle_name: "Ferrari F8 Tributo", rental_country: "Italia", pickup_location: "Milano Centrale", rental_days: 3, status: "completed" },
@@ -1724,7 +1733,7 @@ async function openVipDashboardModal() {
               <i class="ri-roadster-fill text-gold"></i> ${b.vehicle_name}
             </strong>
             <span style="font-size: 0.85rem; color: var(--text-muted);">
-              <i class="ri-map-pin-line"></i> Paese: <strong style="color: #fff;">${cleanCountry}</strong> (${loc}) • ${b.rental_days || 1} giorni
+              <i class="ri-map-pin-line"></i> Paese: <strong style="color: #fff;">${cleanCountry}</strong> (${loc}) ÔÇó ${b.rental_days || 1} giorni
             </span>
           </div>
           <div style="text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
@@ -1753,7 +1762,7 @@ async function handleLogout() {
   currentUser = null;
   resetNavAreaButton();
   closeVipDashboardModal();
-  showToast("👋 Disconnessione effettuata");
+  showToast("­ƒæï Disconnessione effettuata");
 }
 
 // Rendiamo le funzioni globali sul window per garantire l'accesso dagli eventi onclick HTML
@@ -1766,7 +1775,7 @@ window.handleRegister = handleRegister;
 async function handlePartnerReg(event) {
   event.preventDefault();
   if (!supabase) {
-    alert("Errore di connessione al database. Riprovare più tardi.");
+    alert("Errore di connessione al database. Riprovare pi├╣ tardi.");
     return;
   }
 
@@ -1828,12 +1837,12 @@ async function handlePartnerReg(event) {
     // Auto-logout the pending user so they don't access the VIP dashboard
     await supabase.auth.signOut();
 
-    alert("Richiesta inviata con successo! Il team ti contatterà al più presto. Non potrai accedere fino ad approvazione avvenuta.");
+    alert("Richiesta inviata con successo! Il team ti contatter├á al pi├╣ presto. Non potrai accedere fino ad approvazione avvenuta.");
     closeAuthModal();
     event.target.reset();
   } catch (error) {
     console.error("Errore invio candidatura partner:", error);
-    alert("Si è verificato un errore durante l'invio della richiesta: " + (error.message || "Riprova più tardi."));
+    alert("Si ├¿ verificato un errore durante l'invio della richiesta: " + (error.message || "Riprova pi├╣ tardi."));
   } finally {
     if (submitBtn) {
       submitBtn.innerHTML = `<span>Completa richiesta</span> <i class="ri-send-plane-fill"></i>`;
@@ -2033,7 +2042,7 @@ async function handleDossierRecoverySubmit(e) {
             errMsg.style.display = 'block';
           }
         } else {
-          // Salva in localStorage per comodità
+          // Salva in localStorage per comodit├á
           localStorage.setItem('itercars_last_quote_code', data.quote_code);
           
           // Reindirizza direttamente al caricamento documenti (Dossier)
@@ -2041,7 +2050,7 @@ async function handleDossierRecoverySubmit(e) {
         }
       } catch (err) {
         if (errMsg) {
-          errMsg.innerText = "Errore di connessione. Riprova più tardi.";
+          errMsg.innerText = "Errore di connessione. Riprova pi├╣ tardi.";
           errMsg.style.display = 'block';
         }
       }
