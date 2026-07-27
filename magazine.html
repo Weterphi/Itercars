@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITERCARS Magazine | Storie, Recensioni e Lifestyle Luxury</title>
+  <meta name="description" content="Esplora il magazine ufficiale ITERCARS. Recensioni di supercar, guide all'acquisto, eventi esclusivi e il meglio del luxury lifestyle automobilistico.">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="index.css?v=50">
+  <link rel="stylesheet" href="magazine.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+</head>
+<body class="magazine-body">
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header id="header" style="background: rgba(6, 9, 15, 0.85); backdrop-filter: blur(10px);">
+    <div class="container nav-container">
+      <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS">
+        <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
+        <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
+        <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
+        <li><a href="magazine.html" style="color: #fff; font-weight: 700; border-bottom: 2px solid var(--accent-primary);"><i class="ri-article-line"></i> MAGAZINE</a></li>
+        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACCADEMY</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <!-- Auth / Contact Buttons ... (simplified for static template) -->
+        <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
+          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= HERO SLIDER (MAGAZINE COVER) ================= -->
+  <section class="mag-hero-section">
+    <!-- Swiper -->
+    <div class="swiper mag-swiper-container">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 -->
+        <div class="swiper-slide mag-slide">
+          <img src="https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Porsche 911" class="mag-slide-bg">
+          <div class="mag-slide-overlay"></div>
+          <div class="mag-slide-content">
+            <span class="mag-slide-category">Recensione Esclusiva</span>
+            <h1 class="mag-slide-title">Porsche 911 Turbo S: L'Ingegneria Incontra L'Adrenalina</h1>
+            <p class="mag-slide-desc">Abbiamo testato la nuova Porsche 911 Turbo S sulle strade panoramiche delle Alpi Svizzere. Scopri perché rimane la regina incontrastata delle supercar da tutti i giorni.</p>
+            <a href="articolo-porsche-911.html" class="mag-slide-btn">Leggi l'Articolo <i class="ri-arrow-right-line"></i></a>
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="swiper-slide mag-slide">
+          <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Ferrari Roma" class="mag-slide-bg">
+          <div class="mag-slide-overlay"></div>
+          <div class="mag-slide-content">
+            <span class="mag-slide-category">Lifestyle & Design</span>
+            <h1 class="mag-slide-title">La Nuova Dolce Vita: Viaggio in Ferrari Roma</h1>
+            <p class="mag-slide-desc">Un weekend esclusivo tra le colline del Chianti a bordo dell'ultima creatura di Maranello. Eleganza senza tempo e prestazioni brucianti in perfetto stile italiano.</p>
+            <a href="#" class="mag-slide-btn">Leggi l'Articolo <i class="ri-arrow-right-line"></i></a>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="swiper-slide mag-slide">
+          <img src="https://images.unsplash.com/photo-1629897048514-3dd74142beaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="G-Class" class="mag-slide-bg">
+          <div class="mag-slide-overlay"></div>
+          <div class="mag-slide-content">
+            <span class="mag-slide-category">Guida all'Acquisto</span>
+            <h1 class="mag-slide-title">SUV di Lusso: Quale Scegliere nel 2026?</h1>
+            <p class="mag-slide-desc">Dal Mercedes Classe G all'Urus, passando per il Purosangue. Il mercato dei SUV ultra-lusso non è mai stato così ricco. Ecco la nostra guida definitiva.</p>
+            <a href="#" class="mag-slide-btn">Leggi l'Articolo <i class="ri-arrow-right-line"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Swiper Pagination -->
+      <div class="swiper-pagination"></div>
+      
+      <!-- Swiper Navigation -->
+      <div class="swiper-button-next" style="color: #fff;"></div>
+      <div class="swiper-button-prev" style="color: #fff;"></div>
+    </div>
+  </section>
+
+  <!-- ================= BENTO GRID (LATEST ARTICLES) ================= -->
+  <section class="mag-bento-section">
+    <h2 class="mag-section-title"><i class="ri-newspaper-line" style="color: var(--accent-primary);"></i> Ultime Pubblicazioni</h2>
+    
+    <div class="mag-bento-grid">
+      
+      <!-- Bento Item (Large) -->
+      <a href="#" class="mag-bento-card mag-card-large">
+        <img src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Auto Elettriche" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag">Tecnologia</span>
+          <h3 class="mag-card-title">Il Futuro è Elettrico: Le Hypercar a Zero Emissioni che sfidano le leggi della fisica</h3>
+          <div class="mag-card-date"><i class="ri-time-line"></i> 26 Luglio 2026 &bull; 8 min read</div>
+        </div>
+      </a>
+
+      <!-- Bento Item (Small) -->
+      <a href="#" class="mag-bento-card mag-card-small">
+        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Aston Martin" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag">Brand Story</span>
+          <h3 class="mag-card-title">L'Eredità Aston Martin</h3>
+          <div class="mag-card-date"><i class="ri-time-line"></i> 24 Luglio 2026</div>
+        </div>
+      </a>
+
+      <!-- Bento Item (Small) -->
+      <a href="#" class="mag-bento-card mag-card-small">
+        <img src="https://images.unsplash.com/photo-1541443131876-44b03de101c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Eventi" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag">Eventi VIP</span>
+          <h3 class="mag-card-title">Villa d'Este Concorso d'Eleganza</h3>
+          <div class="mag-card-date"><i class="ri-time-line"></i> 20 Luglio 2026</div>
+        </div>
+      </a>
+
+      <!-- Bento Item (Tall) -->
+      <a href="#" class="mag-bento-card mag-card-tall">
+        <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ferrari" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag">Collezionismo</span>
+          <h3 class="mag-card-title">Investire in auto d'epoca: le Ferrari più redditizie degli ultimi 10 anni</h3>
+          <div class="mag-card-date"><i class="ri-time-line"></i> 15 Luglio 2026 &bull; 10 min read</div>
+        </div>
+      </a>
+
+      <!-- Bento Item (Wide) -->
+      <a href="#" class="mag-bento-card mag-card-wide">
+        <img src="https://images.unsplash.com/photo-1616789916960-9e90098df718?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Rolls Royce" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag">Ultra Luxury</span>
+          <h3 class="mag-card-title">Rolls-Royce Spectre: Il Silenzio Assoluto incontra l'Elettrico</h3>
+          <div class="mag-card-date"><i class="ri-time-line"></i> 10 Luglio 2026 &bull; 6 min read</div>
+        </div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer id="contatti">
+    <div class="container">
+      <div class="footer-bottom" style="border-top: none; padding-top: 30px; text-align: center; color: var(--text-muted);">
+        <p>&copy; 2026 ITERCARS Magazine. Tutti i diritti riservati.</p>
+        <p style="margin-top: 10px;"><a href="index.html" style="color: var(--accent-primary); text-decoration: underline;">Torna al Noleggio</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    // Inizializzazione Swiper
+    var swiper = new Swiper('.mag-swiper-container', {
+      effect: 'fade', // Effetto dissolvenza molto elegante
+      autoplay: {
+        delay: 6000,
+        disableOnInteraction: false,
+      },
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  </script>
+</body>
+</html>
