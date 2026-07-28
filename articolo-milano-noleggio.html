@@ -418,12 +418,26 @@
 
     fsBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
+        let req = null;
         if (swiperContainer.requestFullscreen) {
-          swiperContainer.requestFullscreen();
+          req = swiperContainer.requestFullscreen();
         } else if (swiperContainer.webkitRequestFullscreen) { 
-          swiperContainer.webkitRequestFullscreen();
+          req = swiperContainer.webkitRequestFullscreen();
         } else if (swiperContainer.msRequestFullscreen) { 
-          swiperContainer.msRequestFullscreen();
+          req = swiperContainer.msRequestFullscreen();
+        }
+
+        // Try to force landscape orientation on mobile
+        const lockOrientation = () => {
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock('landscape').catch(err => console.log('Orientation lock not supported or failed:', err));
+          }
+        };
+
+        if (req && req.then) {
+          req.then(lockOrientation).catch(e => console.log(e));
+        } else {
+          setTimeout(lockOrientation, 300);
         }
       } else {
         if (document.exitFullscreen) {
@@ -432,6 +446,11 @@
           document.webkitExitFullscreen();
         } else if (document.msExitFullscreen) { 
           document.msExitFullscreen();
+        }
+        
+        // Unlock orientation when exiting fullscreen
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
         }
       }
     });
