@@ -52,58 +52,57 @@
     <!-- Swiper -->
     <div class="swiper mag-swiper-container">
       <div class="swiper-wrapper">
-        <!-- Slide 1 -->
+        <!-- Featured Article: Milano Noleggio -->
         <div class="swiper-slide mag-slide">
-          <img src="https://images.unsplash.com/photo-1544829099-b9a0c07fad1a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Porsche 911" class="mag-slide-bg">
+          <img src="milano-lambo.jpg?v=new" alt="Lamborghini a Milano" class="mag-slide-bg">
           <div class="mag-slide-overlay"></div>
           <div class="mag-slide-content">
-            <span class="mag-slide-category">Recensione Esclusiva</span>
-            <h1 class="mag-slide-title">Porsche 911 Turbo S: L'Ingegneria Incontra L'Adrenalina</h1>
-            <p class="mag-slide-desc">Abbiamo testato la nuova Porsche 911 Turbo S sulle strade panoramiche delle Alpi Svizzere. Scopri perché rimane la regina incontrastata delle supercar da tutti i giorni.</p>
-            <a href="articolo-porsche-911.html" class="mag-slide-btn">Leggi l'Articolo <i class="ri-arrow-right-line"></i></a>
-          </div>
-        </div>
-
-        <!-- Slide 2 -->
-        <div class="swiper-slide mag-slide">
-          <img src="https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Ferrari Roma" class="mag-slide-bg">
-          <div class="mag-slide-overlay"></div>
-          <div class="mag-slide-content">
-            <span class="mag-slide-category">Lifestyle & Design</span>
-            <h1 class="mag-slide-title">La Nuova Dolce Vita: Viaggio in Ferrari Roma</h1>
-            <p class="mag-slide-desc">Un weekend esclusivo tra le colline del Chianti a bordo dell'ultima creatura di Maranello. Eleganza senza tempo e prestazioni brucianti in perfetto stile italiano.</p>
-            <a href="#" class="mag-slide-btn">Leggi l'Articolo <i class="ri-arrow-right-line"></i></a>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="swiper-slide mag-slide">
-          <img src="https://images.unsplash.com/photo-1629897048514-3dd74142beaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="G-Class" class="mag-slide-bg">
-          <div class="mag-slide-overlay"></div>
-          <div class="mag-slide-content">
-            <span class="mag-slide-category">Guida all'Acquisto</span>
-            <h1 class="mag-slide-title">SUV di Lusso: Quale Scegliere nel 2026?</h1>
-            <p class="mag-slide-desc">Dal Mercedes Classe G all'Urus, passando per il Purosangue. Il mercato dei SUV ultra-lusso non è mai stato così ricco. Ecco la nostra guida definitiva.</p>
-            <a href="#" class="mag-slide-btn">Leggi l'Articolo <i class="ri-arrow-right-line"></i></a>
+            <span class="mag-slide-category" style="background: rgba(255, 215, 0, 0.2); color: #ffd700; border-color: rgba(255, 215, 0, 0.4);">Special Report</span>
+            <h1 class="mag-slide-title">L'Impero Silenzioso del Lusso su Quattro Ruote</h1>
+            <p class="mag-slide-desc">Dalle officine della Motor Valley al nuovo rinascimento dell'Asset-Light Brokerage: come l'Italia sta ridefinendo il mercato dell'auto d'élite.</p>
+            <a href="articolo-milano-noleggio.html" class="mag-slide-btn">Esplora Ora <i class="ri-arrow-right-line"></i></a>
           </div>
         </div>
       </div>
-      
-      <!-- Swiper Pagination -->
-      <div class="swiper-pagination"></div>
-      
-      <!-- Swiper Navigation -->
-      <div class="swiper-button-next" style="color: #fff;"></div>
-      <div class="swiper-button-prev" style="color: #fff;"></div>
     </div>
   </section>
 
   <!-- ================= BENTO GRID (LATEST ARTICLES) ================= -->
   <section class="mag-bento-section">
-    <h2 class="mag-section-title"><i class="ri-newspaper-line" style="color: var(--accent-primary);"></i> Ultime Pubblicazioni</h2>
+    
+    <!-- Magazine Filters -->
+    <div class="mag-filters-container">
+      <button class="mag-filter-btn active">Tutti</button>
+      <button class="mag-filter-btn">Edizioni</button>
+      <button class="mag-filter-btn">Articoli</button>
+      <button class="mag-filter-btn">Lifestyle</button>
+      <button class="mag-filter-btn">Transition</button>
+    </div>
     
     <div class="mag-bento-grid">
       
+      <!-- LATEST ARTICLE: MILANO NOLEGGIO -->
+      <a href="articolo-milano-noleggio.html" class="mag-bento-card mag-card-large">
+        <img src="milano-lambo.jpg?v=new" alt="Lamborghini a Milano" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag">Special Report</span>
+          <h3 class="mag-card-title">L'Impero Silenzioso del Lusso su Quattro Ruote</h3>
+          <div class="mag-card-date">
+            <i class="ri-calendar-line"></i> 28 Luglio 2026 • 12 min read
+          </div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-1" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">124</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
+        </div>
+      </a>
+
       <!-- Bento Item (Large) -->
       <a href="#" class="mag-bento-card mag-card-large">
         <img src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Auto Elettriche" class="mag-card-img">
@@ -112,6 +111,15 @@
           <span class="mag-card-tag">Tecnologia</span>
           <h3 class="mag-card-title">Il Futuro è Elettrico: Le Hypercar a Zero Emissioni che sfidano le leggi della fisica</h3>
           <div class="mag-card-date"><i class="ri-time-line"></i> 26 Luglio 2026 &bull; 8 min read</div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-2" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">51</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
         </div>
       </a>
 
@@ -123,6 +131,15 @@
           <span class="mag-card-tag">Brand Story</span>
           <h3 class="mag-card-title">L'Eredità Aston Martin</h3>
           <div class="mag-card-date"><i class="ri-time-line"></i> 24 Luglio 2026</div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-3" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">119</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
         </div>
       </a>
 
@@ -134,6 +151,15 @@
           <span class="mag-card-tag">Eventi VIP</span>
           <h3 class="mag-card-title">Villa d'Este Concorso d'Eleganza</h3>
           <div class="mag-card-date"><i class="ri-time-line"></i> 20 Luglio 2026</div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-4" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">105</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
         </div>
       </a>
 
@@ -145,6 +171,15 @@
           <span class="mag-card-tag">Collezionismo</span>
           <h3 class="mag-card-title">Investire in auto d'epoca: le Ferrari più redditizie degli ultimi 10 anni</h3>
           <div class="mag-card-date"><i class="ri-time-line"></i> 15 Luglio 2026 &bull; 10 min read</div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-5" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">84</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
         </div>
       </a>
 
@@ -156,6 +191,15 @@
           <span class="mag-card-tag">Ultra Luxury</span>
           <h3 class="mag-card-title">Rolls-Royce Spectre: Il Silenzio Assoluto incontra l'Elettrico</h3>
           <div class="mag-card-date"><i class="ri-time-line"></i> 10 Luglio 2026 &bull; 6 min read</div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-6" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">24</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
         </div>
       </a>
 
@@ -194,5 +238,73 @@
       },
     });
   </script>
-</body>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const cards = document.querySelectorAll('.card-actions');
+    
+    cards.forEach(card => {
+        const articleId = card.getAttribute('data-article-id');
+        const likeBtn = card.querySelector('.btn-card-like');
+        const shareBtn = card.querySelector('.btn-card-share');
+        const heartIcon = card.querySelector('.heart-icon');
+        const likeCountSpan = card.querySelector('.like-count');
+        
+        // Prevent clicking buttons from triggering the link navigation
+        likeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            let currentLikes = parseInt(likeCountSpan.textContent);
+            let hasLiked = localStorage.getItem('liked_' + articleId) === 'true';
+            
+            if (!hasLiked) {
+                currentLikes++;
+                localStorage.setItem('liked_' + articleId, 'true');
+                heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill');
+                heartIcon.style.color = '#ef4444';
+            } else {
+                currentLikes--;
+                localStorage.setItem('liked_' + articleId, 'false');
+                heartIcon.classList.replace('ri-heart-3-fill', 'ri-heart-3-line');
+                heartIcon.style.color = '#fff';
+            }
+            likeCountSpan.textContent = currentLikes;
+            localStorage.setItem('likes_count_' + articleId, currentLikes);
+        });
+
+        shareBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            let parentLink = card.closest('a').href;
+            let title = card.closest('a').querySelector('.mag-card-title').textContent;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: parentLink
+                }).catch(err => console.log('Condivisione fallita:', err));
+            } else {
+                alert("Copia questo link per condividere l'articolo:\n" + parentLink);
+            }
+        });
+        
+        // Initialize state
+        let savedLikes = localStorage.getItem('likes_count_' + articleId);
+        if (savedLikes) {
+            likeCountSpan.textContent = savedLikes;
+        } else {
+            // Save the initial random likes
+            localStorage.setItem('likes_count_' + articleId, likeCountSpan.textContent);
+        }
+        
+        if (localStorage.getItem('liked_' + articleId) === 'true') {
+            heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill');
+            heartIcon.style.color = '#ef4444';
+        }
+    });
+});
+</script>
+\n</body>
 </html>

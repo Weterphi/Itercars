@@ -406,3 +406,727 @@
   .mag-slide { padding: 40px 5%; }
   .article-title { font-size: 2.2rem; }
 }
+
+/* ==========================================================================
+   IMMERSIVE ARTICLE (STORY FORMAT)
+   ========================================================================== */
+.immersive-body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* No scroll, handled by Swiper */
+  background: #000;
+  font-family: 'Outfit', sans-serif;
+  color: #fff;
+}
+
+/* Exit Button */
+.immersive-exit-btn {
+  position: fixed;
+  top: 30px;
+  right: 40px;
+  z-index: 9999;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.immersive-exit-btn:hover {
+  background: rgba(239, 68, 68, 0.3); /* Red glow on hover */
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+/* Swiper Container */
+.immersive-swiper {
+  width: 100vw;
+  height: 100vh;
+}
+
+/* Slide Base Styling */
+.immersive-slide {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background: radial-gradient(circle at center, #0a0e17 0%, #000000 100%);
+}
+
+/* Cover Layout */
+.cover-layout {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.cover-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.cover-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1000px;
+  padding: 0 5%;
+}
+
+.cover-title {
+  font-size: 5rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.9);
+  background: linear-gradient(to right, #fff, #cbd5e1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.swipe-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
+  50% { opacity: 1; transform: translateX(-50%) translateY(10px); }
+  100% { opacity: 0.5; transform: translateX(-50%) translateY(0); }
+}
+
+/* Split Layout (Text + Image) */
+.split-layout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.split-image {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}
+
+.split-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.split-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8% 10%;
+  background: #04060a;
+}
+
+.split-content h2 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 30px;
+  color: var(--accent-primary);
+}
+
+.split-content p {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  color: #cbd5e1;
+  margin-bottom: 24px;
+}
+
+.immersive-quote {
+  font-size: 1.8rem;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.5;
+  color: #fff;
+  border-left: 4px solid var(--accent-primary);
+  padding-left: 30px;
+  margin: 40px 0;
+}
+
+/* Call to action Slide */
+.cta-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 5%;
+}
+
+/* Custom Swiper Pagination */
+.swiper-pagination-progressbar {
+  background: rgba(255,255,255,0.1);
+  top: 0 !important;
+  height: 4px !important;
+}
+.swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+  background: var(--accent-primary);
+}
+
+/* Responsive Overrides */
+@media (max-width: 992px) {
+  .split-layout {
+    flex-direction: column;
+  }
+  .split-image {
+    flex: 0.4;
+  }
+  .split-content {
+    flex: 0.6;
+    padding: 10% 5%;
+    overflow-y: auto;
+  }
+  .cover-title {
+    font-size: 3rem;
+  }
+  .split-content h2 {
+    font-size: 2.2rem;
+  }
+  .split-content p {
+    font-size: 1.1rem;
+  }
+  .immersive-exit-btn {
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+}
+
+/* ==========================================================================
+   HYBRID ARTICLE (SLIDER + TRADITIONAL)
+   ========================================================================== */
+/* The slider container at the top of the article */
+.mag-hero-article {
+  position: relative;
+  width: 100%;
+  height: 80vh; /* Default height before fullscreen */
+  min-height: 500px;
+  background: #000;
+  margin-top: 0;
+}
+
+.mag-hero-article .immersive-swiper {
+  width: 100%;
+  height: 100%;
+}
+
+/* Action Buttons Container to hold them inside the slider */
+.immersive-actions {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120px; /* Hover area at the top */
+  padding: 30px 40px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1000;
+  pointer-events: auto; /* Catch hover events */
+}
+
+/* Minimalist buttons, hidden by default */
+.esc-btn, .fullscreen-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: transparent; /* No background */
+  border: none; /* No borders */
+  box-shadow: none;
+  color: #fff;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  font-weight: 300;
+  letter-spacing: 1px;
+  opacity: 0; /* Hidden by default */
+  transform: translateY(-15px); /* Slide down effect */
+}
+
+/* Show buttons when hovering the top area of the screen */
+.immersive-actions:hover .esc-btn,
+.immersive-actions:hover .fullscreen-btn {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Subtle effect when hovering directly on the button */
+.esc-btn:hover, .fullscreen-btn:hover {
+  background: rgba(255, 255, 255, 0.1); /* Very subtle highlight */
+  transform: scale(1.1);
+}
+
+/* When the slider is in native fullscreen mode */
+.immersive-swiper:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+.immersive-swiper:-webkit-full-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+.immersive-swiper:-ms-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
+
+/* Article Container Overrides for Dark Theme */
+.magazine-body .article-container {
+  background: #000;
+  color: #d1d5db;
+}
+
+.magazine-body .article-content h2,
+.magazine-body .article-content h3 {
+  color: #fff;
+}
+
+/* Magazine Filters */
+.mag-filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 40px;
+  align-items: center;
+  justify-content: center; /* Centered layout */
+}
+
+.mag-filter-btn {
+  padding: 10px 24px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.mag-filter-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.mag-filter-btn.active {
+  background: rgba(0, 146, 70, 0.2);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 15px rgba(0, 146, 70, 0.3);
+}
+
+/* Animation for the Fullscreen button heartbeat */
+@keyframes heartbeat {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 146, 70, 0.7); }
+  50% { transform: scale(1.15); box-shadow: 0 0 0 15px rgba(0, 146, 70, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 146, 70, 0); }
+}
+
+.pulse-attention {
+  animation: heartbeat 1.5s infinite !important;
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  background: rgba(0, 146, 70, 0.4) !important; 
+  border-color: var(--accent-primary) !important;
+}
+
+.show-always {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Horizontal Timeline for Immersive Slide */
+.timeline-layout {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 5%;
+  background: #0b0f19;
+}
+
+.horizontal-timeline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  padding: 40px 0;
+  margin-top: 40px;
+}
+
+.horizontal-timeline::before {
+  content: '';
+  position: absolute;
+  top: 49px; /* Aligns with the middle of the 20px dot (40px padding + 9px) */
+  left: 5%;
+  width: 90%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 1;
+}
+
+.timeline-item {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  text-align: center;
+  padding: 0 15px;
+}
+
+.timeline-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #0b0f19;
+  border: 3px solid var(--accent-primary);
+  margin: 0 auto 20px auto;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 10px rgba(0, 146, 70, 0.5);
+}
+
+.timeline-date {
+  font-weight: 800;
+  color: var(--accent-primary);
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+.timeline-title {
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.timeline-text {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 992px) {
+  .horizontal-timeline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .horizontal-timeline::before {
+    top: 40px;
+    left: 24px; /* Align vertical line */
+    width: 2px;
+    height: calc(100% - 80px);
+  }
+  .timeline-item {
+    display: flex;
+    text-align: left;
+    margin-bottom: 40px;
+    padding: 0;
+  }
+  .timeline-dot {
+    margin: 0 30px 0 15px;
+    flex-shrink: 0;
+  }
+  .timeline-content {
+    margin-top: -5px;
+  }
+}
+
+/* =========================================
+   MAGAZINE PAGE LAYOUT (DENSE EDITORIAL)
+   ========================================= */
+.mag-page-layout {
+  padding: 60px;
+  background: #04060a;
+  color: #d1d5db;
+  overflow-y: auto; /* allow scrolling inside the slide if content overflows */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.mag-page-header {
+  margin-bottom: 30px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.mag-page-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.mag-page-meta {
+  font-size: 0.9rem;
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mag-columns {
+  column-count: 2;
+  column-gap: 50px;
+  text-align: justify;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.drop-cap::first-letter {
+  font-size: 4.5rem;
+  float: left;
+  line-height: 0.85;
+  padding-right: 12px;
+  color: var(--accent-primary);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+}
+
+.mag-columns h3 {
+  color: #fff;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
+  break-after: avoid;
+}
+
+.mag-columns p {
+  margin-bottom: 20px;
+}
+
+/* Sidebar Box for Data */
+.mag-sidebar {
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 4px solid var(--accent-primary);
+  padding: 20px;
+  margin-bottom: 25px;
+  break-inside: avoid;
+}
+
+.mag-sidebar h4 {
+  color: var(--accent-primary);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.mag-sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mag-sidebar ul li {
+  margin-bottom: 10px;
+  font-size: 0.95rem;
+}
+.mag-sidebar ul li strong {
+  color: #fff;
+  display: block;
+}
+
+/* =========================================
+   TOP-ALIGNED HORIZONTAL TIMELINE
+   ========================================= */
+.mag-timeline-container {
+  width: 100%;
+  margin: 40px 0;
+  position: relative;
+  padding-top: 20px; 
+}
+
+.mag-timeline-line {
+  position: absolute;
+  top: 8px; /* Alignment for the dots */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255,255,255,0.2);
+  z-index: 1;
+}
+
+.mag-timeline-items {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.mag-timeline-item {
+  position: relative;
+  flex: 1;
+  text-align: left;
+  padding: 0 15px;
+  z-index: 2;
+}
+
+.mag-timeline-dot {
+  position: absolute;
+  top: -19px; /* Precisely centers the 16px dot on the 2px line at top:8px */
+  left: 15px;
+  width: 16px;
+  height: 16px;
+  background: #04060a;
+  border: 3px solid var(--accent-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0, 146, 70, 0.6);
+}
+
+.mag-timeline-year {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+  margin-top: 15px;
+  margin-bottom: 8px;
+}
+
+.mag-timeline-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+.mag-timeline-text {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+/* Dense Article Table */
+.dense-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 0.9rem;
+}
+.dense-table th {
+  background: rgba(0, 146, 70, 0.1);
+  color: var(--accent-primary);
+  text-align: left;
+  padding: 12px;
+  font-weight: 700;
+  border-bottom: 2px solid var(--accent-primary);
+}
+.dense-table td {
+  padding: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+  vertical-align: top;
+}
+.dense-table strong {
+  color: #fff;
+}
+
+@media (max-width: 992px) {
+  .mag-columns { column-count: 1; }
+  .mag-page-layout { padding: 30px 20px; }
+  
+  .mag-timeline-items { flex-direction: column; }
+  .mag-timeline-line { width: 2px; height: 100%; left: 22px; top: 0; }
+  .mag-timeline-container { padding-top: 0; }
+  .mag-timeline-item { padding: 0 0 30px 40px; }
+  .mag-timeline-dot { top: 5px; left: 14px; }
+}
+
+/* GOLD DUST SPARKS ANIMATION */
+.gold-dust-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1; /* Below text, above background */
+  overflow: hidden;
+}
+
+.gold-spark {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: #ffd700;
+  border-radius: 50%;
+  box-shadow: 0 0 4px 1px #ffd700, 0 0 10px 2px rgba(255, 215, 0, 0.4);
+  animation: floatUp 15s linear infinite;
+  opacity: 0;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) scale(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+    transform: translateY(80vh) scale(1);
+  }
+  80% {
+    opacity: 0.6;
+    transform: translateY(20vh) scale(1.5);
+  }
+  100% {
+    transform: translateY(-10vh) scale(0);
+    opacity: 0;
+  }
+}
+
+/* Base structural fixes for timeline in old slide format */
+.timeline-slide-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 5;
+  padding: 40px;
+}

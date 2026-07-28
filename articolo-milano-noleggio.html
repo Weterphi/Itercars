@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>L'Impero Silenzioso del Lusso su Quattro Ruote | ITERCARS Magazine</title>
+  <meta name="description" content="Dalle officine della Motor Valley al nuovo rinascimento dell'Asset-Light Brokerage: come l'Italia sta ridefinendo il mercato dell'auto d'élite.">
+  
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="index.css?v=50">
+  <link rel="stylesheet" href="magazine.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    /* Table styling for the traditional article at the bottom */
+    .article-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 40px 0;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .article-table th {
+      background: rgba(0, 146, 70, 0.15);
+      color: var(--accent-primary);
+      text-align: left;
+      padding: 20px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .article-table td {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #d1d5db;
+      vertical-align: top;
+    }
+    .article-table tr:last-child td { border-bottom: none; }
+    .article-table tr:hover td { background: rgba(255, 255, 255, 0.05); }
+  
+    /* Mobile Responsive Overrides */
+    @media (max-width: 768px) {
+      .glass-responsive {
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+        width: 92% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+        text-align: center !important;
+        border-radius: 12px !important;
+      }
+      .glass-responsive.glass-top {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        transform: none !important;
+        border-radius: 0 !important;
+        padding: 15px 5% !important;
+      }
+      .glass-responsive h2 {
+        font-size: 1.6rem !important;
+        margin-bottom: 15px !important;
+      }
+      .glass-responsive p {
+        font-size: 0.95rem !important;
+      }
+      .article-title {
+        font-size: 2.2rem !important;
+      }
+      .immersive-quote {
+        font-size: 2rem !important;
+        padding: 20px !important;
+      }
+    }
+</style>
+</head>
+<body class="magazine-body" style="background: #000;">
+
+  <!-- ================= HERO IMMERSIVE SLIDER (SPARSE LAYOUT + GOLD DUST) ================= -->
+  <section class="mag-hero-article">
+    
+    <div class="swiper immersive-swiper" id="articleSwiper">
+      
+      <!-- Action Buttons -->
+      <div class="immersive-actions" style="z-index: 100;">
+        <a href="magazine.html" class="esc-btn" title="Torna al Magazine">ESC</a>
+        <button class="fullscreen-btn pulse-attention" id="fsToggleBtn" title="Schermo Intero">
+          <i class="ri-fullscreen-line" id="fsIcon"></i>
+        </button>
+      </div>
+
+      <div class="swiper-wrapper">
+
+        <!-- SLIDE 1: HORIZONTAL TIMELINE (Moved from Slide 3) -->
+        <section class="swiper-slide immersive-slide cover-layout" style="background: #04060a; display: block; overflow-y: auto;">
+          <img src="file:///C:/Users/alber/.gemini/antigravity-ide/brain/17a27086-1a90-4a6f-8f6b-11b73ae6fece/mercedes_interior_luxury_1785188275448.png" alt="Timeline Background" class="cover-bg" style="opacity: 0.1; filter: grayscale(100%);">
+          <div class="timeline-slide-container" style="padding-top: 100px;">
+            <h2 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; color: #fff; text-align: center;">Cronistoria di un Mito</h2>
+            <p style="color: #cbd5e1; font-size: 1.3rem; margin-bottom: 60px; text-align: center;">Da Oggetto di Culto a Driver Economico</p>
+            
+            <div class="mag-timeline-container">
+              <div class="mag-timeline-line"></div>
+              <div class="mag-timeline-items">
+                <div class="mag-timeline-item">
+                  <div class="mag-timeline-dot"></div>
+                  <div class="mag-timeline-year">1947</div>
+                  <div class="mag-timeline-title">La Leggenda Ferrari</div>
+                  <div class="mag-timeline-text">12 Maggio: Enzo Ferrari fa uscire da Maranello la 125 S. Inizia la Motor Valley.</div>
+                </div>
+                <div class="mag-timeline-item">
+                  <div class="mag-timeline-dot"></div>
+                  <div class="mag-timeline-year">1954</div>
+                  <div class="mag-timeline-title">L'Estetica Italiana</div>
+                  <div class="mag-timeline-text">Il debutto dell'Alfa Romeo Giulietta Spider impone il design nel mondo.</div>
+                </div>
+                <div class="mag-timeline-item">
+                  <div class="mag-timeline-dot"></div>
+                  <div class="mag-timeline-year">1960</div>
+                  <div class="mag-timeline-title">'La Dolce Vita'</div>
+                  <div class="mag-timeline-text">Fellini consacra Roma. La fuoriserie diventa il simbolo globale.</div>
+                </div>
+                <div class="mag-timeline-item">
+                  <div class="mag-timeline-dot"></div>
+                  <div class="mag-timeline-year">1963</div>
+                  <div class="mag-timeline-title">La Sfida Lamborghini</div>
+                  <div class="mag-timeline-text">Nasce a Sant'Agata Bolognese il concetto di supercar estrema.</div>
+                </div>
+                <div class="mag-timeline-item">
+                  <div class="mag-timeline-dot"></div>
+                  <div class="mag-timeline-year">2026</div>
+                  <div class="mag-timeline-title">La Rivoluzione 'Usership'</div>
+                  <div class="mag-timeline-text">Il noleggio di lusso supera i 350mln €. Il mercato passa dalla proprietà all'accesso.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 2: SPLIT SCREEN -->
+        <section class="swiper-slide immersive-slide split-layout">
+          <div class="split-image">
+            <img src="UFFICIO.jpg" alt="Maranello to Asset-Light Brokerage">
+          </div>
+          <div class="split-content" style="z-index: 10;">
+            <h2>Da Maranello all'Asset-Light Brokerage</h2>
+            <p>Dalle officine leggendarie della Motor Valley al nuovo rinascimento del noleggio: l'Italia sta ridefinendo il mercato dell'auto d'élite e creando una nuova classe di imprenditori.</p>
+            <p>C’è una linea sottile e potentissima che unisce il rombo di un motore a 12 cilindri nella pianura padana del 1947 alle coste della Costa Smeralda nel 2026. L’automobile di lusso non è più soltanto un mezzo di trasporto, ma il fulcro di un’esperienza sensoriale irrinunciabile.</p>
+          </div>
+        </section>
+
+
+
+        <!-- SLIDE 3: IL NUOVO PARADIGMA -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; display: flex; align-items: center; justify-content: center;">
+          <img src="PARADIGMA.jpg" alt="Nuovo Paradigma" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1;">
+          
+          <div class="glass-responsive glass-top" style="position: absolute; z-index: 10; top: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); padding: 15px 5%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); text-align: center; box-sizing: border-box;">
+            <h2 style="font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 10px;">Il Nuovo Paradigma: Non Servono Milioni</h2>
+            <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.4; margin-bottom: 10px;">Per decenni si è creduto che per entrare nel business delle auto di lusso servissero capitali enormi e flotte milionarie. Oggi questo paradigma è ufficialmente superato.</p>
+            <p style="color: #cbd5e1; font-size: 1rem; line-height: 1.4;">La vera rivoluzione si chiama <strong>Asset-Light</strong>. Invece di acquistare veicoli soggetti a svalutazione e costi assicurativi, la nuova generazione agisce come <strong>Broker d'Élite</strong>, connettendo la domanda con la "shadow inventory" di partner strategici.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 4: VANTAGGI (ARMONIC LAYOUT) -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <img src="armonic.jpg" alt="Vantaggi Business" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1;">
+          
+          <div class="glass-responsive" style="position: absolute; right: 3%; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px); padding: 35px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 440px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 25px; line-height: 1.2;">Perché questo business trasforma la vita:</h2>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+              <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.5; margin: 0;"><strong>1. Zero Rischio d'Impresa:</strong><br>Niente immobilizzazione di capitali in beni svalutabili o spese strutturali fisse.</p>
+              <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.5; margin: 0;"><strong>2. Margini Straordinari:</strong><br>Ricarichi su noleggi dai 1.500€ ai 5.000€ al giorno generano flussi di cassa ad altissima redditività immediata.</p>
+              <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.5; margin: 0;"><strong>3. Scalabilità Nazionale:</strong><br>Un broker opera ovunque: consegna una McLaren a Milano o una Rolls a Capri tramite uno smartphone e una rete strutturata.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 6: QUOTE -->
+        <section class="swiper-slide immersive-slide cover-layout" style="background: #04060a;">
+          <img src="file:///C:/Users/alber/.gemini/antigravity-ide/brain/17a27086-1a90-4a6f-8f6b-11b73ae6fece/portofino_m_glamour_1785188284391.png" alt="Academy Quote" class="cover-bg" style="opacity: 0.15; filter: grayscale(100%);">
+          <div class="cover-content" style="max-width: 1200px; z-index: 10;">
+            <h3 style="color: var(--accent-primary); font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">Il Catalizzatore del Cambiamento: Itercars Academy</h3>
+            <div class="immersive-quote" style="font-size: 3.5rem; text-align: left; padding: 40px; border-left-width: 8px;">
+              "L'intuizione di fondo è semplice quanto potente: non devi possedere il sogno, devi essere la persona che lo rende accessibile."
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 6: GEOGRAFIA MERCATO (ARMONIC LAYOUT) -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <img src="milano-lambo.jpg?v=new" alt="Geografia del Mercato" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1;">
+          
+          <div class="glass-responsive" style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 10; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px); padding: 35px 45px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 650px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); width: 90%;">
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">La Geografia di un Mercato in Piena Espansione</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">C’è stato un tempo, non troppo lontano, in cui il mito italiano si forgiava nell'acciaio vibrante e nel cuoio cucito a mano. Possedere una di queste fuoriserie era il coronamento di una vita, lo status symbol definitivo, il passaporto per un'esclusiva aristocrazia motoristica.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Oggi, quell'eredità respira ancora a pieni polmoni, ma il paradigma è mutato. Nel 2026, il lusso contemporaneo non si misura più con il possesso, bensì con l'accesso. Da Milano alle scogliere vertiginose della Costiera Amalfitana, l'Italia sta assistendo a un'effervescenza senza precedenti nel mercato del noleggio di auto d'élite. Non è più un mero servizio di mobilità; è la nuova frontiera dell'economia dell'esperienza.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 7: I NUOVI ARTIGIANI DEL LUSSO (ARMONIC LAYOUT) -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <img src="v12.jpg" alt="I Nuovi Artigiani del Lusso" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1;">
+          
+          <div class="glass-responsive" style="position: absolute; left: 5%; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px); padding: 35px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 550px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">I Nuovi Artigiani del Lusso</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">Dietro ogni consegna di un V12 immacolato, c'è un'orchestra di professionisti ibridi. Le posizioni più ambite spaziano dal <strong>Luxury Fleet Manager</strong> all'<strong>Experience Planner</strong> (che disegna itinerari sartoriali in dimore storiche), fino al <strong>Private Relationship Manager</strong> e lo <strong>Chauffeur d'Élite</strong>.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">È un settore fluido che premia l'intelligenza emotiva, l'attitudine al problem solving estremo e l'arte assoluta dell'ospitalità.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 9: FULL IMAGE FFF -->
+        <section class="swiper-slide immersive-slide cover-layout no-gold-dust">
+          <img src="FFF.jpg" alt="Esclusività" class="cover-bg" style="opacity: 1;">
+        </section>
+
+        <!-- SLIDE 10: CTA FINAL -->
+        <section class="swiper-slide immersive-slide cta-layout" style="background: radial-gradient(circle at center, #063f1f 0%, #000000 100%);">
+          <div class="article-cta-box" style="max-width: 600px; z-index: 10;">
+            <i class="ri-graduation-cap-fill" style="font-size: 4rem; color: var(--accent-primary); margin-bottom: 20px; display: block;"></i>
+            <h3 style="font-size: 2.5rem; font-weight: 800;">Diventa un Broker d'Élite</h3>
+            <p style="font-size: 1.2rem; margin-bottom: 40px;">Scopri i segreti dell'Asset-Light Brokerage. Iscriviti alla Itercars Academy e riprendi in mano le chiavi della tua libertà finanziaria.</p>
+            <a href="accademy.html" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.2rem; border-radius: 99px; box-shadow: 0 10px 30px rgba(0, 146, 70, 0.4);">
+              <i class="ri-arrow-right-line"></i> Scopri Itercars Academy
+            </a>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="swiper-pagination"></div>
+      
+      <!-- Navigation Buttons -->
+      <div class="swiper-button-next" style="color: rgba(255,255,255,0.3); right: 20px;"></div>
+      <div class="swiper-button-prev" style="color: rgba(255,255,255,0.3); left: 20px;"></div>
+    </div>
+  </section>
+
+  <!-- ================= TRADITIONAL ARTICLE TEXT ================= -->
+  <article class="article-container" style="max-width: 900px; margin: 0 auto; padding: 60px 20px 100px 20px; position: relative; z-index: 5;">
+    
+    <div style="text-align: center; margin-bottom: 50px;">
+      <h1 class="article-title" style="font-size: 3.5rem;">L'Impero Silenzioso del Lusso su Quattro Ruote</h1>
+      <p style="color: var(--text-muted); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">Special Report | L'Industria dell'Eccellenza</p>
+      <div style="width: 60px; height: 3px; background: var(--accent-primary); margin: 20px auto;"></div>
+    </div>
+
+    <!-- MAIN ARTICLE IMAGE & ACTIONS -->
+    <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <img src="milano-lambo.jpg?v=new" alt="Milano Lambo" style="width: 100%; height: auto; max-height: 500px; display: block; object-fit: cover;">
+      
+      <!-- Social & Like Actions -->
+      <div style="position: absolute; bottom: 20px; right: 20px; display: flex; gap: 15px; align-items: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);">
+        
+        <!-- Like Button -->
+        <button id="likeBtn" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 0; outline: none; transition: all 0.3s;">
+          <i class="ri-heart-3-line" id="heartIcon"></i>
+          <span id="likeCount" style="font-weight: 600; font-family: 'Inter', sans-serif; font-size: 1rem;">124</span>
+        </button>
+        
+        <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+        
+        <!-- Share Button -->
+        <button id="shareBtn" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 0; outline: none; transition: all 0.3s;" title="Condividi">
+          <i class="ri-share-forward-line"></i>
+          <span style="font-weight: 600; font-size: 0.9rem; font-family: 'Inter', sans-serif;">Condividi</span>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="article-content" style="font-size: 1.1rem; line-height: 1.8;">
+      <p><em>Dalle officine leggendarie della Motor Valley al nuovo rinascimento dell'Asset-Light Brokerage: come l'Italia sta ridefinendo il mercato dell'auto d'élite e creando una nuova classe di imprenditori.</em></p>
+      <p style="margin-bottom: 40px;"><strong>Di Redazione Special Reports</strong></p>
+
+      <p>C’è una linea sottile e potentissima che unisce il rombo di un motore a dodici cilindri nella pianura padana del 1947 alle coste dorate della Costa Smeralda nel 2026. È la linea dell’ossessione italiana per la bellezza in movimento. Tuttavia, ciò che un tempo era un privilegio elitario riservato a pochissimi facoltosi proprietari, oggi si è trasformato in uno dei mercati più redditizi e in rapida espansione del Paese: il noleggio di alta gamma e l'intermediazione d'élite.</p>
+      
+      <p>In un’Italia che accoglie oltre 60 milioni di visitatori all'anno — con un segmento Luxury Travel in crescita costante ad un tasso annuo composto (CAGR) superiore al 9% — l’automobile di lusso non è più soltanto un mezzo di trasporto, ma il fulcro di un’esperienza sensoriale irrinunciabile.</p>
+
+      <h2>Il Nuovo Paradigma: Non Servono Milioni per Dominare il Mercato</h2>
+      <p>Per decenni, l'errore più comune di chi guardava a questo settore era credere che per entrare nel business delle auto di lusso servissero capitali enormi, garage sterminati e flotte di proprietà dal valore di milioni di euro. Oggi questo paradigma è ufficialmente superato.</p>
+      
+      <p>La vera rivoluzione dell'economia contemporanea si chiama <strong>Asset-Light</strong> (struttura a basso capitale di rischio). Invece di acquistare veicoli soggetti a svalutazione, costi assicurativi astronomici e manutenzioni complesse, la nuova generazione di imprenditori agisce come <strong>Broker d'Élite</strong>: orchestratori di mercato capaci di connettere la domanda ad altissima capacità di spesa (turisti VIP, HNWI, grandi eventi) con la "shadow inventory" (flotte private inutilizzate, concessionari, partner strategici).</p>
+
+      <h2>I Numeri del Mercato in Italia</h2>
+      <table class="article-table">
+        <thead>
+          <tr>
+            <th>Indicatore</th>
+            <th>Valore di Mercato (Stima Italia)</th>
+            <th>Implicazione Imprenditoriale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Spesa Media giornaliera Clientela VIP</strong></td>
+            <td>€ 1.800 – € 4.500</td>
+            <td>Alta redditività per singola operazione</td>
+          </tr>
+          <tr>
+            <td><strong>Tasso di Crescita Turismo di Lusso</strong></td>
+            <td>+12% su base annua</td>
+            <td>Domanda costante e superiore all'offerta</td>
+          </tr>
+          <tr>
+            <td><strong>Modello Operativo Consigliato</strong></td>
+            <td>Brokerage Asset-Light</td>
+            <td>Ritorno sull'investimento rapido, overheads minimi</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>La Geografia di un Mercato in Piena Espansione</h2>
+      <p>C’è stato un tempo, non troppo lontano, in cui il mito italiano si forgiava nell'acciaio vibrante e nel cuoio cucito a mano. Possedere una di queste fuoriserie era il coronamento di una vita, lo status symbol definitivo, il passaporto per un'esclusiva aristocrazia motoristica.</p>
+
+      <p>Oggi, quell'eredità respira ancora a pieni polmoni, ma il paradigma è mutato. Nel 2026, il lusso contemporaneo non si misura più con il possesso, bensì con l'accesso. Da Milano alle scogliere vertiginose della Costiera Amalfitana, l'Italia sta assistendo a un'effervescenza senza precedenti nel mercato del noleggio di auto d'élite. Non è più un mero servizio di mobilità; è la nuova frontiera dell'economia dell'esperienza.</p>
+
+      <h2>I Nuovi Artigiani del Lusso: Opportunità di Carriera</h2>
+      <p>Dietro il rombo di un motore V12 che viene consegnato immacolato all'ingresso di un Grand Hotel, c'è un'orchestra invisibile di professionisti. Le opportunità di lavoro stanno fiorendo in tutta Italia:</p>
+      
+      <table class="article-table">
+        <thead>
+          <tr>
+            <th>Profilo Professionale</th>
+            <th>Focus Operativo</th>
+            <th>Competenze Richieste</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>L’Architetto delle Esperienze (Experience Planner)</strong></td>
+            <td>Disegna itinerari sartoriali, combinando noleggio con degustazioni e soggiorni storici.</td>
+            <td>Creatività, networking locale eccellente, empatia.</td>
+          </tr>
+          <tr>
+            <td><strong>Curatore della Flotta (Fleet Curator)</strong></td>
+            <td>Responsabilità meccanica ed estetica dei veicoli, anticipazione dei trend di mercato.</td>
+            <td>Conoscenza motoristica, attenzione ai dettagli, gestione budget.</td>
+          </tr>
+          <tr>
+            <td><strong>Private Relationship Manager</strong></td>
+            <td>Il volto dell'azienda per i clienti top. Risolve l'impossibile h24.</td>
+            <td>Problem solving, diplomazia, lingue straniere.</td>
+          </tr>
+          <tr>
+            <td><strong>Chauffeur d'Élite / Pilota Privato</strong></td>
+            <td>Non un autista, ma una guardia del corpo e un cicerone raffinato.</td>
+            <td>Etichetta, sicurezza, guida sportiva e sicura, discrezione.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>L'Orizzonte</h2>
+      <p>L'Italia, culla dell'arte e della velocità, ha trovato nel noleggio di lusso la perfetta sintesi tra il suo glorioso passato automobilistico e le esigenze fluide del XXI secolo.</p>
+
+      <p>Per gli imprenditori e i professionisti in cerca di una svolta, questo mercato non offre semplicemente un posto di lavoro, ma la chiave d'accesso a un club esclusivo. È un invito a mettersi al volante di un'industria in cui la bellezza, l'adrenalina e il servizio impeccabile corrono veloci, verso un futuro che non ha alcuna intenzione di frenare.</p>
+      
+      <div style="margin-top: 60px; text-align: center;">
+        <p style="font-size: 1.3rem;"><strong>Entra nell'Élite del Brokerage Automobilistico</strong></p>
+        <a href="accademy.html" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.2rem; border-radius: 99px; box-shadow: 0 10px 30px rgba(0, 146, 70, 0.4); display: inline-block; margin-top: 15px;">
+          <i class="ri-arrow-right-line"></i> Scopri Itercars Academy
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <!-- Swiper JS e Logica Fullscreen Ibrida -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  
+  <script>
+    // Generatore di Scintille d'Oro (Gold Dust)
+    const slides = document.querySelectorAll('.immersive-slide:not(.no-gold-dust)');
+    slides.forEach(slide => {
+      const container = document.createElement('div');
+      container.className = 'gold-dust-container';
+      for(let i=0; i<35; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'gold-spark';
+        spark.style.left = Math.random() * 100 + '%';
+        spark.style.animationDelay = (Math.random() * 15) + 's';
+        spark.style.animationDuration = (10 + Math.random() * 15) + 's';
+        const size = (Math.random() * 2 + 1) + 'px';
+        spark.style.width = size;
+        spark.style.height = size;
+        container.appendChild(spark);
+      }
+      slide.appendChild(container);
+    });
+
+    var articleSwiper = new Swiper('#articleSwiper', {
+      direction: 'horizontal', 
+      slidesPerView: 1,
+      spaceBetween: 0,
+      keyboard: {
+        enabled: true, 
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        type: 'progressbar',
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      on: {
+        slideChange: function () {
+          updateFsButtonState();
+        }
+      }
+    });
+
+    const fsBtn = document.getElementById('fsToggleBtn');
+    const swiperContainer = document.getElementById('articleSwiper');
+    const fsIcon = document.getElementById('fsIcon');
+
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        if (swiperContainer.requestFullscreen) {
+          swiperContainer.requestFullscreen();
+        } else if (swiperContainer.webkitRequestFullscreen) { 
+          swiperContainer.webkitRequestFullscreen();
+        } else if (swiperContainer.msRequestFullscreen) { 
+          swiperContainer.msRequestFullscreen();
+        }
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { 
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { 
+          document.msExitFullscreen();
+        }
+      }
+    });
+
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+    document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+
+    function updateFullscreenIcon() {
+      if (document.fullscreenElement) {
+        fsIcon.classList.remove('ri-fullscreen-line');
+        fsIcon.classList.add('ri-fullscreen-exit-line');
+        fsBtn.style.background = 'rgba(239, 68, 68, 0.4)';
+        fsBtn.style.borderColor = '#ef4444';
+      } else {
+        fsIcon.classList.remove('ri-fullscreen-exit-line');
+        fsIcon.classList.add('ri-fullscreen-line');
+        fsBtn.style.background = 'transparent';
+        fsBtn.style.borderColor = 'transparent';
+      }
+      updateFsButtonState();
+    }
+
+    function updateFsButtonState() {
+      if (document.fullscreenElement) {
+        fsBtn.classList.remove('pulse-attention', 'show-always');
+      } else {
+        if (articleSwiper.activeIndex === 0) {
+          fsBtn.classList.add('pulse-attention');
+          fsBtn.classList.remove('show-always');
+        } else {
+          fsBtn.classList.remove('pulse-attention');
+          fsBtn.classList.add('show-always');
+        }
+      }
+    }
+
+    // --- Like System ---
+    const likeBtn = document.getElementById('likeBtn');
+    const heartIcon = document.getElementById('heartIcon');
+    const likeCountSpan = document.getElementById('likeCount');
+    
+    if (likeBtn && heartIcon && likeCountSpan) {
+      // Inizializza contatore da localStorage (memoria) o valore default
+      let currentLikes = localStorage.getItem('article_likes_milan') ? parseInt(localStorage.getItem('article_likes_milan')) : 124;
+      let hasLiked = localStorage.getItem('user_has_liked_milan') === 'true';
+      
+      likeCountSpan.textContent = currentLikes;
+      if (hasLiked) {
+        heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill');
+        heartIcon.style.color = '#ef4444'; // Red
+      }
+
+      likeBtn.addEventListener('click', () => {
+        if (!hasLiked) {
+          currentLikes++;
+          hasLiked = true;
+          heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill');
+          heartIcon.style.color = '#ef4444';
+        } else {
+          currentLikes--;
+          hasLiked = false;
+          heartIcon.classList.replace('ri-heart-3-fill', 'ri-heart-3-line');
+          heartIcon.style.color = '#fff';
+        }
+        likeCountSpan.textContent = currentLikes;
+        localStorage.setItem('article_likes_milan', currentLikes);
+        localStorage.setItem('user_has_liked_milan', hasLiked);
+      });
+    }
+
+    // --- Share Button ---
+    const shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', () => {
+        if (navigator.share) {
+          navigator.share({
+            title: "L'Impero Silenzioso del Lusso su Quattro Ruote",
+            text: "Scopri le nuove dinamiche del mercato del noleggio di lusso a Milano.",
+            url: window.location.href
+          }).catch(err => console.log('Condivisione fallita:', err));
+        } else {
+          alert("Copia questo link per condividere l'articolo:\n" + window.location.href);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
