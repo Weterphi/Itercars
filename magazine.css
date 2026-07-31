@@ -1130,3 +1130,54 @@
   z-index: 5;
   padding: 40px;
 }
+
+/* ==========================================================================
+   MOBILE HERO SLIDER OVERRIDES (MAGAZINE)
+   ========================================================================== */
+@media (max-width: 768px) {
+  .mag-hero-section {
+    height: auto;
+    min-height: auto;
+  }
+  .mag-swiper-container {
+    height: auto;
+  }
+  .mag-slide {
+    padding: 0;
+    flex-direction: column;
+    align-items: stretch;
+    height: auto;
+  }
+  .mag-slide-bg {
+    position: relative;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    transform: none !important; /* Disabilita lo zoom effect su mobile per mantenere la foto intera */
+  }
+  .swiper-slide-active .mag-slide-bg {
+    transform: none;
+  }
+  .mag-slide-overlay {
+    display: none; /* Rimuove l'ombra sopra la foto dato che il testo ora e' sotto */
+  }
+  .mag-slide-content {
+    position: relative;
+    padding: 30px 20px;
+    background: #04060a; /* Sfondo scuro per il testo */
+  }
+  .mag-slide-title {
+    font-size: 2rem;
+    text-shadow: none;
+  }
+  .mag-slide-desc {
+    font-size: 1.05rem;
+    margin-bottom: 25px;
+    text-shadow: none;
+  }
+  .mag-slide-btn {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
+}
