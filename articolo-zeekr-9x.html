@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeekr 9X: L'Egemone dell'Asfalto | ITERCARS Magazine</title>
+  <meta name="description" content="La strada ha sempre chiesto risultati tangibili, presenza scenica e innovazione spietata. La Zeekr 9X ha risposto presente all'appello.">
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="Zeekr 9X: L'Egemone dell'Asfalto | ITERCARS Magazine">
+  <meta property="og:description" content="La strada ha sempre chiesto risultati tangibili, presenza scenica e innovazione spietata. La Zeekr 9X ha risposto presente all'appello.">
+  <meta property="og:image" content="zeeker 9x.jpg">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="index.css?v=50">
+  <link rel="stylesheet" href="magazine.css">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <style>
+    .glass-responsive {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    /* Scrollbar minimalista per il box di testo */
+    .glass-responsive::-webkit-scrollbar {
+      width: 6px;
+    }
+    .glass-responsive::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05); 
+    }
+    .glass-responsive::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2); 
+      border-radius: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .glass-responsive { left: 50% !important; right: auto !important; transform: translate(-50%, -50%) !important; width: 92% !important; max-width: 100% !important; padding: 20px !important; text-align: center !important; border-radius: 12px !important; }
+      .glass-responsive.glass-top { top: 0 !important; left: 0 !important; width: 100% !important; transform: none !important; border-radius: 0 !important; padding: 15px 5% !important; }
+      .glass-responsive h2 { font-size: 1.6rem !important; margin-bottom: 15px !important; }
+      .glass-responsive p { font-size: 0.95rem !important; }
+      .article-title { font-size: 2.2rem !important; }
+    }
+    .pseudo-fullscreen { position: fixed !important; top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important; z-index: 999999 !important; background: #000 !important; margin: 0 !important; }
+  </style>
+</head>
+<body class="magazine-body" style="background: #000;">
+  
+  <section class="mag-hero-article">
+    <div class="swiper immersive-swiper" id="articleSwiper">
+      <div class="immersive-actions" style="z-index: 100;">
+        <a href="magazine.html" class="esc-btn" title="Torna al Magazine">ESC</a>
+        <button class="fullscreen-btn pulse-attention" id="fsToggleBtn" title="Schermo Intero">
+          <i class="ri-fullscreen-line" id="fsIcon"></i>
+        </button>
+      </div>
+      <div class="swiper-wrapper">
+      
+        <!-- SLIDE 1: Cover -->
+        <section class="swiper-slide immersive-slide cover-layout" style="background: #04060a;">
+          <img src="zeeker 9x.jpg" alt="Zeekr 9X" class="cover-bg">
+          <div class="cover-overlay"></div>
+          <div class="cover-content" style="text-align: center; max-width: 900px; padding: 0 5%; z-index:10;">
+            <span class="mag-slide-category" style="background: rgba(255, 50, 50, 0.2); color: #ff5555; border: 1px solid rgba(255, 50, 50, 0.4); border-radius: 99px; padding: 5px 15px; font-weight: bold; margin-bottom: 20px; display: inline-block;">NEW RELEASE</span>
+            <h1 class="article-title" style="font-size: 3.5rem; font-weight: 800; color: #fff; margin-bottom: 15px;">Zeekr 9X: L'Egemone dell'Asfalto</h1>
+            <p style="font-size: 1.4rem; color: #cbd5e1; margin-bottom: 30px;">che Riscrive le Regole del Gioco</p>
+            <div class="article-meta" style="color: #94a3b8; font-size: 0.95rem; display: flex; justify-content: center; gap: 20px;">
+              <span><i class="ri-user-line"></i> Di Itercars</span>
+              <span><i class="ri-calendar-line"></i> 31 Luglio 2026</span>
+              <span><i class="ri-time-line"></i> 8 min read</span>
+            </div>
+            <div class="swipe-indicator" style="margin-top: 50px; animation: bounce 2s infinite;">
+              <i class="ri-arrow-down-line" style="font-size: 2rem; color: rgba(255,255,255,0.5);"></i>
+            </div>
+          </div>
+        </section>
+        
+        <!-- SLIDE 2: SPLIT SCREEN -->
+        <section class="swiper-slide immersive-slide split-layout">
+          <div class="split-image">
+            <img src="zeekr_ai_grille.png" alt="Zeekr Grille">
+          </div>
+          <div class="split-content" style="z-index: 10;">
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 25px; line-height: 1.2;">Oltre le Vecchie Gerarchie</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">Dimenticate le vecchie gerarchie, quelle che per decenni hanno dettato legge nei salotti buoni dell'automobilismo internazionale. Per generazioni, la formula del lusso su quattro ruote è stata declinata rigorosamente in tedesco o in inglese.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Ma la strada non guarda in faccia al blasone, guarda ai risultati. Il nuovo heavyweight del settore è appena atterrato sul suolo europeo e non ha la minima intenzione di chiedere il permesso per sedersi al tavolo dei grandi.</p>
+          </div>
+        </section>
+        
+        <!-- SLIDE 3: PARADIGMA (TOP GLASS) -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; display: flex; align-items: center; justify-content: center;">
+          <img src="zeekr_ai_action.png" alt="Zeekr Super Hybrid" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4); z-index: 1;">
+          <div class="glass-responsive glass-top" style="position: absolute; z-index: 10; top: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px); padding: 25px 5%; border-bottom: 1px solid rgba(255, 255, 255, 0.1); text-align: center; box-sizing: border-box;">
+            <h2 style="font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 10px;">897 Cavalli di Pura Violenza</h2>
+            <p style="color: #cbd5e1; font-size: 1.1rem; line-height: 1.6; max-width: 1000px; margin: 0 auto;">Quando si parla di numeri, la 9X smonta la vecchia narrativa secondo cui le dimensioni massicce debbano necessariamente sacrificare le prestazioni brute. Sotto quella scocca imponente si nasconde una centrale elettrica di pura violenza: un sistema Super Hybrid EREV dove due motori elettrici erogano una potenza combinata di 897 cavalli.</p>
+          </div>
+        </section>
+        
+        <!-- SLIDE 4: ARMONIC LAYOUT RIGHT (BULLET POINTS) -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <img src="zeekr_ai_sunset.png" alt="Zeekr Charging" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: 1;">
+          <div class="glass-responsive" style="position: absolute; right: 3%; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px); padding: 35px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 440px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 25px; line-height: 1.2;">Un Pugno di Ferro in Guanto di Velluto</h2>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+              <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.5; margin: 0;"><strong>Accelerazione Bruciante:</strong><br>Sradica la sua stessa massa da 0 a 100 km/h in appena 4,1 secondi.</p>
+              <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.5; margin: 0;"><strong>Architettura 900 Volt:</strong><br>Dal 10% all'80% di batteria in soli 9 minuti e mezzo. Il tempo di un caffè espresso.</p>
+              <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.5; margin: 0;"><strong>Autonomia Implacabile:</strong><br>Ciclo combinato fino a 737 chilometri per macinare distanze interregionali senza ansia.</p>
+            </div>
+          </div>
+        </section>
+        
+        <!-- SLIDE 5: QUOTE -->
+        <section class="swiper-slide immersive-slide cover-layout" style="background: #04060a;">
+          <img src="zeekr_ai_grille.png" alt="Quote Background" class="cover-bg" style="opacity: 0.15; filter: grayscale(100%);">
+          <div class="cover-content" style="max-width: 1200px; z-index: 10;">
+            <h3 style="color: var(--accent-primary); font-size: 1.5rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">L'Egemone dell'Asfalto</h3>
+            <div class="immersive-quote" style="font-size: 3rem; text-align: left; padding: 40px; border-left-width: 8px;">
+              "La strada ha sempre chiesto risultati tangibili, presenza scenica e innovazione spietata. La Zeekr 9X ha risposto presente all'appello."
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 6: ARMONIC LAYOUT LEFT (INTERIOR) -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <img src="zeekr_ai_interior.png" alt="Zeekr Interior" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: left center; z-index: 1;">
+          <div class="glass-responsive" style="position: absolute; left: 5%; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(12px); padding: 35px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 550px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.5);">
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">Lounge VIP & Silicon Valley</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">I sedili "Nuvola Flottante" si trasformano in letti di prima classe. L'abitacolo è dominato da un doppio display OLED 3.5K e un mastodontico HUD in realtà aumentata da 47 pollici.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Un cervello elettronico con doppi chip Snapdragon 8295 orchestra l'infotainment, mentre l'isolamento acustico è squarciato solo dall'impianto audio Naim da 4000 Watt.</p>
+          </div>
+        </section>
+
+
+      </div>
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+      <!-- Add Navigation -->
+      <div class="swiper-button-next" style="color: rgba(255,255,255,0.3); right: 20px;"></div>
+      <div class="swiper-button-prev" style="color: rgba(255,255,255,0.3); left: 20px;"></div>
+    </div>
+  </section>
+
+
+  
+  
+  <!-- ================= TRADITIONAL ARTICLE TEXT ================= -->
+  <article class="article-container" style="max-width: 900px; margin: 0 auto; padding: 60px 20px 100px 20px; position: relative; z-index: 5;">
+    
+    <div style="text-align: center; margin-bottom: 50px;">
+      <h1 class="article-title" style="font-size: 3.5rem;">Zeekr 9X: L'Egemone dell'Asfalto</h1>
+      <p style="color: var(--text-muted); font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">New Release | L'Automobilismo del Futuro</p>
+      <div style="width: 60px; height: 3px; background: var(--accent-primary); margin: 20px auto;"></div>
+    </div>
+
+    <!-- MAIN ARTICLE IMAGE & ACTIONS -->
+    <div style="position: relative; border-radius: 12px; overflow: hidden; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+      <img src="zeeker 9x.jpg" alt="Zeekr 9X" style="width: 100%; height: auto; max-height: 500px; display: block; object-fit: cover;">
+      
+      <!-- Social & Like Actions -->
+      <div style="position: absolute; bottom: 20px; right: 20px; display: flex; gap: 15px; align-items: center; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); padding: 8px 16px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.1);">
+        
+        <!-- Like Button -->
+        <button id="likeBtn" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 0; outline: none; transition: all 0.3s;">
+          <i class="ri-heart-3-line" id="heartIcon"></i>
+          <span id="likeCount" style="font-weight: 600; font-family: 'Inter', sans-serif; font-size: 1rem;">198</span>
+        </button>
+        
+        <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.2);"></div>
+        
+        <!-- Share Button -->
+        <button id="shareBtn" style="background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 0; outline: none; transition: all 0.3s;" title="Condividi">
+          <i class="ri-share-forward-line"></i>
+          <span style="font-weight: 600; font-size: 0.9rem; font-family: 'Inter', sans-serif;">Condividi</span>
+        </button>
+
+      </div>
+    </div>
+
+    <div class="article-content" style="font-size: 1.15rem; line-height: 1.8;">
+      <p style="margin-bottom: 40px;"><strong>Di Itercars</strong> - <em>31 Luglio 2026</em></p>
+
+      <p style="color: #e2e8f0; margin-bottom: 25px;">
+        Dimenticate le vecchie gerarchie, quelle che per decenni hanno dettato legge nei salotti buoni dell'automobilismo internazionale. Per generazioni, la formula del lusso su quattro ruote è stata una liturgia immutabile, declinata rigorosamente in tedesco o in inglese. Bastava sfoggiare tonnellate di pelle trapuntata a mano, piallature di radica e un possente motore V8 che bruciava ottani come se il domani non esistesse, per assicurarsi il rispetto in strada e i margini nei bilanci. Ma la strada non guarda in faccia al blasone, guarda ai risultati. E oggi, la geografia del potere automobilistico sta subendo un terremoto di magnitudo altissima.
+      </p>
+
+      <p style="color: #e2e8f0; margin-bottom: 40px;">
+        Il nuovo heavyweight del settore è appena atterrato sul suolo europeo e non ha la minima intenzione di chiedere il permesso per sedersi al tavolo dei grandi. Zeekr, l'asso pigliatutto di Geely, ha deciso di calare il carico da novanta lanciando la Zeekr 9X. Non stiamo parlando del solito SUV elettrico di transizione, nato per compiacere le normative sulle emissioni. Ci troviamo di fronte a un leviatano di oltre cinque metri di lunghezza e quasi tre tonnellate di stazza, un manifesto di superiorità tecnologica che punta dritto alla giugulare di corazzate storiche come la Range Rover, la BMW X7 o la Mercedes Classe G. È alta ingegneria travestita da abito sartoriale, con un'attitudine puramente da strada e la spavalderia di chi sa di avere le carte vincenti in mano.
+      </p>
+
+      <h2 style="font-size: 2rem; margin-top: 50px; margin-bottom: 25px; color: #fff;">Pura Violenza Ingegneristica</h2>
+      
+      <p style="color: #e2e8f0; margin-bottom: 25px;">
+        Quando si parla di numeri, la 9X smonta pezzo per pezzo la vecchia narrativa secondo cui le dimensioni massicce debbano necessariamente sacrificare le prestazioni brute. Sotto quella scocca imponente si nasconde una centrale elettrica di pura violenza. La configurazione scelta per dominare l'Europa è un sistema Super Hybrid EREV, ovvero un veicolo elettrico ad autonomia estesa. In termini pratici, questo significa che sotto il cofano lavora un motore termico da 2.0 litri turbo che non ha il compito di far girare le ruote, ma agisce esclusivamente come un generatore instancabile per alimentare il pacco batterie. La vera spinta, la trazione vera e propria che morde l'asfalto, è affidata a due motori elettrici che erogano una potenza combinata di 897 cavalli.
+      </p>
+
+      <p style="color: #e2e8f0; margin-bottom: 40px;">
+        Stiamo parlando di una brutalità ingegneristica che si traduce in un pugno di ferro in guanto di velluto. Quest'auto sradica la sua stessa massa portandoti da zero a cento chilometri orari in appena 4,1 secondi. È uno scatto bruciante da semaforo che ridicolizza supercar ben più blasonate e leggere, ma tu lo stai eseguendo comodamente sprofondato in un salotto insonorizzato. E per chi vive nel terrore dell'ansia da ricarica, la 9X risponde con un'architettura elettrica a 900 Volt che cambia letteralmente il modo in cui percepiamo il tempo. Attaccandosi a una colonnina ultra-rapida, il pacco batterie passa dal dieci all'ottanta percento in soli nove minuti e mezzo. È il tempo di un caffè espresso, di una telefonata veloce per chiudere un deal, e sei di nuovo in pista, supportato da un'autonomia complessiva nel ciclo combinato che tocca i 737 chilometri. Puoi macinare distanze interregionali senza mai dover guardare con ansia l'indicatore sul cruscotto.
+      </p>
+      
+      <img src="zeekr_ai_grille.png" alt="Zeekr AI Grille" style="width: 100%; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+
+      <h2 style="font-size: 2rem; margin-top: 50px; margin-bottom: 25px; color: #fff;">Lounge VIP & Silicon Valley</h2>
+
+      <p style="color: #e2e8f0; margin-bottom: 25px;">
+        Aprire le portiere di questa vettura significa varcare la soglia di un mondo dove i vecchi standard del lusso sono stati piallati e ricostruiti da zero. Il centro stile svedese ha concepito un abitacolo che è la fusione perfetta tra una lounge VIP esclusiva e un hub operativo della Silicon Valley. La configurazione a sei posti, disposti su tre file, offre uno spazio vitale immenso. Guidare o essere guidati diventa un'esperienza visiva e sensoriale totale. La plancia è dominata da un doppio display OLED con risoluzione 3.5K, mentre i passeggeri posteriori godono di un monitor da 17 pollici che scende elegantemente dal tetto. Ma è chi siede al volante a godere del pezzo forte: un mastodontico Head-Up Display in realtà aumentata da 47 pollici che proietta ogni singola informazione vitale, dalle traiettorie del navigatore agli ostacoli, direttamente sul parabrezza, fondendo il mondo digitale con l'asfalto reale.
+      </p>
+      
+      <p style="color: #e2e8f0; margin-bottom: 40px;">
+        I sedili, ribattezzati non a caso "Nuvola Flottante", sono veri e propri troni dotati di riscaldamento, ventilazione e funzioni di massaggio avanzate, permettendo a chi viaggia nella seconda fila di reclinare la seduta fino a trasformarla in un letto di prima classe. L'isolamento acustico è degno di uno studio di registrazione, un silenzio di tomba che viene squarciato, solo quando lo decidi tu, da un impianto audio Naim da quasi quattromila Watt e 32 altoparlanti, capace di far vibrare la cassa toracica. A orchestrare tutta questa tecnologia c'è un cervello elettronico spaventoso, alimentato da doppi chip Qualcomm Snapdragon 8295 per l'infotainment e processori Nvidia Drive Thor dedicati esclusivamente alla gestione fluida e sicura della guida autonoma. Zero ritardi, zero incertezze, solo pura performance di calcolo.
+      </p>
+
+      <img src="zeekr_ai_interior.png" alt="Zeekr AI Interior" style="width: 100%; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+
+      <h2 style="font-size: 2rem; margin-top: 50px; margin-bottom: 25px; color: #fff;">Un Asset-Light Game Changer</h2>
+
+      <p style="color: #e2e8f0; margin-bottom: 25px;">
+        È proprio qui, analizzando l'impatto sul mercato, che la questione si fa tremendamente seria e cambia le dinamiche del business. Un mezzo con queste specifiche non è solo l'ennesimo status symbol per ricchi annoiati; è uno strumento capace di riscrivere le regole del brokering automobilistico di altissimo livello. Quando si opera nel mercato del noleggio di lusso e dell'intermediazione, lavorare in maniera intelligente significa massimizzare i profitti minimizzando i costi fissi. L'approccio asset-light è la chiave per sopravvivere e dominare.
+      </p>
+      
+      <p style="color: #e2e8f0; margin-bottom: 40px;">
+        Immaginate il potenziale di avere una Zeekr 9X posizionata strategicamente nel proprio shadow inventory. Non serve immobilizzare capitali enormi per riempire un autosalone fisico; basta avere la disponibilità virtuale, la garanzia di poter procurare questo specifico modello in tempi record. Quando il cliente di fascia alta, il CEO o l'artista di turno si stanca delle solite ammiraglie tedesche e cerca il vero game-changer per fare il suo ingresso in scena, questa è l'arma definitiva da sfoderare. Offrire una 9X significa garantire ai propri clienti non solo un veicolo, ma un'esperienza che unisce l'hype del prodotto rivoluzionario, le prestazioni di un'hypercar e il comfort di un jet privato, con un rapporto qualità-prezzo che attualmente sta facendo venire i sudori freddi ai consigli di amministrazione di mezza Europa.
+      </p>
+      
+      <img src="zeekr_ai_sunset.png" alt="Zeekr AI Sunset" style="width: 100%; border-radius: 12px; margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+
+      <p style="color: #e2e8f0; margin-bottom: 25px;">
+        La strada ha sempre chiesto risultati tangibili, presenza scenica e innovazione spietata. La Zeekr 9X ha risposto presente all'appello, entrando in scena con la forza di un uragano e piazzando l'asticella a un'altezza vertiginosa. Le vecchie case automobilistiche sono avvisate: vivere di rendita sulla propria storia non basta più. Il futuro è già parcheggiato qui fuori, e ha un aspetto formidabile.
+      </p>
+      
+      <div style="margin-top: 60px; text-align: center;">
+        <a href="magazine.html" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.2rem; border-radius: 99px; box-shadow: 0 10px 30px rgba(0, 146, 70, 0.4); display: inline-block;">
+          <i class="ri-arrow-left-line"></i> Torna al Magazine
+        </a>
+      </div>
+
+    </div>
+  </article>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <script>
+    
+    // Generatore di Scintille d'Oro (Gold Dust)
+    const slides = document.querySelectorAll('.immersive-slide:not(.no-gold-dust)');
+    slides.forEach(slide => {
+      const container = document.createElement('div');
+      container.className = 'gold-dust-container';
+      for(let i=0; i<35; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'gold-spark';
+        spark.style.left = Math.random() * 100 + '%';
+        spark.style.animationDelay = (Math.random() * 15) + 's';
+        spark.style.animationDuration = (10 + Math.random() * 15) + 's';
+        const size = (Math.random() * 2 + 1) + 'px';
+        spark.style.width = size;
+        spark.style.height = size;
+        container.appendChild(spark);
+      }
+      slide.appendChild(container);
+    });
+
+    var articleSwiper = new Swiper('#articleSwiper', {
+      direction: 'horizontal', slidesPerView: 1, spaceBetween: 0,
+      keyboard: { enabled: true },
+      pagination: { el: '.swiper-pagination', type: 'progressbar' },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      on: { slideChange: function () { updateFsButtonState(); } }
+    });
+    const fsBtn = document.getElementById('fsToggleBtn');
+    const swiperContainer = document.getElementById('articleSwiper');
+    const fsIcon = document.getElementById('fsIcon');
+    
+    fsBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        if (swiperContainer.requestFullscreen) { swiperContainer.requestFullscreen();
+        } else if (swiperContainer.webkitRequestFullscreen) { swiperContainer.webkitRequestFullscreen();
+        } else if (swiperContainer.msRequestFullscreen) { swiperContainer.msRequestFullscreen(); }
+      } else {
+        if (document.exitFullscreen) { document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+      }
+    });
+    function updateFullscreenIcon() {
+      if (document.fullscreenElement) {
+        fsIcon.classList.remove('ri-fullscreen-line'); fsIcon.classList.add('ri-fullscreen-exit-line');
+        fsBtn.style.background = 'rgba(239, 68, 68, 0.4)'; fsBtn.style.borderColor = '#ef4444';
+      } else {
+        fsIcon.classList.remove('ri-fullscreen-exit-line'); fsIcon.classList.add('ri-fullscreen-line');
+        fsBtn.style.background = 'transparent'; fsBtn.style.borderColor = 'transparent';
+      }
+      updateFsButtonState();
+    }
+    document.addEventListener('fullscreenchange', updateFullscreenIcon);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+    document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+    function updateFsButtonState() {
+      if (document.fullscreenElement) {
+        fsBtn.classList.remove('pulse-attention', 'show-always');
+      } else {
+        if (articleSwiper.activeIndex === 0) { fsBtn.classList.add('pulse-attention'); fsBtn.classList.remove('show-always'); }
+        else { fsBtn.classList.remove('pulse-attention'); fsBtn.classList.add('show-always'); }
+      }
+    }
+    const likeBtn = document.getElementById('likeBtn');
+    const heartIcon = document.getElementById('heartIcon');
+    const likeCountSpan = document.getElementById('likeCount');
+    if (likeBtn && heartIcon && likeCountSpan) {
+      let currentLikes = localStorage.getItem('article_likes_zeekr') ? parseInt(localStorage.getItem('article_likes_zeekr')) : 198;
+      let hasLiked = localStorage.getItem('user_has_liked_zeekr') === 'true';
+      likeCountSpan.textContent = currentLikes;
+      if (hasLiked) { heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill'); heartIcon.style.color = '#ef4444'; }
+      likeBtn.addEventListener('click', () => {
+        if (!hasLiked) { currentLikes++; hasLiked = true; localStorage.setItem('user_has_liked_zeekr', 'true'); heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill'); heartIcon.style.color = '#ef4444'; }
+        else { currentLikes--; hasLiked = false; localStorage.setItem('user_has_liked_zeekr', 'false'); heartIcon.classList.replace('ri-heart-3-fill', 'ri-heart-3-line'); heartIcon.style.color = '#fff'; }
+        likeCountSpan.textContent = currentLikes; localStorage.setItem('article_likes_zeekr', currentLikes);
+      });
+    }
+    const shareBtn = document.getElementById('shareBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async () => {
+        try { if (navigator.share) { await navigator.share({ title: "Zeekr 9X: L'Egemone dell'Asfalto", text: "Leggi questo articolo sul nuovo SUV Zeekr 9X su Itercars Magazine.", url: window.location.href, }); }
+        else { alert('Copia questo link per condividere: ' + window.location.href); } }
+        catch (err) { console.log('Condivisione fallita o annullata', err); }
+      });
+    }
+  </script>
+</body>
+</html>

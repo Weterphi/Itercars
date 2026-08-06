@@ -19,6 +19,21 @@
   <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <style>
+    /* Stile per mostrare le frecce della hero slide solo all'hover */
+    .mag-hero-section .swiper-button-next,
+    .mag-hero-section .swiper-button-prev {
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      color: rgba(255, 255, 255, 0.8);
+      transform: scale(0.8);
+    }
+    .mag-hero-section:hover .swiper-button-next,
+    .mag-hero-section:hover .swiper-button-prev {
+      opacity: 1;
+      transform: scale(1);
+    }
+  </style>
 </head>
 <body class="magazine-body">
 
@@ -63,7 +78,26 @@
             <a href="articolo-milano-noleggio.html" class="mag-slide-btn">Esplora Ora <i class="ri-arrow-right-line"></i></a>
           </div>
         </div>
+        
+        <!-- Zeekr 9X Hero Slide -->
+        <div class="swiper-slide mag-slide">
+          <img src="zeeker 9x.jpg" alt="Zeekr 9X Hero" class="mag-slide-bg">
+          <div class="mag-slide-overlay"></div>
+          <div class="mag-slide-content">
+            <span class="mag-slide-category" style="background: rgba(255, 50, 50, 0.2); color: #ff5555; border-color: rgba(255, 50, 50, 0.4);">New Release</span>
+            <h1 class="mag-slide-title">Zeekr 9X: L'Egemone dell'Asfalto</h1>
+            <p class="mag-slide-desc">La geografia del potere automobilistico sta subendo un terremoto di magnitudo altissima.</p>
+            <a href="articolo-zeekr-9x.html" class="mag-slide-btn">Esplora Ora <i class="ri-arrow-right-line"></i></a>
+          </div>
+        </div>
+
       </div>
+      
+      <!-- Navigazione slider principale (visibile all'hover) -->
+      <div class="swiper-button-next mag-hero-nav"></div>
+      <div class="swiper-button-prev mag-hero-nav"></div>
+      <!-- Paginazione -->
+      <div class="swiper-pagination"></div>
     </div>
   </section>
 
@@ -81,6 +115,28 @@
     
     <div class="mag-bento-grid">
       
+      <!-- ZEEKR 9X ARTICLE -->
+      <a href="articolo-zeekr-9x.html" class="mag-bento-card mag-card-tall">
+        <img src="zeeker 9x.jpg" alt="Zeekr 9X" class="mag-card-img">
+        <div class="mag-card-overlay"></div>
+        <div class="mag-card-content">
+          <span class="mag-card-tag" style="background: rgba(255, 50, 50, 0.2); color: #ff5555; border: 1px solid rgba(255, 50, 50, 0.4);">New Release</span>
+          <h3 class="mag-card-title">Zeekr 9X: L'Egemone dell'Asfalto che Riscrive le Regole</h3>
+          <div class="mag-card-date">
+            <i class="ri-calendar-line"></i> 31 Luglio 2026 • 8 min read
+          </div>
+          <!-- Card Actions -->
+          <div class="card-actions" data-article-id="art-zeekr" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
+            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
+              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">198</span>
+            </button>
+            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
+              <i class="ri-share-forward-line"></i>
+            </button>
+          </div>
+        </div>
+      </a>
+
       <!-- LATEST ARTICLE: MILANO NOLEGGIO -->
       <a href="articolo-milano-noleggio.html" class="mag-bento-card mag-card-large">
         <img src="milano-lambo.jpg?v=new" alt="Lamborghini a Milano" class="mag-card-img">
@@ -103,105 +159,6 @@
         </div>
       </a>
 
-      <!-- Bento Item (Large) -->
-      <a href="#" class="mag-bento-card mag-card-large">
-        <img src="https://images.unsplash.com/photo-1614200179396-2bdb77ebf81b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Auto Elettriche" class="mag-card-img">
-        <div class="mag-card-overlay"></div>
-        <div class="mag-card-content">
-          <span class="mag-card-tag">Tecnologia</span>
-          <h3 class="mag-card-title">Il Futuro è Elettrico: Le Hypercar a Zero Emissioni che sfidano le leggi della fisica</h3>
-          <div class="mag-card-date"><i class="ri-time-line"></i> 26 Luglio 2026 &bull; 8 min read</div>
-          <!-- Card Actions -->
-          <div class="card-actions" data-article-id="art-2" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
-            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
-              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">51</span>
-            </button>
-            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
-              <i class="ri-share-forward-line"></i>
-            </button>
-          </div>
-        </div>
-      </a>
-
-      <!-- Bento Item (Small) -->
-      <a href="#" class="mag-bento-card mag-card-small">
-        <img src="https://images.unsplash.com/photo-1549399542-7e3f8b79c341?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Aston Martin" class="mag-card-img">
-        <div class="mag-card-overlay"></div>
-        <div class="mag-card-content">
-          <span class="mag-card-tag">Brand Story</span>
-          <h3 class="mag-card-title">L'Eredità Aston Martin</h3>
-          <div class="mag-card-date"><i class="ri-time-line"></i> 24 Luglio 2026</div>
-          <!-- Card Actions -->
-          <div class="card-actions" data-article-id="art-3" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
-            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
-              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">119</span>
-            </button>
-            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
-              <i class="ri-share-forward-line"></i>
-            </button>
-          </div>
-        </div>
-      </a>
-
-      <!-- Bento Item (Small) -->
-      <a href="#" class="mag-bento-card mag-card-small">
-        <img src="https://images.unsplash.com/photo-1541443131876-44b03de101c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Eventi" class="mag-card-img">
-        <div class="mag-card-overlay"></div>
-        <div class="mag-card-content">
-          <span class="mag-card-tag">Eventi VIP</span>
-          <h3 class="mag-card-title">Villa d'Este Concorso d'Eleganza</h3>
-          <div class="mag-card-date"><i class="ri-time-line"></i> 20 Luglio 2026</div>
-          <!-- Card Actions -->
-          <div class="card-actions" data-article-id="art-4" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
-            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
-              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">105</span>
-            </button>
-            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
-              <i class="ri-share-forward-line"></i>
-            </button>
-          </div>
-        </div>
-      </a>
-
-      <!-- Bento Item (Tall) -->
-      <a href="#" class="mag-bento-card mag-card-tall">
-        <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Ferrari" class="mag-card-img">
-        <div class="mag-card-overlay"></div>
-        <div class="mag-card-content">
-          <span class="mag-card-tag">Collezionismo</span>
-          <h3 class="mag-card-title">Investire in auto d'epoca: le Ferrari più redditizie degli ultimi 10 anni</h3>
-          <div class="mag-card-date"><i class="ri-time-line"></i> 15 Luglio 2026 &bull; 10 min read</div>
-          <!-- Card Actions -->
-          <div class="card-actions" data-article-id="art-5" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
-            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
-              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">84</span>
-            </button>
-            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
-              <i class="ri-share-forward-line"></i>
-            </button>
-          </div>
-        </div>
-      </a>
-
-      <!-- Bento Item (Wide) -->
-      <a href="#" class="mag-bento-card mag-card-wide">
-        <img src="https://images.unsplash.com/photo-1616789916960-9e90098df718?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Rolls Royce" class="mag-card-img">
-        <div class="mag-card-overlay"></div>
-        <div class="mag-card-content">
-          <span class="mag-card-tag">Ultra Luxury</span>
-          <h3 class="mag-card-title">Rolls-Royce Spectre: Il Silenzio Assoluto incontra l'Elettrico</h3>
-          <div class="mag-card-date"><i class="ri-time-line"></i> 10 Luglio 2026 &bull; 6 min read</div>
-          <!-- Card Actions -->
-          <div class="card-actions" data-article-id="art-6" style="position: absolute; bottom: 15px; right: 15px; display: flex; gap: 8px; z-index: 20;">
-            <button class="btn-card-like" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;">
-              <i class="ri-heart-3-line heart-icon"></i> <span class="like-count" style="font-family: 'Inter', sans-serif; font-weight:600;">24</span>
-            </button>
-            <button class="btn-card-share" style="background: rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-size: 1rem; cursor: pointer; display: flex; align-items: center; padding: 5px 10px; border-radius: 20px; backdrop-filter: blur(5px); transition: all 0.2s;" title="Condividi">
-              <i class="ri-share-forward-line"></i>
-            </button>
-          </div>
-        </div>
-      </a>
 
     </div>
   </section>

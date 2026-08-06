@@ -6,6 +6,14 @@
   <title>L'Impero Silenzioso del Lusso su Quattro Ruote | ITERCARS Magazine</title>
   <meta name="description" content="Dalle officine della Motor Valley al nuovo rinascimento dell'Asset-Light Brokerage: come l'Italia sta ridefinendo il mercato dell'auto d'élite.">
   
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="L'Impero Silenzioso del Lusso su Quattro Ruote | ITERCARS Magazine">
+  <meta property="og:description" content="Dalle officine della Motor Valley al nuovo rinascimento dell'Asset-Light Brokerage: come l'Italia sta ridefinendo il mercato dell'auto d'élite.">
+  <meta property="og:image" content="milano-lambo.jpg">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="">
+  <meta name="twitter:card" content="summary_large_image">
+
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
   <link rel="stylesheet" href="index.css?v=50">
@@ -418,26 +426,12 @@
 
     fsBtn.addEventListener('click', () => {
       if (!document.fullscreenElement) {
-        let req = null;
         if (swiperContainer.requestFullscreen) {
-          req = swiperContainer.requestFullscreen();
+          swiperContainer.requestFullscreen();
         } else if (swiperContainer.webkitRequestFullscreen) { 
-          req = swiperContainer.webkitRequestFullscreen();
+          swiperContainer.webkitRequestFullscreen();
         } else if (swiperContainer.msRequestFullscreen) { 
-          req = swiperContainer.msRequestFullscreen();
-        }
-
-        // Try to force landscape orientation on mobile
-        const lockOrientation = () => {
-          if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock('landscape').catch(err => console.log('Orientation lock not supported or failed:', err));
-          }
-        };
-
-        if (req && req.then) {
-          req.then(lockOrientation).catch(e => console.log(e));
-        } else {
-          setTimeout(lockOrientation, 300);
+          swiperContainer.msRequestFullscreen();
         }
       } else {
         if (document.exitFullscreen) {
@@ -446,11 +440,6 @@
           document.webkitExitFullscreen();
         } else if (document.msExitFullscreen) { 
           document.msExitFullscreen();
-        }
-        
-        // Unlock orientation when exiting fullscreen
-        if (screen.orientation && screen.orientation.unlock) {
-          screen.orientation.unlock();
         }
       }
     });
