@@ -325,9 +325,11 @@ function renderCurrentLesson() {
     videoPlayer.muted = savedVol === 0;
     videoPlayer.volume = isNaN(savedVol) ? 1.0 : savedVol;
     
-    const currentSrc = videoPlayer.getAttribute('src');
-    if (currentSrc !== lesson.video) {
-      videoPlayer.src = lesson.video;
+    const videoSrc = lesson.video.replace('academy_videos/', 'academy_hls/').replace('.mp4', '.m3u8');
+    const currentSrc = videoPlayer.getAttribute('data-src');
+    
+    if (currentSrc !== videoSrc) {
+      videoPlayer.setAttribute('data-src', videoSrc);
       
       const onLoadedMetadata = () => {
          if(savedTime > 0 && savedTime < videoPlayer.duration - 2) {
@@ -335,10 +337,27 @@ function renderCurrentLesson() {
          }
          videoPlayer.removeEventListener('loadedmetadata', onLoadedMetadata);
       };
-      videoPlayer.addEventListener('loadedmetadata', onLoadedMetadata);
 
-      videoPlayer.load();
-      videoPlayer.play().catch(err => console.log('Autoplay bloccato o in attesa di interazione:', err));
+      if (window.Hls && Hls.isSupported() && videoSrc.includes('.m3u8')) {
+        if (window.hlsPlayer) window.hlsPlayer.destroy();
+        const hls = new Hls();
+        window.hlsPlayer = hls;
+        hls.loadSource(videoSrc);
+        hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+          if (savedTime > 0) videoPlayer.currentTime = savedTime;
+          videoPlayer.play().catch(err => console.log('Autoplay bloccato:', err));
+        });
+      } else if (videoPlayer.canPlayType('application/vnd.apple.mpegurl')) {
+        videoPlayer.src = videoSrc;
+        videoPlayer.addEventListener('loadedmetadata', onLoadedMetadata);
+        videoPlayer.play().catch(err => console.log('Autoplay bloccato:', err));
+      } else {
+        videoPlayer.src = lesson.video;
+        videoPlayer.addEventListener('loadedmetadata', onLoadedMetadata);
+        videoPlayer.load();
+        videoPlayer.play().catch(err => console.log('Autoplay bloccato:', err));
+      }
     }
   }
   // Aggiorna titoli e descrizione
