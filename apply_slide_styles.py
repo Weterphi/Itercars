@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 import codecs
 import os
-
 # 1. DELETE OLD REAL IMAGES
 old_images = [
     "zeekr_9x_cover.png",
@@ -15,11 +14,9 @@ for img in old_images:
         os.remove(img)
     except Exception as e:
         print("Could not remove", img, e)
-
 # 2. UPDATE ARTICOLO ZEEKR (Slides replacement)
 with codecs.open('articolo-zeekr-9x.html', 'r', 'utf-8') as f:
     html = f.read()
-
 new_slider = '''
   <section class="mag-hero-article">
     <div class="swiper immersive-swiper" id="articleSwiper">
@@ -94,7 +91,6 @@ new_slider = '''
             </div>
           </div>
         </section>
-
         <!-- SLIDE 6: ARMONIC LAYOUT LEFT (INTERIOR) -->
         <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
           <img src="zeekr_ai_interior.png" alt="Zeekr Interior" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: left center; z-index: 1;">
@@ -104,12 +100,10 @@ new_slider = '''
             <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Un cervello elettronico con doppi chip Snapdragon 8295 orchestra l'infotainment, mentre l'isolamento acustico è squarciato solo dall'impianto audio Naim da 4000 Watt.</p>
           </div>
         </section>
-
         <!-- SLIDE 7: FULL IMAGE -->
         <section class="swiper-slide immersive-slide cover-layout no-gold-dust">
           <img src="zeekr_ai_action.png" alt="Zeekr Finale" class="cover-bg" style="opacity: 1;">
         </section>
-
       </div>
       <!-- Add Pagination -->
       <div class="swiper-pagination"></div>
@@ -119,12 +113,10 @@ new_slider = '''
     </div>
   </section>
 '''
-
 start_str = '<section class="mag-hero-article">'
 end_str = '</section>'
 start_idx = html.find(start_str)
 end_idx = html.find(end_str, start_idx) + len(end_str)
-
 if start_idx != -1 and end_idx != -1:
     html = html[:start_idx] + new_slider + html[end_idx:]
     
@@ -150,18 +142,14 @@ if start_idx != -1 and end_idx != -1:
 '''
     if "gold-dust-container" not in html:
         html = html.replace('var articleSwiper = new Swiper', gold_js + '\n    var articleSwiper = new Swiper')
-
     with codecs.open('articolo-zeekr-9x.html', 'w', 'utf-8') as f:
         f.write(html)
         print("Updated Zeekr HTML slides!")
 
-
 # 3. UPDATE MAGAZINE.HTML (Bento card + Hero slider)
 with codecs.open('magazine.html', 'r', 'utf-8') as f:
     mag = f.read()
-
 mag = mag.replace("zeekr_9x_cover.png", "zeekr_ai_action.png")
-
 hero_zeekr_slide = '''
         <!-- HERO SLIDE ZEEKR -->
         <div class="swiper-slide mag-hero-slide">
@@ -179,7 +167,6 @@ hero_zeekr_slide = '''
           </div>
         </div>
 '''
-
 if '<!-- HERO SLIDE 2 -->' in mag:
     mag = mag.replace('<!-- HERO SLIDE 2 -->', hero_zeekr_slide + '\n        <!-- HERO SLIDE 2 -->')
     with codecs.open('magazine.html', 'w', 'utf-8') as f:

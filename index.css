@@ -1,9 +1,7 @@
 /* ==========================================================================
    LUXURY CAR RENTAL - PREMIUM DESIGN SYSTEM (AutoRent Replica & Enhancement)
    ========================================================================== */
-
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-
 :root {
   /* Palette Colori Esclusiva: Deep Obsidian & Royal Emerald Gold */
   --bg-primary: #0a0e17;
@@ -12,7 +10,6 @@
   --bg-glass: rgba(17, 24, 39, 0.85);
   --border-glass: rgba(255, 255, 255, 0.08);
   --border-focus: rgba(0, 146, 70, 0.5);
-
   /* Colori Accento Differenziati dal Template Originale (Invece di arancione standard) */
   --accent-primary: #009246; /* Italian Green */
   --accent-primary-hover: #007336;
@@ -20,17 +17,14 @@
   --accent-red-hover: #f3f4f6;
   --accent-gradient: linear-gradient(135deg, #009246 0%, #007336 50%, #2ecc71 100%);
   --red-gradient: linear-gradient(135deg, #009246 0%, #2ecc71 100%);
-
   /* Testi */
   --text-main: #ffffff;
   --text-muted: #9ca3af;
   --text-dark: #0f172a;
-
   /* Ombre & Bagliori */
   --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
   --glow-emerald: 0 0 25px rgba(0, 146, 70, 0.3);
   --glow-red: 0 0 25px rgba(0, 146, 70, 0.3);
-
   /* Transizioni e Raggi */
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -39,20 +33,17 @@
   --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 html {
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
   position: relative;
 }
-
 body {
   font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--bg-primary);
@@ -63,29 +54,24 @@ body {
   max-width: 100%;
   position: relative;
 }
-
 h1, h2, h3, h4, .font-heading {
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
   letter-spacing: -0.02em;
 }
-
 a {
   color: inherit;
   text-decoration: none;
   transition: var(--transition-fast);
 }
-
 ul {
   list-style: none;
 }
-
 button {
   cursor: pointer;
   border: none;
   font-family: inherit;
 }
-
 /* ==========================================================================
    UTILITY CLASSES & COMPONENTS
    ========================================================================== */
@@ -94,7 +80,6 @@ button {
   margin: 0 auto;
   padding: 0 24px;
 }
-
 /* Header container full-width on desktop for maximum impact */
 .nav-container {
   display: flex;
@@ -106,25 +91,21 @@ button {
   flex-wrap: nowrap;
   gap: 16px;
 }
-
 @media (min-width: 1200px) {
   .nav-container {
     padding: 0 40px;
   }
 }
-
 .text-gradient {
   background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #009246 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
 .text-red {
   background: linear-gradient(135deg, #fef3c7 0%, #ce2b37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -138,70 +119,59 @@ button {
   position: relative;
   overflow: hidden;
 }
-
 .btn-primary {
   background: var(--accent-gradient);
   color: var(--text-main);
   box-shadow: var(--glow-emerald);
 }
-
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 35px rgba(0, 146, 70, 0.5);
 }
-
 .btn-black {
   background: #000000;
   color: var(--text-main);
   border: 1px solid transparent;
 }
-
 .btn-black:hover {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-glass);
   transform: translateY(-2px);
 }
-
 .btn-white-green {
   background-color: #ffffff;
   color: var(--accent-primary);
   border: 1px solid #ffffff;
   transition: all var(--transition-fast);
 }
-
 .btn-white-green:hover {
   background-color: var(--accent-primary);
   color: #ffffff;
   border-color: var(--accent-primary);
   box-shadow: var(--shadow-lg), var(--glow-emerald);
 }
-
 .btn-red {
   background: var(--red-gradient);
   color: var(--text-dark);
   font-weight: 700;
   box-shadow: var(--glow-red);
 }
-
 .btn-red:hover {
   transform: translateY(-2px);
   box-shadow: 0 0 35px rgba(245, 158, 11, 0.5);
 }
-
 .btn-outline {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--border-glass);
   color: var(--text-main);
   backdrop-filter: blur(10px);
 }
-
 .btn-outline:hover {
   background: rgba(255, 255, 255, 0.1);
   border-color: var(--accent-primary);
   color: var(--accent-primary);
   transform: translateY(-2px);
 }
-
 .glass-card {
   background: var(--bg-card);
   backdrop-filter: blur(16px);
@@ -210,13 +180,11 @@ button {
   border-radius: var(--radius-lg);
   transition: var(--transition-smooth);
 }
-
 .glass-card:hover {
   border-color: rgba(0, 146, 70, 0.3);
   transform: translateY(-6px);
   box-shadow: var(--shadow-lg);
 }
-
 /* ==========================================================================
    HEADER / NAVBAR
    ========================================================================== */
@@ -225,13 +193,11 @@ header {
   top: 0;
   left: 0;
 
-
   width: 100%;
   z-index: 1000;
   padding: 8px 0 !important;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 header.scrolled {
   background: rgba(10, 14, 23, 0.96);
   backdrop-filter: blur(20px);
@@ -239,7 +205,6 @@ header.scrolled {
   border-bottom: 1px solid var(--border-glass);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
 }
-
 /* Hide phone button, phone numbers, and phone icons on mobile */
 @media (max-width: 768px) {
   .nav-phone-btn,
@@ -250,7 +215,6 @@ header.scrolled {
   }
 }
 
-
 /* Solo ed esclusivamente sulla pagina flotta: menu con sfondo scuro leggermente trasparente per ottima visibilità ed eleganza */
 body.fleet-page header {
   background: rgba(10, 14, 23, 0.65);
@@ -258,11 +222,9 @@ body.fleet-page header {
   border-bottom: 1px solid var(--border-glass);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
-
 body.fleet-page header.scrolled {
   background: rgba(10, 14, 23, 0.94);
 }
-
 .logo {
   display: flex;
   align-items: center;
@@ -270,90 +232,72 @@ body.fleet-page header.scrolled {
   text-decoration: none;
   flex-shrink: 0;
 }
-
 .navbar-logo-img {
   width: 200px !important;
   height: auto;
   object-fit: contain;
   transition: transform var(--transition-fast), filter var(--transition-fast);
 }
-
 header.scrolled .navbar-logo-img {
   width: 200px !important;
 }
-
 header.scrolled .nav-links {
   gap: 24px !important;
 }
-
 header.scrolled .nav-links a {
   font-size: 0.86rem !important;
 }
-
 header.scrolled .nav-actions .btn {
   padding: 8px 16px !important;
   font-size: 0.86rem !important;
 }
-
 header.scrolled .nav-actions .lang-dropdown-wrapper .btn {
   padding: 6px 12px !important;
   font-size: 0.84rem !important;
 }
-
 header.scrolled .nav-actions {
   gap: 12px !important;
 }
-
 .logo:hover .navbar-logo-img {
   transform: scale(1.05);
   filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
 }
-
 /* Animations */
 .logo-animating {
   animation: logoSlideIn 1.2s cubic-bezier(0.05, 0.9, 0.1, 1) forwards;
 }
-
 @keyframes logoSlideIn {
   0% { transform: translateX(-100vw); opacity: 0; }
   10% { opacity: 1; }
   100% { transform: translateX(0); opacity: 1; }
 }
-
 .logo-animating .navbar-logo-img {
   animation: logoPulse 1.2s cubic-bezier(0.05, 0.9, 0.1, 1) forwards;
 }
-
 @keyframes logoPulse {
   0% { transform: scale(0.95); opacity: 0; }
   100% { transform: scale(1); opacity: 1; }
 }
-
 /* Idle animation removed for wide logo */
-
 .footer-logo-img {
   height: 65px;
   width: auto;
   object-fit: contain;
   transition: transform var(--transition-fast);
 }
-
 .logo:hover .footer-logo-img {
   transform: scale(1.04);
 }
-
 .logo-icon-svg {
   width: 48px;
   height: 26px;
   display: block;
   transition: transform var(--transition-fast), filter var(--transition-fast);
 }
-
 .logo:hover .logo-icon-svg {
   transform: scale(1.06);
   filter: drop-shadow(0 0 8px rgba(0, 146, 70, 0.4));
 }
-
 .logo-text {
   font-family: 'Outfit', sans-serif;
   font-weight: 800;
@@ -364,11 +308,9 @@ header.scrolled .nav-actions {
   -webkit-text-fill-color: transparent;
   transition: transform var(--transition-fast), filter var(--transition-fast);
 }
-
 .logo:hover .logo-text {
   filter: drop-shadow(0 0 8px rgba(0, 146, 70, 0.35));
 }
-
 
 .nav-links {
   display: flex;
@@ -378,7 +320,6 @@ header.scrolled .nav-actions {
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 .nav-links a {
   font-weight: 500;
   font-size: 0.86rem !important;
@@ -386,11 +327,9 @@ header.scrolled .nav-actions {
   position: relative;
   white-space: nowrap;
 }
-
 .nav-links a:hover, .nav-links a.active {
   color: var(--text-main);
 }
-
 .nav-links a::after {
   content: '';
   position: absolute;
@@ -402,11 +341,9 @@ header.scrolled .nav-actions {
   transition: var(--transition-fast);
   border-radius: 2px;
 }
-
 .nav-links a:hover::after, .nav-links a.active::after {
   width: 100%;
 }
-
 .nav-actions {
   display: flex;
   align-items: center;
@@ -415,18 +352,15 @@ header.scrolled .nav-actions {
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 .nav-actions .btn {
   padding: 8px 16px !important;
   font-size: 0.86rem !important;
   white-space: nowrap;
 }
-
 .nav-actions .lang-dropdown-wrapper .btn {
   padding: 6px 12px !important;
   font-size: 0.84rem !important;
 }
-
 /* ==========================================================================
    HERO WITH FULL BACKGROUND WRAPPER (VIDEO)
    ========================================================================== */
@@ -436,7 +370,6 @@ header.scrolled .nav-actions {
   padding-bottom: 30px;
   border-bottom: 1px solid var(--border-glass);
 }
-
 .hero-bg-video {
   position: absolute;
   top: 50%;
@@ -450,7 +383,6 @@ header.scrolled .nav-actions {
   object-fit: cover;
   filter: brightness(1.08) contrast(1.05);
 }
-
 .hero-bg-overlay {
   position: absolute;
   top: 0;
@@ -460,7 +392,6 @@ header.scrolled .nav-actions {
   background: radial-gradient(circle at center, rgba(10, 14, 23, 0.1) 0%, rgba(10, 14, 23, 0.45) 100%);
   z-index: 1;
 }
-
 .hero {
   position: relative;
   min-height: 85vh;
@@ -470,7 +401,6 @@ header.scrolled .nav-actions {
   padding-bottom: 50px; /* Less padding at the bottom */
   z-index: 2;
 }
-
 .hero-content {
   display: flex;
   flex-direction: column;
@@ -479,7 +409,6 @@ header.scrolled .nav-actions {
   max-width: 900px;
   margin: 0 auto;
 }
-
 .hero-text {
   background: transparent;
   padding: 0;
@@ -490,13 +419,11 @@ header.scrolled .nav-actions {
   flex-direction: column;
   align-items: center;
 }
-
 .hero-text h1 {
   font-size: 4rem;
   line-height: 1.15;
   margin-bottom: 12px; /* Compressed */
 }
-
 .hero-text p {
   font-size: 1.25rem;
   color: #e2e8f0;
@@ -506,14 +433,12 @@ header.scrolled .nav-actions {
   margin-right: auto;
   line-height: 1.5;
 }
-
 .hero-btns {
   display: flex;
   gap: 15px;
   justify-content: center;
   margin-bottom: 30px; /* Compressed */
 }
-
 .hero-stats {
   display: flex;
   gap: 50px;
@@ -522,25 +447,20 @@ header.scrolled .nav-actions {
   justify-content: center;
   width: 100%;
 }
-
 .stat-item h3 {
   font-size: 2.2rem;
   color: var(--accent-primary);
   margin-bottom: 5px;
 }
-
 .stat-item p {
   font-size: 1rem;
   color: var(--text-muted);
-
 }
-
 .hero-visual {
   position: relative;
   display: flex;
   justify-content: center;
 }
-
 .hero-car-img {
   width: 110%;
   max-width: 650px;
@@ -548,7 +468,6 @@ header.scrolled .nav-actions {
   animation: floatCar 6s ease-in-out infinite;
   z-index: 2;
 }
-
 .hero-glow-circle {
   position: absolute;
   top: 50%;
@@ -559,12 +478,10 @@ header.scrolled .nav-actions {
   background: radial-gradient(circle, rgba(0, 146, 70, 0.25) 0%, transparent 70%);
   z-index: 1;
 }
-
 @keyframes floatCar {
   0%, 100% { transform: translateY(0px) rotate(0deg); }
   50% { transform: translateY(-15px) rotate(1deg); }
 }
-
 /* ==========================================================================
    SEARCH & FILTER BAR (Floating)
    ========================================================================== */
@@ -573,7 +490,6 @@ header.scrolled .nav-actions {
   z-index: 10;
   margin-top: -50px;
 }
-
 .search-box {
   background: var(--bg-glass);
   border: 1px solid var(--border-glass);
@@ -582,14 +498,12 @@ header.scrolled .nav-actions {
   box-shadow: var(--shadow-lg), 0 0 40px rgba(0,0,0,0.5);
   backdrop-filter: blur(24px);
 }
-
 .search-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr) auto;
   gap: 20px;
   align-items: center;
 }
-
 @media (min-width: 768px) {
   .search-grid.has-specific .search-btn-container {
     grid-column: 1 / -1;
@@ -601,13 +515,11 @@ header.scrolled .nav-actions {
     max-width: 350px;
   }
 }
-
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
 .form-group label {
   font-size: 0.85rem;
   font-weight: 600;
@@ -615,13 +527,11 @@ header.scrolled .nav-actions {
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-
 .input-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
-
 .input-wrapper i {
   position: absolute;
   left: 16px;
@@ -629,11 +539,9 @@ header.scrolled .nav-actions {
   font-size: 1.2rem;
   pointer-events: none;
 }
-
 .input-wrapper .form-control {
   padding-left: 45px;
 }
-
 /* AUTOCOMPLETE SUGGESTIONS */
 .autocomplete-suggestions {
   position: absolute;
@@ -653,7 +561,6 @@ header.scrolled .nav-actions {
   margin: 5px 0 0 0;
   display: none;
 }
-
 .autocomplete-suggestions li {
   padding: 12px 16px;
   cursor: pointer;
@@ -664,21 +571,17 @@ header.scrolled .nav-actions {
   display: flex;
   flex-direction: column;
 }
-
 .autocomplete-suggestions li:last-child {
   border-bottom: none;
 }
-
 .autocomplete-suggestions li:hover {
   background: rgba(0, 146, 70, 0.2);
 }
-
 .autocomplete-suggestions .suggestion-secondary {
   font-size: 0.8rem;
   color: var(--text-muted);
   margin-top: 3px;
 }
-
 .form-control {
   width: 100%;
   padding: 12px 14px 12px 42px;
@@ -690,31 +593,26 @@ header.scrolled .nav-actions {
   font-size: 0.95rem;
   transition: var(--transition-fast);
 }
-
 .form-control:focus {
   outline: none;
   border-color: var(--accent-primary);
   background: rgba(255, 255, 255, 0.08);
 }
-
 .form-control option {
   background: var(--bg-secondary);
   color: var(--text-main);
 }
-
 /* ==========================================================================
    FLEET / CATALOG SECTION
    ========================================================================== */
 .fleet-section {
   padding: 100px 0;
 }
-
 .section-header {
   text-align: center;
   max-width: 700px;
   margin: 0 auto 50px auto;
 }
-
 .section-tag {
   display: inline-block;
   padding: 6px 16px;
@@ -728,30 +626,25 @@ header.scrolled .nav-actions {
   margin-bottom: 16px;
   border: 1px solid rgba(0, 146, 70, 0.2);
 }
-
 .section-header h2 {
   font-size: 2.8rem;
   margin-bottom: 16px;
 }
-
 .section-header p {
   color: var(--text-muted);
   font-size: 1.1rem;
 }
-
 /* Category Highlights / Boxes */
 .category-wide-container {
   width: 100%;
   max-width: 100%;
   padding: 0 24px;
 }
-
 @media (min-width: 1200px) {
   .category-wide-container {
     padding: 0 60px; /* Allinea con l'header su desktop */
   }
 }
-
 .category-highlights {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -759,7 +652,6 @@ header.scrolled .nav-actions {
   margin-bottom: 50px;
   width: 100%;
 }
-
 .category-highlight-card {
   background: var(--bg-card);
   border: 1px solid var(--border-glass);
@@ -770,13 +662,11 @@ header.scrolled .nav-actions {
   display: flex;
   flex-direction: column;
 }
-
 .category-highlight-card:hover {
   transform: translateY(-8px);
   border-color: var(--accent-red);
   box-shadow: var(--shadow-lg), var(--glow-red);
 }
-
 .category-highlight-img {
   width: 100%;
   height: 380px; /* Taller on mobile as well */
@@ -784,17 +674,14 @@ header.scrolled .nav-actions {
   border-bottom: 1px solid var(--border-glass);
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 @media (min-width: 1200px) {
   .category-highlight-img {
     height: 600px; /* Extremely imposing on desktop */
   }
 }
-
 .category-highlight-card:hover .category-highlight-img {
   transform: scale(1.05);
 }
-
 .category-highlight-content {
   padding: 24px;
   padding-bottom: 80px; /* Previene l'accavallamento col bottone */
@@ -802,40 +689,34 @@ header.scrolled .nav-actions {
   position: relative;
   flex-grow: 1;
 }
-
 @media (min-width: 1200px) {
   .category-highlight-content {
     padding: 30px;
     padding-bottom: 90px; /* Previene accavallamento anche su desktop */
   }
 }
-
 .category-highlight-content h3 {
   font-size: 1.6rem;
   color: #fff;
   margin-bottom: 8px;
   font-family: 'Outfit', sans-serif;
 }
-
 @media (min-width: 1200px) {
   .category-highlight-content h3 {
     font-size: 2.2rem;
   }
 }
-
 .category-highlight-content p {
   font-size: 0.85rem;
   color: var(--text-muted);
   line-height: 1.4;
   padding-right: 30px;
 }
-
 @media (min-width: 1200px) {
   .category-highlight-content p {
     font-size: 1.05rem;
   }
 }
-
 .category-action-btn {
   position: absolute;
   bottom: 24px;
@@ -853,34 +734,28 @@ header.scrolled .nav-actions {
   transition: all 0.3s ease;
   backdrop-filter: blur(4px);
 }
-
 .category-action-btn i {
   color: var(--accent-red);
   font-size: 1.2rem;
   transition: transform 0.3s ease;
 }
-
 .category-highlight-card:hover .category-action-btn {
   background: rgba(255, 255, 255, 0.08);
   border-color: rgba(255, 255, 255, 0.2);
 }
-
 .category-highlight-card:hover .category-action-btn i {
   transform: translate(3px, -3px);
 }
-
 @media (max-width: 992px) {
   .category-highlights {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 576px) {
   .category-highlights {
     grid-template-columns: 1fr;
   }
 }
-
 /* Category Filter Pills */
 .filter-pills {
   display: flex;
@@ -889,7 +764,6 @@ header.scrolled .nav-actions {
   gap: 12px;
   margin-bottom: 40px;
 }
-
 .pill-btn {
   padding: 10px 24px;
   background: rgba(255, 255, 255, 0.04);
@@ -899,14 +773,12 @@ header.scrolled .nav-actions {
   font-weight: 500;
   transition: var(--transition-fast);
 }
-
 .pill-btn:hover, .pill-btn.active {
   background: var(--accent-primary);
   color: #ffffff;
   border-color: var(--accent-primary);
   box-shadow: var(--glow-emerald);
 }
-
 /* ==========================================================================
    EXCLUSIVE FLEET HERO & GLASS FILTERS
    ========================================================================== */
@@ -924,7 +796,6 @@ header.scrolled .nav-actions {
     filter: drop-shadow(0 4px 15px rgba(0, 230, 118, 0.35));
   }
 }
-
 @keyframes fadeInUpSmooth {
   0% {
     opacity: 0;
@@ -935,7 +806,6 @@ header.scrolled .nav-actions {
     transform: translateY(0);
   }
 }
-
 .fleet-hero-title {
   font-size: 3.8rem;
   font-weight: 800;
@@ -949,7 +819,6 @@ header.scrolled .nav-actions {
   color: transparent;
   animation: gradientShimmer 6s ease infinite, fadeInUpSmooth 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
 .fleet-hero-sub {
   color: #e2e8f0;
   font-size: 1.25rem;
@@ -957,12 +826,10 @@ header.scrolled .nav-actions {
   animation: fadeInUpSmooth 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
   opacity: 0;
 }
-
 .fleet-hero-filters-anim {
   animation: fadeInUpSmooth 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
   opacity: 0;
 }
-
 .fleet-glass-filters {
   display: inline-flex;
   flex-wrap: wrap;
@@ -978,7 +845,6 @@ header.scrolled .nav-actions {
   border-radius: 99px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
-
 .fleet-pill-btn {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -994,7 +860,6 @@ header.scrolled .nav-actions {
   gap: 8px;
   text-decoration: none;
 }
-
 .fleet-pill-btn:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.3);
@@ -1002,7 +867,6 @@ header.scrolled .nav-actions {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
 }
-
 .fleet-pill-btn.active {
   background: linear-gradient(135deg, rgba(0, 230, 118, 0.85), rgba(0, 146, 70, 0.95));
   border-color: rgba(255, 255, 255, 0.45);
@@ -1011,7 +875,6 @@ header.scrolled .nav-actions {
   box-shadow: 0 0 25px rgba(0, 230, 118, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.4);
   transform: translateY(-2px) scale(1.03);
 }
-
 @media (max-width: 768px) {
   .fleet-hero-title {
     font-size: 2.3rem !important;
@@ -1038,38 +901,32 @@ header.scrolled .nav-actions {
     border-radius: 14px;
   }
 }
-
 /* Fleet Grid */
 .fleet-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
   gap: 30px;
 }
-
 .car-card {
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
-
 .car-image-container {
   position: relative;
   height: 240px;
   overflow: hidden;
   background: rgba(0,0,0,0.3);
 }
-
 .car-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .car-card:hover .car-img {
   transform: scale(1.08);
 }
-
 .car-badge {
   position: absolute;
   top: 16px;
@@ -1083,7 +940,6 @@ header.scrolled .nav-actions {
   color: var(--accent-red);
   border: 1px solid rgba(206, 43, 55, 0.3);
 }
-
 .car-rating {
   position: absolute;
   top: 16px;
@@ -1099,26 +955,22 @@ header.scrolled .nav-actions {
   gap: 4px;
   color: #fbbf24;
 }
-
 .car-info {
   padding: 24px;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
-
 .car-title {
   font-size: 1.4rem;
   font-weight: 700;
   margin-bottom: 6px;
 }
-
 .car-type {
   color: var(--text-muted);
   font-size: 0.9rem;
   margin-bottom: 20px;
 }
-
 .car-specs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1128,7 +980,6 @@ header.scrolled .nav-actions {
   border-bottom: 1px solid var(--border-glass);
   margin-bottom: 20px;
 }
-
 .spec-item {
   display: flex;
   flex-direction: column;
@@ -1136,41 +987,34 @@ header.scrolled .nav-actions {
   text-align: center;
   gap: 6px;
 }
-
 .spec-item i {
   color: var(--accent-primary);
   font-size: 1.2rem;
 }
-
 .spec-item span {
   font-size: 0.8rem;
   color: var(--text-muted);
   font-weight: 500;
 }
-
 .car-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: auto;
 }
-
 .car-price {
   display: flex;
   flex-direction: column;
 }
-
 .price-amount {
   font-size: 1.5rem;
   font-weight: 800;
   color: var(--text-main);
 }
-
 .price-period {
   font-size: 0.8rem;
   color: var(--text-muted);
 }
-
 /* ==========================================================================
    WHY CHOOSE US / FEATURES
    ========================================================================== */
@@ -1179,18 +1023,15 @@ header.scrolled .nav-actions {
   background: rgba(17, 24, 39, 0.4);
   position: relative;
 }
-
 .features-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
 }
-
 .feature-box {
   padding: 36px 28px;
   text-align: center;
 }
-
 .feature-icon {
   width: 70px;
   height: 70px;
@@ -1205,24 +1046,20 @@ header.scrolled .nav-actions {
   color: var(--accent-primary);
   transition: var(--transition-smooth);
 }
-
 .feature-box:hover .feature-icon {
   background: var(--accent-primary);
   color: #ffffff;
   transform: rotateY(360deg);
   box-shadow: var(--glow-emerald);
 }
-
 .feature-box h3 {
   font-size: 1.25rem;
   margin-bottom: 12px;
 }
-
 .feature-box p {
   color: var(--text-muted);
   font-size: 0.95rem;
 }
-
 /* ==========================================================================
    BOOKING MODAL
    ========================================================================== */
@@ -1242,12 +1079,10 @@ header.scrolled .nav-actions {
   visibility: hidden;
   transition: var(--transition-fast);
 }
-
 .modal-overlay.active {
   opacity: 1;
   visibility: visible;
 }
-
 .modal-content {
   background: var(--bg-secondary);
   border: 1px solid var(--border-glass);
@@ -1262,11 +1097,9 @@ header.scrolled .nav-actions {
   max-height: 85vh;
   overflow-y: auto;
 }
-
 .modal-overlay.active .modal-content {
   transform: translateY(0);
 }
-
 .close-modal {
   position: absolute;
   top: 24px;
@@ -1282,12 +1115,10 @@ header.scrolled .nav-actions {
   font-size: 1.2rem;
   transition: var(--transition-fast);
 }
-
 .close-modal:hover {
   background: rgba(239, 68, 68, 0.2);
   color: #ef4444;
 }
-
 /* ==========================================================================
    FOOTER
    ========================================================================== */
@@ -1296,41 +1127,34 @@ footer {
   border-top: 1px solid var(--border-glass);
   padding: 80px 0 30px 0;
 }
-
 .footer-grid {
   display: grid;
   grid-template-columns: 2fr repeat(3, 1fr);
   gap: 50px;
   margin-bottom: 60px;
 }
-
 .footer-col p {
   color: var(--text-muted);
   margin-top: 16px;
   max-width: 320px;
 }
-
 .footer-col h4 {
   font-size: 1.1rem;
   margin-bottom: 24px;
   color: var(--text-main);
 }
-
 .footer-links {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-
 .footer-links a {
   color: var(--text-muted);
 }
-
 .footer-links a:hover {
   color: var(--accent-primary);
   padding-left: 6px;
 }
-
 .footer-bottom {
   border-top: 1px solid var(--border-glass);
   padding-top: 30px;
@@ -1340,7 +1164,6 @@ footer {
   color: var(--text-muted);
   font-size: 0.9rem;
 }
-
 /* ==========================================================================
    RESPONSIVE LAYOUTS
    ========================================================================== */
@@ -1368,7 +1191,6 @@ footer {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 640px) {
   .modal-content {
     padding: 24px;
@@ -1403,7 +1225,6 @@ footer {
     height: 38px;
   }
 }
-
 /* ==========================================================================
    LANGUAGE SWITCHER DROPDOWN & MODAL
    ========================================================================== */
@@ -1426,13 +1247,11 @@ footer {
   background: rgba(10, 14, 23, 0.95);
   backdrop-filter: blur(20px);
 }
-
 .lang-dropdown-menu.active {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
-
 .lang-dropdown-menu button {
   display: flex;
   align-items: center;
@@ -1448,12 +1267,10 @@ footer {
   width: 100%;
   cursor: pointer;
 }
-
 .lang-dropdown-menu button:hover {
   background: rgba(255, 255, 255, 0.08);
   color: var(--accent-primary);
 }
-
 .lang-grid-item {
   display: flex;
   align-items: center;
@@ -1469,17 +1286,14 @@ footer {
   text-align: left;
   cursor: pointer;
 }
-
 .lang-grid-item:hover {
   background: rgba(0, 146, 70, 0.15);
   border-color: var(--accent-primary);
   transform: translateY(-2px);
 }
-
 .lang-flag {
   font-size: 1.4rem;
 }
-
 /* ==========================================================================
    CONCIERGE BOT WINDOW (Mock Assistant)
    ========================================================================== */
@@ -1502,13 +1316,11 @@ footer {
   transform: translateY(20px) scale(0.95);
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .concierge-bot-window.active {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0) scale(1);
 }
-
 .bot-header {
   padding: 16px;
   background: rgba(255, 255, 255, 0.04);
@@ -1517,7 +1329,6 @@ footer {
   align-items: center;
   justify-content: space-between;
 }
-
 .bot-avatar {
   width: 38px;
   height: 38px;
@@ -1530,7 +1341,6 @@ footer {
   font-size: 1.2rem;
   box-shadow: var(--glow-emerald);
 }
-
 .status-dot {
   width: 8px;
   height: 8px;
@@ -1538,7 +1348,6 @@ footer {
   background: #2ecc71;
   box-shadow: 0 0 8px #2ecc71;
 }
-
 .btn-close-bot {
   background: transparent;
   border: none;
@@ -1547,7 +1356,6 @@ footer {
   padding: 4px;
   cursor: pointer;
 }
-
 .bot-body {
   padding: 16px;
   max-height: 360px;
@@ -1556,7 +1364,6 @@ footer {
   flex-direction: column;
   gap: 12px;
 }
-
 .bot-msg {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1566,14 +1373,12 @@ footer {
   color: var(--text-main);
   font-size: 0.9rem;
 }
-
 .bot-contact-cards {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 14px;
 }
-
 .bot-card-link {
   display: flex;
   align-items: center;
@@ -1584,23 +1389,19 @@ footer {
   border-radius: 12px;
   transition: var(--transition-fast);
 }
-
 .bot-card-link:hover {
   border-color: var(--accent-primary);
   transform: translateX(4px);
 }
-
 .bot-card-link strong {
   display: block;
   font-size: 0.9rem;
   color: #fff;
 }
-
 .bot-card-link span {
   font-size: 0.8rem;
   color: var(--text-muted);
 }
-
 .bot-footer {
   padding: 12px 16px;
   background: rgba(255, 255, 255, 0.02);
@@ -1608,7 +1409,6 @@ footer {
   display: flex;
   gap: 10px;
 }
-
 #botInputText {
   flex: 1;
   background: rgba(10, 14, 23, 0.8);
@@ -1619,22 +1419,18 @@ footer {
   font-size: 0.9rem;
   outline: none;
 }
-
 #botInputText:focus {
   border-color: var(--accent-primary);
 }
-
 /* ==========================================================================
    RESPONSIVE MOBILE NAVIGATION (iPhone & Smartphone)
    ========================================================================== */
 .mobile-menu-btn {
   display: none;
 }
-
 .mobile-floating-phone {
   display: none !important;
 }
-
 @media (max-width: 1024px) {
   .mobile-floating-phone {
     display: inline-flex !important;
@@ -1668,7 +1464,6 @@ footer {
     font-size: 1.4rem !important;
   }
 }
-
 @media (min-width: 992px) and (max-width: 1380px) {
   .nav-container { padding: 0 15px !important; gap: 10px !important; }
   .navbar-logo-img { width: 160px !important; }
@@ -1680,7 +1475,6 @@ footer {
   .nav-phone-btn .phone-text { display: none !important; }
   .nav-phone-btn { padding: 8px !important; }
 }
-
 @media (max-width: 991px) {
   .hero {
     padding-bottom: 10px !important;
@@ -1700,7 +1494,6 @@ footer {
   .footer-logo-img {
     height: 45px;
   }
-
   .mobile-menu-btn {
     display: inline-flex;
     padding: 7px 12px !important;
@@ -1718,11 +1511,9 @@ footer {
     padding: 5px 12px !important;
     font-size: 0.82rem !important;
   }
-
   .nav-phone-btn {
     display: none !important;
   }
-
   .mobile-floating-phone {
     display: inline-flex !important;
     position: fixed !important;
@@ -1754,18 +1545,15 @@ footer {
   .mobile-floating-phone i {
     font-size: 1.4rem !important;
   }
-
   .nav-area-btn {
     padding: 10px 14px !important;
   }
   .nav-area-btn #navAreaText {
     display: none !important;
   }
-
   .nav-actions {
     gap: 10px !important;
   }
-
   .nav-links {
     position: absolute;
     top: 100%;
@@ -1781,16 +1569,13 @@ footer {
     box-shadow: 0 20px 40px rgba(0,0,0,0.8);
     display: none;
   }
-
   .nav-links.mobile-open {
     display: flex;
   }
-
   .nav-links li {
     width: 100%;
     text-align: center;
   }
-
   .nav-links a {
     display: block;
     padding: 12px 0;
@@ -1807,15 +1592,12 @@ footer {
     justify-content: center;
     flex-wrap: wrap;
   }
-
   .hero, .hero-content {
     display: contents !important;
   }
-
   .hero-subtitle {
     display: none !important;
   }
-
   .hero-text {
     order: 1 !important;
     padding-top: 120px !important;
@@ -1823,18 +1605,15 @@ footer {
     position: relative !important;
     z-index: 10 !important;
   }
-
   .search-section {
     order: 2 !important;
     margin-top: 20px !important;
     margin-bottom: 30px !important;
   }
-
   .hero-visual {
     order: 3 !important;
     margin-bottom: 40px !important;
   }
-
   .hero-bg-wrapper {
     display: flex !important;
     flex-direction: column !important;
@@ -1850,7 +1629,6 @@ footer {
       linear-gradient(180deg, rgba(10, 14, 23, 0.15) 0%, rgba(10, 14, 23, 0.20) 280px, rgba(10, 14, 23, 0.85) 420px, #0a0e17 520px) !important;
   }
 }
-
 /* ==========================================================================
    PARTNERS PAGE STYLES (Leadership Grid & Collaboration Plan)
    ========================================================================== */
@@ -1860,7 +1638,6 @@ footer {
   gap: 30px;
   margin-top: 40px;
 }
-
 .team-card {
   padding: 32px 24px;
   text-align: center;
@@ -1871,7 +1648,6 @@ footer {
   overflow: hidden;
   border: 1px solid var(--border-glass);
 }
-
 .team-avatar-wrapper {
   width: 140px;
   height: 140px;
@@ -1881,7 +1657,6 @@ footer {
   margin-bottom: 20px;
   box-shadow: var(--glow-emerald);
 }
-
 .team-avatar {
   width: 100%;
   height: 100%;
@@ -1889,14 +1664,12 @@ footer {
   object-fit: cover;
   border: 3px solid var(--bg-primary);
 }
-
 .team-name {
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 4px;
 }
-
 .team-role {
   font-size: 0.85rem;
   color: var(--accent-red);
@@ -1905,20 +1678,17 @@ footer {
   letter-spacing: 0.05em;
   margin-bottom: 16px;
 }
-
 .team-desc {
   font-size: 0.9rem;
   color: var(--text-muted);
   margin-bottom: 24px;
   line-height: 1.5;
 }
-
 .team-socials {
   display: flex;
   gap: 12px;
   margin-top: auto;
 }
-
 .team-social-btn {
   display: inline-flex;
   align-items: center;
@@ -1932,7 +1702,6 @@ footer {
   color: #fff;
   transition: var(--transition-fast);
 }
-
 .team-social-btn:hover {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
@@ -1940,13 +1709,11 @@ footer {
   transform: translateY(-2px);
   box-shadow: var(--glow-emerald);
 }
-
 .team-social-btn.linkedin:hover {
   background: #0a66c2;
   border-color: #0a66c2;
   box-shadow: 0 0 20px rgba(10, 102, 194, 0.4);
 }
-
 /* Plan Cards */
 .plan-grid {
   display: grid;
@@ -1954,13 +1721,11 @@ footer {
   gap: 30px;
   margin-top: 40px;
 }
-
 @media (max-width: 992px) {
   .plan-grid {
     grid-template-columns: 1fr;
   }
 }
-
 .plan-card {
   padding: 40px 30px;
   display: flex;
@@ -1968,13 +1733,11 @@ footer {
   position: relative;
   transition: var(--transition-smooth);
 }
-
 .plan-card.featured {
   border: 1px solid var(--accent-red);
   background: rgba(206, 43, 55, 0.06);
   box-shadow: var(--glow-red);
 }
-
 .plan-badge {
   position: absolute;
   top: 20px;
@@ -1987,7 +1750,6 @@ footer {
   background: var(--red-gradient);
   color: #000;
 }
-
 /* ==========================================================================
    VIP SERVICES SECTION
    ========================================================================== */
@@ -1996,14 +1758,12 @@ footer {
   background: radial-gradient(circle at 80% 50%, rgba(245, 158, 11, 0.08) 0%, transparent 50%);
   border-top: 1px solid var(--border-glass);
 }
-
 .vip-services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
   gap: 30px;
   margin-top: 40px;
 }
-
 .vip-service-card {
   padding: 36px 28px;
   display: flex;
@@ -2013,13 +1773,11 @@ footer {
   border: 1px solid var(--border-glass);
   transition: var(--transition-smooth);
 }
-
 .vip-service-card:hover {
   border-color: rgba(245, 158, 11, 0.4);
   transform: translateY(-6px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(245, 158, 11, 0.15);
 }
-
 .vip-service-icon {
   width: 60px;
   height: 60px;
@@ -2035,33 +1793,27 @@ footer {
   box-shadow: 0 8px 20px rgba(245, 158, 11, 0.15);
   transition: var(--transition-fast);
 }
-
 .vip-service-card:hover .vip-service-icon {
   transform: scale(1.1) rotate(-5deg);
   background: var(--red-gradient);
   color: #000;
 }
-
 .vip-service-title {
   font-size: 1.35rem;
   font-weight: 700;
   color: var(--text-main);
   margin-bottom: 12px;
 }
-
 .vip-service-desc {
   font-size: 0.95rem;
   color: var(--text-muted);
   line-height: 1.6;
 }
 
-
-
 /* Fleet Category Styles */
 .fleet-category-section {
   margin-bottom: 80px;
 }
-
 .fleet-category-title {
   font-size: 2.2rem;
   margin-bottom: 30px;
@@ -2072,7 +1824,6 @@ footer {
   align-items: center;
   gap: 12px;
 }
-
 .fleet-category-title::before {
   content: '';
   display: inline-block;
@@ -2081,7 +1832,6 @@ footer {
   background: var(--accent-gradient);
   border-radius: 2px;
 }
-
 /* Compact mobile cards for Fleet and Marketplace */
 @media (max-width: 768px) {
   .fleet-grid,
@@ -2148,13 +1898,11 @@ footer {
     font-size: 0.85rem !important;
   }
 }
-
 /* Background Zoom Animation */
 @keyframes zoomBg {
   0% { transform: scale(1); }
   100% { transform: scale(1.1); }
 }
-
 .hero-animated-bg {
   position: absolute;
   top: 0; left: 0;
@@ -2165,7 +1913,6 @@ footer {
   animation: zoomBg 20s infinite alternate linear;
   z-index: 0;
 }
-
 /* Mobile Hero Search Box */
 .mobile-hero-search {
   display: none;
@@ -2196,7 +1943,6 @@ footer {
 .mobile-hero-search select.form-control {
   padding-left: 44px !important;
 }
-
 @media (max-width: 992px) {
   .hero-btns {
     display: none !important;

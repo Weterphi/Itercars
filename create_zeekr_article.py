@@ -1,6 +1,5 @@
 ﻿# -*- coding: utf-8 -*-
 import codecs
-
 html = '''<!DOCTYPE html>
 <html lang="it">
 <head>
@@ -214,13 +213,10 @@ html = '''<!DOCTYPE html>
   </script>
 </body>
 </html>'''
-
 with codecs.open('articolo-zeekr-9x.html', 'w', 'utf-8') as f:
     f.write(html)
-
 with codecs.open('magazine.html', 'r', 'utf-8') as f:
     mag = f.read()
-
 card = '''
       <!-- ZEEKR 9X ARTICLE -->
       <a href="articolo-zeekr-9x.html" class="mag-bento-card mag-card-tall">
@@ -244,10 +240,8 @@ card = '''
         </div>
       </a>
 '''
-
 if '<!-- LATEST ARTICLE: MILANO NOLEGGIO -->' in mag:
     mag = mag.replace('<!-- LATEST ARTICLE: MILANO NOLEGGIO -->', card + '\n      <!-- LATEST ARTICLE: MILANO NOLEGGIO -->')
     with codecs.open('magazine.html', 'w', 'utf-8') as f:
         f.write(mag)
-
 print("Done")

@@ -144,14 +144,12 @@
     }
   `;
   document.head.appendChild(style);
-
   // Controlla il consenso salvato
   const consent = localStorage.getItem('itercars_cookie_consent');
   
   // Funzione per creare e mostrare il banner
   function showBanner() {
     if (document.getElementById('itercarsCookieBanner')) return;
-
     const banner = document.createElement('div');
     banner.id = 'itercarsCookieBanner';
     banner.className = 'cookie-banner-overlay';
@@ -172,14 +170,11 @@
         <button id="btnCookiePolicy" class="btn-cookie-policy">Informativa Privacy</button>
       </div>
     `;
-
     document.body.appendChild(banner);
-
     // Animazione di entrata
     setTimeout(() => {
       banner.classList.add('show');
     }, 100);
-
     // Gestione click
     document.getElementById('btnCookieAccept').addEventListener('click', () => {
       localStorage.setItem('itercars_cookie_consent', 'accepted');
@@ -199,7 +194,6 @@
         showToast("🔒 Preferenze salvate: Consento ai cookie analitici e di miglioramento servizi.");
       }
     });
-
     document.getElementById('btnCookieReject').addEventListener('click', () => {
       localStorage.setItem('itercars_cookie_consent', 'rejected');
       if (typeof gtag === 'function') {
@@ -218,12 +212,10 @@
         showToast("🛡️ Preferenze salvate: Attivi solo i cookie tecnici essenziali.");
       }
     });
-
     document.getElementById('btnCookiePolicy').addEventListener('click', () => {
       alert("Informativa Privacy & Cookie Policy ITERCARS:\\n\\nIn conformità al Regolamento Europeo (GDPR), i dati raccolti tramite Google Analytics 4 e Microsoft Clarity vengono utilizzati in forma anonimizzata ed esclusivamente per fini statistici e di miglioramento del servizio di noleggio supercar e brokerage.\\n\\nPuoi modificare o revocare il tuo consenso in qualsiasi momento cancellando i dati di navigazione o cliccando su Cookie Policy nel footer.");
     });
   }
-
   function closeBanner(banner) {
     banner.classList.remove('show');
     setTimeout(() => {
@@ -232,7 +224,6 @@
       }
     }, 400);
   }
-
   // Se il consenso non è ancora stato dato, mostra il banner al caricamento
   if (!consent) {
     if (document.readyState === 'loading') {
@@ -241,13 +232,11 @@
       showBanner();
     }
   }
-
   // Permetti di riaprire dal footer
   window.reopenCookieBanner = function(e) {
     if (e && e.preventDefault) e.preventDefault();
     showBanner();
   };
-
   // Aggancia automaticamente ai link 'Cookie Policy' nel footer se presenti
   document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('a').forEach(a => {
@@ -256,7 +245,6 @@
         a.addEventListener('click', window.reopenCookieBanner);
       }
     });
-
     // =========================================================================
     // GLOBAL MOBILE VIDEO AUTOPLAY ENFORCER & TOUCH BUTTON OPTIMIZER
     // =========================================================================
@@ -298,13 +286,11 @@
         }
       });
     }
-
     enforceMobileVideoAutoplay();
     window.addEventListener('resize', enforceMobileVideoAutoplay, { passive: true });
     document.addEventListener('visibilitychange', () => {
       if (!document.hidden) enforceMobileVideoAutoplay();
     });
-
     // Inietta regole CSS globali di ottimizzazione per pulsanti e video su dispositivi mobili
     if (!document.getElementById('mobileGlobalOptStyle')) {
       const optStyle = document.createElement('style');

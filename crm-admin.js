@@ -3,13 +3,11 @@
    ZERO MOCK DATA POLICY — 100% SUPABASE INTEGRATION & COMPLETE CRUD
    ZERO EMOJI POLICY — VECTOR ARCHITECTURAL DESIGN
    ========================================================================== */
-
 const SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk';
 var supabase = (typeof window.supabase !== 'undefined' && window.supabase.createClient) 
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
   : null;
-
 // Global State Containers (LIVE DB ONLY - NO MOCKS)
 var CurrentLeads = [];
 var CurrentVehicles = [];
@@ -24,12 +22,10 @@ var CurrentBookings = [];
 var CurrentDocuments = [];
 var CurrentPartners = [];
 var ActiveModalLead = null;
-
 document.addEventListener('DOMContentLoaded', () => {
   checkAdminAuth();
   loadAllCrmData();
 });
-
 // Switch tra i Tab Operativi della Console (Stripe Sidebar Layout)
 function switchTab(tabId, btnElem) {
   document.querySelectorAll('.tab-pane').forEach(t => t.classList.remove('active'));
@@ -38,7 +34,6 @@ function switchTab(tabId, btnElem) {
   const target = document.getElementById(tabId);
   if (target) target.classList.add('active');
   if (btnElem) btnElem.classList.add('active');
-
   const names = {
     'tab-kanban': 'Pipeline Funnel Leads',
     'tab-fleet': 'Flotta & Listini DB',
@@ -48,12 +43,16 @@ function switchTab(tabId, btnElem) {
     'tab-dossier': 'Dossier Delibere Credito',
     'tab-partners': 'Candidature Partner',
     'tab-active-partners': 'Gestione Profili Partner',
-    'tab-fleet-approval': 'Approvazione Flotte Excel Mandanti'
+    'tab-fleet-approval': 'Approvazione Flotte Excel Mandanti',
+    'tab-cms': 'Gestione Contenuti Sito (CMS)'
   };
-
   const breadcrumb = document.getElementById('currentBreadcrumbName');
   if (breadcrumb && names[tabId]) {
     breadcrumb.textContent = names[tabId];
+  }
+  const kpiGrid = document.querySelector('.kpi-grid');
+  if (kpiGrid) {
+    kpiGrid.style.display = tabId === 'tab-cms' ? 'none' : 'grid';
   }
   if (tabId === 'tab-fleet-approval') {
     loadFleetApprovalTable();
@@ -61,8 +60,8 @@ function switchTab(tabId, btnElem) {
   if (tabId === 'tab-active-partners') {
     if (typeof loadActivePartnersTab === 'function') loadActivePartnersTab();
   }
+  // Remove loadSiteConfigCMS from here as we now use iframe
 }
-
 // Switch tra le Sotto-schede di Flotta e Listini (NBT, NLT, Luxury, Generale)
 function switchFleetSubTab(subTabName, btnElem) {
   ActiveFleetSubTab = subTabName;
@@ -71,7 +70,6 @@ function switchFleetSubTab(subTabName, btnElem) {
     s.style.display = 'none';
   });
   document.querySelectorAll('#tab-fleet .btn-header-outline').forEach(b => b.classList.remove('active'));
-
   const targetPane = document.getElementById(`subtab-fleet-${subTabName}`);
   if (targetPane) {
     targetPane.classList.add('active');
@@ -79,7 +77,6 @@ function switchFleetSubTab(subTabName, btnElem) {
   }
   if (btnElem) btnElem.classList.add('active');
 }
-
 /* ==========================================================================
    CARICAMENTO GLOBALE DATI DAL DATABASE (SUPABASE REAL-TIME FETCH)
    ========================================================================== */
@@ -88,7 +85,6 @@ async function loadAllCrmData() {
     console.error("Supabase client non inizializzato");
     return;
   }
-
   await Promise.all([
     fetchLeadsFromDatabase(),
     fetchVehiclesFromDatabase(),
@@ -97,7 +93,6 @@ async function loadAllCrmData() {
     fetchDocumentsFromDatabase(),
     fetchPartnersFromDatabase()
   ]);
-
   renderKanbanBoard();
   renderVehiclesTable(CurrentVehicles);
   renderNbtOffersTable(CurrentNbtOffers);
@@ -112,7 +107,6 @@ async function loadAllCrmData() {
   updateKpiSummary();
   loadFleetApprovalTable();
 }
-
 // Sanitizzazione input per evitare XSS
 function escapeHTML(str) {
   if (!str) return '';
@@ -123,7 +117,6 @@ function escapeHTML(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
-
 // 1. Fetch Leads (`public.crm_leads`)
 async function fetchLeadsFromDatabase() {
   try {
@@ -131,7 +124,6 @@ async function fetchLeadsFromDatabase() {
       .from('crm_leads')
       .select('*')
       .order('created_at', { ascending: false });
-
     if (!error && data) {
       CurrentLeads = data.map(l => {
         // Extract real price from text instead of defaulting to 799
@@ -167,7 +159,6 @@ async function fetchLeadsFromDatabase() {
     CurrentLeads = [];
   }
 }
-
 // 2. Fetch Vehicles, NLT, NBT & Luxury (`public.vehicles`, `public.nlt_offers`, `public.nbt_offers`)
 async function fetchVehiclesFromDatabase() {
   try {
@@ -177,20 +168,15 @@ async function fetchVehiclesFromDatabase() {
       supabase.from('nbt_offers').select('*, vehicles(*)').order('created_at', { ascending: false }),
       supabase.from('providers').select('*').order('name', { ascending: true })
     ]);
-
     if (!vehRes.error && vehRes.data) CurrentVehicles = vehRes.data;
     else CurrentVehicles = [];
-
     if (!nltRes.error && nltRes.data) CurrentNltOffers = nltRes.data;
     else CurrentNltOffers = [];
-
     if (!nbtRes.error && nbtRes.data) CurrentNbtOffers = nbtRes.data;
     else CurrentNbtOffers = [];
-
     if (!provRes.error && provRes.data) CurrentProviders = provRes.data;
     else CurrentProviders = window._allProvidersCache || [];
     window._allProvidersCache = CurrentProviders;
-
     // Filtra esclusivamente le supercar, SUV Luxury, cabrio e sportive prestige che corrispondono alla pagina Luxury del sito
     CurrentLuxuryVehicles = CurrentVehicles.filter(v => {
       if (v.is_luxury === false) return false;
@@ -201,20 +187,17 @@ async function fetchVehiclesFromDatabase() {
                          (['audi', 'bmw', 'mercedes'].some(b => name.includes(b)) && ['rs', 'r8', 'm3', 'm4', 'm8', 'g63', 'amg'].some(m => name.includes(m)));
       return (v.is_luxury === true && (isLuxCat || isLuxBrand || Number(v.daily_price) >= 400)) || isLuxCat || isLuxBrand;
     });
-
     CurrentPartnerVehicles = CurrentVehicles.filter(v => {
       return (v.provider_id != null && v.provider_id !== '') || 
              (v.import_job_id != null && v.import_job_id !== '') ||
              (v.partner_notes != null && v.partner_notes !== '');
     });
-
     // Allinea anche i contatori specifici nei badge
     if (document.getElementById('badgeSubVehicles')) document.getElementById('badgeSubVehicles').textContent = CurrentVehicles.length;
     if (document.getElementById('badgeSubNlt')) document.getElementById('badgeSubNlt').textContent = CurrentNltOffers.length;
     if (document.getElementById('badgeSubNbt')) document.getElementById('badgeSubNbt').textContent = CurrentNbtOffers.length;
     if (document.getElementById('badgeSubLuxury')) document.getElementById('badgeSubLuxury').textContent = CurrentLuxuryVehicles.length;
     if (document.getElementById('badgeSubPartners')) document.getElementById('badgeSubPartners').textContent = CurrentPartnerVehicles.length;
-
     if (typeof renderPartnerOffersTable === 'function') {
       renderPartnerOffersTable(CurrentPartnerVehicles);
     }
@@ -227,7 +210,6 @@ async function fetchVehiclesFromDatabase() {
     CurrentPartnerVehicles = [];
   }
 }
-
 // 3. Fetch Quotes (`public.quotes`)
 async function fetchQuotesFromDatabase() {
   try {
@@ -235,7 +217,6 @@ async function fetchQuotesFromDatabase() {
       .from('quotes')
       .select('*')
       .order('created_at', { ascending: false });
-
     if (!error && data) {
       CurrentQuotes = data;
     } else {
@@ -246,7 +227,6 @@ async function fetchQuotesFromDatabase() {
     CurrentQuotes = [];
   }
 }
-
 // 4. Fetch Bookings & Availability (`public.bookings` + `public.availability_requests`) + Leads Approvati
 async function fetchBookingsFromDatabase() {
   try {
@@ -255,7 +235,6 @@ async function fetchBookingsFromDatabase() {
       supabase.from('availability_requests').select('*').order('created_at', { ascending: false }),
       supabase.from('crm_leads').select('*').in('pipeline_status', ['approved_by_provider', 'contract_signed']).order('created_at', { ascending: false })
     ]);
-
     let combined = [];
     if (!bkRes.error && bkRes.data) {
       combined = combined.concat(bkRes.data.map(b => ({
@@ -308,7 +287,6 @@ async function fetchBookingsFromDatabase() {
            else if (l.notes && l.notes.toLowerCase().includes('nbt')) cat = 'NBT';
            else if (l.notes && l.notes.toLowerCase().includes('luxury')) cat = 'Luxury';
         }
-
         return {
           id: escapeHTML(l.id),
           source: 'crm_lead',
@@ -332,7 +310,6 @@ async function fetchBookingsFromDatabase() {
     CurrentBookings = [];
   }
 }
-
 // 5. Fetch Documents (`public.crm_documents`)
 async function fetchDocumentsFromDatabase() {
   try {
@@ -340,7 +317,6 @@ async function fetchDocumentsFromDatabase() {
       .from('crm_documents')
       .select('*')
       .order('uploaded_at', { ascending: false });
-
     if (!error && data) {
       CurrentDocuments = data;
     } else {
@@ -351,7 +327,6 @@ async function fetchDocumentsFromDatabase() {
     CurrentDocuments = [];
   }
 }
-
 // 6. Fetch Partner Applications (`public.supplier_applications`)
 async function fetchPartnersFromDatabase() {
   try {
@@ -359,7 +334,6 @@ async function fetchPartnersFromDatabase() {
       .from('supplier_applications')
       .select('*')
       .order('created_at', { ascending: false });
-
     if (!error && data) {
       CurrentPartners = data;
     } else {
@@ -370,7 +344,6 @@ async function fetchPartnersFromDatabase() {
     CurrentPartners = [];
   }
 }
-
 /* ==========================================================================
    TAB 1: PIPELINE FUNNEL LEADS (KANBAN BOARD CRUD)
    ========================================================================== */
@@ -382,10 +355,8 @@ function renderKanbanBoard() {
     approved_by_provider: document.getElementById('cardsColApproved'),
     contract_signed: document.getElementById('cardsColSigned')
   };
-
   Object.values(cols).forEach(c => { if (c) c.innerHTML = ''; });
   const counts = { new_lead: 0, quote_sent: 0, docs_requested: 0, approved_by_provider: 0, contract_signed: 0 };
-
   if (CurrentLeads.length === 0) {
     if (cols.new_lead) {
       cols.new_lead.innerHTML = `
@@ -399,23 +370,19 @@ function renderKanbanBoard() {
     document.getElementById('badgeLeadsCount').textContent = '0';
     return;
   }
-
   CurrentLeads.forEach(lead => {
     let st = lead.pipeline_status || 'new_lead';
     if (!cols[st]) st = 'new_lead';
     counts[st]++;
-
     let tagClass = 'tag-privato';
     if (lead.customer_type && lead.customer_type.toLowerCase().includes('iva')) tagClass = 'tag-piva';
     if (lead.customer_type && lead.customer_type.toLowerCase().includes('aziend')) tagClass = 'tag-azienda';
-
     let nextSt = '';
     let nextLabel = '';
     if (st === 'new_lead') { nextSt = 'quote_sent'; nextLabel = 'Invia Prev. '; }
     else if (st === 'quote_sent') { nextSt = 'docs_requested'; nextLabel = 'Istruttoria '; }
     else if (st === 'docs_requested') { nextSt = 'approved_by_provider'; nextLabel = 'Delibera OK '; }
     else if (st === 'approved_by_provider') { nextSt = 'contract_signed'; nextLabel = 'Firma Contratto '; }
-
     const cardHtml = `
       <div class="lead-card" onclick="openDossierModal('${lead.id}')">
         <div class="lead-card-header">
@@ -428,7 +395,6 @@ function renderKanbanBoard() {
           <div class="lead-car-price">€ ${Number(lead.monthly_price).toLocaleString('it-IT')} <small style="font-size: 0.75rem; font-weight: 400; color: var(--text-muted);">/mese</small></div>
           <div class="lead-provider"><i class="ri-shield-check-line"></i> Mandante: <strong>${lead.provider_code}</strong></div>
         </div>
-
         <div class="lead-actions" onclick="event.stopPropagation()">
           <a href="https://api.whatsapp.com/send?phone=${(lead.phone||'').replace(/[^0-9]/g, '')}&text=Buongiorno ${lead.first_name}, la contatto dal Desk ITERCARS per la sua richiesta su ${lead.car_name}." target="_blank" class="btn-card-action">
             <i class="ri-whatsapp-line" style="color: #ffffff;"></i> WhatsApp
@@ -441,10 +407,8 @@ function renderKanbanBoard() {
         </div>
       </div>
     `;
-
     if (cols[st]) cols[st].innerHTML += cardHtml;
   });
-
   document.getElementById('countColNew').textContent = counts.new_lead;
   document.getElementById('countColQuote').textContent = counts.quote_sent;
   document.getElementById('countColDocs').textContent = counts.docs_requested;
@@ -452,11 +416,9 @@ function renderKanbanBoard() {
   document.getElementById('countColSigned').textContent = counts.contract_signed;
   document.getElementById('badgeLeadsCount').textContent = CurrentLeads.length;
 }
-
 async function quickAdvanceLead(leadId, nextStatus) {
   const lead = CurrentLeads.find(l => l.id === leadId);
   if (!lead) return;
-
   lead.pipeline_status = nextStatus;
   try {
     await supabase.from('crm_leads').update({ pipeline_status: nextStatus }).eq('id', leadId);
@@ -477,14 +439,12 @@ async function quickAdvanceLead(leadId, nextStatus) {
        };
        await supabase.from('bookings').insert([newBooking]);
     }
-
   } catch(e) {
     console.warn("Errore update lead status:", e);
   }
   renderKanbanBoard();
   updateKpiSummary();
 }
-
 function openNewLeadModal() {
   const modal = document.getElementById('newLeadModal');
   if (modal) {
@@ -493,12 +453,10 @@ function openNewLeadModal() {
     modal.classList.add('active');
   }
 }
-
 function closeNewLeadModal() {
   const modal = document.getElementById('newLeadModal');
   if (modal) modal.classList.remove('active');
 }
-
 async function handleNewLeadFormSubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
   const nameVal = document.getElementById('newLeadName') ? document.getElementById('newLeadName').value.trim() : '';
@@ -507,7 +465,6 @@ async function handleNewLeadFormSubmit(event) {
   const typeVal = document.getElementById('newLeadType') ? document.getElementById('newLeadType').value : 'Azienda / Società';
   const carVal = document.getElementById('newLeadCar') ? document.getElementById('newLeadCar').value.trim() : '';
   const notesVal = document.getElementById('newLeadNotes') ? document.getElementById('newLeadNotes').value.trim() : '';
-
   let first = nameVal;
   let last = '';
   if (nameVal.includes(' ')) {
@@ -515,7 +472,6 @@ async function handleNewLeadFormSubmit(event) {
     first = parts[0];
     last = parts.slice(1).join(' ');
   }
-
   try {
     const { data, error } = await supabase.from('crm_leads').insert([{
       first_name: first || 'Nuovo',
@@ -529,12 +485,10 @@ async function handleNewLeadFormSubmit(event) {
       notes: notesVal,
       assigned_broker_agent: 'Consulente Senior ITERCARS'
     }]).select();
-
     if (error) {
       alert("Errore durante il salvataggio su Supabase: " + error.message);
       return;
     }
-
     closeNewLeadModal();
     await fetchLeadsFromDatabase();
     renderKanbanBoard();
@@ -546,11 +500,9 @@ async function handleNewLeadFormSubmit(event) {
 }
 // Alias per compatibilità
 function saveNewLeadRecord(e) { handleNewLeadFormSubmit(e); }
-
 async function deleteCurrentLead() {
   if (!ActiveModalLead) return;
   if (!confirm(`Confermi l'eliminazione definitiva del lead "${ActiveModalLead.first_name} ${ActiveModalLead.last_name}" dal database SQL?`)) return;
-
   try {
     await supabase.from('crm_leads').delete().eq('id', ActiveModalLead.id);
     closeDossierModal();
@@ -562,14 +514,12 @@ async function deleteCurrentLead() {
     alert("Errore durante la cancellazione del lead.");
   }
 }
-
 /* ==========================================================================
    TAB 2: GESTIONE FLOTTA & LISTINI (`public.vehicles` CRUD)
    ========================================================================== */
 function renderVehiclesTable(vehicles) {
   const tbody = document.getElementById('vehiclesTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (vehicles.length === 0) {
     tbody.innerHTML = `
@@ -586,7 +536,6 @@ function renderVehiclesTable(vehicles) {
     document.getElementById('badgeVehiclesCount').textContent = '0';
     return;
   }
-
   vehicles.forEach(v => {
     const title = `${v.brand || ''} ${v.model || v.name || 'Vettura'}`.trim();
     const isLive = v.is_available !== false;
@@ -633,10 +582,8 @@ function renderVehiclesTable(vehicles) {
       </tr>
     `;
   });
-
   document.getElementById('badgeVehiclesCount').textContent = vehicles.length;
 }
-
 function filterVehiclesTable(query) {
   const input = document.getElementById('searchVehicleInput');
   const q = (query || (input ? input.value : '')).toLowerCase();
@@ -647,14 +594,12 @@ function filterVehiclesTable(query) {
   );
   renderVehiclesTable(filtered);
 }
-
 /* ==========================================================================
    TAB 2.1: GESTIONE LISTINI NBT BREVE TERMINE (`public.nbt_offers` CRUD)
    ========================================================================== */
 function renderNbtOffersTable(offers) {
   const tbody = document.getElementById('nbtOffersTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (!offers || offers.length === 0) {
     tbody.innerHTML = `
@@ -671,7 +616,6 @@ function renderNbtOffersTable(offers) {
     if (document.getElementById('badgeSubNbt')) document.getElementById('badgeSubNbt').textContent = '0';
     return;
   }
-
   offers.forEach(o => {
     const veh = o.vehicles || CurrentVehicles.find(x => x.id === o.vehicle_id) || {};
     const title = `${veh.brand || ''} ${veh.model || veh.name || o.provider_offer_code || 'Vettura NBT'}`.trim();
@@ -680,7 +624,6 @@ function renderNbtOffersTable(offers) {
     const daily = Number(o.daily_price || veh.daily_price || 0);
     const monthly = Number(o.client_monthly_price || Math.round(daily * 20) || 0);
     const dep = Number(o.deposit_mandante || veh.deposit || 3000);
-
     tbody.innerHTML += `
       <tr>
         <td>
@@ -727,10 +670,8 @@ function renderNbtOffersTable(offers) {
       </tr>
     `;
   });
-
   if (document.getElementById('badgeSubNbt')) document.getElementById('badgeSubNbt').textContent = offers.length;
 }
-
 function filterNbtTable() {
   const input = document.getElementById('searchNbtInput');
   const q = (input ? input.value : '').toLowerCase();
@@ -743,14 +684,12 @@ function filterNbtTable() {
   });
   renderNbtOffersTable(filtered);
 }
-
 /* ==========================================================================
    TAB 2.2: GESTIONE LISTINI NLT LUNGO TERMINE (`public.nlt_offers` CRUD)
    ========================================================================== */
 function renderNltOffersTable(offers) {
   const tbody = document.getElementById('nltOffersTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (!offers || offers.length === 0) {
     tbody.innerHTML = `
@@ -767,7 +706,6 @@ function renderNltOffersTable(offers) {
     if (document.getElementById('badgeSubNlt')) document.getElementById('badgeSubNlt').textContent = '0';
     return;
   }
-
   offers.forEach(o => {
     const veh = o.vehicles || CurrentVehicles.find(x => x.id === o.vehicle_id) || {};
     const title = `${veh.brand || ''} ${veh.model || veh.name || o.provider_offer_code || 'Vettura NLT'}`.trim();
@@ -775,7 +713,6 @@ function renderNltOffersTable(offers) {
     const isLive = o.is_active !== false;
     const monthly = Number(o.client_monthly_price || veh.daily_price || 0);
     const dep = Number(o.deposit_mandante || veh.deposit || 3000);
-
     tbody.innerHTML += `
       <tr>
         <td>
@@ -822,10 +759,8 @@ function renderNltOffersTable(offers) {
       </tr>
     `;
   });
-
   if (document.getElementById('badgeSubNlt')) document.getElementById('badgeSubNlt').textContent = offers.length;
 }
-
 function filterNltTable() {
   const input = document.getElementById('searchNltInput');
   const q = (input ? input.value : '').toLowerCase();
@@ -838,7 +773,6 @@ function filterNltTable() {
   });
   renderNltOffersTable(filtered);
 }
-
 function openNewVehicleModal() {
   const modal = document.getElementById('newVehicleModal');
   if (modal) {
@@ -851,7 +785,6 @@ function openNewVehicleModal() {
     modal.classList.add('active');
   }
 }
-
 function closeNewVehicleModal() {
   const modal = document.getElementById('newVehicleModal');
   if (modal) {
@@ -861,14 +794,11 @@ function closeNewVehicleModal() {
 }
 // Alias per compatibilità
 function closeVehicleModal() { closeNewVehicleModal(); }
-
 function editVehicleRecord(vehicleId) {
   const v = CurrentVehicles.find(x => x.id === vehicleId);
   if (!v) return;
-
   const modal = document.getElementById('newVehicleModal');
   if (!modal) return;
-
   if (document.getElementById('vehEditId')) document.getElementById('vehEditId').value = v.id;
   if (document.getElementById('vehProviderId')) document.getElementById('vehProviderId').value = v.provider_id || '';
   if (document.getElementById('vehTitle')) document.getElementById('vehTitle').value = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
@@ -878,17 +808,14 @@ function editVehicleRecord(vehicleId) {
   if (v.specs && v.specs.hp) specStr += ` • ${v.specs.hp}`;
   if (v.transmission) specStr += ` • ${v.transmission}`;
   if (document.getElementById('vehSpecs')) document.getElementById('vehSpecs').value = specStr;
-
   if (document.getElementById('vehTag')) document.getElementById('vehTag').value = v.badge || 'NLT 48 Mesi';
   if (document.getElementById('vehImage')) document.getElementById('vehImage').value = v.image_url || '';
   if (document.getElementById('vehDesc')) document.getElementById('vehDesc').value = (v.specs && v.specs.description ? v.specs.description : (v.description || 'Dotazione executive completa di serie con navigatore, fari Matrix LED, interni in pelle e cerchi in lega.'));
   if (document.getElementById('vehCity')) document.getElementById('vehCity').value = v['city'] || '';
-
   if (document.getElementById('vehicleModalTitleText')) document.getElementById('vehicleModalTitleText').textContent = `Modifica: ${v.brand || ''} ${v.model || v.name || ''}`;
   modal.style.zIndex = '2100';
   modal.classList.add('active');
 }
-
 async function handleVehicleFormSubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
   
@@ -901,11 +828,9 @@ async function handleVehicleFormSubmit(event) {
   const imgVal = document.getElementById('vehImage') ? document.getElementById('vehImage').value.trim() : '';
   const descVal = document.getElementById('vehDesc') ? document.getElementById('vehDesc').value.trim() : '';
   const cityVal = document.getElementById('vehCity') ? document.getElementById('vehCity').value.trim() : '';
-
   const isLuxury = document.getElementById('vehIsLuxury') ? document.getElementById('vehIsLuxury').checked : false;
   const isNbt = document.getElementById('vehIsNbt') ? document.getElementById('vehIsNbt').checked : false;
   const isNlt = document.getElementById('vehIsNlt') ? document.getElementById('vehIsNlt').checked : false;
-
   let brand = 'ITERCARS';
   let model = titleVal;
   if (titleVal.includes(' ')) {
@@ -913,7 +838,6 @@ async function handleVehicleFormSubmit(event) {
     brand = parts[0];
     model = parts.slice(1).join(' ');
   }
-
   const payload = {
     brand: brand,
     model: model,
@@ -932,19 +856,16 @@ async function handleVehicleFormSubmit(event) {
     provider_id: providerIdVal || null,
     'city': cityVal
   };
-
   try {
     if (id) {
       const { error } = await supabase.from('vehicles').update(payload).eq('id', id);
       if (error) throw error;
-
       // Sincronizza anche il prezzo sulle offerte NLT e NBT collegate a questa vettura per coerenza
       await supabase.from('nlt_offers').update({ client_monthly_price: priceVal }).eq('vehicle_id', id);
       await supabase.from('nbt_offers').update({ daily_price: priceVal }).eq('vehicle_id', id);
     } else {
       const { data: newVeh, error } = await supabase.from('vehicles').insert([payload]).select();
       if (error) throw error;
-
       // Crea automaticamente una offerta NLT base collegata alla nuova vettura se inserita con successo
       if (newVeh && newVeh[0] && newVeh[0].id) {
         await supabase.from('nlt_offers').insert([{
@@ -987,7 +908,6 @@ async function handleVehicleFormSubmit(event) {
 }
 // Alias
 function saveVehicleRecord(e) { handleVehicleFormSubmit(e); }
-
 async function deleteVehicleRecord(vehicleId) {
   try {
     alert("Avvio eliminazione veicolo: " + vehicleId);
@@ -997,20 +917,17 @@ async function deleteVehicleRecord(vehicleId) {
       return;
     }
     if (!confirm(`Confermi l'eliminazione definitiva della vettura "${v.brand || ''} ${v.model || v.name || ''}" e di tutte le offerte associate?`)) return;
-
     // 1. Eliminiamo prima preventivamente tutte le tabelle dipendenti (FK) per evitare errori "violates foreign key constraint"
     await supabase.from('nlt_offers').delete().eq('vehicle_id', vehicleId);
     await supabase.from('nbt_offers').delete().eq('vehicle_id', vehicleId);
     await supabase.from('quotes').delete().eq('vehicle_id', vehicleId);
     await supabase.from('bookings').delete().eq('vehicle_id', vehicleId);
-
     // 2. Eliminiamo la vettura controllando se Supabase restituisce un errore RLS o SQL
     const { error } = await supabase.from('vehicles').delete().eq('id', vehicleId);
     if (error) {
       alert("Impossibile eliminare da Supabase (Blocco Policy RLS / Permessi): " + error.message);
       return;
     }
-
     await fetchVehiclesFromDatabase();
     renderVehiclesTable(CurrentVehicles);
     renderNbtOffersTable(CurrentNbtOffers);
@@ -1022,7 +939,6 @@ async function deleteVehicleRecord(vehicleId) {
     alert("Impossibile eliminare: " + (e.message || e));
   }
 }
-
 async function toggleVehicleStatus(vehicleId, newStatus) {
   try {
     await supabase.from('vehicles').update({ is_available: newStatus }).eq('id', vehicleId);
@@ -1031,7 +947,6 @@ async function toggleVehicleStatus(vehicleId, newStatus) {
     renderVehiclesTable(CurrentVehicles);
   } catch(e) {}
 }
-
 /* ==========================================================================
    MODALI E CRUD NBT BREVE TERMINE (`public.nbt_offers`)
    ========================================================================== */
@@ -1046,7 +961,6 @@ function populateNbtVehicleSelect(selectedVehId) {
   });
   sel.innerHTML += '<option value="NEW_VEHICLE" style="font-weight:700; color:#f1c40f;">+ Nuova Marca e Modello (Crea al volo in flotta)...</option>';
 }
-
 function handleNbtVehicleSelectChange(selectElem) {
   const wrapper = document.getElementById('nbtNewTitleWrapper');
   const inputNew = document.getElementById('nbtNewTitle');
@@ -1071,7 +985,6 @@ function handleNbtVehicleSelectChange(selectElem) {
     }
   }
 }
-
 function openNewNbtOfferModal() {
   const modal = document.getElementById('newNbtOfferModal');
   if (!modal) return;
@@ -1090,23 +1003,19 @@ function openNewNbtOfferModal() {
   if (wrapper) wrapper.style.display = 'none';
   modal.classList.add('active');
 }
-
 function closeNewNbtOfferModal() {
   const modal = document.getElementById('newNbtOfferModal');
   if (modal) modal.classList.remove('active');
 }
-
 function editNbtOfferRecord(offerId) {
   const o = CurrentNbtOffers.find(x => x.id === offerId);
   if (!o) return;
   const modal = document.getElementById('newNbtOfferModal');
   if (!modal) return;
-
   if (document.getElementById('nbtEditId')) document.getElementById('nbtEditId').value = o.id;
   populateNbtVehicleSelect(o.vehicle_id);
   const wrapper = document.getElementById('nbtNewTitleWrapper');
   if (wrapper) wrapper.style.display = 'none';
-
   if (document.getElementById('nbtDailyPrice')) document.getElementById('nbtDailyPrice').value = o.daily_price || (o.vehicles ? o.vehicles.daily_price : 140);
   if (document.getElementById('nbtMonthlyPrice')) document.getElementById('nbtMonthlyPrice').value = o.client_monthly_price || '';
   if (document.getElementById('nbtDeposit')) document.getElementById('nbtDeposit').value = o.deposit_mandante || 3000;
@@ -1115,13 +1024,11 @@ function editNbtOfferRecord(offerId) {
   if (document.getElementById('nbtReadyDelivery')) document.getElementById('nbtReadyDelivery').value = (o.is_ready_delivery !== false) ? 'true' : 'false';
   if (document.getElementById('nbtDeliveryWeeks')) document.getElementById('nbtDeliveryWeeks').value = o.delivery_weeks || 1;
   if (document.getElementById('nbtProviderCode')) document.getElementById('nbtProviderCode').value = o.provider_offer_code || '';
-
   const veh = o.vehicles || CurrentVehicles.find(x => x.id === o.vehicle_id) || {};
   const t = `${veh.brand || ''} ${veh.model || veh.name || ''}`.trim();
   if (document.getElementById('nbtModalTitleText')) document.getElementById('nbtModalTitleText').innerHTML = `<i class="ri-flashlight-fill"></i> Modifica NBT: ${t}`;
   modal.classList.add('active');
 }
-
 async function handleNbtOfferSubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
   const editId = document.getElementById('nbtEditId') ? document.getElementById('nbtEditId').value : '';
@@ -1135,7 +1042,6 @@ async function handleNbtOfferSubmit(event) {
   const readyVal = document.getElementById('nbtReadyDelivery') ? document.getElementById('nbtReadyDelivery').value === 'true' : true;
   const weeksVal = Number(document.getElementById('nbtDeliveryWeeks').value) || 1;
   const codeVal = document.getElementById('nbtProviderCode') ? document.getElementById('nbtProviderCode').value.trim() : 'NBT-VIP-LIVE';
-
   try {
     let finalVehId = selVehId;
     if (selVehId === 'NEW_VEHICLE' || !selVehId) {
@@ -1166,14 +1072,12 @@ async function handleNbtOfferSubmit(event) {
         is_available: true,
         is_luxury: false
       }]).select();
-
       if (vehErr || !createdVeh || !createdVeh[0]) throw new Error("Errore creazione veicolo DB: " + (vehErr ? vehErr.message : ''));
       finalVehId = createdVeh[0].id;
     } else {
       // Aggiorna anche il daily_price sul veicolo per coerenza
       await supabase.from('vehicles').update({ daily_price: dailyVal, deposit: depVal, is_nbt: true }).eq('id', finalVehId);
     }
-
     const payload = {
       vehicle_id: finalVehId,
       provider_offer_code: codeVal,
@@ -1186,7 +1090,6 @@ async function handleNbtOfferSubmit(event) {
       delivery_weeks: weeksVal,
       is_active: true
     };
-
     if (editId) {
       const { error } = await supabase.from('nbt_offers').update(payload).eq('id', editId);
       if (error) throw error;
@@ -1194,7 +1097,6 @@ async function handleNbtOfferSubmit(event) {
       const { error } = await supabase.from('nbt_offers').insert([payload]);
       if (error) throw error;
     }
-
     closeNewNbtOfferModal();
     await fetchVehiclesFromDatabase();
     renderVehiclesTable(CurrentVehicles);
@@ -1205,7 +1107,6 @@ async function handleNbtOfferSubmit(event) {
     alert("Errore salvataggio listino NBT: " + (e.message || e));
   }
 }
-
 async function deleteNbtOfferRecord(offerId) {
   if (!confirm("Confermi la rimozione di questa offerta dal listino NBT Breve Termine?")) return;
   try {
@@ -1218,7 +1119,6 @@ async function deleteNbtOfferRecord(offerId) {
     alert("Errore rimozione NBT: " + (e.message || e));
   }
 }
-
 async function toggleNbtOfferStatus(offerId, newStatus) {
   try {
     await supabase.from('nbt_offers').update({ is_active: newStatus }).eq('id', offerId);
@@ -1227,7 +1127,6 @@ async function toggleNbtOfferStatus(offerId, newStatus) {
     renderNbtOffersTable(CurrentNbtOffers);
   } catch(e) {}
 }
-
 /* ==========================================================================
    MODALI E CRUD NLT LUNGO TERMINE (`public.nlt_offers`)
    ========================================================================== */
@@ -1242,7 +1141,6 @@ function populateNltVehicleSelect(selectedVehId) {
   });
   sel.innerHTML += '<option value="NEW_VEHICLE" style="font-weight:700; color:#ffffff;">+ Nuova Marca e Modello (Crea al volo in flotta)...</option>';
 }
-
 function handleNltVehicleSelectChange(selectElem) {
   const wrapper = document.getElementById('nltNewTitleWrapper');
   const inputNew = document.getElementById('nltNewTitle');
@@ -1267,7 +1165,6 @@ function handleNltVehicleSelectChange(selectElem) {
     }
   }
 }
-
 function openNewNltOfferModal() {
   const modal = document.getElementById('newNltOfferModal');
   if (!modal) return;
@@ -1283,23 +1180,19 @@ function openNewNltOfferModal() {
   if (wrapper) wrapper.style.display = 'none';
   modal.classList.add('active');
 }
-
 function closeNewNltOfferModal() {
   const modal = document.getElementById('newNltOfferModal');
   if (modal) modal.classList.remove('active');
 }
-
 function editNltOfferRecord(offerId) {
   const o = CurrentNltOffers.find(x => x.id === offerId);
   if (!o) return;
   const modal = document.getElementById('newNltOfferModal');
   if (!modal) return;
-
   if (document.getElementById('nltEditId')) document.getElementById('nltEditId').value = o.id;
   populateNltVehicleSelect(o.vehicle_id);
   const wrapper = document.getElementById('nltNewTitleWrapper');
   if (wrapper) wrapper.style.display = 'none';
-
   if (document.getElementById('nltMonthlyPrice')) document.getElementById('nltMonthlyPrice').value = o.client_monthly_price || (o.vehicles ? o.vehicles.daily_price : 580);
   if (document.getElementById('nltDeposit')) document.getElementById('nltDeposit').value = o.deposit_mandante || 3000;
   if (document.getElementById('nltDuration')) document.getElementById('nltDuration').value = o.duration_months || 48;
@@ -1307,13 +1200,11 @@ function editNltOfferRecord(offerId) {
   if (document.getElementById('nltReadyDelivery')) document.getElementById('nltReadyDelivery').value = (o.is_ready_delivery !== false) ? 'true' : 'false';
   if (document.getElementById('nltDeliveryWeeks')) document.getElementById('nltDeliveryWeeks').value = o.delivery_weeks || 4;
   if (document.getElementById('nltProviderCode')) document.getElementById('nltProviderCode').value = o.provider_offer_code || '';
-
   const veh = o.vehicles || CurrentVehicles.find(x => x.id === o.vehicle_id) || {};
   const t = `${veh.brand || ''} ${veh.model || veh.name || ''}`.trim();
   if (document.getElementById('nltModalTitleText')) document.getElementById('nltModalTitleText').innerHTML = `<i class="ri-calendar-check-line"></i> Modifica NLT: ${t}`;
   modal.classList.add('active');
 }
-
 async function handleNltOfferSubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
   const editId = document.getElementById('nltEditId') ? document.getElementById('nltEditId').value : '';
@@ -1326,7 +1217,6 @@ async function handleNltOfferSubmit(event) {
   const readyVal = document.getElementById('nltReadyDelivery') ? document.getElementById('nltReadyDelivery').value === 'true' : true;
   const weeksVal = Number(document.getElementById('nltDeliveryWeeks').value) || 4;
   const codeVal = document.getElementById('nltProviderCode') ? document.getElementById('nltProviderCode').value.trim() : 'NLT-ALD-48M';
-
   try {
     let finalVehId = selVehId;
     if (selVehId === 'NEW_VEHICLE' || !selVehId) {
@@ -1357,14 +1247,12 @@ async function handleNltOfferSubmit(event) {
         is_available: true,
         is_luxury: false
       }]).select();
-
       if (vehErr || !createdVeh || !createdVeh[0]) throw new Error("Errore creazione veicolo DB: " + (vehErr ? vehErr.message : ''));
       finalVehId = createdVeh[0].id;
     } else {
       // Se l'auto non ha un canone impostato o per allineare flotta generale
       await supabase.from('vehicles').update({ is_nlt: true }).eq('id', finalVehId);
     }
-
     const payload = {
       vehicle_id: finalVehId,
       provider_offer_code: codeVal,
@@ -1376,7 +1264,6 @@ async function handleNltOfferSubmit(event) {
       delivery_weeks: weeksVal,
       is_active: true
     };
-
     if (editId) {
       const { error } = await supabase.from('nlt_offers').update(payload).eq('id', editId);
       if (error) throw error;
@@ -1384,7 +1271,6 @@ async function handleNltOfferSubmit(event) {
       const { error } = await supabase.from('nlt_offers').insert([payload]);
       if (error) throw error;
     }
-
     closeNewNltOfferModal();
     await fetchVehiclesFromDatabase();
     renderVehiclesTable(CurrentVehicles);
@@ -1396,7 +1282,6 @@ async function handleNltOfferSubmit(event) {
     alert("Errore salvataggio listino NLT: " + (e.message || e));
   }
 }
-
 async function deleteNltOfferRecord(offerId) {
   if (!confirm("Confermi la rimozione di questa offerta dal listino NLT Lungo Termine?")) return;
   try {
@@ -1410,7 +1295,6 @@ async function deleteNltOfferRecord(offerId) {
     alert("Errore rimozione NLT: " + (e.message || e));
   }
 }
-
 async function toggleNltOfferStatus(offerId, newStatus) {
   try {
     await supabase.from('nlt_offers').update({ is_active: newStatus }).eq('id', offerId);
@@ -1419,7 +1303,6 @@ async function toggleNltOfferStatus(offerId, newStatus) {
     renderNltOffersTable(CurrentNltOffers);
   } catch(e) {}
 }
-
 /* ==========================================================================
    MODALI E CRUD FLOTTA LUXURY / SUPERCAR (`public.vehicles` dove `is_luxury = true`)
    ========================================================================== */
@@ -1427,24 +1310,19 @@ function renderLuxuryTable(vehicles) {
   const tbody = document.getElementById('luxuryTableBody');
   if (!tbody) return;
   tbody.innerHTML = '';
-
   if (!vehicles || vehicles.length === 0) {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 25px; color: var(--text-muted);">Nessuna supercar luxury trovata nel database. Clicca "+ Aggiungi Supercar Luxury" in alto.</td></tr>';
     return;
   }
-
   vehicles.forEach(v => {
     const specs = v.specs || {};
     const hp = specs.hp || '650 CV';
     const accel = specs.accel || '3.1s 0-100';
     const speed = specs.speed || '320 km/h';
-
     const statusBadge = v.is_available 
       ? `<span class="badge badge-confirmed"><i class="ri-check-line"></i> Disponibile Luxury</span>`
       : `<span class="badge badge-pending"><i class="ri-pause-line"></i> Sospesa</span>`;
-
     const title = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
-
     tbody.innerHTML += `
       <tr>
         <td>
@@ -1478,7 +1356,6 @@ function renderLuxuryTable(vehicles) {
     `;
   });
 }
-
 function filterLuxuryTable() {
   const q = document.getElementById('searchLuxuryInput') ? document.getElementById('searchLuxuryInput').value.toLowerCase() : '';
   if (!q) {
@@ -1491,7 +1368,6 @@ function filterLuxuryTable() {
   });
   renderLuxuryTable(filtered);
 }
-
 function openNewLuxuryModal() {
   const modal = document.getElementById('newLuxuryModal');
   if (!modal) return;
@@ -1508,18 +1384,15 @@ function openNewLuxuryModal() {
   
   modal.classList.add('active');
 }
-
 function closeNewLuxuryModal() {
   const modal = document.getElementById('newLuxuryModal');
   if (modal) modal.classList.remove('active');
 }
-
 function editLuxuryRecord(vehId) {
   const v = CurrentLuxuryVehicles.find(x => x.id === vehId) || CurrentVehicles.find(x => x.id === vehId);
   if (!v) return;
   const modal = document.getElementById('newLuxuryModal');
   if (!modal) return;
-
   if (document.getElementById('luxuryEditId')) document.getElementById('luxuryEditId').value = v.id;
   const title = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
   if (document.getElementById('luxuryTitle')) document.getElementById('luxuryTitle').value = title;
@@ -1532,11 +1405,9 @@ function editLuxuryRecord(vehId) {
   if (document.getElementById('luxuryAccel')) document.getElementById('luxuryAccel').value = specs.accel || '3.1s 0-100';
   if (document.getElementById('luxurySpeed')) document.getElementById('luxurySpeed').value = specs.speed || '320 km/h';
   if (document.getElementById('luxuryImageUrl')) document.getElementById('luxuryImageUrl').value = v.image_url || 'logo_tricolore.png';
-
   if (document.getElementById('luxuryModalTitleText')) document.getElementById('luxuryModalTitleText').innerHTML = `<i class="ri-vip-crown-fill"></i> Modifica Luxury: ${title}`;
   modal.classList.add('active');
 }
-
 async function handleLuxurySubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
   const editId = document.getElementById('luxuryEditId') ? document.getElementById('luxuryEditId').value : '';
@@ -1548,7 +1419,6 @@ async function handleLuxurySubmit(event) {
   const accelVal = document.getElementById('luxuryAccel') ? document.getElementById('luxuryAccel').value.trim() : '3.1s 0-100';
   const speedVal = document.getElementById('luxurySpeed') ? document.getElementById('luxurySpeed').value.trim() : '320 km/h';
   const imgVal = document.getElementById('luxuryImageUrl') ? document.getElementById('luxuryImageUrl').value.trim() : 'logo_tricolore.png';
-
   try {
     let brand = 'ITERCARS';
     let model = fullTitle;
@@ -1557,7 +1427,6 @@ async function handleLuxurySubmit(event) {
       brand = parts[0];
       model = parts.slice(1).join(' ');
     }
-
     const payload = {
       brand: brand,
       model: model,
@@ -1571,7 +1440,6 @@ async function handleLuxurySubmit(event) {
       is_luxury: true,
       is_available: true
     };
-
     if (editId) {
       const { error } = await supabase.from('vehicles').update(payload).eq('id', editId);
       if (error) throw error;
@@ -1579,7 +1447,6 @@ async function handleLuxurySubmit(event) {
       const { error } = await supabase.from('vehicles').insert([payload]);
       if (error) throw error;
     }
-
     closeNewLuxuryModal();
     await fetchVehiclesFromDatabase();
     renderVehiclesTable(CurrentVehicles);
@@ -1592,14 +1459,12 @@ async function handleLuxurySubmit(event) {
     alert("Errore salvataggio Supercar Luxury: " + (e.message || e));
   }
 }
-
 /* ==========================================================================
    TAB 2.5: GESTIONE LISTINI PARTNERS (`public.vehicles` per Mandanti/Partner)
    ========================================================================== */
 function renderPartnerOffersTable(offers) {
   const tbody = document.getElementById('partnerOffersTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (!offers || offers.length === 0) {
     tbody.innerHTML = `
@@ -1616,7 +1481,6 @@ function renderPartnerOffersTable(offers) {
     if (document.getElementById('badgeSubPartners')) document.getElementById('badgeSubPartners').textContent = '0';
     return;
   }
-
   offers.forEach(v => {
     const prov = (CurrentProviders || []).find(p => p.id === v.provider_id) || {};
     const provName = prov.name || (v.provider_id ? `Partner ID: ${v.provider_id.substring(0,8)}` : 'Noleggiatore Partner');
@@ -1629,7 +1493,6 @@ function renderPartnerOffersTable(offers) {
     const dep = Number(v.deposit || prov.default_deposit || 1500);
     const isLive = v.is_available !== false && v.is_active !== false && v.status !== 'pending_approval' && v.status !== 'rejected';
     const isPending = v.status === 'pending_approval' || (v.is_active === false && v.status !== 'rejected' && !isLive);
-
     let statusHtml = '';
     if (isLive) {
       statusHtml = `
@@ -1650,7 +1513,6 @@ function renderPartnerOffersTable(offers) {
         </span>
       `;
     }
-
     tbody.innerHTML += `
       <tr>
         <td>
@@ -1705,10 +1567,8 @@ function renderPartnerOffersTable(offers) {
       </tr>
     `;
   });
-
   if (document.getElementById('badgeSubPartners')) document.getElementById('badgeSubPartners').textContent = offers.length;
 }
-
 function filterPartnerOffersTable() {
   const input = document.getElementById('searchPartnersInput');
   const q = (input ? input.value : '').toLowerCase();
@@ -1722,7 +1582,6 @@ function filterPartnerOffersTable() {
   });
   renderPartnerOffersTable(filtered);
 }
-
 async function quickApprovePartnerOffer(vehicleId) {
   const v = CurrentVehicles.find(x => x.id === vehicleId);
   if (!v) return;
@@ -1730,7 +1589,6 @@ async function quickApprovePartnerOffer(vehicleId) {
   v.status = 'approved';
   v.is_available = true;
   v.is_active = true;
-
   if (supabase) {
     try {
       await supabase.from('vehicles').update({ status: 'approved', is_available: true, is_active: true, approval_date: new Date().toISOString() }).eq('id', vehicleId);
@@ -1742,15 +1600,12 @@ async function quickApprovePartnerOffer(vehicleId) {
   if (typeof loadFleetApprovalTable === 'function') loadFleetApprovalTable();
   alert("Vettura partner approvata e pubblicata con successo online sul portale!");
 }
-
 async function togglePartnerOfferStatus(vehicleId, makeActive) {
   const v = CurrentVehicles.find(x => x.id === vehicleId);
   if (!v) return;
-
   v.is_available = makeActive;
   v.is_active = makeActive;
   v.status = makeActive ? 'approved' : 'rejected';
-
   if (supabase) {
     try {
       await supabase.from('vehicles').update({ is_available: makeActive, is_active: makeActive, status: makeActive ? 'approved' : 'rejected' }).eq('id', vehicleId);
@@ -1758,19 +1613,16 @@ async function togglePartnerOfferStatus(vehicleId, makeActive) {
       // Cascade to nbt_offers and nlt_offers
       try { await supabase.from('nlt_offers').update({ is_active: makeActive }).eq('vehicle_id', vehicleId); } catch(e){}
       try { await supabase.from('nbt_offers').update({ is_active: makeActive }).eq('vehicle_id', vehicleId); } catch(e){}
-
     } catch(e) { console.warn("Supabase toggle partner car err:", e); }
   }
   await fetchVehiclesFromDatabase();
   renderPartnerOffersTable(CurrentPartnerVehicles);
   renderVehiclesTable(CurrentVehicles);
 }
-
 function openNewPartnerOfferModal() {
   const modal = document.getElementById('newPartnerOfferModal');
   const select = document.getElementById('partnerSelectProvider');
   if (!modal || !select) return;
-
   select.innerHTML = '<option value="">-- Seleziona Mandante / Azienda Partner --</option>';
   (CurrentProviders || []).forEach(p => {
     select.innerHTML += `<option value="${p.id}">${p.name} (${p.code || 'partner'})</option>`;
@@ -1779,7 +1631,6 @@ function openNewPartnerOfferModal() {
     select.innerHTML += `<option value="e5555555-5555-5555-5555-555555555555">Partner Esempio 1 S.R.L.</option>`;
     select.innerHTML += `<option value="f6666666-6666-6666-6666-666666666666">Elite Supercars Club Italia</option>`;
   }
-
   if (document.getElementById('partnerEditId')) document.getElementById('partnerEditId').value = '';
   if (document.getElementById('partnerModalTitleText')) document.getElementById('partnerModalTitleText').innerHTML = '<i class="ri-team-line"></i> Aggiungi Macchina Partner';
   if (document.getElementById('partnerVehTitle')) document.getElementById('partnerVehTitle').value = '';
@@ -1789,23 +1640,18 @@ function openNewPartnerOfferModal() {
   if (document.getElementById('partnerVehImage')) document.getElementById('partnerVehImage').value = '';
   if (document.getElementById('partnerVehDesc')) document.getElementById('partnerVehDesc').value = '';
   if (document.getElementById('partnerVehStatus')) document.getElementById('partnerVehStatus').value = 'approved';
-
   modal.classList.add('active');
 }
-
 function closeNewPartnerOfferModal() {
   const modal = document.getElementById('newPartnerOfferModal');
   if (modal) modal.classList.remove('active');
 }
-
 function editPartnerOfferRecord(vehicleId) {
   const v = CurrentVehicles.find(x => x.id === vehicleId);
   if (!v) return;
-
   openNewPartnerOfferModal();
   const modal = document.getElementById('newPartnerOfferModal');
   if (!modal) return;
-
   if (document.getElementById('partnerEditId')) document.getElementById('partnerEditId').value = v.id;
   if (document.getElementById('partnerModalTitleText')) document.getElementById('partnerModalTitleText').innerHTML = `<i class="ri-team-line"></i> Modifica Macchina Partner: ${v.brand || ''} ${v.model || v.name || ''}`;
   if (document.getElementById('partnerSelectProvider')) document.getElementById('partnerSelectProvider').value = v.provider_id || '';
@@ -1822,17 +1668,14 @@ function editPartnerOfferRecord(vehicleId) {
   if (document.getElementById('partnerVehImage')) document.getElementById('partnerVehImage').value = v.image_url || '';
   if (document.getElementById('partnerVehDesc')) document.getElementById('partnerVehDesc').value = (v.specs && v.specs.description ? v.specs.description : (v.description || ''));
 }
-
 async function handlePartnerOfferSubmit(event) {
   if (event && event.preventDefault) event.preventDefault();
-
   const editId = document.getElementById('partnerEditId') ? document.getElementById('partnerEditId').value : '';
   const providerId = document.getElementById('partnerSelectProvider') ? document.getElementById('partnerSelectProvider').value : '';
   if (!providerId) {
     alert("Seleziona una mandante o azienda partner per assegnare la vettura.");
     return;
   }
-
   const titleVal = document.getElementById('partnerVehTitle') ? document.getElementById('partnerVehTitle').value.trim() : '';
   const catVal = document.getElementById('partnerVehCategory') ? document.getElementById('partnerVehCategory').value : 'SUV Luxury';
   const priceVal = Number(document.getElementById('partnerVehPrice') ? document.getElementById('partnerVehPrice').value : 200) || 200;
@@ -1841,7 +1684,6 @@ async function handlePartnerOfferSubmit(event) {
   const statusVal = document.getElementById('partnerVehStatus') ? document.getElementById('partnerVehStatus').value : 'approved';
   const imgVal = document.getElementById('partnerVehImage') ? document.getElementById('partnerVehImage').value.trim() : '';
   const descVal = document.getElementById('partnerVehDesc') ? document.getElementById('partnerVehDesc').value.trim() : '';
-
   let brand = 'Partner';
   let model = titleVal;
   if (titleVal.includes(' ')) {
@@ -1849,13 +1691,10 @@ async function handlePartnerOfferSubmit(event) {
     brand = parts[0];
     model = parts.slice(1).join(' ');
   }
-
   const partsSpecs = specsVal.split('•').map(x => x.trim());
   const fuel = partsSpecs[0] || 'Ibrido / Diesel';
   const trans = partsSpecs[1] || 'Automatico 8M';
-
   const isOnline = statusVal === 'approved';
-
   const payload = {
     provider_id: providerId,
     brand: brand,
@@ -1878,7 +1717,6 @@ async function handlePartnerOfferSubmit(event) {
     is_nlt: true,
     is_nbt: true
   };
-
   try {
     if (editId) {
       const { error } = await supabase.from('vehicles').update(payload).eq('id', editId);
@@ -1889,7 +1727,6 @@ async function handlePartnerOfferSubmit(event) {
       const { error } = await supabase.from('vehicles').insert([payload]);
       if (error) { alert("Errore salvataggio su Supabase: " + error.message); return; }
     }
-
     closeNewPartnerOfferModal();
     await fetchVehiclesFromDatabase();
     renderPartnerOffersTable(CurrentPartnerVehicles);
@@ -1900,12 +1737,10 @@ async function handlePartnerOfferSubmit(event) {
     alert("Errore durante l'inserimento o modifica della vettura partner: " + e.message);
   }
 }
-
 async function deletePartnerOfferRecord(vehicleId) {
   const v = CurrentVehicles.find(x => x.id === vehicleId);
   if (!v) return;
   if (!confirm(`Confermi l'eliminazione definitiva del veicolo partner "${v.brand} ${v.model}" dal database SQL?`)) return;
-
   try {
     await supabase.from('vehicles').delete().eq('id', vehicleId);
     await fetchVehiclesFromDatabase();
@@ -1916,14 +1751,12 @@ async function deletePartnerOfferRecord(vehicleId) {
     alert("Errore durante la cancellazione della vettura partner: " + e.message);
   }
 }
-
 /* ==========================================================================
    TAB 3: ARCHIVIO PREVENTIVI EMESSI (`public.quotes`)
    ========================================================================== */
 function renderQuotesTable(quotes) {
   const tbody = document.getElementById('quotesTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (quotes.length === 0) {
     tbody.innerHTML = `
@@ -1940,7 +1773,6 @@ function renderQuotesTable(quotes) {
     document.getElementById('badgeQuotesCount').textContent = '0';
     return;
   }
-
   quotes.forEach(q => {
     const dateStr = q.created_at ? new Date(q.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Oggi';
     const isNbt = q.quote_type === 'NBT' || (q.quote_code && q.quote_code.startsWith('IT-NBT-'));
@@ -1948,11 +1780,9 @@ function renderQuotesTable(quotes) {
     const typeBadge = isNbt
       ? '<span style="background: rgba(59, 130, 246, 0.18); color: #60a5fa; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(59, 130, 246, 0.4); display: inline-block; margin-top: 4px;">Breve Termine (NBT)</span>'
       : '<span style="background: rgba(16, 185, 129, 0.18); color: #34d399; padding: 3px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; border: 1px solid rgba(16, 185, 129, 0.4); display: inline-block; margin-top: 4px;">Lungo Termine (NLT)</span>';
-
     const durationText = isNbt
       ? `${q.selected_duration_days || q.selected_duration_months || 7} Giorni • ${Number(q.selected_km_per_day || q.selected_km_per_year || 150).toLocaleString('it-IT')} km/giorno`
       : `${q.selected_duration_months || 48} Mesi • ${Number(q.selected_km_per_year || 15000).toLocaleString('it-IT')} km/anno`;
-
     const providerText = q.provider_id 
       ? `<div style="font-size: 0.76rem; color: #facc15; margin-top: 4px;"><i class="ri-building-line"></i> Mandante: <code>${q.provider_id.slice(0, 8)}...</code></div>` 
       : '';
@@ -1992,10 +1822,8 @@ function renderQuotesTable(quotes) {
       </tr>
     `;
   });
-
   document.getElementById('badgeQuotesCount').textContent = quotes.length;
 }
-
 function filterQuotesTable(query) {
   const q = query.toLowerCase();
   const filtered = CurrentQuotes.filter(item => 
@@ -2004,7 +1832,6 @@ function filterQuotesTable(query) {
   );
   renderQuotesTable(filtered);
 }
-
 async function deleteQuoteRecord(quoteId) {
   if (!confirm("Confermi l'eliminazione di questa pratica dal registro preventivi?")) return;
   try {
@@ -2013,14 +1840,12 @@ async function deleteQuoteRecord(quoteId) {
     renderQuotesTable(CurrentQuotes);
   } catch(e) {}
 }
-
 /* ==========================================================================
    TAB 4: PRENOTAZIONI NBT & RICHIESTE VIP (`bookings` + `availability_requests`)
    ========================================================================== */
 function renderBookingsTable(bookings) {
   const tbody = document.getElementById('bookingsTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (bookings.length === 0) {
     tbody.innerHTML = `
@@ -2037,19 +1862,16 @@ function renderBookingsTable(bookings) {
     if (document.getElementById('badgeBookingsCount')) document.getElementById('badgeBookingsCount').textContent = '0';
     return;
   }
-
   bookings.forEach(b => {
     let pillClass = 'pill-new';
     if (b.status === 'approved' || b.status === 'confermato' || b.status === 'confirmed') pillClass = 'pill-approved';
     if (b.status === 'pending' || b.status === 'new') pillClass = 'pill-pending';
     if (b.status === 'delivered') pillClass = 'pill-approved';
-
     const dateStr = b.created_at ? new Date(b.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : 'Oggi';
     const sourceLabel = b.source === 'availability' ? 'Richiesta Disponibilità' : 'Sito Web';
     const sourcePrefix = b.source === 'availability' ? '[VIP]' : '[WEB]';
     
     const idDisplay = b.id ? String(b.id).substring(0, 8) : 'N/A';
-
     tbody.innerHTML += `
       <tr>
         <td>
@@ -2094,10 +1916,8 @@ function renderBookingsTable(bookings) {
       </tr>
     `;
   });
-
   if (document.getElementById('badgeBookingsCount')) document.getElementById('badgeBookingsCount').textContent = bookings.length;
 }
-
 function filterBookingsTable(query) {
   const q = query.toLowerCase();
   const catBookings = CurrentBookings.map(b => ({...b, derived_cat: getBookingCategory(b)})).filter(b => b.derived_cat === currentBookingCategory);
@@ -2108,7 +1928,6 @@ function filterBookingsTable(query) {
   );
   renderBookingsTable(filtered);
 }
-
 async function deleteBookingRecord(recordId, source) {
   if (!confirm("Confermi l'eliminazione di questa prenotazione/richiesta dal database?")) return;
   try {
@@ -2118,78 +1937,60 @@ async function deleteBookingRecord(recordId, source) {
     renderBookingsTable(CurrentBookings);
   } catch(e) {}
 }
-
 /* ==========================================================================
    TAB 5: COMPARATORE MULTI-MANDANTE LIVE (`public.vehicles` + `nlt_offers`)
    ========================================================================== */
 function populateComparisonCarSelect() {
   const select = document.getElementById('compareSelectCar');
   if (!select) return;
-
   select.innerHTML = '';
   if (CurrentVehicles.length === 0) {
     select.innerHTML = '<option value="">Nessuna vettura in catalogo SQL - Aggiungi un veicolo</option>';
     return;
   }
-
   CurrentVehicles.forEach((v, idx) => {
     const title = `${v.brand || ''} ${v.model || v.name || ''}`.trim();
     select.innerHTML += `<option value="${v.id}" ${idx === 0 ? 'selected' : ''}>${title} (${v.category || 'SUV'})</option>`;
   });
-
   runLiveComparison();
 }
-
 function runLiveComparison() {
   const select = document.getElementById('compareSelectCar');
   if (!select || !select.value) return;
-
   const vehicleId = select.value;
   const v = CurrentVehicles.find(x => x.id === vehicleId);
   const carTitle = v ? `${v.brand || ''} ${v.model || v.name || ''}`.trim() : 'Vettura Flotta';
   const baseDaily = v ? (Number(v.daily_price || v.price) || 500) : 500;
-
   const durationElem = document.getElementById('compareMonths') || document.getElementById('compareSelectDuration');
   const duration = durationElem ? Number(durationElem.value) || 48 : 48;
-
   const kmElem = document.getElementById('compareKm') || document.getElementById('compareSelectKm');
   const km = kmElem ? Number(kmElem.value) || 15000 : 15000;
-
   const depElem = document.getElementById('compareDeposit') || document.getElementById('compareInputDeposit');
   const deposit = depElem ? Number(depElem.value) || 3000 : 3000;
-
   const markupElem = document.getElementById('compareBrokerMarkup') || document.getElementById('compareInputMarkup');
   const markup = markupElem ? Number(markupElem.value) || 45 : 45;
-
   const container = document.getElementById('compareResultsGrid') || document.getElementById('compareResultsContainer');
   if (!container) return;
-
   // Calcolo listino dinamico simulando i 4 mandanti sul canone base del veicolo
   let durMult = 1.0;
   if (duration === 36) durMult = 1.08;
   if (duration === 60) durMult = 0.93;
-
   const kmDelta = (km - 15000) / 5000 * 30.00;
   const depDelta = (3000 - deposit) / duration;
-
   // Stima canone NLT mensile netto di partenza basato sulla vettura
   const baseMonthlyNet = Math.round((baseDaily * 1.6) * durMult + kmDelta + depDelta);
-
   const providers = [
     { code: 'arval', name: 'Arval Italia S.p.A.', icon: 'ri-shield-line', time: 'Pronta Consegna (3 sett.)', diff: 20 },
     { code: 'ayvens', name: 'Ayvens Network (ALD/LeasePlan)', icon: 'ri-global-line', time: 'Ordine (4-6 sett.)', diff: 45 },
     { code: 'leasys', name: 'Leasys Executive', icon: 'ri-star-line', time: 'Ordine Su Misura (8 sett.)', diff: 75 },
     { code: 'itercars', name: 'ITERCARS Direct VIP Fleet', icon: 'ri-vip-crown-line', time: 'Pronta Consegna Immediata', diff: 0 }
   ];
-
   let calculatedOffers = providers.map(p => {
     let netPrice = baseMonthlyNet + p.diff;
     let clientFinalPrice = Math.round(netPrice + markup);
     return { ...p, netPrice: netPrice, clientPrice: clientFinalPrice };
   });
-
   calculatedOffers.sort((a, b) => a.clientPrice - b.clientPrice);
-
   container.innerHTML = '';
   calculatedOffers.forEach((o, index) => {
     const isBest = index === 0;
@@ -2220,13 +2021,11 @@ function runLiveComparison() {
             </div>
           </div>
         </div>
-
         <div>
           <div style="background: rgba(0,0,0,0.5); padding: 14px; border-radius: 12px; margin-bottom: 14px; text-align: center;">
             <span style="font-size: 0.76rem; color: var(--text-muted); text-transform: uppercase; display: block; font-weight: 700;">Canone Offerto al Cliente</span>
             <span style="font-size: 2rem; font-weight: 900; color: #ffffff; line-height: 1.1;">€ ${o.clientPrice} <small style="font-size: 0.82rem; font-weight: 400; color: #fff;">/mese</small></span>
           </div>
-
           <button class="btn-header ${isBest ? 'btn-header-primary' : 'btn-header-outline'}" style="width: 100%; justify-content: center; height: 46px;" onclick="sendGeneratedComparisonQuote('${carTitle}', '${o.name}', '${duration}', '${km}', '${deposit}', '${o.clientPrice}')">
             <i class="ri-whatsapp-line"></i> Invia Proposta WhatsApp
           </button>
@@ -2237,21 +2036,17 @@ function runLiveComparison() {
 }
 // Alias per compatibilità
 function runComparison() { runLiveComparison(); }
-
 function sendGeneratedComparisonQuote(carName, provider, months, km, deposit, price) {
   const msg = `*ITERCARS PREVENTIVO UFFICIALE NLT*\n\nGentile Cliente, ecco la migliore proposta selezionata dal nostro Broker:\n\n*${carName}*\nListino Mandante: *${provider}*\nDurata: *${months} Mesi*\nChilometri: *${km} km/anno*\nAnticipo: *€ ${deposit}*\n\n*Canone Tutto Incluso: € ${price} / mese (IVA esc.)*\nAssicurazione RCA+Kasko, Manutenzione Full e Bollo compresi.\n\nDesidera bloccare la vettura e avviare l'istruttoria?`;
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 /* ==========================================================================
    TAB 6: DOSSIER DELIBERA CREDITO (`public.crm_documents`)
    ========================================================================== */
 function renderDocsOverview() {
   const container = document.getElementById('docsOverviewContainer');
   if (!container) return;
-
   const docsLeads = CurrentLeads.filter(l => l.pipeline_status === 'docs_requested' || l.pipeline_status === 'approved_by_provider' || l.pipeline_status === 'contract_signed');
-
   if (docsLeads.length === 0) {
     container.innerHTML = `
       <div class="empty-state-box">
@@ -2263,7 +2058,6 @@ function renderDocsOverview() {
     document.getElementById('badgeDocsCount').textContent = '0';
     return;
   }
-
   let html = '<div style="display: flex; flex-direction: column; gap: 14px;">';
   docsLeads.forEach(l => {
     html += `
@@ -2286,17 +2080,14 @@ function renderDocsOverview() {
   container.innerHTML = html;
   document.getElementById('badgeDocsCount').textContent = docsLeads.length;
 }
-
 function openDossierModal(leadId) {
   const lead = CurrentLeads.find(l => l.id === leadId);
   if (!lead) return;
   ActiveModalLead = lead;
-
   document.getElementById('modalClientTitle').textContent = `Dossier: ${lead.first_name} ${lead.last_name}`;
   document.getElementById('modalClientSub').textContent = `${lead.customer_type} • ${lead.car_name} (€${lead.monthly_price}/m - ${lead.provider_code})`;
   document.getElementById('modalLeadNotes').value = lead.notes || '';
   document.getElementById('modalStatusSelect').value = lead.pipeline_status || 'new_lead';
-
   const mandBox = document.getElementById('modalMandanteBox');
   if (mandBox) {
     let prov = null;
@@ -2307,7 +2098,6 @@ function openDossierModal(leadId) {
     const provCode = lead.provider_code || (prov ? prov.code : null);
     const provPhone = lead.provider_company_phone || (prov ? prov.company_phone : null);
     const provEmail = lead.provider_company_email || (prov ? prov.company_email : null);
-
     if (provName || provCode) {
       mandBox.style.display = 'block';
       document.getElementById('modalMandanteName').textContent = provName || provCode;
@@ -2327,13 +2117,10 @@ function openDossierModal(leadId) {
       mandBox.style.display = 'none';
     }
   }
-
   // Verifica se ci sono documenti allegati per questo lead in CurrentDocuments
   const leadDocs = CurrentDocuments.filter(d => d.lead_id === lead.id);
-
   const checkElem = document.getElementById('modalDocChecklist');
   checkElem.innerHTML = '';
-
   if (leadDocs.length > 0) {
     leadDocs.forEach(d => {
       checkElem.innerHTML += `
@@ -2363,7 +2150,6 @@ function openDossierModal(leadId) {
       { name: 'Reddito (Modello Unico / 2 Buste Paga)', status: lead.pipeline_status === 'new_lead' ? 'Da Richiedere' : 'Verificato', icon: lead.pipeline_status === 'new_lead' ? 'ri-time-line text-muted' : 'ri-checkbox-circle-line text-muted', color: lead.pipeline_status === 'new_lead' ? '#f1c40f' : '#ffffff' },
       { name: 'Modulo Privacy & Trattamento Dati Itercars', status: 'Firmato Digitale', icon: 'ri-checkbox-circle-line text-muted', color: '#ffffff' }
     ];
-
     docsList.forEach(d => {
       checkElem.innerHTML += `
         <div class="doc-check-item">
@@ -2376,40 +2162,32 @@ function openDossierModal(leadId) {
       `;
     });
   }
-
   document.getElementById('dossierModal').classList.add('active');
 }
-
 function closeDossierModal() {
   document.getElementById('dossierModal').classList.remove('active');
 }
-
 async function saveLeadNotes() {
   if (!ActiveModalLead) return;
   const newNotes = document.getElementById('modalLeadNotes').value.trim();
   ActiveModalLead.notes = newNotes;
-
   try {
     await supabase.from('crm_leads').update({ notes: newNotes }).eq('id', ActiveModalLead.id);
     alert("Note operative aggiornate con successo nel dossier.");
   } catch(e) {}
 }
-
 async function updateLeadStatusFromModal() {
   if (!ActiveModalLead) return;
   const newSt = document.getElementById('modalStatusSelect').value;
   ActiveModalLead.pipeline_status = newSt;
-
   try {
     await supabase.from('crm_leads').update({ pipeline_status: newSt }).eq('id', ActiveModalLead.id);
   } catch(e) {}
-
   closeDossierModal();
   renderKanbanBoard();
   renderDocsOverview();
   updateKpiSummary();
 }
-
 async function deleteDocumentRecord(docId) {
   if (!confirm("Confermi l'eliminazione di questo documento dal dossier?")) return;
   try {
@@ -2418,14 +2196,12 @@ async function deleteDocumentRecord(docId) {
     if (ActiveModalLead) openDossierModal(ActiveModalLead.id);
   } catch(e) {}
 }
-
 function openAddDocumentToLeadModal() {
   if (!ActiveModalLead) return;
   const docType = prompt("Inserisci tipologia documento (es. Busta Paga, CUD, Patente):", "Patente di Guida");
   if (!docType) return;
   const fileUrl = prompt("Inserisci URL di archiviazione o link file Supabase Storage:", "https://example.com/documento.pdf");
   if (!fileUrl) return;
-
   supabase.from('crm_documents').insert([{
     lead_id: ActiveModalLead.id,
     document_type: docType,
@@ -2436,14 +2212,12 @@ function openAddDocumentToLeadModal() {
     openDossierModal(ActiveModalLead.id);
   });
 }
-
 /* ==========================================================================
    TAB 7: CANDIDATURE PARTNER & FORNITORI (`public.supplier_applications`)
    ========================================================================== */
 function renderPartnersTable(partners) {
   const tbody = document.getElementById('partnersTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   if (partners.length === 0) {
     tbody.innerHTML = `
@@ -2460,7 +2234,6 @@ function renderPartnersTable(partners) {
     document.getElementById('badgePartnersCount').textContent = '0';
     return;
   }
-
   partners.forEach(p => {
     const dataDisplay = p.data ? p.data : (p.created_at ? new Date(p.created_at).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' }) : 'Oggi');
     const pIvaDisplay = p.partita_iva ? `<div style="font-size: 0.8rem; color: var(--text-muted);">P.IVA: ${p.partita_iva}</div>` : '';
@@ -2493,15 +2266,12 @@ function renderPartnersTable(partners) {
       </tr>
     `;
   });
-
   document.getElementById('badgePartnersCount').textContent = partners.length;
 }
-
 async function acceptPartnerRecord(id) {
   if (!confirm("Vuoi approvare questo partner e aggiungerlo alla rete ufficiale?")) return;
   const p = CurrentPartners.find(x => x.id === id);
   if (!p) return;
-
   try {
     const { error: insErr } = await supabase.from('providers').insert([{
       name: p.company_name,
@@ -2514,19 +2284,15 @@ async function acceptPartnerRecord(id) {
       is_active: true,
       saas_plan: 'pro_partner'
     }]);
-
     if (insErr) throw insErr;
-
     // INVIA LA MAIL DI ACCETTAZIONE AL PARTNER
     try {
       await sendPartnerAcceptanceEmail(p.email, p.company_name);
     } catch(e) {
       console.warn("Errore simulazione email:", e);
     }
-
     const { error: delErr } = await supabase.from('supplier_applications').delete().eq('id', id);
     if (delErr) throw delErr;
-
     alert("Partner approvato con successo e trasferito nella gestione attiva!");
     await fetchPartnersFromDatabase();
     renderPartnersTable(CurrentPartners);
@@ -2536,7 +2302,6 @@ async function acceptPartnerRecord(id) {
     alert("Errore durante l'approvazione del partner.");
   }
 }
-
 // --- AUTOMAZIONE EMAIL DI ACCETTAZIONE PARTNER ---
 async function sendPartnerAcceptanceEmail(partnerEmail, companyName) {
   if (!partnerEmail) return;
@@ -2574,7 +2339,6 @@ async function sendPartnerAcceptanceEmail(partnerEmail, companyName) {
     alert(`Errore nell'invio dell'email a ${partnerEmail}. Assicurati che la function 'accettazione_azienda' sia deployata.`);
   }
 }
-
 function filterPartnersTable(query) {
   const q = query.toLowerCase();
   const filtered = CurrentPartners.filter(p => 
@@ -2584,7 +2348,6 @@ function filterPartnersTable(query) {
   );
   renderPartnersTable(filtered);
 }
-
 async function deletePartnerRecord(partnerId) {
   if (!confirm("Confermi l'eliminazione di questa candidatura partner dal database?")) return;
   try {
@@ -2593,7 +2356,6 @@ async function deletePartnerRecord(partnerId) {
     renderPartnersTable(CurrentPartners);
   } catch(e) {}
 }
-
 /* ==========================================================================
    KPI SUMMARY ENGINE
    ========================================================================== */
@@ -2601,22 +2363,18 @@ function updateKpiSummary() {
   const newCount = CurrentLeads.filter(l => l.pipeline_status === 'new_lead' || l.pipeline_status === 'quote_sent').length;
   const docsCount = CurrentLeads.filter(l => l.pipeline_status === 'docs_requested').length;
   const wonCount = CurrentLeads.filter(l => l.pipeline_status === 'contract_signed').length;
-
   const totalVal = CurrentLeads
     .filter(l => l.pipeline_status !== 'lost')
     .reduce((sum, l) => sum + (Number(l.monthly_price) || 0), 0);
-
   const k1 = document.getElementById('kpiNewLeads');
   const k2 = document.getElementById('kpiPipelineValue');
   const k3 = document.getElementById('kpiDocsPending');
   const k4 = document.getElementById('kpiContractsWon');
-
   if (k1) k1.innerHTML = `${newCount} <small>attivi</small>`;
   if (k2) k2.innerHTML = `€ ${totalVal.toLocaleString('it-IT')} <small>/ mese</small>`;
   if (k3) k3.innerHTML = `${docsCount} <small>in verifica</small>`;
   if (k4) k4.innerHTML = `${wonCount} <small>totali</small>`;
 }
-
 /* ==========================================================================
    GESTIONE AUTENTICAZIONE E LOGOUT ADMIN BROKER CONSOLE
    ========================================================================== */
@@ -2624,7 +2382,6 @@ async function checkAdminAuth() {
   const overlay = document.getElementById('adminAuthOverlay');
   const mainApp = document.querySelector('.app-layout');
   if (!overlay) return;
-
   try {
     const { data: { session } } = await supabase.auth.getSession();
     if (session && session.user) {
@@ -2649,46 +2406,38 @@ async function checkAdminAuth() {
     if(mainApp) mainApp.style.display = 'none';
   }
 }
-
 async function handleAdminLogin(event) {
   if (event && event.preventDefault) event.preventDefault();
   const emailInput = document.getElementById('adminEmailInput');
   const passInput = document.getElementById('adminPasswordInput');
   const email = (emailInput ? emailInput.value : '').trim().toLowerCase();
   const pass = (passInput ? passInput.value : '').trim();
-
   if (!email || !pass) {
     alert('Inserisci email e password.');
     return;
   }
-
   const submitBtn = event.target.querySelector('button[type="submit"]');
   if (submitBtn) {
     submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Verifica Credenziali...`;
     submitBtn.disabled = true;
   }
-
   try {
     const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
       email: email,
       password: pass
     });
-
     if (authErr) throw authErr;
-
     // Controllo Sicurezza Massima: l'email è nella tabella degli amministratori eletti?
     const { data: adminData, error: adminErr } = await supabase
       .from('broker_admins')
       .select('email')
       .eq('email', email)
       .single();
-
     if (adminErr || !adminData) {
       await supabase.auth.signOut();
       alert('ACCESSO NEGATO: Questo account non ha i privilegi di Amministratore (Broker CRM).');
       return;
     }
-
     unlockConsoleSuccess(email);
   } catch (err) {
     console.error('Login Admin Errore:', err);
@@ -2701,16 +2450,13 @@ async function handleAdminLogin(event) {
   }
 }
 
-
 function unlockConsoleSuccess(userEmail) {
   checkAdminAuth();
-
   const statusEl = document.getElementById('connectionStatus');
   if (statusEl) {
     statusEl.innerHTML = `<span style="width: 8px; height: 8px; background: #ffffff; border-radius: 50%; display: inline-block; box-shadow: 0 0 10px #ffffff;"></span> BROKER ATTIVO: ${userEmail.split('@')[0].toUpperCase()}`;
   }
 }
-
 /* ==========================================================================
    MODERAZIONE E APPROVAZIONE FLOTTE EXCEL PARTNER (CONSOLE CENTRALE)
    ========================================================================== */
@@ -2718,20 +2464,15 @@ async function loadFleetApprovalTable() {
   const tbody = document.getElementById('fleetApprovalTableBody');
   const badge = document.getElementById('badgeFleetPendingCount');
   if (!tbody || !supabase) return;
-
   tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 26px; color: var(--text-muted);"><i class="ri-loader-4-line ri-spin" style="font-size: 1.4rem;"></i> Analisi veicoli in attesa di approvazione...</td></tr>`;
-
   try {
     let allJobs = [];
     let allVehicles = [];
     let allProviders = [];
-
     const vehRes = await supabase.from('vehicles').select('*').order('created_at', { ascending: false });
     if (vehRes && vehRes.data) allVehicles = vehRes.data;
-
     const provRes = await supabase.from('providers').select('*');
     if (provRes && provRes.data) allProviders = provRes.data;
-
     try {
       let jobsRes = await supabase.from('import_jobs').select('*').order('imported_at', { ascending: false });
       if (jobsRes.error) {
@@ -2739,7 +2480,6 @@ async function loadFleetApprovalTable() {
       }
       if (jobsRes && jobsRes.data) allJobs = jobsRes.data;
     } catch(eJ) { console.warn("Errore fetch import_jobs:", eJ); }
-
     window._allJobsCache = allJobs;
     window._allVehiclesCache = allVehicles;
     if (allJobs && allJobs.length > 0) {
@@ -2748,28 +2488,23 @@ async function loadFleetApprovalTable() {
         if (job.file_data || job.file_url) window._excelCache[job.id] = job.file_data || job.file_url;
       });
     }
-
     // Filtriamo i veicoli in attesa di approvazione della Direzione
     const list = allVehicles.filter(v => {
       const isPendingStatus = v.status === 'pending_approval';
       const isInactiveNotRejected = v.is_active === false && v.status !== 'rejected';
       return isPendingStatus || isInactiveNotRejected;
     });
-
     const pendingJobsIds = new Set();
     list.forEach(v => {
         if (v.import_job_id) pendingJobsIds.add(v.import_job_id);
     });
-
     const pendingJobs = (window._allJobsCache || []).filter(j => 
       j.status === 'pending_approval' || 
       j.status === 'processing_by_direzione' || 
       !j.status ||
       pendingJobsIds.has(j.id)
     );
-
     if (badge) badge.textContent = list.length + pendingJobs.length;
-
     if (list.length === 0 && pendingJobs.length === 0) {
       tbody.innerHTML = `
         <tr>
@@ -2781,9 +2516,7 @@ async function loadFleetApprovalTable() {
       `;
       return;
     }
-
     tbody.innerHTML = '';
-
     if (list.length > 0 || pendingJobs.length > 0) {
       tbody.innerHTML += `
         <tr style="background: linear-gradient(90deg, rgba(16,185,129,0.22), rgba(16,185,129,0.05)); border-bottom: 2px solid #ffffff;">
@@ -2805,7 +2538,6 @@ async function loadFleetApprovalTable() {
         </tr>
       `;
     }
-
     // Raggruppiamo i veicoli per import_job_id
     const vehiclesByJob = {};
     const standaloneVehicles = [];
@@ -2818,14 +2550,12 @@ async function loadFleetApprovalTable() {
         standaloneVehicles.push(v);
       }
     });
-
     // 1. Rendiamo innanzitutto i file Excel/PDF originali inviati dai partner (import_jobs in attesa)
     pendingJobs.forEach(job => {
       const prov = allProviders.find(p => p.id === job.provider_id);
       const partnerName = prov ? prov.name : 'Noleggiatore Partner';
       const partnerVat = prov ? (prov.company_vat ? `P.IVA: ${prov.company_vat}` : `Codice: ${prov.code || ''}`) : `ID: ${(job.provider_id || '').substring(0,8)}`;
       const timeStr = job.imported_at ? new Date(job.imported_at).toLocaleString('it-IT') : 'Oggi';
-
       tbody.innerHTML += `
         <tr style="background: rgba(245, 158, 11, 0.04); border-left: 3px solid var(--accent-gold);">
           <td style="vertical-align: middle; width: 16%; padding: 8px 6px; box-sizing: border-box;">
@@ -2881,7 +2611,6 @@ async function loadFleetApprovalTable() {
           </td>
         </tr>
       `;
-
       const jobVehicles = vehiclesByJob[job.id] || [];
       if (jobVehicles.length > 0) {
         let carsHtml = jobVehicles.map(v => `
@@ -2901,7 +2630,6 @@ async function loadFleetApprovalTable() {
             </div>
           </div>
         `).join('');
-
         tbody.innerHTML += `
           <tr style="background: rgba(0,0,0,0.25);">
             <td colspan="5" style="padding: 16px 24px; border-bottom: 2px solid rgba(255,255,255,0.08);">
@@ -2920,7 +2648,6 @@ async function loadFleetApprovalTable() {
         `;
       }
     });
-
     // 2. Rendiamo eventuali schede veicolo isolate (senza job associato)
     standaloneVehicles.forEach(v => {
       const prov = allProviders.find(p => p.id === v.provider_id);
@@ -2928,7 +2655,6 @@ async function loadFleetApprovalTable() {
       const partnerVat = prov ? (prov.company_vat ? `P.IVA: ${prov.company_vat}` : `Codice: ${prov.code || prov.id.substring(0,8)}`) : `Provider ID: ${(v.provider_id || 'Locale').substring(0,8)}`;
       const title = `${v.brand || ''} ${v.model || v.name || 'Auto Esclusiva'}`.trim();
       const desc = (v.specs && v.specs.description) ? v.specs.description : `Allestimento ${v.trim || 'Top'} con motore ${v.fuel_type || 'Ibrido'} ${v.transmission || 'Automatico'}.`;
-
       tbody.innerHTML += `
         <tr>
           <td style="vertical-align: middle; width: 16%; padding: 8px 6px; box-sizing: border-box;">
@@ -2990,10 +2716,8 @@ async function loadFleetApprovalTable() {
     tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 24px; color:#ef4444;">Errore di caricamento dal database. Riprova.</td></tr>`;
   }
 }
-
 async function approveAllPendingPartnerVehicles() {
   if (!confirm(" DELIBERA MASTER (TASTO OK POTENTE):\n\nSei sicuro di voler acconsentire e delibera con Tasto OK a TUTTE le auto e i dossier attualmente in attesa?\n- Diverranno istantaneamente ONLINE su NLT, NBT e Luxury sul portale\n- La console del Partner passerà da 'Flotta in preparazione' a flotta LIVE interattiva.")) return;
-
   try {
     let pendingJobs = [];
     if (typeof supabase !== 'undefined') {
@@ -3042,7 +2766,6 @@ async function approveAllPendingPartnerVehicles() {
     alert("Errore durante la delibera master: " + err.message);
   }
 }
-
 async function approveImportJob(jobId) {
   if (!confirm("Acconsenti ed esamini positivamente questo file inviato dal Mandante?")) return;
   try {
@@ -3081,7 +2804,6 @@ async function approveImportJob(jobId) {
     loadFleetApprovalTable();
   } catch(e) { console.warn("Errore approvazione file job:", e); }
 }
-
 async function rejectImportJob(jobId) {
   if (!confirm("Desideri rifiutare o archiviare questo file?")) return;
   try {
@@ -3092,7 +2814,6 @@ async function rejectImportJob(jobId) {
     loadFleetApprovalTable();
   } catch(e) { console.warn("Errore rifiuto file job:", e); }
 }
-
 async function sendToAntigravity(jobId) {
   if (!confirm("Vuoi inviare questo file ad Antigravity per l'elaborazione automatica delle auto?")) return;
   try {
@@ -3103,16 +2824,13 @@ async function sendToAntigravity(jobId) {
     loadFleetApprovalTable();
   } catch(e) { console.warn("Errore invio ad Antigravity:", e); }
 }
-
 async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
   let fileDataUrl = null;
   let fileName = 'Listino_Partner.xlsx';
-
   // 1. Cercare in cache con import_job_id
   if (importJobId && importJobId !== 'null' && importJobId !== 'undefined' && window._excelCache && window._excelCache[importJobId]) {
     fileDataUrl = window._excelCache[importJobId];
   }
-
   // 2. Cercare in cache con provider_id
   if (!fileDataUrl && window._allJobsCache && Array.isArray(window._allJobsCache)) {
     let jobFound = null;
@@ -3130,7 +2848,6 @@ async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
       fileName = jobFound.file_name || fileName;
     }
   }
-
   // 3. SE IN CACHE NON C'È ANCORA IL FILE BASE64 (es. per alleggerimento query iniziale), LO RECUPERIAMO AL VOLO DA SUPABASE!
   if (!fileDataUrl && typeof supabase !== 'undefined') {
     try {
@@ -3166,7 +2883,6 @@ async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
       console.warn("On-demand download fetch warn:", errFetch);
     }
   }
-
   // 4. Se abbiamo trovato il file autentico, avviamo subito il download sul computer
   if (fileDataUrl) {
     const a = document.createElement('a');
@@ -3177,7 +2893,6 @@ async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
     document.body.removeChild(a);
     return;
   }
-
   // 4. Fallback intelligente al 100%: se l'auto era stata caricata prima della patch e non ha file allegato in DB,
   // generiamo e scarichiamo al volo la scheda tecnica CSV esatta di quell'auto con prezzo, cauzione e testi in modo da non bloccarti MAI!
   const v = window._allVehiclesCache ? window._allVehiclesCache.find(x => x.id === vehicleId) : null;
@@ -3196,7 +2911,6 @@ async function downloadVehiclePartnerFile(vehicleId, providerId, importJobId) {
   a.click();
   document.body.removeChild(a);
 }
-
 function downloadOriginalExcelFile(fileName, jobId) {
   const fileDataUrl = (window._excelCache && window._excelCache[jobId]) ? window._excelCache[jobId] : null;
   if (!fileDataUrl) {
@@ -3210,10 +2924,8 @@ function downloadOriginalExcelFile(fileName, jobId) {
   a.click();
   document.body.removeChild(a);
 }
-
 async function approvePartnerVehicle(vehicleId) {
   if (!confirm("Sei sicuro di voler acconsentire a questa vettura e renderla LIVE sul portale e nei comparatori Itercars?")) return;
-
   try {
     // 1. Aggiorniamo vehicles in status 'approved', is_active=true, is_available=true
     const { error: errVeh } = await supabase
@@ -3225,10 +2937,8 @@ async function approvePartnerVehicle(vehicleId) {
         approval_date: new Date().toISOString()
       })
       .eq('id', vehicleId);
-
     if (errVeh) throw errVeh;
 // 2. Aggiorniamo o creiamo le offerte collegate
-
     const fullV = window._allVehiclesCache.find(v => v.id === vehicleId);
     if (fullV) {
       if (fullV.is_nlt) {
@@ -3240,7 +2950,6 @@ async function approvePartnerVehicle(vehicleId) {
            const p46 = (fullV.specs && fullV.specs.monthly_price_46) ? Number(fullV.specs.monthly_price_46) : (p36 * 0.90);
            
            function fmtPrice(v) { return '€ ' + Math.round(v).toLocaleString('it-IT'); }
-
            await supabase.from('nlt_offers').insert({ 
              vehicle_id: vehicleId, 
              provider_id: fullV.provider_id, 
@@ -3272,7 +2981,6 @@ async function approvePartnerVehicle(vehicleId) {
         }
       }
     }
-
     alert(" VEICOLO ACCONSENTITO E PUBBLICATO CON SUCCESSO!\nL'auto è ora ufficialmente LIVE e visibile ai clienti sul sito web principale e nei comparatori NLT/NBT.");
     await loadAllCrmData();
     loadFleetApprovalTable();
@@ -3281,10 +2989,8 @@ async function approvePartnerVehicle(vehicleId) {
     alert("Errore durante l'approvazione: " + err.message);
   }
 }
-
 async function rejectPartnerVehicle(vehicleId) {
   if (!confirm("Sei sicuro di voler RIFIUTARE (Non consentire) questa vettura? Non sarà consentita sul sito.")) return;
-
   try {
     const { error: errVeh } = await supabase
       .from('vehicles')
@@ -3295,13 +3001,10 @@ async function rejectPartnerVehicle(vehicleId) {
         approval_date: new Date().toISOString()
       })
       .eq('id', vehicleId);
-
     if (errVeh) throw errVeh;
-
     // Spegniamo anche nlt e nbt
     await supabase.from('nlt_offers').update({ is_active: false, status: 'rejected' }).eq('vehicle_id', vehicleId);
     await supabase.from('nbt_offers').update({ is_active: false, status: 'rejected' }).eq('vehicle_id', vehicleId);
-
     alert(" Veicolo rifiutato e non consentito. È stato archiviato e non apparirà sul sito.");
     loadFleetApprovalTable();
   } catch (err) {
@@ -3309,7 +3012,6 @@ async function rejectPartnerVehicle(vehicleId) {
     alert("Errore durante il rifiuto: " + err.message);
   }
 }
-
 function adminLogout() {
   try {
     sessionStorage.removeItem('itercars_admin_logged');
@@ -3326,12 +3028,10 @@ function adminLogout() {
     overlay.classList.add('active');
   }
 }
-
 /* ==========================================================================
    PARTNER PROFILE CONTROL PANEL LOGIC E TAB MULTI-MANDANTE
    ========================================================================== */
 let ActivePartnerProfile = null;
-
 async function openPartnerProfile(providerId) {
   try {
     const p = CurrentPartners.find(x => x.id === providerId) || (typeof CurrentProviders !== 'undefined' ? CurrentProviders.find(x => x.id === providerId) : null);
@@ -3360,12 +3060,10 @@ async function openPartnerProfile(providerId) {
     console.error(err);
   }
 }
-
 function closePartnerProfileModal() {
   document.getElementById('partnerProfileModal').classList.remove('active');
   ActivePartnerProfile = null;
 }
-
 function switchPartnerProfileTab(tabName) {
   document.getElementById('profileTabFleet').style.display = tabName === 'fleet' ? 'block' : 'none';
   document.getElementById('profileTabDocs').style.display = tabName === 'docs' ? 'block' : 'none';
@@ -3373,7 +3071,6 @@ function switchPartnerProfileTab(tabName) {
   document.getElementById('btnProfileFleet').className = tabName === 'fleet' ? 'btn-header btn-header-primary' : 'btn-header btn-header-outline';
   document.getElementById('btnProfileDocs').className = tabName === 'docs' ? 'btn-header btn-header-primary' : 'btn-header btn-header-outline';
 }
-
 async function loadPartnerProfileFleet(providerId) {
   const tbody = document.getElementById('partnerProfileFleetBody');
   if(!tbody) return;
@@ -3416,7 +3113,6 @@ async function loadPartnerProfileFleet(providerId) {
     tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
   }
 }
-
 async function loadPartnerProfileDocs(providerId) {
   const tbody = document.getElementById('partnerProfileDocsBody');
   if(!tbody) return;
@@ -3453,7 +3149,6 @@ async function loadPartnerProfileDocs(providerId) {
     tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
   }
 }
-
 async function approvePartnerFleet() {
   if (!ActivePartnerProfile) return;
   if (!confirm("Sei sicuro di voler approvare tutti i veicoli in attesa di questo partner? Verranno pubblicati sul portale.")) return;
@@ -3475,7 +3170,6 @@ async function approvePartnerFleet() {
     alert("Errore durante l'approvazione.");
   }
 }
-
 async function deletePartnerProfileVehicle(vehicleId) {
   if (!confirm("Sei sicuro di voler eliminare definitivamente questo veicolo?")) return;
   try {
@@ -3487,7 +3181,6 @@ async function deletePartnerProfileVehicle(vehicleId) {
     alert("Errore durante l'eliminazione.");
   }
 }
-
 function openNewVehicleForPartner() {
   openNewVehicleModal();
   if (typeof ActivePartnerProfile !== 'undefined' && ActivePartnerProfile) {
@@ -3495,11 +3188,9 @@ function openNewVehicleForPartner() {
     if (provIdElem) provIdElem.value = ActivePartnerProfile.id;
   }
 }
-
 function editPartnerDetails() {
   alert("La modifica dei dati aziendali sarà disponibile nella prossima release.");
 }
-
 
 async function loadActivePartnersTab() {
   const tbody = document.getElementById('activePartnersTableBody');
@@ -3508,7 +3199,6 @@ async function loadActivePartnersTab() {
   if (!tbody || !supabase) return;
   
   tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 26px;"><i class="ri-loader-line ri-spin"></i> Caricamento profili...</td></tr>';
-
   try {
     const { data: providers, error } = await supabase.from('providers').select('*').order('name', { ascending: true });
     
@@ -3535,7 +3225,6 @@ async function loadActivePartnersTab() {
           <td><span style="background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 12px;">${actualFleetCount} Auto</span></td>
           <td style="text-align: right;">
             <button class="btn-header btn-header-primary" style="padding: 6px 12px; font-size: 0.78rem;" onclick="openPartnerProfile('${p.id}')">
-
               <i class="ri-user-settings-line"></i> Gestisci Profilo
             </button>
           </td>
@@ -3547,7 +3236,6 @@ async function loadActivePartnersTab() {
     tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #ef4444;">Errore di caricamento.</td></tr>';
   }
 }
-
 
 async function annihilatePartner() {
   if (!ActivePartnerProfile) return;
@@ -3575,10 +3263,8 @@ async function annihilatePartner() {
     alert(`Si è verificato un errore durante l'eliminazione: ` + err.message);
   }
 }
-
 // Global array for bookings
 let currentBookingCategory = 'NBT';
-
 function getBookingCategory(b) {
   if (b.category) return b.category;
   
@@ -3600,7 +3286,6 @@ function getBookingCategory(b) {
   
   return 'NBT';
 }
-
 function filterBookingsByCategory(category) {
   currentBookingCategory = category;
   
@@ -3630,7 +3315,6 @@ function filterBookingsByCategory(category) {
   if(document.getElementById('badgeNltCount')) document.getElementById('badgeNltCount').textContent = countNlt;
   if(document.getElementById('badgeLuxuryCount')) document.getElementById('badgeLuxuryCount').textContent = countLux;
 }
-
 
 // --- AUTOMAZIONE EMAIL PARTNER ---
 async function sendAutomatedPartnerEmail(jobId) {
@@ -3683,7 +3367,6 @@ async function sendAutomatedPartnerEmail(jobId) {
     alert(`Errore nell'invio dell'email automatica. Assicurati che la function 'accettazione_azienda' sia deployata.`);
   }
 }
-
 /* ==========================================================================
    MOBILE SIDEBAR LOGIC
    ========================================================================== */
@@ -3698,7 +3381,6 @@ function toggleMobileSidebar() {
   }
 }
 
-
 /* ==========================================================================
    EDIT VEICOLO IN APPROVAZIONE
    ========================================================================== */
@@ -3706,10 +3388,8 @@ function openVehicleEditModal(vehicleId) {
   if (!window._allVehiclesCache) return;
   const v = window._allVehiclesCache.find(x => x.id === vehicleId);
   if (!v) return;
-
   document.getElementById('editVehicleId').textContent = '#' + vehicleId.substring(0,6);
   document.getElementById('editVehicleId').dataset.id = vehicleId;
-
   document.getElementById('editVehicleImage').value = v.image_url || '';
   document.getElementById('editVehicleBrand').value = v.brand || '';
   document.getElementById('editVehicleModel').value = v.model || v.name || '';
@@ -3719,14 +3399,12 @@ function openVehicleEditModal(vehicleId) {
   if (v.is_nlt && v.specs && v.specs.monthly_price) price = v.specs.monthly_price;
   document.getElementById('editVehiclePrice').value = price;
   document.getElementById('editVehicleDeposit').value = v.deposit || 0;
-
   const modal = document.getElementById('vehicleEditModal');
   if (modal) {
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('active'), 10);
   }
 }
-
 function closeVehicleEditModal() {
   const modal = document.getElementById('vehicleEditModal');
   if (modal) {
@@ -3734,21 +3412,17 @@ function closeVehicleEditModal() {
     setTimeout(() => modal.style.display = 'none', 300);
   }
 }
-
 async function saveVehicleEdits() {
   const vehicleId = document.getElementById('editVehicleId').dataset.id;
   if (!vehicleId) return;
-
   const v = window._allVehiclesCache.find(x => x.id === vehicleId);
   if (!v) return;
-
   const image_url = document.getElementById('editVehicleImage').value.trim();
   const brand = document.getElementById('editVehicleBrand').value.trim();
   const model = document.getElementById('editVehicleModel').value.trim();
   const category = document.getElementById('editVehicleCategory').value.trim();
   const price = Number(document.getElementById('editVehiclePrice').value) || 0;
   const deposit = Number(document.getElementById('editVehicleDeposit').value) || 0;
-
   try {
     const updatePayload = {
       image_url,
@@ -3758,7 +3432,6 @@ async function saveVehicleEdits() {
       category,
       deposit
     };
-
     if (v.is_nlt) {
       const specs = v.specs || {};
       specs.monthly_price = price;
@@ -3768,10 +3441,8 @@ async function saveVehicleEdits() {
     } else {
       updatePayload.daily_price = price;
     }
-
     const { error } = await supabase.from('vehicles').update(updatePayload).eq('id', vehicleId);
     if (error) throw error;
-
     closeVehicleEditModal();
     // Re-render the table
     if (typeof loadFleetApprovalTable === 'function') {
@@ -3780,14 +3451,11 @@ async function saveVehicleEdits() {
     
     // Also notify
     alert('Veicolo aggiornato con successo! È ancora in attesa di approvazione finale.');
-
   } catch(err) {
     console.error('Errore salvataggio veicolo:', err);
     alert('Errore durante il salvataggio: ' + err.message);
   }
 }
-
-
 
 async function handleVehicleImageUpload(event) {
   const file = event.target.files[0];
@@ -3823,3 +3491,154 @@ async function handleVehicleImageUpload(event) {
   };
   reader.readAsDataURL(file);
 }
+
+/* ==========================================================================
+   GESTIONE SITO CMS (Gestione Contenuti Supabase)
+   ========================================================================== */
+async function loadSiteConfigCMS() {
+  if (!supabase) return;
+  const container = document.getElementById('cmsOverviewContainer');
+  if (!container) return;
+  container.innerHTML = '<div style="color: var(--text-muted); text-align: center; padding: 20px;">Caricamento configurazione sito in corso...</div>';
+  try {
+    const { data, error } = await supabase
+      .from('site_config')
+      .select('*')
+      .order('category', { ascending: true })
+      .order('config_key', { ascending: true });
+    if (error) throw error;
+    if (!data || data.length === 0) {
+      container.innerHTML = '<div class="empty-state-box"><i class="ri-settings-4-line"></i><h4>Nessuna configurazione trovata</h4><p>Non ci sono voci in site_config.</p></div>';
+      return;
+    }
+    // Raggruppa per categoria
+    const categories = {};
+    data.forEach(item => {
+      const cat = item.category || 'general';
+      if (!categories[cat]) categories[cat] = [];
+      categories[cat].push(item);
+    });
+    let html = '';
+    for (const cat in categories) {
+      html += `
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 16px; margin-bottom: 16px;">
+          <h4 style="color: var(--accent-green); margin-bottom: 12px; font-weight: 400; text-transform: capitalize;"><i class="ri-folder-settings-line"></i> Categoria: ${cat}</h4>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+      `;
+      categories[cat].forEach(item => {
+        html += `
+            <div style="display: flex; flex-direction: column; gap: 6px;">
+              <div style="display: flex; justify-content: space-between;">
+                <label style="color: #fff; font-size: 0.85rem; font-weight: 300;">${item.description || item.config_key} <span style="color: var(--text-muted); font-size: 0.7rem;">(${item.config_key})</span></label>
+                <button onclick="saveCmsField('${item.config_key}')" class="btn-header btn-header-outline" style="padding: 2px 8px; font-size: 0.75rem; border-color: var(--accent-green); color: var(--accent-green);">Salva</button>
+              </div>
+              <textarea id="cms_field_${item.config_key}" rows="2" style="width: 100%; padding: 8px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 4px; font-family: monospace;">${item.config_value || ''}</textarea>
+            </div>
+        `;
+      });
+      html += `
+          </div>
+        </div>
+      `;
+    }
+    
+    container.innerHTML = html;
+  } catch (e) {
+    console.warn("Errore caricamento CMS:", e);
+    container.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 20px;">Errore durante il caricamento del CMS. Verifica le tabelle in Supabase.</div>';
+  }
+}
+async function saveCmsField(key) {
+  const el = document.getElementById('cms_field_' + key);
+  if (!el) return;
+  const newVal = el.value;
+  try {
+    const { error } = await supabase
+      .from('site_config')
+      .update({ config_value: newVal, updated_at: new Date() })
+      .eq('config_key', key);
+    if (error) throw error;
+    
+    // Mostra conferma visuale
+    const originalBg = el.style.background;
+    el.style.background = 'rgba(46, 204, 113, 0.2)';
+    setTimeout(() => el.style.background = originalBg, 800);
+  } catch (e) {
+    console.warn("Errore salvataggio CMS:", e);
+    alert("Errore salvataggio campo: " + e.message);
+  }
+}
+
+
+/* ==========================================================================
+   VISUAL BUILDER CMS (Iframe Communication - Universal)
+   ========================================================================== */
+window.changeCmsIframeSrc = function() {
+  const sel = document.getElementById('cmsPageSelector');
+  const iframe = document.getElementById('cmsIframe');
+  if (sel && iframe) {
+    iframe.src = sel.value + "&t=" + Date.now();
+  }
+};
+window.saveCmsChanges = async function() {
+  const iframe = document.getElementById('cmsIframe');
+  if (!iframe || !iframe.contentWindow) return;
+  
+  try {
+    if (typeof iframe.contentWindow.getCmsChanges !== 'function') {
+      alert("La modalità CMS non è ancora caricata nella pagina. Assicurati che l'indirizzo finisca con ?cms_mode=true.");
+      return;
+    }
+    const changes = iframe.contentWindow.getCmsChanges();
+    if (Object.keys(changes).length === 0) {
+      alert("Nessuna modifica rilevata. Clicca sui testi per modificarli.");
+      return;
+    }
+    let errorCount = 0;
+    
+    // Save each change to Supabase
+    for (const [key, payload] of Object.entries(changes)) {
+      let category = 'general';
+      let configValue = payload;
+      
+      // Support object payload from new universal system
+      if (payload && typeof payload === 'object' && payload.value !== undefined) {
+         configValue = payload.value;
+         category = payload.category || 'general';
+      } else {
+          // Old fallback
+          if (key.endsWith('_it')) category = 'text_it';
+          else if (key.endsWith('_en')) category = 'text_en';
+          else if (key.endsWith('_pt')) category = 'text_pt';
+          else if (key.endsWith('_fr')) category = 'text_fr';
+          else if (key.endsWith('_de')) category = 'text_de';
+          else if (key.endsWith('_es')) category = 'text_es';
+          else if (key.endsWith('_ar')) category = 'text_ar';
+          else if (key.endsWith('_ja')) category = 'text_ja';
+      }
+      const { error } = await supabase.from('site_config').upsert({
+        config_key: key,
+        config_value: configValue,
+        category: category,
+        description: 'Aggiornato via Visual Builder Universal',
+        updated_at: new Date()
+      }, { onConflict: 'config_key' });
+      
+      if (error) {
+        console.error("Errore salvataggio chiave", key, error);
+        errorCount++;
+      }
+    }
+    if (errorCount === 0) {
+      alert('Tutte le modifiche sono state salvate con successo su Supabase!');
+      if (typeof iframe.contentWindow.clearCmsChanges === 'function') {
+        iframe.contentWindow.clearCmsChanges();
+      }
+    } else {
+      alert(`Si sono verificati ${errorCount} errori durante il salvataggio. Controlla la console.`);
+    }
+  } catch (e) {
+    console.warn("Errore salvataggio Visual Builder:", e);
+    alert("Errore salvataggio: " + e.message);
+  }
+};

@@ -1,6 +1,5 @@
 import requests
 import json
-
 SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co'
 SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk'
 HEADERS = {
@@ -9,7 +8,6 @@ HEADERS = {
     'Content-Type': 'application/json',
     'Prefer': 'return=representation'
 }
-
 def format_price(val):
     if not val: return None
     try:
@@ -17,11 +15,9 @@ def format_price(val):
         return f"€ {int(num):,}".replace(",", ".")
     except:
         return str(val)
-
 # Fetch all NLT vehicles
 res = requests.get(f"{SUPABASE_URL}/rest/v1/vehicles?is_nlt=eq.true", headers=HEADERS)
 vehicles = res.json()
-
 offers = []
 for v in vehicles:
     specs = v.get('specs') or {}
@@ -60,7 +56,6 @@ for v in vehicles:
         '46_mesi_prezzo': format_price(p46)
     }
     offers.append(offer)
-
 # Insert offers into nlt_offers
 if offers:
     res_ins = requests.post(f"{SUPABASE_URL}/rest/v1/nlt_offers", headers=HEADERS, json=offers)

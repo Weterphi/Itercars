@@ -8,7 +8,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     const savedConsent = localStorage.getItem('itercars_cookie_consent');
     const isGranted = savedConsent === 'accepted' ? 'granted' : 'denied';
     gtag('consent', 'default', {
@@ -17,7 +16,6 @@
       'ad_user_data': isGranted,
       'ad_personalization': isGranted
     });
-
     gtag('config', 'G-H6JBRXTWJL');
   </script>
   <meta charset="UTF-8">
@@ -279,12 +277,10 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body>
-
   <!-- Hide full header/navigation menu -->
   <style>
     #header { display: none; }
   </style>
-
 
   <main class="upload-container">
     
@@ -305,14 +301,12 @@
           <i class="ri-shield-keyhole-fill" style="color: #2ecc71; font-size: 1.3rem;"></i>
           <span>Portale Pratiche ITERCARS</span>
         </div>
-
         <div class="dossier-nav-actions">
           <button type="button" class="btn-nav-item btn-nav-primary" id="topNavNextBtn" onclick="handleProfessionalNavNext()">
             <span>Avanti</span> <i class="ri-arrow-right-line"></i>
           </button>
         </div>
       </div>
-
       <!-- Bottom Row: Stepper 1, 2, 3 -->
       <div class="stepper-bar" id="stepperBar">
         <div class="step-item completed" id="stepperItem1">
@@ -329,7 +323,6 @@
         </div>
       </div>
     </div>
-
     <!-- QUOTE SUMMARY HEADER -->
     <div class="quote-header-card">
       <div>
@@ -344,13 +337,11 @@
         <div style="font-size: 1.8rem; font-weight: 900; color: #2ecc71; line-height: 1.1;" id="uploadQuotePriceDisplay">€ ---</div>
       </div>
     </div>
-
     <!-- INSTRUCTIONS ALERT -->
     <div style="background: rgba(255,255,255,0.03); border-left: 4px solid var(--accent-primary); padding: 18px 24px; border-radius: 0 12px 12px 0; margin-bottom: 30px; font-size: 0.95rem; line-height: 1.5;">
       <i class="ri-shield-user-line" style="color: var(--accent-primary); font-size: 1.2rem; vertical-align: middle; margin-right: 6px;"></i>
       <strong>Sicurezza & Privacy 256-bit:</strong> I tuoi file vengono trasmessi tramite crittografia di livello bancario ai nostri sistemi informativi per l'istruttoria e la delibera del credito presso il mandante ufficiale. Non verranno in alcun caso divulgati o ceduti a terzi non autorizzati.
     </div>
-
     <!-- SEZIONE 2: CARICAMENTO DOCUMENTI -->
     <div id="sectionStep2">
       <!-- CUSTOMER TYPE SELECTOR -->
@@ -362,7 +353,6 @@
           <button type="button" class="btn btn-outline" id="typeBtnAzienda" onclick="switchCustomerType('Azienda SRL/SPA')" style="font-weight: 800;"><i class="ri-building-line" style="margin-right: 6px;"></i>Azienda (SRL / SPA / Società )</button>
         </div>
       </div>
-
       <!-- UPLOAD GRID -->
       <div class="upload-grid" id="dropzonesGrid">
         
@@ -373,7 +363,6 @@
             <button type="button" class="mini-format-btn active" id="btn_mini_id_pdf" onclick="selectMiniFormat(event, 'id', 'pdf')" style="flex: 1; background: #2ecc71; color: #000; font-size: 0.72rem; font-weight: 800; padding: 5px 8px; border-radius: 7px; border: none; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">PDF Unico</button>
             <button type="button" class="mini-format-btn" id="btn_mini_id_dual" onclick="selectMiniFormat(event, 'id', 'dual')" style="flex: 1; background: transparent; color: #fff; font-size: 0.72rem; font-weight: 700; padding: 5px 8px; border-radius: 7px; border: none; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Foto (Fronte/Retro)</button>
           </div>
-
           <!-- VISTA PDF COMPATTA -->
           <div id="mini_view_id_pdf" onclick="triggerFileInput('file_id_card')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; width: 100%; max-width: 100%; overflow: hidden;">
             <input type="file" id="file_id_card" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_id_card', 'carta_identita', 'status_dz_id_card')">
@@ -382,7 +371,6 @@
             <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Carta d'identità  in corso di validità  o Passaporto (.pdf).</p>
             <div class="doc-status-badge" id="status_dz_id_card">Clicca o trascina il file PDF</div>
           </div>
-
           <!-- VISTA DUAL COMPATTA (FRONTE & RETRO) -->
           <div id="mini_view_id_dual" style="display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; flex: 1; width: 100%; max-width: 100%; overflow: hidden;">
             <div class="mini-sub-box" onclick="triggerFileInput('file_id_fronte')">
@@ -401,7 +389,6 @@
             </div>
           </div>
         </div>
-
         <!-- DROPZONE 2: PATENTE DI GUIDA (COMPATTA CON MINI TOGGLE) -->
         <div class="upload-dropzone" id="dz_driving_license">
           <!-- MINI TOGGLE DISCRETO IN ALTO -->
@@ -409,7 +396,6 @@
             <button type="button" class="mini-format-btn active" id="btn_mini_pat_pdf" onclick="selectMiniFormat(event, 'pat', 'pdf')" style="flex: 1; background: #2ecc71; color: #000; font-size: 0.72rem; font-weight: 800; padding: 5px 8px; border-radius: 7px; border: none; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">PDF Unico</button>
             <button type="button" class="mini-format-btn" id="btn_mini_pat_dual" onclick="selectMiniFormat(event, 'pat', 'dual')" style="flex: 1; background: transparent; color: #fff; font-size: 0.72rem; font-weight: 700; padding: 5px 8px; border-radius: 7px; border: none; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Foto (Fronte/Retro)</button>
           </div>
-
           <!-- VISTA PDF COMPATTA -->
           <div id="mini_view_pat_pdf" onclick="triggerFileInput('file_driving_license')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; width: 100%; max-width: 100%; overflow: hidden;">
             <input type="file" id="file_driving_license" accept=".pdf" style="display: none;" onchange="handleFileSelected('file_driving_license', 'patente', 'status_dz_driving_license')">
@@ -418,7 +404,6 @@
             <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;">Patente B di chi condurrà  il mezzo (.pdf).</p>
             <div class="doc-status-badge" id="status_dz_driving_license">Clicca o trascina il file PDF</div>
           </div>
-
           <!-- VISTA DUAL COMPATTA (FRONTE & RETRO) -->
           <div id="mini_view_pat_dual" style="display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; flex: 1; width: 100%; max-width: 100%; overflow: hidden;">
             <div class="mini-sub-box" onclick="triggerFileInput('file_pat_fronte')">
@@ -437,7 +422,6 @@
             </div>
           </div>
         </div>
-
         <!-- DROPZONE 3: DOCUMENTAZIONE REDDITUALE (COMPATTA CON MINI TOGGLE) -->
         <div class="upload-dropzone" id="dz_income_doc">
           <!-- MINI TOGGLE DISCRETO IN ALTO -->
@@ -445,7 +429,6 @@
             <button type="button" class="mini-format-btn active" id="btn_mini_inc_pdf" onclick="selectMiniFormat(event, 'inc', 'pdf')" style="flex: 1; background: #2ecc71; color: #000; font-size: 0.72rem; font-weight: 800; padding: 5px 8px; border-radius: 7px; border: none; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">PDF / CUD Unico</button>
             <button type="button" class="mini-format-btn" id="btn_mini_inc_dual" onclick="selectMiniFormat(event, 'inc', 'dual')" style="flex: 1; background: transparent; color: #fff; font-size: 0.72rem; font-weight: 700; padding: 5px 8px; border-radius: 7px; border: none; cursor: pointer; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">2 File (Busta 1/2)</button>
           </div>
-
           <!-- VISTA PDF COMPATTA -->
           <div id="mini_view_inc_pdf" onclick="triggerFileInput('file_income_doc')" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; width: 100%; max-width: 100%; overflow: hidden;">
             <input type="file" id="file_income_doc" accept=".pdf,.jpg,.png" style="display: none;" onchange="handleFileSelected('file_income_doc', 'documento_reddituale', 'status_dz_income_doc')">
@@ -454,7 +437,6 @@
             <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0 0 12px; line-height: 1.4;" id="incomeDocDesc">Ultime 2 buste paga complete oppure Ultimo CUD / 730.</p>
             <div class="doc-status-badge" id="status_dz_income_doc">Clicca o trascina il file</div>
           </div>
-
           <!-- VISTA DUAL COMPATTA (BUSTA PAGA 1 & 2) -->
           <div id="mini_view_inc_dual" style="display: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; flex: 1; width: 100%; max-width: 100%; overflow: hidden;">
             <div class="mini-sub-box" onclick="triggerFileInput('file_inc_1')">
@@ -473,9 +455,7 @@
             </div>
           </div>
         </div>
-
       </div>
-
       <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; padding: 26px; text-align: center; margin: 30px 0;">
         <h4 style="font-size: 1.3rem; font-weight: 800; margin: 0 0 8px;">Documentazione Pronta per il Dossier?</h4>
         <p style="color: var(--text-muted); font-size: 0.92rem; margin: 0 auto 20px; max-width: 580px; line-height: 1.5;" id="docsReadyInstructionText">
@@ -488,17 +468,14 @@
             <i class="ri-ai-generate" style="font-size: 1.3rem;"></i> <span>Verifica documenti</span>
           </button>
         </div>
-
         <!-- Messaggio di esito verifica Grok (appare in verde con scritta "verifica completata") -->
         <div id="verificationStatusMsg" style="display: none; margin: 20px auto; max-width: 520px; padding: 16px 24px; border-radius: 16px; font-weight: 800; font-size: 1.15rem; transition: all 0.3s ease;"></div>
-
         <!-- Tasto conferma per procedere (appare SOLO DOPO che la verifica con Grok è completata) -->
         <button type="button" id="btnConfirmStep2" onclick="confirmStep2AndShowStep3(event)" class="btn btn-primary" style="display: none; height: 54px; padding: 0 38px; font-size: 1.1rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; box-shadow: 0 8px 24px rgba(46, 204, 113, 0.3); align-items: center; gap: 10px; transition: all 0.3s ease;">
           <i class="ri-check-double-line" style="font-size: 1.3rem;"></i> <span>Invia documenti e vai alla Sezione 3</span> <i class="ri-arrow-right-line" style="font-size: 1.3rem;"></i>
         </button>
       </div>
     </div>
-
     <!-- SUMMARY SEZIONE 2 COMPILATA -->
     <div id="sectionStep2Summary" style="display: none; background: rgba(46, 204, 113, 0.1); border: 1px solid rgba(46, 204, 113, 0.4); border-radius: 16px; padding: 18px 24px; margin-bottom: 28px; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; animation: fadeIn 0.3s ease;">
       <div style="display: flex; align-items: center; gap: 12px;">
@@ -512,7 +489,6 @@
         <i class="ri-edit-line"></i> Modifica Documenti
       </button>
     </div>
-
     <!-- SEZIONE 3: CHECKOUT E BLOCCO PRATICA (EMBEDDED PAYMENT MODULE) -->
   <div class="checkout-action-box" id="embeddedCheckoutSection" style="display: none; animation: fadeIn 0.4s ease;">
       <h3 style="font-size: 1.6rem; font-weight: 900; margin: 0 0 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
@@ -521,7 +497,6 @@
       <p style="color: var(--text-muted); max-width: 680px; margin: 0 auto 20px; font-size: 0.95rem; line-height: 1.5;">
         Hai completato il caricamento dei documenti. Inserisci i dati della tua carta per riservare formalmente la vettura e avviare l'istruttoria del dossier presso il nostro istituto di credito.
       </p>
-
       <!-- GOLDEN / GREEN PRE-AUTHORIZATION ASSURANCE BANNER -->
       <div style="background: rgba(46, 204, 113, 0.12); border: 1.5px solid #2ecc71; border-radius: 18px; padding: 20px 24px; text-align: left; margin: 0 auto 28px; max-width: 640px; display: flex; gap: 16px; align-items: flex-start; box-shadow: 0 10px 30px rgba(46, 204, 113, 0.15);">
         <i class="ri-shield-keyhole-fill" style="color: #2ecc71; font-size: 2.2rem; flex-shrink: 0; margin-top: 2px;"></i>
@@ -537,12 +512,9 @@
           <i class="ri-secure-payment-line" style="font-size: 1.35rem;"></i> <span>Vai al Pagamento Sicuro</span>
         </button>
       </div>
-
       <div id="uploadErrorToast" style="margin-top: 14px; color: #ff5e5e; font-size: 0.9rem; font-weight: 600; display: none;"></div>
     </div>
-
   </main>
-
   <!-- ================= FOOTER ================= -->
   <footer style="border-top: 1px solid rgba(255,255,255,0.08); padding: 40px 0; background: #040509; text-align: center; color: var(--text-muted); font-size: 0.88rem;">
     <div class="container">
@@ -550,13 +522,11 @@
       <p>Assistenza Clienti e Supporto Documentale: <a href="tel:+393755942143" style="color: #2ecc71; font-weight: 700; text-decoration: none;">+39 375 594 2143</a> â€¢ <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
     </div>
   </footer>
-
   <!-- Floating Mobile Phone Button -->
   <a href="tel:+393755942143" class="mobile-floating-phone" title="Chiama ITERCARS" aria-label="Chiama +39 375 594 2143">
     <i class="ri-phone-fill"></i>
     <span>+39 375 594 2143</span>
   </a>
-
   <!-- Supabase JS SDK, PDF.js & OCR SDK -->
   <!-- ================= AUTHENTICATION MODAL (LOGIN / REGISTER) ================= -->
   <div class="modal-overlay" id="authModal">
@@ -581,12 +551,10 @@
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Non sei ancora registrato?</span>
           <button type="button" onclick="switchAuthMode('register')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Registrati qui</button>
         </div>
-
         <!-- ACCESSO DIRETTO PER NOLEGGIATORI E PARTNER MANDANTI -->
         <div style="margin-top: 18px; padding: 14px; background: rgba(250, 204, 21, 0.08); border: 1px dashed rgba(250, 204, 21, 0.4); border-radius: 12px; text-align: center;">
           <span style="font-size: 0.85rem; color: #facc15; font-weight: 700; display: block; margin-bottom: 8px;"><i class="ri-building-4-fill"></i> Area partner</span>
@@ -599,7 +567,6 @@
           </div>
         </div>
       </div>
-
       <!-- REGISTRATION VIEW -->
       <div id="registerFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gradient"></i> Registrazione Membro VIP</h3>
@@ -616,7 +583,6 @@
               <input type="text" class="form-control" id="regLastName" required placeholder="Rossi">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Data di Nascita *</label>
@@ -627,7 +593,6 @@
               <input type="text" class="form-control" id="regCountry" required placeholder="Italia">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Email *</label>
@@ -638,7 +603,6 @@
               <input type="tel" class="form-control" id="regPhone" required placeholder="+39 340 0000000">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
@@ -649,18 +613,15 @@
               <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
-
           <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px;">
             <span>Crea Account VIP</span> <i class="ri-vip-crown-fill"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già  un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
-
       <!-- PARTNER REGISTRATION VIEW -->
       <div id="partnerRegFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
@@ -677,7 +638,6 @@
               <input type="text" class="form-control" id="partRegVat" required placeholder="IT1234567890">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Nome Referente *</label>
@@ -688,7 +648,6 @@
               <input type="tel" class="form-control" id="partRegPhone" required placeholder="+39 340 0000000">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Indirizzo Email Aziendale *</label>
@@ -699,7 +658,6 @@
               <input type="text" class="form-control" id="partRegAddress" required placeholder="Via Roma 1, Milano">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password di Accesso *</label>
@@ -710,21 +668,17 @@
               <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
-
           <button type="submit" class="btn btn-outline" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px; border-color: #facc15; color: #facc15; font-weight: 700;">
             <span>Completa richiesta</span> <i class="ri-send-plane-fill"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Vuoi accedere al portale clienti?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna al Login</button>
         </div>
       </div>
-
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -732,7 +686,6 @@
   <script src="app.js?v=38"></script>
   <script src="upload-documenti.js?v=20260722_actual_charge"></script>
   <script src="cookie-banner.js?v=5"></script>
-
   <!-- Professional Navigation System Script -->
   <script>
     function handleProfessionalNavBack() {
@@ -768,7 +721,6 @@
         window.location.href = 'index.html';
       }
     }
-
     function handleProfessionalNavNext() {
       const step3 = document.getElementById('embeddedCheckoutSection');
       
@@ -803,4 +755,3 @@
   </script>
 </body>
 </html>
-

@@ -1,16 +1,13 @@
 import os
 import re
-
 base_dir = r"c:\Users\alber\Desktop\LuxuryCar"
 public_html_files = [
     'index.html', 'fleet.html', 'noleggio-breve-termine.html', 
-    'noleggio-lungo-termine.html', 'car-detail.html', 'accademy.html', 'partners.html'
+    'noleggio-lungo-termine.html', 'car-detail.html', 'academy.html', 'partners.html'
 ]
-
 # 1. REMOVE FROM PUBLIC HTML FILES
 pattern_direct_access = re.compile(r'\s*<!-- ACCESSO DIRETTO PER NOLEGGIATORI E PARTNER MANDANTI -->.*?</div>\s*</div>', re.DOTALL)
 pattern_partner_reg_view = re.compile(r'\s*<!-- PARTNER REGISTRATION VIEW -->.*?<div id="partnerRegFormBox".*?</form>\s*<div[^>]*>.*?</div>\s*</div>', re.DOTALL)
-
 for f in public_html_files:
     path = os.path.join(base_dir, f)
     if os.path.exists(path):
@@ -27,7 +24,6 @@ for f in public_html_files:
         with open(path, 'w', encoding='utf-8') as file:
             file.write(content)
         print(f"Cleaned {f}")
-
 # 2. MODIFY CRM-PARTNER.HTML
 crm_html_path = os.path.join(base_dir, 'crm-partner.html')
 if os.path.exists(crm_html_path):
@@ -68,7 +64,6 @@ if os.path.exists(crm_html_path):
             <input type="text" class="admin-input" id="partRegVat" required placeholder="IT1234567890">
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Referente *</label>
@@ -79,7 +74,6 @@ if os.path.exists(crm_html_path):
             <input type="tel" class="admin-input" id="partRegPhone" required placeholder="+39 340 0000000">
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email *</label>
@@ -90,7 +84,6 @@ if os.path.exists(crm_html_path):
             <input type="text" class="admin-input" id="partRegAddress" required placeholder="Milano">
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password *</label>
@@ -101,12 +94,10 @@ if os.path.exists(crm_html_path):
             <input type="password" class="admin-input" id="partRegPasswordConfirm" required minlength="6" placeholder="••••••••">
           </div>
         </div>
-
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px; border-color: #facc15; color: #111; background: #facc15;">
           <span>Invia Richiesta</span> <i class="ri-send-plane-fill"></i>
         </button>
       </form>
-
       <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1);">
         <span style="color: var(--text-muted); font-size: 0.95rem;">Vuoi accedere alla console?</span>
         <button type="button" onclick="switchPartnerAuthMode('login')" style="background: none; border: none; color: #facc15; font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna al Login</button>
@@ -136,16 +127,13 @@ if os.path.exists(crm_html_path):
     # The partnerAuthOverlay div ends right before the main container or body, but it's easier to replace `</div>\n  </div>\n\n  <div class="dashboard-layout">`
     # Let's just find the first `    </div>\n  </div>` which closes partnerLoginBox and partnerAuthOverlay.
     crm_html_raw = crm_html_raw.replace('    </div>\n  </div>', '    </div>\n' + reg_box_html + '\n  </div>', 1)
-
     with open(crm_html_path, 'w', encoding='utf-8') as file:
         file.write(crm_html_raw)
     print("Updated crm-partner.html")
-
 # 3. APPEND JS LOGIC TO CRM-PARTNER.JS
 crm_js_path = os.path.join(base_dir, 'crm-partner.js')
 if os.path.exists(crm_js_path):
     js_code = """
-
 /* ==========================================================================
    PARTNER REGISTRATION & AUTH SWITCH
    ========================================================================== */
@@ -160,14 +148,12 @@ window.switchPartnerAuthMode = function(mode) {
     if(regBox) regBox.style.display = 'none';
   }
 };
-
 window.handlePartnerReg = async function(event) {
   event.preventDefault();
   if (!supabase) {
     alert("Errore di connessione al database. Riprovare pi tardi.");
     return;
   }
-
   const companyName = document.getElementById('partRegCompany').value.trim();
   const vat = document.getElementById('partRegVat').value.trim();
   const contactName = document.getElementById('partRegName').value.trim();
@@ -176,18 +162,15 @@ window.handlePartnerReg = async function(event) {
   const address = document.getElementById('partRegAddress').value.trim();
   const password = document.getElementById('partRegPassword').value;
   const passwordConfirm = document.getElementById('partRegPasswordConfirm').value;
-
   if (password !== passwordConfirm) {
     alert("Le password non coincidono.");
     return;
   }
-
   const submitBtn = event.target.querySelector('button[type="submit"]');
   if (submitBtn) {
     submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> <span>Invio in corso...</span>`;
     submitBtn.disabled = true;
   }
-
   try {
     const { data: authData, error: authErr } = await supabase.auth.signUp({
       email: email,
@@ -200,10 +183,8 @@ window.handlePartnerReg = async function(event) {
         }
       }
     });
-
     if (authErr) throw authErr;
     const authId = authData.user ? authData.user.id : null;
-
     const { error: dbErr } = await supabase.from('supplier_applications').insert([{
       auth_id: authId,
       company_name: companyName,
@@ -217,11 +198,9 @@ window.handlePartnerReg = async function(event) {
       status: 'new',
       data: new Date().toLocaleString('it-IT')
     }]);
-
     if (dbErr) throw dbErr;
     
     await supabase.auth.signOut();
-
     alert("Richiesta inviata con successo! Il team ti contatter al pi presto. Non potrai accedere fino ad approvazione avvenuta.");
     window.switchPartnerAuthMode('login');
     event.target.reset();

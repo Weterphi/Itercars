@@ -23,7 +23,7 @@ serve(async (req) => {
 
     if (webhookSecret && signature) {
       try {
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+        event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
       } catch (err) {
         console.error(`⚠️ Webhook signature verification failed:`, err.message);
         return new Response(JSON.stringify({ error: err.message }), { status: 400 });
@@ -38,6 +38,13 @@ serve(async (req) => {
       const dataObject = event.data.object;
       const quoteCode = dataObject.metadata?.quote_code || "Codice non specificato";
       
+      // Se non c'è un quote code e l'importo è 279 (o c'è un link academy), molto probabilmente è l'Academy.
+      // Saltiamo l'invio della mail del Noleggio Auto per non creare confusione!
+      if (quoteCode === "Codice non specificato") {
+         console.log("Acquisto senza quote_code (probabile Academy). Ignoro l'invio mail autonoleggio.");
+         return new Response(JSON.stringify({ received: true, ignored: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }});
+      }
+
       const resendApiKey = Deno.env.get("PREVENTIVO");
       if (resendApiKey) {
         const resendPayload = {

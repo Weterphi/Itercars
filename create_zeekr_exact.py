@@ -1,7 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 import codecs
 import re
-
 html = '''<!DOCTYPE html>
 <html lang="it">
 <head>
@@ -229,17 +228,12 @@ html = '''<!DOCTYPE html>
   </script>
 </body>
 </html>'''
-
 with codecs.open('articolo-zeekr-9x.html', 'w', 'utf-8') as f:
     f.write(html)
-
 with codecs.open('magazine.html', 'r', 'utf-8') as f:
     mag = f.read()
-
 # Replace the brain url in magazine.html with the local one
 mag = re.sub(r'file:///C:/Users/alber/\.gemini/antigravity-ide/brain/[a-zA-Z0-9-]+/media__[0-9]+\.png', 'zeekr_9x_cover.png', mag)
-
 with codecs.open('magazine.html', 'w', 'utf-8') as f:
     f.write(mag)
-
 print("Article and magazine updated successfully.")

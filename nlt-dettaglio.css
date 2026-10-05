@@ -2,12 +2,10 @@
    ITERCARS — DETTAGLIO VEICOLO & CONFIGURATORE NLT STYLES
    Layout 2 colonne con Sticky Box di Configurazione, Glassmorphism
    ========================================================================== */
-
 .nlt-detail-header {
   padding-top: 120px;
   padding-bottom: 24px;
 }
-
 .nlt-breadcrumb {
   font-size: 0.9rem;
   color: var(--text-muted);
@@ -16,7 +14,6 @@
   gap: 8px;
   margin-bottom: 20px;
 }
-
 .nlt-detail-grid {
   display: grid;
   grid-template-columns: 1.2fr 0.9fr;
@@ -27,7 +24,6 @@
   margin-bottom: 80px;
   align-items: start;
 }
-
 @media (max-width: 992px) {
   .nlt-detail-grid {
     grid-template-columns: 1fr;
@@ -37,7 +33,6 @@
       'pillars';
   }
 }
-
 /* Colonna Sinistra: Vetrina Vettura */
 .detail-main-box {
   grid-area: car;
@@ -45,7 +40,6 @@
   flex-direction: column;
   gap: 28px;
 }
-
 .detail-image-wrapper {
   position: relative;
   width: 100%;
@@ -55,26 +49,22 @@
   background: #080a12;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
 }
-
 .detail-image {
   width: 100%;
   max-height: 440px;
   object-fit: cover;
   display: block;
 }
-
 .detail-specs-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 12px;
 }
-
 @media (max-width: 768px) {
   .detail-specs-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
-
 .detail-spec-card {
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -86,24 +76,20 @@
   align-items: center;
   gap: 6px;
 }
-
 .detail-spec-card i {
   font-size: 1.5rem;
   color: var(--accent-primary);
 }
-
 .detail-spec-card .label {
   font-size: 0.75rem;
   color: var(--text-muted);
   text-transform: uppercase;
 }
-
 .detail-spec-card .value {
   font-size: 0.95rem;
   font-weight: 800;
   color: #fff;
 }
-
 /* Elenco I 6 Pilastri All-Inclusive */
 .included-pillars-box {
   grid-area: pillars;
@@ -112,7 +98,6 @@
   border-radius: var(--radius-lg);
   padding: 28px;
 }
-
 .included-pillars-box h3 {
   font-size: 1.35rem;
   margin-bottom: 20px;
@@ -120,19 +105,16 @@
   align-items: center;
   gap: 10px;
 }
-
 .pillars-list {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-
 @media (max-width: 600px) {
   .pillars-list {
     grid-template-columns: 1fr;
   }
 }
-
 .pillar-item {
   display: flex;
   align-items: flex-start;
@@ -142,34 +124,29 @@
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
 .pillar-item i {
   font-size: 1.4rem;
   color: #2ecc71;
   flex-shrink: 0;
   margin-top: 2px;
 }
-
 .pillar-item h4 {
   font-size: 0.95rem;
   margin: 0 0 4px 0;
   color: #fff;
 }
-
 .pillar-item p {
   font-size: 0.8rem;
   color: var(--text-muted);
   margin: 0;
   line-height: 1.4;
 }
-
 /* Colonna Destra: Sticky Configuratore NLT */
 .detail-sidebar {
   grid-area: config;
   position: sticky;
   top: 110px;
 }
-
 .configurator-widget {
   background: rgba(11, 15, 25, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -181,7 +158,6 @@
   flex-direction: column;
   gap: 24px;
 }
-
 .configurator-widget h2 {
   font-size: 1.5rem;
   margin: 0;
@@ -191,13 +167,11 @@
   align-items: center;
   justify-content: space-between;
 }
-
 .config-section {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
-
 .config-section-title {
   font-size: 0.85rem;
   font-weight: 700;
@@ -208,19 +182,16 @@
   align-items: center;
   gap: 8px;
 }
-
 .config-options-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
-
 .config-options-grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
-
 .config-option-btn {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -235,27 +206,23 @@
   flex: 1;
   min-width: 80px;
 }
-
 .config-option-btn:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.25);
   color: #fff;
 }
-
 .config-option-btn.active {
   background: rgba(0, 146, 70, 0.25);
   border-color: var(--accent-primary);
   color: #2ecc71;
   box-shadow: 0 0 15px rgba(0, 146, 70, 0.35);
 }
-
 /* Pacchetti Noleggio Rettangolari Raggruppati (Stile Compatto Eurocar) */
 .packages-list-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 12px;
 }
-
 .package-option-card {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.16);
@@ -270,20 +237,17 @@
   position: relative;
   overflow: hidden;
 }
-
 .package-option-card:hover {
   background: rgba(46, 204, 113, 0.08);
   border-color: #2ecc71;
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
-
 .package-option-card.active {
   background: rgba(46, 204, 113, 0.13);
   border: 1px solid #2ecc71;
   box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
 }
-
 .package-card-header {
   display: flex;
   justify-content: space-between;
@@ -291,7 +255,6 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding-bottom: 10px;
 }
-
 .package-radio-icon {
   font-size: 1.4rem;
   color: rgba(255, 255, 255, 0.35);
@@ -299,16 +262,13 @@
   display: flex;
   align-items: center;
 }
-
 .package-radio-icon.selected {
   color: #2ecc71;
   filter: drop-shadow(0 0 6px rgba(46, 204, 113, 0.6));
 }
-
 .package-option-card:hover .package-radio-icon:not(.selected) {
   color: rgba(255, 255, 255, 0.75);
 }
-
 .package-duration-badge {
   font-size: 1.15rem;
   font-weight: 900;
@@ -317,7 +277,6 @@
   align-items: center;
   gap: 8px;
 }
-
 .package-status-badge {
   font-size: 0.78rem;
   font-weight: 800;
@@ -329,38 +288,32 @@
   align-items: center;
   gap: 4px;
 }
-
 .status-disponibile {
   background: rgba(46, 204, 113, 0.2);
   color: #2ecc71;
   border: 1px solid rgba(46, 204, 113, 0.45);
 }
-
 .status-inarrivo {
   background: rgba(52, 152, 219, 0.2);
   color: #58a6ff;
   border: 1px solid rgba(52, 152, 219, 0.45);
 }
-
 .package-card-body {
   display: flex;
   flex-direction: column;
   gap: 7px;
   font-size: 0.88rem;
 }
-
 .package-spec-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: var(--text-muted);
 }
-
 .package-spec-row strong {
   color: #fff;
   font-weight: 700;
 }
-
 .extra-km-tag {
   color: #f39c12;
   font-weight: 700;
@@ -369,7 +322,6 @@
   border-radius: 6px;
   font-size: 0.8rem;
 }
-
 .package-card-footer {
   display: flex;
   justify-content: space-between;
@@ -378,27 +330,23 @@
   padding-top: 12px;
   margin-top: 2px;
 }
-
 .package-price-label {
   font-size: 0.82rem;
   font-weight: 700;
   color: var(--text-muted);
   text-transform: uppercase;
 }
-
 .package-price-value {
   font-size: 1.55rem;
   font-weight: 950;
   color: #2ecc71;
   line-height: 1;
 }
-
 .package-price-value small {
   font-size: 0.8rem;
   font-weight: 600;
   color: #fff;
 }
-
 /* Box Rata Live in Cima/Fondo alla Side */
 .live-price-box {
   background: rgba(0, 146, 70, 0.12);
@@ -409,7 +357,6 @@
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   box-shadow: 0 10px 30px rgba(0, 146, 70, 0.25);
 }
-
 .live-price-label {
   font-size: 0.82rem;
   font-weight: 700;
@@ -417,7 +364,6 @@
   color: var(--text-muted);
   letter-spacing: 0.5px;
 }
-
 .live-price-number {
   font-size: 2.6rem;
   font-weight: 950;
@@ -425,13 +371,11 @@
   line-height: 1.1;
   margin: 6px 0;
 }
-
 .live-price-summary {
   font-size: 0.82rem;
   color: #fff;
   margin-top: 6px;
 }
-
 /* Form preventivo rapido */
 .quote-form {
   display: flex;
@@ -441,11 +385,9 @@
   padding-top: 20px;
 }
 
-
 /* ==========================================================================
    STAMPA PREVENTIVO PDF
    ========================================================================== */
-
 
 /* ==========================================================================
    STAMPA PREVENTIVO PDF
@@ -462,7 +404,6 @@
   body > * {
     display: none !important;
   }
-
   /* Mostra SOLO la section che contiene il preventivo */
   body > section.nlt-detail-header {
     display: block !important;
@@ -474,7 +415,6 @@
   .nlt-breadcrumb, .nlt-detail-grid {
     display: none !important;
   }
-
   #officialQuoteContainer {
     display: block !important;
     position: relative !important;
@@ -494,7 +434,6 @@
     display: block !important;
     max-width: 100% !important;
   }
-
   /* Override degli stili scuri inline */
   .quote-result-card {
     background: #fff !important;
@@ -504,7 +443,6 @@
     margin: 0 !important;
     box-shadow: none !important;
   }
-
   /* Testi neri */
   #officialQuoteContainer div,
   #officialQuoteContainer span,
@@ -518,7 +456,6 @@
   #officialQuoteContainer div[style*="color: #2ecc71"] {
     color: #009246 !important;
   }
-
   /* Sfondi leggeri */
   #officialQuoteContainer > div > div[style*="background: rgba(255,255,255,0.03)"] {
     background: #f9f9f9 !important;
@@ -533,12 +470,10 @@
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-
   /* Rimuovi ombre */
   #officialQuoteContainer > div > div[style*="filter: blur"] {
     display: none !important;
   }
-
   /* Nascondi bottoni */
   #officialQuoteContainer .btn,
   #officialQuoteContainer button,

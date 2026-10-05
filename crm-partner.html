@@ -8,7 +8,6 @@
   
   <!-- Favicon IC Verde/Oro -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23050811' stroke='%23facc15' stroke-width='6'/%3E%3Ctext x='50%25' y='66%25' font-family='sans-serif' font-weight='900' font-size='56' fill='%23facc15' text-anchor='middle' letter-spacing='-3'%3EIC%3C/text%3E%3C/svg%3E" />
-
   <!-- Google Fonts: Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +27,6 @@
 <body>
   <!-- MOBILE OVERLAY -->
   <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileSidebar()"></div>
-
   <!-- GATE DI AUTENTICAZIONE RISERVATO Al PARTNER / NOLEGGIATORE -->
   <div class="partner-auth-overlay active" id="partnerAuthOverlay">
     <div class="partner-auth-box" id="partnerLoginBox">
@@ -37,7 +35,6 @@
         <h2 style="font-size: 1.35rem; font-weight: 300; color: #fff;">Console Partner</h2>
         <p style="color: var(--text-muted); font-size: 0.84rem; margin-top: 4px;">Piattaforma Operativa</p>
       </div>
-
       <form onsubmit="handlePartnerLogin(event)" style="display: flex; flex-direction: column; gap: 14px;">
         <div style="text-align: left;">
           <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email Aziendale Registrata</label>
@@ -47,7 +44,6 @@
           <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password</label>
           <input type="password" id="partnerPasswordInput" class="admin-input" placeholder="********" required />
         </div>
-
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px;">
           <i class="ri-shield-user-line"></i> Accedi alla Tua Console Flotta
         </button>
@@ -56,12 +52,10 @@
         <span style="color: var(--text-muted); font-size: 0.85rem;">Non sei ancora partner?</span>
         <button type="button" onclick="switchPartnerAuthMode('register')" style="background: none; border: none; color: #facc15; font-weight: 700; cursor: pointer; margin-left: 6px; text-decoration: underline; font-size: 0.85rem;">Diventa partner</button>
       </div>
-
       <div style="margin-top: 22px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 0.76rem; color: var(--text-muted); text-align: center;">
         <i class="ri-lock-password-line text-muted"></i> Connessione Protetta </span>
       </div>
     </div>
-
     <!-- PARTNER REGISTRATION VIEW -->
     <div class="partner-auth-box" id="partnerRegFormBox" style="display: none; max-width: 500px; max-height: 90vh; overflow-y: auto;">
       <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner</h3>
@@ -78,7 +72,6 @@
             <input type="text" class="admin-input" id="partRegVat" required placeholder="IT1234567890">
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Referente *</label>
@@ -89,7 +82,6 @@
             <input type="tel" class="admin-input" id="partRegPhone" required placeholder="+39 340 0000000">
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email *</label>
@@ -100,7 +92,6 @@
             <input type="text" class="admin-input" id="partRegAddress" required placeholder="Milano">
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group" style="text-align: left;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password *</label>
@@ -111,23 +102,18 @@
             <input type="password" class="admin-input" id="partRegPasswordConfirm" required minlength="6" placeholder="********">
           </div>
         </div>
-
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.96rem; margin-top: 10px; border-color: #facc15; color: #111; background: #facc15;">
           <span>Invia Richiesta</span> <i class="ri-send-plane-fill"></i>
         </button>
       </form>
-
       <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1);">
         <span style="color: var(--text-muted); font-size: 0.95rem;">Vuoi accedere alla console?</span>
         <button type="button" onclick="switchPartnerAuthMode('login')" style="background: none; border: none; color: #facc15; font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna al Login</button>
       </div>
     </div>
-
   </div>
-
   <!-- APP LAYOUT (SIDEBAR SINISTRA + WORKSPACE CENTRALE) -->
   <div class="app-layout" id="mainAppLayout" style="display: none;">
-
     <!-- BARRA LATERALE MANDANTE -->
     <aside class="sidebar">
       <div class="sidebar-brand">
@@ -137,7 +123,6 @@
         </div>
         <div id="displayPartnerName" style="font-size: 0.85rem; font-weight: 700; color: #facc15; margin-top: 8px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;"></div>
       </div>
-
       <nav class="sidebar-nav">
         <div class="nav-section-title">Gestione Flotta</div>
         
@@ -148,7 +133,6 @@
           </div>
           <span class="nav-badge" id="badgeFleetCount">0</span>
         </button>
-
         <button class="sidebar-item" onclick="switchPartnerTab('tab-import', this)">
           <div class="sidebar-item-label">
             <i class="ri-file-excel-2-line"></i>
@@ -156,9 +140,7 @@
           </div>
           <span class="nav-badge" style="background:transparent; color:#ffffff;">STUDIO</span>
         </button>
-
         <div class="nav-section-title">Operazioni e Pratiche</div>
-
         <button class="sidebar-item" onclick="switchPartnerTab('tab-bookings', this)">
           <div class="sidebar-item-label">
             <i class="ri-bookmark-3-line"></i>
@@ -166,14 +148,12 @@
           </div>
           <span class="nav-badge" id="badgeBookingsCount">0</span>
         </button>
-
         <button class="sidebar-item" onclick="switchPartnerTab('tab-calendar', this)">
           <div class="sidebar-item-label">
             <i class="ri-calendar-event-line"></i>
             <span>Calendario NBT</span>
           </div>
         </button>
-
         <button class="sidebar-item" onclick="switchPartnerTab('tab-settings', this)">
           <div class="sidebar-item-label">
             <i class="ri-building-4-line"></i>
@@ -182,7 +162,6 @@
         </button>
       
       </nav>
-
       <div class="sidebar-footer">
         
         
@@ -191,7 +170,6 @@
         </button>
       </div>
     </aside>
-
     <!-- WORKSPACE CENTRALE -->
     <main class="main-wrapper">
       
@@ -204,7 +182,6 @@
           <i class="ri-dashboard-2-line" style="color: var(--accent-gold); font-size: 1.2rem;"></i>
           <span>ITERCARS PARTNER HUB / <strong id="partnerBreadcrumbName">La Mia Flotta & Tasti Rapidi</strong></span>
         </div>
-
         <div class="topbar-actions">
           <div style="font-size: 0.76rem; display: flex; align-items: center; gap: 6px; background: transparent; color: #ffffff; padding: 6px 12px; border-radius: 20px; font-weight: 300;">
             <span style="width: 7px; height: 7px; background: #ffffff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ffffff;"></span>
@@ -220,7 +197,6 @@
           </button>
         </div>
       </header>
-
       <!-- WORKSPACE CONTENT -->
       <div class="workspace">
         
@@ -234,7 +210,6 @@
             <div class="kpi-value" id="kpiTotalFleet">0</div>
             <div class="kpi-subtext"><i class="ri-database-2-line"></i> Catalogo privato su Supabase</div>
           </div>
-
           <div class="kpi-card">
             <div class="kpi-card-header">
               <span class="kpi-title">Auto Online (Disponibili)</span>
@@ -243,7 +218,6 @@
             <div class="kpi-value" id="kpiActiveFleet">0</div>
             <div class="kpi-subtext"><i class="ri-check-line"></i> Visibili live ai clienti e broker</div>
           </div>
-
           <div class="kpi-card">
             <div class="kpi-card-header">
               <span class="kpi-title">Richieste & Contratti</span>
@@ -252,7 +226,6 @@
             <div class="kpi-value" id="kpiBookingsCount">0</div>
             <div class="kpi-subtext"><i class="ri-arrow-up-line"></i> Prenotazioni arrivate dal portale</div>
           </div>
-
           <div class="kpi-card">
             <div class="kpi-card-header">
               <span class="kpi-title">Valore Annuo Flotta Stimato</span>
@@ -262,7 +235,6 @@
             <div class="kpi-subtext"><i class="ri-pie-chart-line"></i> Calcolato sui canoni di listino</div>
           </div>
         </div>
-
         <!-- TAB 1: LA MIA FLOTTA & TOGGLE SWITCH RAPIDI -->
         <div id="tab-myfleet" class="tab-pane active">
           <div class="data-table-container">
@@ -277,7 +249,6 @@
                 </button>
               </div>
             </div>
-
             <table>
               <thead>
                 <tr>
@@ -293,7 +264,6 @@
             </table>
           </div>
         </div>
-
         <!-- TAB 2: TRASMISSIONE FILE FLOTTA (EXCEL, PDF, LISTINI) -->
         <div id="tab-import" class="tab-pane">
           <div class="data-table-container" style="padding: 28px;">
@@ -306,7 +276,6 @@
                   Seleziona o trascina qui il tuo file **Excel (.xlsx/.csv), PDF o Listino prezzi** aggiornato e clicca sul pulsante per inviarlo istantaneamente e in modo sicuro alla Console Centrale.
                 </p>
               </div>
-
               <div style="margin-bottom: 20px; text-align: left; max-width: 400px; margin-left: auto; margin-right: auto;">
                 <label style="font-size: 0.8rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Destinazione Flotta (Tipologia Auto)</label>
                 <select id="fleetUploadCategory" class="admin-input" style="font-size: 0.95rem; background: #111; color: #fff; border: 1px solid rgba(255,255,255,0.2);">
@@ -316,7 +285,6 @@
                   <option value="Luxury / Supercar">Solo Luxury / Supercar</option>
                 </select>
               </div>
-
               <!-- DOWNLOAD TEMPLATE ZONE -->
               <div style="margin-bottom: 24px; text-align: center; background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
                 <span style="font-size: 0.9rem; color: var(--text-muted); display: block; margin-bottom: 8px;"><i class="ri-download-cloud-2-line"></i> Scarica template per compilare flotta</span>
@@ -334,7 +302,6 @@
                   </optgroup>
                 </select>
               </div>
-
               <!-- DRAG & DROP ZONE / SELEZIONE FILE -->
               <div class="upload-dropzone" id="fleetUploadDropzone">
                 <i class="ri-file-cloud-line" style="font-size: 3.2rem; color: #ffffff; margin-bottom: 12px;"></i>
@@ -345,7 +312,6 @@
                 </label>
                 <input type="file" id="fleetFileInput" accept=".csv,.xlsx,.xls,.pdf,.doc,.docx,.zip" style="display: none;" />
               </div>
-
               <!-- BOX FILE SELEZIONATO E TASTO INVIA FILE -->
               <div id="selectedFilePreviewBox" style="display: none; margin-top: 20px; background: #141414; border: 1px solid rgba(255,255,255,0.15); border-radius: 0px; padding: 20px; text-align: center;">
                 <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 16px;">
@@ -359,7 +325,6 @@
                   <i class="ri-send-plane-2-fill" style="font-size: 1.3rem;"></i> INVIA FILE ALLA DIREZIONE CENTRALE
                 </button>
               </div>
-
               <!-- RIEPILOGO INVIO CORRENTE -->
               <div id="aiStudioLogTerminal" style="display: none; background: rgba(0,0,0,0.5); border: 1px solid #ffffff; border-radius: 12px; padding: 18px; margin-top: 20px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
@@ -368,11 +333,9 @@
                 </div>
                 <div class="ai-log-terminal" id="aiLogContent" style="max-height: 200px; font-size: 0.88rem; color: #e2e8f0; line-height: 1.6;"></div>
               </div>
-
             </div>
           </div>
         </div>
-
         <!-- TAB 3: PRENOTAZIONI & CONTRATTI CLIENTE -->
         <div id="tab-bookings" class="tab-pane">
           <div class="data-table-container">
@@ -382,7 +345,6 @@
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">Gestisci le richieste per la tua flotta, contatta il cliente via WhatsApp e avanza lo stato di consegna.</p>
               </div>
             </div>
-
             <div class="kanban-board" id="partnerKanbanBoard">
               <!-- Colonne generate via JS -->
               <div class="kanban-column" id="kanban-col-pending">
@@ -400,7 +362,6 @@
                 </div>
                 <div class="kanban-cards" id="kanban-cards-confirmed"></div>
               </div>
-
               <div class="kanban-column" id="kanban-col-delivered">
                 <div class="kanban-col-header" style="color: #10b981;">
                   <i class="ri-car-line"></i> In Uso (Consegnato)
@@ -408,7 +369,6 @@
                 </div>
                 <div class="kanban-cards" id="kanban-cards-delivered"></div>
               </div>
-
               <div class="kanban-column" id="kanban-col-closed">
                 <div class="kanban-col-header" style="color: var(--text-muted);">
                   <i class="ri-flag-checkered-fill"></i> Riconsegnato
@@ -419,7 +379,6 @@
             </div>
           </div>
         </div>
-
         <!-- TAB CALENDARIO NBT -->
         <div id="tab-calendar" class="tab-pane">
           <div class="data-table-container">
@@ -436,13 +395,11 @@
             </div>
           </div>
         </div>
-
         <!-- TAB 4: IMPOSTAZIONI PROFILO AZIENDALE -->
         <div id="tab-settings" class="tab-pane">
           <div class="data-table-container" style="padding: 30px; max-width: 760px; margin: 0 auto;">
             <h3 style="font-size: 1.25rem; font-weight: 300; color: #fff; margin-bottom: 6px;"><i class="ri-building-4-line text-muted"></i> Profilo Mandante / Società  di Noleggio</h3>
             <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 24px;">Questi dati appariranno nelle schede auto sulla piattaforma e nei voucher di prenotazione dei clienti.</p>
-
             <form onsubmit="savePartnerProfile(event)">
               <div class="form-grid-2col">
                 <div>
@@ -454,7 +411,6 @@
                   <input type="text" id="settingCompanyVat" class="admin-input" value="" required />
                 </div>
               </div>
-
               <div class="form-grid-2col">
                 <div>
                   <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email di Referenza Ordini (*)</label>
@@ -465,17 +421,14 @@
                   <input type="number" id="settingDefaultDeposit" class="admin-input" value="1500" required />
                 </div>
               </div>
-
               <div style="margin-bottom: 20px;">
                 <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Sede o Indirizzo Operativo per Consegne Veicoli</label>
                 <input type="text" id="settingAddress" class="admin-input" value="Via Montenapoleone 18, Milano (MI)" />
               </div>
-
               <div style="margin-bottom: 24px;">
                 <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Condizioni e Orari di Ritiro Veicoli</label>
                 <textarea rows="3" class="admin-input" placeholder="Orari di apertura: Lun-Sab 09:00 - 19:30. Consegna possibile a domicilio su Milano entro 15km...">Orari di apertura: Lun-Sab 09:00 - 19:30. Consegna possibile a domicilio su Milano e Aeroporti Linate/Malpensa.</textarea>
               </div>
-
               <div style="display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-subtle); padding-top: 18px;">
                 <button type="submit" class="btn-header btn-header-primary" style="padding: 10px 24px; font-size: 0.94rem;">
                   <i class="ri-save-line"></i> Salva Profilo Mandante
@@ -484,24 +437,17 @@
             </form>
           </div>
         </div>
-
       </div>
-
     </main>
-
   </div>
-
   
-
             <div style="margin-bottom: 24px;">
               <label style="font-size: 0.74rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Endpoint Webhook (Eventi Flotta)</label>
               <input type="url" class="admin-input" placeholder="https://tuo-server.com/api/webhooks/itercars" style="font-family: monospace;" />
             </div>
-
             <button class="btn-header btn-header-primary"><i class="ri-save-line"></i> Salva Configurazione API</button>
           </div>
         </div>
-
   <!-- MODAL: MODIFICA RAPIDA TARIFFA E CAUZIONE -->
   <div class="modal-overlay" id="editTariffModal">
     <div class="modal-content" style="max-width: 460px;">
@@ -511,18 +457,14 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="saveTariffChanges(event)">
         <p id="modalVehTitle" style="color: #fff; font-weight: 300; font-size: 0.96rem; margin-bottom: 16px;"></p>
-
         <!-- Tabs for Pricing Engine -->
         <div style="display: flex; gap: 8px; margin-bottom: 16px;">
           <button type="button" class="btn-header btn-header-outline active" id="btnNbtTab" onclick="switchPricingTab('nbt')" style="flex: 1; justify-content: center; font-size: 0.8rem; border-color: var(--accent-gold); color: var(--accent-gold);">BREVE TERMINE</button>
           <button type="button" class="btn-header btn-header-outline" id="btnNltTab" onclick="switchPricingTab('nlt')" style="flex: 1; justify-content: center; font-size: 0.8rem; border-color: rgba(255,255,255,0.15); color: var(--text-muted);">LUNGO TERMINE</button>
         </div>
-
         <input type="hidden" id="currentPricingTab" value="nbt" />
-
         <div id="nbtPricingContainer">
           <div style="margin-bottom: 14px;">
             <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (€/giorno) (*)</label>
@@ -533,7 +475,6 @@
             <input type="number" id="editDeposit" class="admin-input" />
           </div>
         </div>
-
         <div id="nltPricingContainer" style="display: none;">
           <div style="margin-bottom: 14px; display: flex; gap: 12px;">
             <div style="flex: 1; background: rgba(255,255,255,0.02); padding: 10px; border-radius: 8px;">
@@ -564,7 +505,6 @@
             </div>
           </div>
         </div>
-
         <div style="margin-bottom: 22px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
           <label style="font-size: 0.74rem; font-weight: 300; color: var(--accent-gold); text-transform: uppercase; margin-bottom: 6px; display: block;"><i class="ri-rocket-line"></i> Disponibilità  & Consegna</label>
           <select id="editDeliveryType" class="admin-input" onchange="toggleDeliveryFields()" style="margin-bottom: 8px; font-size: 0.88rem; padding: 8px 10px; background-color: #111111 !important; color: #ffffff !important; border: 1px solid rgba(255,255,255,0.2);">
@@ -581,7 +521,6 @@
             <input type="date" id="editDeliveryDate" class="admin-input" style="font-size: 0.88rem; background-color: #111111 !important; color: #ffffff !important; color-scheme: dark;" />
           </div>
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" onclick="closeEditTariffModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary">
@@ -591,8 +530,6 @@
       </form>
     </div>
   </div>
-
   <script src="crm-partner.js?v=5"></script>
 </body>
 </html>
-

@@ -3,9 +3,7 @@
    Gestione completa delle opzioni di noleggio (Mesi, Km, Anticipo, Franchigia)
    con ricalcolo live del canone e generazione Preventivo PDF Ufficiale.
    ========================================================================== */
-
 const BROKER_MARGIN = 1.0; // Rimosso doppio ricarico (+15%), le tariffe base e il backend hanno già il margine calcolato
-
 const OFFICIAL_RATES = {
   '32226fdb-ba8c-4e46-8e21-e303e0a0fe3d': {
     
@@ -100,9 +98,7 @@ const OFFICIAL_RATES = {
     48: { baseKm: 25000, kmTotal: 100000, deposit: 4000, price: 513, extraKmPrice: 0.13, status: 'Disponibile' }
   }
 };
-
 const SAMPLE_DETAIL_OFFERS = [];
-
 // Stato della configurazione attiva per l'auto corrente
 const ConfigState = {
   car: null,
@@ -112,7 +108,6 @@ const ConfigState = {
   kaskoFranchigia: 'standard', // 'standard' (500€) oppure 'zero' (0€)
   finalMonthlyPrice: 0
 };
-
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   let carId = params.get('id') || 'bmw-x3-48-3k';
@@ -121,7 +116,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const paramBrand = params.get('brand');
   const paramImg = params.get('img');
   const paramTrim = params.get('trim');
-
   // Eager load per velocizzare il sito (Zero-Layout-Shift)
   if (paramImg) {
     const imgEl = document.getElementById('detailMainImg');
@@ -139,14 +133,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const trimEl = document.getElementById('detailTrim');
     if (trimEl) trimEl.innerText = paramTrim;
   }
-
   let found = null;
   // 1. Tenta da cache locale salvata da nlt-app.js (cerca per id, vehicle_id o model esatto)
   try {
     const cached = JSON.parse(localStorage.getItem('itercars_nlt_cache') || '[]');
     found = cached.find(o => String(o.id) === String(carId) || String(o.vehicle_id) === String(carId) || (paramModel && String(o.model).toLowerCase() === String(paramModel).toLowerCase()));
   } catch (e) { }
-
   // 2. Se non in cache e connesso a Supabase, cerca live sul DB
   if (!found && typeof window.supabase !== 'undefined' && window.supabase) {
     try {
@@ -159,7 +151,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         `)
         .eq('id', carId)
         .maybeSingle();
-
       if (!data) {
         const res = await window.supabase
           .from('nlt_offers')
@@ -168,7 +159,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           .maybeSingle();
         if (res.data) data = res.data;
       }
-
       let vDb = (data && data.vehicles) ? data.vehicles : null;
       if (!vDb && carId) {
         const resVeh = await window.supabase
@@ -184,20 +174,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const resLive = await window.supabase.from('vehicles').select('*').eq('id', vDb.id).maybeSingle();
         if (resLive && resLive.data) vDb = Object.assign({}, vDb, resLive.data);
       }
-
       if (!error && (data || vDb)) {
         const v = vDb || {};
         const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
-
         // Priorità alla tariffa e cauzione aggiornate live dal partner in tabella vehicles
         const monthlyP = (v.daily_price !== undefined && v.daily_price !== null && v.daily_price !== '' && Number(v.daily_price) > 0)
           ? Math.round(Number(v.daily_price) * 20)
           : ((data && data.client_monthly_price !== undefined && data.client_monthly_price !== null && data.client_monthly_price !== '') ? Number(data.client_monthly_price) : 699);
-
         const depositP = (v.deposit !== undefined && v.deposit !== null && v.deposit !== '' && Number(v.deposit) >= 0)
           ? Number(v.deposit)
           : ((data && data.deposit_mandante !== undefined && data.deposit_mandante !== null && data.deposit_mandante !== '') ? Number(data.deposit_mandante) : 3000);
-
         found = {
           id: data ? data.id : (v.id || carId),
           vehicle_id: v.id || (data ? data.vehicle_id : carId),
@@ -226,12 +212,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.warn("Dettaglio live da DB non raggiungibile, fallback in corso.");
     }
   }
-
   // 3. Fallback al catalogo ufficiale (cerca per id, vehicle_id o corrispondenza esatta/parziale del modello)
   if (!found) {
     found = SAMPLE_DETAIL_OFFERS.find(o => String(o.id) === String(carId) || String(o.vehicle_id) === String(carId) || (paramModel && String(o.model).toLowerCase().includes(String(paramModel).toLowerCase())) || String(o.id).toLowerCase().includes(String(carId).toLowerCase()) || String(o.model).toLowerCase().includes(String(carId).toLowerCase()));
   }
-
   // 4. Ricostruzione dinamica e pulita dai parametri URL se l'offerta è personalizzata o dal DB ma non in cache
   if (!found && paramModel) {
     found = {
@@ -255,49 +239,39 @@ document.addEventListener('DOMContentLoaded', async () => {
       baseDeposit: Number(params.get('deposit')) || 3500
     };
   }
-
   if (!found && SAMPLE_DETAIL_OFFERS.length > 0) found = SAMPLE_DETAIL_OFFERS[0];
-
   if (found) {
     if (found.basePrice === undefined && found.baseOffer?.monthlyPrice !== undefined) found.basePrice = Number(found.baseOffer.monthlyPrice);
     if (found.baseDuration === undefined && found.baseOffer?.duration !== undefined) found.baseDuration = Number(found.baseOffer.duration);
     if (found.baseKm === undefined && found.baseOffer?.km !== undefined) found.baseKm = Number(found.baseOffer.km);
     if (found.baseDeposit === undefined && found.baseOffer?.deposit !== undefined) found.baseDeposit = Number(found.baseOffer.deposit);
-
     ConfigState.car = found;
     ConfigState.durationMonths = found.baseDuration || 36;
     ConfigState.kmPerYear = found.baseKm || 60000;
     ConfigState.depositAmount = found.baseDeposit !== undefined ? found.baseDeposit : 2000;
   }
-
   renderCarDetails();
   calculateAndRenderPrice();
 });
-
 function renderCarDetails() {
   const c = ConfigState.car;
   if (!c) return;
-
   document.title = `${c.brand} ${c.model} (${c.trim}) — Configura NLT | ITERCARS`;
-
   // Breadcrumb & Titoli
   const breadcrumb = document.getElementById('nltBreadcrumb');
   if (breadcrumb) {
     breadcrumb.innerHTML = `<a href="noleggio-lungo-termine.html" style="color: #2ecc71; text-decoration: none;">Catalogo NLT</a> <i class="ri-arrow-right-s-line"></i> <span>${c.brand}</span> <i class="ri-arrow-right-s-line"></i> <strong>${c.model}</strong>`;
   }
-
   const brandElem = document.getElementById('detailBrand');
   const modelElem = document.getElementById('detailModel');
   const trimElem = document.getElementById('detailTrim');
   const providerElem = document.getElementById('detailProvider');
   const imgElem = document.getElementById('detailMainImg');
-
   if (brandElem) brandElem.textContent = c.brand;
   if (modelElem) modelElem.textContent = c.model;
   if (trimElem) trimElem.textContent = c.trim;
   if (providerElem) providerElem.innerHTML = `<i class="ri-shield-star-fill text-green"></i> Listino Mandante: <strong>${c.providerName}</strong>`;
   if (imgElem) imgElem.src = c.image;
-
   const badgeContainer = document.getElementById('detailBadgeContainer');
   if (badgeContainer) {
     if (c.deliveryDate && c.deliveryDate !== '') {
@@ -312,33 +286,26 @@ function renderCarDetails() {
       badgeContainer.innerHTML = `<span class="badge-custom" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${c.deliveryWeeks || 4} settimane</span>`;
     }
   }
-
   // Specifiche tecniche
   const speedEl = document.getElementById('detailSpeed');
   const accelEl = document.getElementById('detailAccel');
   const hpEl = document.getElementById('detailHp');
   const fuelEl = document.getElementById('detailFuel');
   const transEl = document.getElementById('detailTrans');
-
   if (speedEl) speedEl.textContent = c.speed;
   if (accelEl) accelEl.textContent = c.accel;
   if (hpEl) hpEl.textContent = c.hp;
   if (fuelEl) fuelEl.textContent = c.fuel;
   if (transEl) transEl.textContent = c.transmission;
-
   // Renderizza i pacchetti rettangolari all-inclusive e aggiorna il canone
   renderRentalPackages();
 }
-
 function getRatesForCar(c) {
   if (!c) return OFFICIAL_RATES['bmw-s3t'];
-
   let baseCarId = String(c.id || '');
   if (baseCarId.includes('-36-')) baseCarId = baseCarId.split('-36-')[0];
   if (baseCarId === 'bmw-x3-48-3k') baseCarId = 'bmw-x3';
-
   let rates = OFFICIAL_RATES[baseCarId] || (c.vehicle_id ? OFFICIAL_RATES[String(c.vehicle_id)] : null);
-
   if (!rates && c.model) {
     const modelStr = String(c.model).toLowerCase();
     if (modelStr.includes('serie 1') || modelStr.includes('118')) rates = OFFICIAL_RATES['bmw-s1'];
@@ -349,14 +316,12 @@ function getRatesForCar(c) {
     else if (modelStr.includes('x5')) rates = OFFICIAL_RATES['bmw-x5'];
     else if (modelStr.includes('i4')) rates = OFFICIAL_RATES['bmw-i4'];
   }
-
   function parseDBPrice(str, def) {
     if(!str || str === 'null') return def;
     let clean = String(str).replace(/[^0-9,.]/g, '').replace(',', '.');
     let val = parseFloat(clean);
     return isNaN(val) ? def : val;
   }
-
   if (c.p36 && c.p36 !== 'null') {
     const baseDep = Number(c.baseDeposit !== undefined ? c.baseDeposit : 3000);
     const defBase = Number(c.basePrice) || 699;
@@ -379,50 +344,38 @@ function getRatesForCar(c) {
   }
   return rates;
 }
-
 function renderRentalPackages() {
   const container = document.getElementById('packagesListGrid');
   if (!container) return;
-
   const c = ConfigState.car;
   if (!c) return;
-
   const rates = getRatesForCar(c);
   const availableDurations = Object.keys(rates).map(Number).sort((a, b) => a - b);
-
   if (!availableDurations.includes(Number(ConfigState.durationMonths)) && availableDurations.length > 0) {
     ConfigState.durationMonths = availableDurations.includes(36) ? 36 : availableDurations[0];
   }
-
   const activeRate = rates[ConfigState.durationMonths] || rates[availableDurations[0]];
   if (activeRate) {
     const kmTot = activeRate.kmTotal || Math.round((activeRate.baseKm || 25000) * (ConfigState.durationMonths / 12));
     ConfigState.kmPerYear = kmTot;
     ConfigState.depositAmount = Number(activeRate.deposit || 0);
   }
-
   container.innerHTML = availableDurations.map(dur => {
     const r = rates[dur];
     const isSelected = Number(ConfigState.durationMonths) === dur;
-
     const kmTotal = r.kmTotal || Math.round((r.baseKm || 25000) * (dur / 12));
     const kmYearly = r.baseKm || Math.round(kmTotal * (12 / dur));
-
     const statusText = r.status || 'Disponibile';
     const statusClass = statusText.toLowerCase().includes('arrivo') ? 'status-inarrivo' : 'status-disponibile';
     const statusIcon = statusText.toLowerCase().includes('arrivo') ? 'ri-time-line' : 'ri-checkbox-circle-fill';
-
     const kmDisplayShort = dur === 12
       ? `${kmTotal.toLocaleString('it-IT')} km`
       : `${Math.round(kmYearly).toLocaleString('it-IT')} km/anno`;
-
     const depositDisplay = r.deposit === 0 ? 'Anticipo 0 €' : `Anticipo € ${Number(r.deposit).toLocaleString('it-IT')}`;
     const displayPrice = Math.round((Number(r.price) + (ConfigState.kaskoFranchigia === 'zero' ? 35 : 0)) * BROKER_MARGIN);
-
     const selectCircleIcon = isSelected
       ? `<i class="ri-radio-button-fill package-radio-icon selected"></i>`
       : `<i class="ri-checkbox-blank-circle-line package-radio-icon"></i>`;
-
     return `
       <div class="package-option-card ${isSelected ? 'active' : ''}" onclick="selectRentalPackage(${dur})">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
@@ -459,27 +412,21 @@ function renderRentalPackages() {
     `;
   }).join('');
 }
-
 // Scelta Pacchetto Noleggio (clic su blocco rettangolare)
 function selectRentalPackage(dur) {
   const c = ConfigState.car;
   if (!c) return;
-
   const rates = getRatesForCar(c);
   const rateInfo = rates[dur] || rates[Object.keys(rates)[0]];
   if (!rateInfo) return;
-
   ConfigState.durationMonths = Number(dur);
   ConfigState.kmPerYear = rateInfo.kmTotal || Math.round((rateInfo.baseKm || 25000) * (dur / 12));
   ConfigState.depositAmount = Number(rateInfo.deposit || 0);
-
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
-
   renderRentalPackages();
   calculateAndRenderPrice();
 }
-
 // Scelta Franchigia Kasko
 function setConfigKasko(type, btnElem) {
   ConfigState.kaskoFranchigia = type;
@@ -489,16 +436,13 @@ function setConfigKasko(type, btnElem) {
   }
   const sa = document.getElementById('sidebarQuoteActions');
   if (sa && sa.style.display === 'block') sa.style.display = 'none';
-
   renderRentalPackages();
   calculateAndRenderPrice();
 }
-
 // Motore di calcolo finanziario tariffa NLT
 function calculateAndRenderPrice() {
   const c = ConfigState.car;
   if (!c) return;
-
   let dur = Number(ConfigState.durationMonths) || 36;
   const rates = getRatesForCar(c);
   const rateInfo = rates[dur] || rates[Object.keys(rates)[0]] || {
@@ -509,25 +453,20 @@ function calculateAndRenderPrice() {
     extraKmPrice: 0.15,
     status: 'Disponibile'
   };
-
   const kmTotal = rateInfo.kmTotal || Math.round((rateInfo.baseKm || 25000) * (dur / 12));
   const kmYearly = rateInfo.baseKm || Math.round(kmTotal * (12 / dur));
   ConfigState.kmPerYear = kmTotal;
   ConfigState.depositAmount = Number(rateInfo.deposit || 0);
-
   let price = Number(rateInfo.price);
   if (ConfigState.kaskoFranchigia === 'zero') {
     price += 35.00;
   }
   price = price * BROKER_MARGIN;
-
   ConfigState.finalMonthlyPrice = Math.round(price);
-
   const priceDisplay = document.getElementById('liveMonthlyPrice');
   const summaryDisplay = document.getElementById('liveConfigSummary');
   const extraKmDisplay = document.getElementById('liveExtraKmInfo');
   const boxElem = document.getElementById('livePriceBox');
-
   if (priceDisplay && summaryDisplay && boxElem) {
     boxElem.style.transform = 'scale(0.97)';
     boxElem.style.opacity = '0.6';
@@ -546,25 +485,20 @@ function calculateAndRenderPrice() {
     }, 110);
   }
 }
-
 // Gestione submit finale "Genera Preventivo" (Apre e mostra il preventivo ufficiale PDF/Stampabile)
 async function handleQuoteSubmit(event) {
   const paramLoc = new URLSearchParams(window.location.search).get('loc') || '';
   event.preventDefault();
-
   const submitBtn = event.target.querySelector('button[type="submit"]');
   const originalBtnText = submitBtn.innerHTML;
-
   submitBtn.disabled = true;
   submitBtn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Elaborazione Preventivo...';
-
   const name = document.getElementById('quoteClientName').value;
   const email = document.getElementById('quoteClientEmail').value;
   const phone = document.getElementById('quoteClientPhone').value;
   const type = document.getElementById('quoteClientType').value;
   const c = ConfigState.car;
   const quoteCode = `IT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
-
   localStorage.setItem('itercars_last_quote_code', quoteCode);
   localStorage.setItem('itercars_last_quote', JSON.stringify({
     quote_code: quoteCode,
@@ -575,7 +509,6 @@ async function handleQuoteSubmit(event) {
     crm_leads: { first_name: name, email: email, customer_type: type },
     vehicles: { provider_id: c.provider_id, brand: c.brand, model: c.model, trim: c.trim }
   }));
-
   // 1. Visualizza SUBITO la scheda Preventivo Ufficiale senza bloccare la pagina!
   const previewBox = document.getElementById('officialQuoteContainer');
   if (previewBox) {
@@ -592,7 +525,6 @@ async function handleQuoteSubmit(event) {
           </div>
           <span style="background: rgba(46, 204, 113, 0.2); color: #2ecc71; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 800;">PRONTO DA FIRMARE / BLOCCA TARIFFA</span>
         </div>
-
         <div class="detail-image-wrapper" style="margin-bottom: 12px; box-shadow: none;">
           <img src="${c.image}" alt="${c.model}" class="detail-image" style="background: #fff; max-height: 280px;">
         </div>
@@ -619,21 +551,18 @@ async function handleQuoteSubmit(event) {
                 <strong style="color: #fff;">${c.transmission}</strong>
             </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; font-size: 0.95rem;">
           <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07);">
             <strong style="color: var(--accent-primary); display: block; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 6px;">Intestazione Cliente</strong>
             <div style="font-size: 1.1rem; font-weight: 800; color: #fff;">${name}</div>
             <div style="color: var(--text-muted); font-size: 0.9rem;">${type} • ${email} • ${phone}</div>
           </div>
-
           <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.07);">
             <strong style="color: var(--accent-primary); display: block; font-size: 0.8rem; text-transform: uppercase; margin-bottom: 6px;">Vettura Selezionata</strong>
             <div style="font-size: 1.1rem; font-weight: 800; color: #fff;">${c.brand} ${c.model}</div>
             <div style="color: var(--text-muted); font-size: 0.9rem;">${c.trim} • Listino ${c.providerName}</div>
           </div>
         </div>
-
         <div style="background: rgba(0, 146, 70, 0.14); border: 1px solid rgba(0, 146, 70, 0.4); border-radius: 14px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
           <div>
             <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Configurazione Contratto NLT</span>
@@ -645,18 +574,15 @@ async function handleQuoteSubmit(event) {
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Kasko Integral ${ConfigState.kaskoFranchigia === 'zero' ? '(Franchigia Zero 0€)' : '(Franchigia Standard)'} + Bollo & Manutenzione H24</div>
             <div style="font-size: 0.82rem; color: #f39c12; margin-top: 4px; font-weight: 600;"><i class="ri-information-line"></i> Costo Km Extra da tabella mandante compreso nel contratto</div>
           </div>
-
           <div style="text-align: right;">
             <span style="font-size: 0.85rem; color: var(--text-muted); display: block; text-transform: uppercase; font-weight: 700;">Canone Mensile Tutto Incluso</span>
             <div style="font-size: 2.2rem; font-weight: 900; color: #2ecc71; line-height: 1;">€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')} <small style="font-size: 0.9rem; font-weight: 400; color: #fff;">/mese (IVA esc.)</small></div>
           </div>
         </div>
-
         <div id="nltToastInfo" style="margin-bottom: 16px; padding: 12px 18px; border-radius: 8px; background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px;">
           <i class="ri-mail-check-fill" style="color: #2ecc71; font-size: 1.4rem;"></i>
           <span>Preventivo generato e inviato al tuo indirizzo email! Puoi procedere con il pagamento o scaricare il PDF.</span>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
           <button type="button" class="btn btn-primary" onclick="window.acceptQuoteAndRedirect('${quoteCode}', event)" style="height: 52px; font-size: 1.05rem; font-weight: 800; background: linear-gradient(135deg, #2ecc71, #009246); border: none; display: flex; align-items: center; justify-content: center; gap: 8px; grid-column: span 2; box-shadow: 0 6px 20px rgba(46, 204, 113, 0.3);">
             <i class="ri-folder-upload-fill" style="font-size: 1.35rem;"></i> Accetta Preventivo e Carica Documenti
@@ -695,10 +621,8 @@ async function handleQuoteSubmit(event) {
       previewBox.scrollIntoView({ behavior: 'smooth' });
     }
   }
-
   submitBtn.disabled = false;
   submitBtn.innerHTML = '✅ Preventivo Generato!';
-
   // 2. Avvia in background senza bloccare l'interfaccia il salvataggio DB, Stripe e l'invio mail!
   (async () => {
     try {
@@ -710,7 +634,6 @@ async function handleQuoteSubmit(event) {
       } catch (pdfErr) {
         console.warn("PDF non generato per allegato:", pdfErr);
       }
-
       if (typeof window.supabase !== 'undefined' && window.supabase) {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
         let offerUuid = c.id && uuidRegex.test(c.id) ? c.id : null;
@@ -718,7 +641,6 @@ async function handleQuoteSubmit(event) {
         let rawProvId = (typeof c !== "undefined" && c.provider_id) ? c.provider_id : ((typeof vehicle !== "undefined" && vehicle && vehicle.provider_id) ? vehicle.provider_id : null);
         let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
         let provName = (typeof c !== "undefined" && (c.providerName || c.provider_company_name)) ? (c.providerName || c.provider_company_name) : 'NLT';
-
         const leadPayload = {
           first_name: name.split(' ')[0] || name,
           last_name: name.split(' ').slice(1).join(' ') || 'Cliente NLT',
@@ -733,7 +655,6 @@ async function handleQuoteSubmit(event) {
           interested_vehicle_id: vehicleUuid,
           notes: `Preventivo NLT [${quoteCode}] per ${c.brand} ${c.model}: ${ConfigState.durationMonths}m/${ConfigState.kmPerYear}km - Anticipo €${ConfigState.depositAmount} -> Rata €${ConfigState.finalMonthlyPrice}/mese [Mandante: ${provName}]` + (paramLoc ? ` [Località: ${paramLoc}]` : '')
         };
-
         let leadData = null;
         try {
           const { data: resData, error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]).select();
@@ -750,9 +671,7 @@ async function handleQuoteSubmit(event) {
         } catch (dbE) {
           console.warn("Errore inserimento crm_leads NLT:", dbE);
         }
-
         let newLeadId = leadData && leadData.length > 0 ? leadData[0].id : null;
-
         await window.supabase.from('quotes').insert([{
           quote_code: quoteCode,
           lead_id: newLeadId,
@@ -772,10 +691,8 @@ async function handleQuoteSubmit(event) {
           },
           status: 'sent'
         }]);
-
         const supabaseUrl = window.supabase.supabaseUrl;
         const supabaseKey = window.supabase.supabaseKey;
-
         let checkoutUrl = null;
         try {
           const stripeRes = await fetch(`${supabaseUrl}/functions/v1/stripe-checkout`, {
@@ -788,7 +705,6 @@ async function handleQuoteSubmit(event) {
             checkoutUrl = stripeData.checkoutUrl || null;
           }
         } catch (stripeErr) { console.warn("Stripe url gen fail in background:", stripeErr); }
-
         const emailPayload = {
           email: email,
           nome: name,
@@ -800,7 +716,6 @@ async function handleQuoteSubmit(event) {
           dossierUrl: window.location.origin + '/upload-documenti.html?code=' + quoteCode,
           checkoutUrl: checkoutUrl
         };
-
         await fetch(`${supabaseUrl}/functions/v1/preventivo_itercars`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${supabaseKey}` },
@@ -812,12 +727,10 @@ async function handleQuoteSubmit(event) {
     }
   })();
 }
-
 function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
   const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n📅 Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/anno*\n💰 Anticipo: *€ ${deposit}*\n\n🔥 *Canone Calcolato: € ${price} / mese Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
 }
-
 
 /**
  * Enterprise Mode PDF Generator (Native jsPDF)
@@ -828,7 +741,6 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   if (!jsPDF) {
     throw new Error("Libreria jsPDF non trovata.");
   }
-
   const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 146, 70);
@@ -839,7 +751,6 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setTextColor(100, 100, 100);
   doc.text(`Codice Pratica: ${quoteCode || 'IT-NLT-0000'}`, 15, 27);
   doc.text(`Data Emissione: ${new Date().toLocaleDateString('it-IT')}`, 15, 32);
-
   doc.setFillColor(240, 253, 244);
   doc.setDrawColor(0, 146, 70);
   doc.setLineWidth(0.5);
@@ -849,11 +760,9 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setTextColor(0, 146, 70);
   doc.text("PRONTO DA FIRMARE", 149, 21.5);
   doc.line(15, 38, 195, 38);
-
   let specsY = 135;
   let boxY = 165;
   let finalY = 205;
-
   try {
     const img = new Image();
     img.crossOrigin = "Anonymous";
@@ -866,7 +775,6 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
     const targetH = 100;
     const imgRatio = img.width / img.height;
     const boxRatio = targetW / targetH;
-
     let drawW, drawH;
     if (imgRatio > boxRatio) {
       drawW = targetW;
@@ -875,14 +783,11 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
       drawH = targetH;
       drawW = targetH * imgRatio;
     }
-
     // Center inside the 180x100 bounding box
     const drawX = ((210 - targetW) / 2) + ((targetW - drawW) / 2);
     const drawY = 42 + ((targetH - drawH) / 2);
-
     doc.addImage(img, 'JPEG', drawX, drawY, drawW, drawH);
     const finalH = targetH; // FORZATO RETTANGOLARE per layout
-
     // Calcoliamo le coordinate successive dinamicamente in base a quanto è alta l'immagine
     specsY = 42 + finalH + 10;
     boxY = specsY + 30;
@@ -890,11 +795,9 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   } catch (e) {
     console.log("Immagine non caricata nel PDF nativo:", e);
   }
-
   doc.setFillColor(249, 249, 249);
   doc.setDrawColor(220, 220, 220);
   doc.roundedRect(15, specsY, 180, 20, 2, 2, 'FD');
-
   const drawSpec = (label, value, x) => {
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
@@ -906,13 +809,11 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
     const splitValue = doc.splitTextToSize(value, 30);
     doc.text(splitValue, x, specsY + 11, { align: 'center' });
   };
-
   drawSpec("VELOCITÀ", c.speed || "N/A", 25);
   drawSpec("0-100", c.accel || "N/A", 60);
   drawSpec("POTENZA", c.hp || "N/A", 95);
   drawSpec("MOTORE", c.fuel || "N/A", 138);
   drawSpec("CAMBIO", c.transmission || "N/A", 182);
-
   doc.setFillColor(249, 249, 249);
   doc.roundedRect(15, boxY, 85, 30, 2, 2, 'FD');
   doc.setFontSize(9);
@@ -925,7 +826,6 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setFontSize(9);
   doc.setTextColor(80, 80, 80);
   doc.text(`${type}\n${email}\n${phone}`, 20, boxY + 20);
-
   doc.setFont("helvetica", "bold");
   doc.setFillColor(249, 249, 249);
   doc.roundedRect(110, boxY, 85, 30, 2, 2, 'FD');
@@ -940,60 +840,48 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.setTextColor(80, 80, 80);
   const trimText = doc.splitTextToSize(c.trim || "", 75);
   doc.text(trimText, 115, boxY + 20);
-
   doc.setFillColor(240, 253, 244);
   doc.setDrawColor(0, 146, 70);
   doc.setLineWidth(1);
   doc.roundedRect(15, finalY, 180, 35, 4, 4, 'FD');
-
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(50, 50, 50);
   doc.text("CONFIGURAZIONE CONTRATTO NLT", 20, finalY + 10);
-
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
   const kaskoType = ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard';
   doc.text(`Durata: ${ConfigState.durationMonths} Mesi   -   Km annui: ${ConfigState.kmPerYear.toLocaleString('it-IT')} km   -   Anticipo: € ${ConfigState.depositAmount.toLocaleString('it-IT')}`, 20, finalY + 18);
-
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
   doc.text(`Servizi: Kasko ${kaskoType}, Bollo, Manutenzione Ord/Str, RCA`, 20, finalY + 26);
-
   doc.setFont("helvetica", "bold");
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
   doc.text("CANONE MENSILE", 185, finalY + 10, { align: 'right' });
-
   doc.setFontSize(26);
   doc.setTextColor(0, 146, 70);
   doc.text(`€ ${ConfigState.finalMonthlyPrice.toLocaleString('it-IT')}`, 185, finalY + 22, { align: 'right' });
-
   doc.setFontSize(8);
   doc.text("/mese (IVA esc.)", 185, finalY + 28, { align: 'right' });
-
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(150, 150, 150);
   doc.text("Generato tramite piattaforma certificata ITERCARS Enterprise", 105, 280, { align: 'center' });
-
   return doc;
 }
-
 
 async function payQuoteStripe(quoteCode, event) {
   if (!window.supabase || !window.supabase.supabaseUrl) {
     alert("Servizio Stripe non ancora attivo in questo ambiente locale (Supabase mancante).");
     return;
   }
-
   try {
     const btn = event.currentTarget;
     const originalHtml = btn.innerHTML;
     btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Preparazione Checkout...';
     btn.disabled = true;
-
     const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
       method: 'POST',
       headers: {
@@ -1002,9 +890,7 @@ async function payQuoteStripe(quoteCode, event) {
       },
       body: JSON.stringify({ quoteCode })
     });
-
     const data = await res.json();
-
     if (data.checkoutUrl) {
       window.location.href = data.checkoutUrl;
     } else {
@@ -1019,7 +905,6 @@ async function payQuoteStripe(quoteCode, event) {
     event.currentTarget.disabled = false;
   }
 }
-
 window.acceptQuoteAndRedirect = function (quoteCode, event) {
   if (event && event.currentTarget) {
     event.currentTarget.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Apertura Dossier Documenti...';

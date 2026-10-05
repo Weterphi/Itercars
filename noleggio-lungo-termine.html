@@ -8,7 +8,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     const savedConsent = localStorage.getItem('itercars_cookie_consent');
     const isGranted = savedConsent === 'accepted' ? 'granted' : 'denied';
     gtag('consent', 'default', {
@@ -17,7 +16,6 @@
       'ad_user_data': isGranted,
       'ad_personalization': isGranted
     });
-
     gtag('config', 'G-H6JBRXTWJL');
   </script>
   <!-- Microsoft Clarity -->
@@ -42,7 +40,6 @@
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=50">
   <link rel="stylesheet" href="nlt.css?v=1">
-
   <style>
     .nlt-mobile-video { display: none !important; }
     .nlt-desktop-video { display: block !important; }
@@ -60,24 +57,21 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body style="background: #06060c; color: #fff; margin: 0; padding: 0;">
-
   <!-- ================= HEADER / NAVBAR ================= -->
   <header id="header">
     <div class="container nav-container">
       <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS Luxury Supercar Rental">
         <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
       </a>
-
       <ul class="nav-links">
         <li><a href="index.html" data-i18n="nav.home">Home</a></li>
         <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
         <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
         <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
         <li><a href="magazine.html" style="color: #fff; font-weight: 700;"><i class="ri-article-line"></i> MAGAZINE</a></li>
-        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACCADEMY</a></li>
+        <li><a href="academy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
         <li><a href="index.html#contatti" data-i18n="nav.contacts" style="font-weight: 600;">CONTATTI</a></li>
       </ul>
-
       <div class="nav-actions">
         <!-- Custom Language Selector -->
         <div class="lang-dropdown-wrapper" style="position: relative;">
@@ -92,7 +86,6 @@
             <button onclick="selectLang('es')"><span class="lang-flag">ðŸ‡ªðŸ‡¸</span> <strong>ES</strong> - Espaà±ol</button>
           </div>
         </div>
-
         <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
           <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
         </a>
@@ -117,7 +110,6 @@
       </div>
     </div>
   </header>
-
   <!-- ================= HERO DUAL MODE SWITCHER ================= -->
       <div class="hero-bg-wrapper" style="position: relative; overflow: hidden; background: #06060c;">
     <video autoplay muted loop playsinline class="hero-bg-video nlt-desktop-video" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
@@ -133,12 +125,10 @@
       <div style="display: inline-flex; align-items: center; gap: 8px; padding: 6px 16px; background: rgba(0, 146, 70, 0.2); border: 1px solid rgba(0, 146, 70, 0.45); border-radius: 99px; margin-top: 20px; margin-bottom: 16px; color: #2ecc71; font-size: 0.85rem; font-weight: 700;">
         <i class="ri-shield-check-fill"></i> IL TUO PARTNER DI FIDUCIA: TRASPARENZA E SICUREZZA ASSOLUTA
       </div>
-
       <h1 style="font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 950; line-height: 1.1; margin-bottom: 14px;" id="nltHeroTitle">
         Noleggio <span class="text-gradient">Lungo Termine</span>
       </h1>
       
-
       <div class="fleet-hero-filters-anim" style="margin-top: 10px;">
         <div class="fleet-glass-filters" id="nltFilterPills" style="justify-content: center; gap: 12px; display: flex; flex-wrap: wrap;">
           
@@ -147,31 +137,25 @@
             <img src="icon_sports_car.png" alt="Piccola" style="width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
             <span style="font-size: 0.85rem; font-weight: 600;">Piccola</span>
           </button>
-
           <!-- Macchina Media -->
           <button type="button" class="btn btn-outline filter-car-size" data-size="media" onclick="setCarSizeFilter('media', this)" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 10px; border-radius: 16px; flex: 1; min-width: 90px; max-width: 140px; border-color: rgba(255,255,255,0.2);">
             <img src="icon_sedan_car.png" alt="Media" style="width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
             <span style="font-size: 0.85rem; font-weight: 600;">Media</span>
           </button>
-
           <!-- Macchina Grande / SUV -->
           <button type="button" class="btn btn-outline filter-car-size" data-size="grande" onclick="setCarSizeFilter('grande', this)" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 12px 10px; border-radius: 16px; flex: 1; min-width: 90px; max-width: 140px; border-color: rgba(255,255,255,0.2);">
             <img src="icon_suv_car.png" alt="SUV/Grande" style="width: 48px; height: auto; object-fit: contain; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));">
             <span style="font-size: 0.85rem; font-weight: 600;">SUV/Grande</span>
           </button>
-
         </div>
       </div>
-
 
         </div> <!-- Chiudo il container a 1200px per poter andare a tutto schermo -->
         
         
   </section>
   </div>
-
   
-
 
   <!-- ================= CARS CATALOG GRID ================= -->
   <section style="padding-top: 40px; padding-bottom: 80px;">
@@ -182,18 +166,15 @@
           <i class="ri-refresh-line"></i> Resetta Filtri
         </button>
       </div>
-
       <div class="nlt-grid" id="nltGrid">
         <!-- Vetture generate dinamicamente via nlt-app.js -->
       </div>
     </div>
   </section>
-
   <!-- ================= 1-CLICK QUOTE GENERATOR & SCORING MODAL ================= -->
   <div class="modal-overlay" id="quoteModal" style="display: none;">
     <div class="modal-content glass-card" style="max-width: 680px; width: 95%; max-height: 90vh; overflow-y: auto; position: relative;">
       <button type="button" class="close-modal" onclick="closeQuoteModal()"><i class="ri-close-line"></i></button>
-
       <!-- Intestazione vettura selezionata -->
       <div style="display: flex; gap: 16px; align-items: center; border-bottom: 1px solid var(--border-glass); padding-bottom: 16px; margin-bottom: 20px;">
         <img id="quoteModalImg" src="logo_fallback.png" alt="Vettura" style="width: 120px; height: 75px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1);">
@@ -203,7 +184,6 @@
           <p id="quoteModalCarTrim" style="font-size: 0.85rem; color: var(--text-muted); margin: 0;">M Sport / Luxury</p>
         </div>
       </div>
-
       <!-- Tabella Prezzo e Configurazione -->
       <div style="background: rgba(0, 146, 70, 0.12); border: 1px solid rgba(0, 146, 70, 0.35); border-radius: 12px; padding: 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;">
         <div>
@@ -215,7 +195,6 @@
           <div id="quoteModalPriceText" style="font-size: 1.6rem; font-weight: 900; color: #2ecc71;">€ 764 / mese <small style="font-size: 0.8rem; font-weight: 400; color: #fff;">Tutto Incluso</small></div>
         </div>
       </div>
-
       <!-- Elenco Servizi compresi nel preventivo -->
       <div style="margin-bottom: 24px;">
         <h4 style="font-size: 0.95rem; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
@@ -225,14 +204,12 @@
           <!-- Compilato da JS -->
         </div>
       </div>
-
       <!-- Form Dati per emissione o scoring -->
       <form onsubmit="handleGeneratePDFSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
         <input type="hidden" id="quoteHiddenOfferId" value="">
         <h4 style="font-size: 1.05rem; margin-bottom: 4px; border-top: 1px solid var(--border-glass); padding-top: 16px;">
           Inserisci i tuoi dati per ricevere il PDF o inviare il dossier al mandante:
         </h4>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group">
             <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Nome e Cognome *</label>
@@ -247,7 +224,6 @@
             </select>
           </div>
         </div>
-
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
           <div class="form-group">
             <label style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 4px;">Telefono / WhatsApp *</label>
@@ -258,7 +234,6 @@
             <input type="email" id="quoteClientEmail" class="form-control" required placeholder="marco.rossi@email.com" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid var(--border-glass); padding: 10px; border-radius: 8px; color: #fff;">
           </div>
         </div>
-
         <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; font-weight: 800; margin-top: 8px;">
           <span>Emetti Preventivo PDF in 1-Click</span> <i class="ri-file-pdf-fill"></i>
         </button>
@@ -266,12 +241,10 @@
           <i class="ri-folder-shield-2-fill"></i> <span>Hai già un preventivo? Recupera Pratica</span>
         </button>
       </form>
-
       <!-- Box Anteprima Preventivo Stampabile (Appare al click) -->
       <div id="quotePdfPreviewBox" style="display: none;"></div>
     </div>
   </div>
-
   <!-- ================= FOOTER ================= -->
   <footer id="contatti" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 50px; background: #040509;">
     <div class="container">
@@ -287,7 +260,6 @@
             <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-whatsapp-line"></i></a>
           </div>
         </div>
-
         <div class="footer-col">
           <h4>Noleggio & Brokerage</h4>
           <div class="footer-links">
@@ -297,16 +269,14 @@
             <a href="partners.html">Diventa Partner / Mandante</a>
           </div>
         </div>
-
         <div class="footer-col">
           <h4>Link Utili</h4>
           <div class="footer-links">
             <a href="index.html">Home Marketplace</a>
-            <a href="accademy.html">ITERCARS Academy</a>
+            <a href="academy.html">ITERCARS Academy</a>
             <a href="index.html#perche-noi">Condizioni di Noleggio</a>
           </div>
         </div>
-
         <div class="footer-col">
           <h4>Contatti & Concierge</h4>
           <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
@@ -315,7 +285,6 @@
           </div>
         </div>
       </div>
-
       <div class="footer-bottom">
         <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NLT Multi-Mandante & NBT.</p>
         <div style="display: flex; gap: 20px;">
@@ -325,13 +294,11 @@
       </div>
     </div>
   </footer>
-
     <!-- Floating Mobile Phone Button -->
   <a href="tel:+393755942143" class="mobile-floating-phone" title="Chiama ITERCARS" aria-label="Chiama +39 375 594 2143">
     <i class="ri-phone-fill"></i>
     <span>+39 375 594 2143</span>
   </a>
-
   <!-- ITERCARS Concierge Bot Window (Mock WhatsApp/Contact Assistant) -->
   <div class="concierge-bot-window glass-card" id="conciergeBotWindow">
     <div class="bot-header">
@@ -368,17 +335,14 @@
             </div>
           </a>
         </div>
-
         <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">Oppure scrivi il tuo messaggio qui sotto per essere reindirizzato direttamente su WhatsApp:</p>
       </div>
     </div>
-
     <form class="bot-footer" onsubmit="handleBotSendMessage(event)">
       <input type="text" id="botInputText" placeholder="Scrivi messaggio per WhatsApp..." required autocomplete="off">
       <button type="submit" class="btn btn-primary" style="padding: 10px 14px; border-radius: 12px;" title="Invia su WhatsApp"><i class="ri-send-plane-fill"></i></button>
     </form>
   </div>
-
   <!-- Supabase JS SDK & App Scripts -->
   <!-- ================= AUTHENTICATION MODAL (LOGIN / REGISTER) ================= -->
   <div class="modal-overlay" id="authModal">
@@ -403,13 +367,11 @@
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Non sei ancora registrato?</span>
           <button type="button" onclick="switchAuthMode('register')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Registrati qui</button>
         </div>
       </div>
-
       <!-- REGISTRATION VIEW -->
       <div id="registerFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gradient"></i> Registrazione Membro VIP</h3>
@@ -426,7 +388,6 @@
               <input type="text" class="form-control" id="regLastName" required placeholder="Rossi">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Data di Nascita *</label>
@@ -437,7 +398,6 @@
               <input type="text" class="form-control" id="regCountry" required placeholder="Italia">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Email *</label>
@@ -448,7 +408,6 @@
               <input type="tel" class="form-control" id="regPhone" required placeholder="+39 340 0000000">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
@@ -459,23 +418,18 @@
               <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
-
           <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px;">
             <span>Crea Account VIP</span> <i class="ri-vip-crown-fill"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
-
     </div>
   </div>
-
   
-
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="app.js?v=40"></script>
@@ -489,34 +443,27 @@
       <div style="width: 64px; height: 64px; background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.8rem; color: #2ecc71;">
         <i class="ri-folder-shield-2-fill"></i>
       </div>
-
       <h3 style="font-size: 1.6rem; margin-bottom: 6px;">Recupera la Tua Pratica</h3>
       <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
         Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
       </p>
-
       <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
         <div class="form-group">
           <label><i class="ri-barcode-line text-gradient"></i> Codice Preventivo (es. PREV-XXXX o IT-NLT-...)</label>
           <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-NLT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
         </div>
-
         <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">- OPPURE -</div>
-
         <div class="form-group">
           <label><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
           <input type="email" class="form-control" id="recoveryEmailInput" placeholder="nome.cognome@email.com">
         </div>
-
         <div id="recoveryErrorMsg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; text-align: center;"></div>
-
         <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 6px;">
           <i class="ri-search-eye-line"></i> <span>Riapri Pratica & Documenti</span>
         </button>
       </form>
     </div>
   </div>
-
   <!-- ================= AUTO-RECOVERY FLOATING BANNER ================= -->
   <div id="autoRecoveryToast" style="display: none; position: fixed; bottom: 24px; right: 24px; z-index: 99999; max-width: 420px; background: rgba(15, 20, 32, 0.95); border: 1px solid rgba(46, 204, 113, 0.5); border-radius: 16px; padding: 18px 22px; box-shadow: 0 15px 40px rgba(0,0,0,0.65); backdrop-filter: blur(16px); animation: slideUpToast 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
@@ -549,8 +496,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
-
 </body>
 </html>
-
 

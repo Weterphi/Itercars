@@ -1,8 +1,6 @@
 import re
-
 with open('articolo-milano-noleggio.html', 'r', encoding='utf-8') as f:
     content = f.read()
-
 # 1. CSS
 css = '''
     /* Rotate Prompt */
@@ -33,7 +31,6 @@ css = '''
     }
 '''
 content = content.replace('</style>', css + '</style>')
-
 # 2. HTML
 html = '''
       <!-- Rotate Prompt for Mobile Fullscreen -->
@@ -46,7 +43,6 @@ target = '''        </button>
       </div>'''
 if target in content:
     content = content.replace(target, target + '\n' + html)
-
 # 3. JS
 js = '''
     function checkOrientationPrompt() {
@@ -61,7 +57,6 @@ js = '''
         swiperContainer.classList.remove('is-fullscreen-portrait');
       }
     }
-
     document.addEventListener('fullscreenchange', checkOrientationPrompt);
     document.addEventListener('webkitfullscreenchange', checkOrientationPrompt);
     window.addEventListener('resize', checkOrientationPrompt);
@@ -69,7 +64,6 @@ js = '''
 target2 = "document.addEventListener('msfullscreenchange', updateFullscreenIcon);"
 if target2 in content:
     content = content.replace(target2, target2 + '\n' + js)
-
 with open('articolo-milano-noleggio.html', 'w', encoding='utf-8') as f:
     f.write(content)
 print("done")

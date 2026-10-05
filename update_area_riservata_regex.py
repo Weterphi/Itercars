@@ -1,15 +1,13 @@
 import re
 import os
-
 files_to_update = [
     'noleggio-breve-termine.html',
     'noleggio-lungo-termine.html',
     'car-detail.html',
-    'accademy.html',
+    'academy.html',
     'partners.html',
     'nbt-dettaglio.html'
 ]
-
 new_block = """        <div class="area-dropdown-wrapper" style="position: relative; display: inline-block;">
           <button class="btn btn-primary nav-area-btn" id="navAreaBtn" onclick="toggleAreaMenu(event)" title="Area Riservata" style="display: flex; align-items: center; gap: 6px;">
             <i class="ri-user-3-fill" style="font-size: 1.15rem;"></i> <span data-i18n="nav.area" id="navAreaText">Area Riservata</span>
@@ -25,9 +23,7 @@ new_block = """        <div class="area-dropdown-wrapper" style="position: relat
             </button>
           </div>
         </div>"""
-
 pattern = re.compile(r'\s*<button[^>]*id="navAreaBtn"[^>]*>[\s\S]*?</button>')
-
 for f in files_to_update:
     path = os.path.join(r"c:\\Users\\alber\\Desktop\\LuxuryCar", f)
     if os.path.exists(path):

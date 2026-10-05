@@ -1,5 +1,4 @@
 import os, glob
-
 html_files = glob.glob('*.html')
 for f in html_files:
     with open(f, 'r', encoding='utf-8') as file:

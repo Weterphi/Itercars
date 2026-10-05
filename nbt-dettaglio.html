@@ -8,7 +8,6 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     const savedConsent = localStorage.getItem('itercars_cookie_consent');
     const isGranted = savedConsent === 'accepted' ? 'granted' : 'denied';
     gtag('consent', 'default', {
@@ -17,7 +16,6 @@
       'ad_user_data': isGranted,
       'ad_personalization': isGranted
     });
-
     gtag('config', 'G-H6JBRXTWJL');
   </script>
   <!-- Microsoft Clarity -->
@@ -56,23 +54,20 @@
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 </head>
 <body style="background: #06060c; color: #fff; margin: 0; padding: 0;">
-
   <!-- ================= HEADER / NAVBAR ================= -->
   <header id="header">
     <div class="container nav-container">
       <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS Luxury Supercar Rental">
         <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
       </a>
-
       <ul class="nav-links">
         <li><a href="index.html" data-i18n="nav.home">Home</a></li>
         <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
         <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
         <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
-        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACCADEMY</a></li>
+        <li><a href="academy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
         <li><a href="index.html#contatti" data-i18n="nav.contacts" style="font-weight: 600;">CONTATTI</a></li>
       </ul>
-
       <div class="nav-actions">
         <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
           <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
@@ -83,7 +78,6 @@
       </div>
     </div>
   </header>
-
   <!-- ================= DETTAGLIO & CONFIGURATORE NBT ================= -->
   <section class="nbt-detail-header">
     <div class="container">
@@ -94,7 +88,6 @@
         <i class="ri-arrow-right-s-line"></i> <span>...</span> 
         <i class="ri-arrow-right-s-line"></i> <strong>...</strong>
       </div>
-
       <div class="nbt-detail-grid">
         
         <!-- ================= COLONNA SINISTRA: VETRINA & SPECIFICHE ================= -->
@@ -107,7 +100,6 @@
               <span class="badge-ready" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 20px; font-weight: 700;"><i class="ri-rocket-fill"></i> Pronta Consegna</span>
             </div>
           </div>
-
           <!-- Titolo & Mandante -->
           <div style="background: rgba(15, 20, 32, 0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius-lg); padding: 24px;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px;">
@@ -121,7 +113,6 @@
               </div>
             </div>
           </div>
-
           <!-- Specifiche Tecniche Veloci -->
           <div class="detail-specs-grid">
             <div class="detail-spec-card">
@@ -151,9 +142,7 @@
             </div>
           </div>
 
-
         </div>
-
         <!-- ================= COLONNA DESTRA: CONFIGURATORE STICKY & PREVENTIVO ================= -->
         <div class="detail-sidebar">
           <div class="configurator-widget">
@@ -162,7 +151,6 @@
               <span><i class="ri-sound-module-fill" style="color: #2ecc71;"></i> Configura Contratto</span>
               <span style="font-size: 0.8rem; background: rgba(255,255,255,0.08); padding: 4px 10px; border-radius: 6px; font-weight: 600;">All-Inclusive</span>
             </h2>
-
             <!-- Box Canone Live -->
             <div class="live-price-box" id="livePriceBox">
               <div class="live-price-label">Totale Calcolato:</div>
@@ -198,7 +186,6 @@
                 <button type="button" class="config-option-btn" data-value="99999" onclick="setConfigKmDaily(99999, this)">Illimitati</button>
               </div>
             </div>
-
             <!-- STEP 3: DEPOSITO CAUZIONALE -->
             <div class="config-section">
               <div class="config-section-title"><i class="ri-wallet-3-line"></i> 3. Deposito Cauzionale (Richiesto sulla Carta)</div>
@@ -217,7 +204,6 @@
                 </div>
               </div>
             </div>
-
             <!-- STEP 4: OPZIONE FRANCHIGIA KASKO -->
             <div class="config-section">
               <div class="config-section-title"><i class="ri-shield-star-line"></i> 4. Opzione Franchigia Assicurativa</div>
@@ -226,7 +212,6 @@
                 <button type="button" class="config-option-btn" data-value="zero" onclick="setConfigKasko('zero', this)" style="color: #2ecc71;">Franchigia Zero 0€ (+€35/m)</button>
               </div>
             </div>
-
             <!-- STEP 5: FORM PER EMISSIONE PREVENTIVO -->
             <form class="quote-form" onsubmit="handleQuoteSubmit(event)">
               <div class="config-section-title" style="margin-bottom: 2px;"><i class="ri-file-pdf-line"></i> 5. Dati per Emissione Preventivo PDF</div>
@@ -243,7 +228,6 @@
                   </select>
                 </div>
               </div>
-
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
                 <div>
                   <input type="tel" id="quoteClientPhone" class="form-control" required placeholder="Telefono / WhatsApp *" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.88rem;">
@@ -252,7 +236,6 @@
                   <input type="email" id="quoteClientEmail" class="form-control" required placeholder="Email *" style="width: 100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); padding: 10px; border-radius: 8px; color: #fff; font-size: 0.88rem;">
                 </div>
               </div>
-
               <button type="submit" class="btn btn-primary" style="width: 100%; height: 52px; font-size: 1.1rem; font-weight: 800; margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;">
                 <span>Genera Preventivo</span> <i class="ri-file-pdf-fill" style="font-size: 1.3rem;"></i>
               </button>
@@ -260,11 +243,9 @@
                 <i class="ri-folder-shield-2-fill" style="font-size: 1.15rem;"></i> <span>Hai già un preventivo? Recupera Pratica in corso</span>
               </button>
             </form>
-
             <div id="sidebarQuoteActions" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.1); animation: fadeIn 0.4s ease;"></div>
           </div>
         </div>
-
           <!-- Spiegazione I 6 Pilastri del Canone Tutto Compreso -->
           <div class="included-pillars-box">
             <h3><i class="ri-shield-check-fill" style="color: #2ecc71;"></i> Cosa è Sempre Incluso nel Canone Totale:</h3>
@@ -277,7 +258,6 @@
                   <p>Tutela completa contro danni accidentali, furto, incendio, atti vandalici ed eventi atmosferici. Senza pensieri.</p>
                 </div>
               </div>
-
               <div class="pillar-item">
                 <i class="ri-tools-fill"></i>
                 <div>
@@ -285,7 +265,6 @@
                   <p>Tutti i tagliandi, cambi olio, usura freni e riparazioni guasti meccanici eseguiti nelle officine ufficiali della casa madre.</p>
                 </div>
               </div>
-
               <div class="pillar-item">
                 <i class="ri-bank-card-fill"></i>
                 <div>
@@ -293,7 +272,6 @@
                   <p>Tassa di proprietà annuale e immatricolazione interamente gestite e pagate dal mandante per tutta la durata del contratto.</p>
                 </div>
               </div>
-
               <div class="pillar-item">
                 <i class="ri-car-washing-fill"></i>
                 <div>
@@ -301,7 +279,6 @@
                   <p>Assistenza attiva 24/7 in tutta Europa con recupero del mezzo e auto di cortesia garantita entro 60 minuti.</p>
                 </div>
               </div>
-
               <div class="pillar-item">
                 <i class="ri-disc-line"></i>
                 <div>
@@ -309,7 +286,6 @@
                   <p>Sostituzione stagionale treno gomme estive ed invernali di marca premium, compreso stoccaggio e convergenza.</p>
                 </div>
               </div>
-
               <div class="pillar-item">
                 <i class="ri-customer-service-2-fill"></i>
                 <div>
@@ -320,13 +296,10 @@
             </div>
           </div>
       </div>
-
       <!-- CONTENITORE PREVENTIVO GENERATO AL VOLO (Si apre dopo il click) -->
       <div id="officialQuoteContainer" style="display: none; padding-bottom: 40px;"></div>
-
     </div>
   </section>
-
   <!-- ================= FOOTER ================= -->
   <footer id="contatti" style="border-top: 1px solid rgba(255,255,255,0.08); padding-top: 50px; background: #040509;">
     <div class="container">
@@ -337,7 +310,6 @@
           </a>
           <p data-i18n="footer.desc">Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.</p>
         </div>
-
         <div class="footer-col">
           <h4>Noleggio & Brokerage</h4>
           <div class="footer-links">
@@ -346,15 +318,13 @@
             <a href="fleet.html">Catalogo Luxury Car</a>
           </div>
         </div>
-
         <div class="footer-col">
           <h4>Link Utili</h4>
           <div class="footer-links">
             <a href="index.html">Home Marketplace</a>
-            <a href="accademy.html">ITERCARS Academy</a>
+            <a href="academy.html">ITERCARS Academy</a>
           </div>
         </div>
-
         <div class="footer-col">
           <h4>Contatti & Concierge</h4>
           <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
@@ -363,19 +333,16 @@
           </div>
         </div>
       </div>
-
       <div class="footer-bottom">
         <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. NBT Multi-Mandante & NBT.</p>
       </div>
     </div>
   </footer>
-
   <!-- Floating Mobile Phone Button -->
   <a href="tel:+393755942143" class="mobile-floating-phone" title="Chiama ITERCARS" aria-label="Chiama +39 375 594 2143">
     <i class="ri-phone-fill"></i>
     <span>+39 375 594 2143</span>
   </a>
-
   <!-- Supabase JS SDK & App Scripts -->
   <!-- ================= AUTHENTICATION MODAL (LOGIN / REGISTER) ================= -->
   <div class="modal-overlay" id="authModal">
@@ -400,12 +367,10 @@
             <span>Accedi Ora</span> <i class="ri-login-box-line"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Non sei ancora registrato?</span>
           <button type="button" onclick="switchAuthMode('register')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Registrati qui</button>
         </div>
-
         <!-- ACCESSO DIRETTO PER NOLEGGIATORI E PARTNER MANDANTI -->
         <div style="margin-top: 18px; padding: 14px; background: rgba(250, 204, 21, 0.08); border: 1px dashed rgba(250, 204, 21, 0.4); border-radius: 12px; text-align: center;">
           <span style="font-size: 0.85rem; color: #facc15; font-weight: 700; display: block; margin-bottom: 8px;"><i class="ri-building-4-fill"></i> Area partner</span>
@@ -418,7 +383,6 @@
           </div>
         </div>
       </div>
-
       <!-- REGISTRATION VIEW -->
       <div id="registerFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px;"><i class="ri-user-add-fill text-gradient"></i> Registrazione Membro VIP</h3>
@@ -435,7 +399,6 @@
               <input type="text" class="form-control" id="regLastName" required placeholder="Rossi">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Data di Nascita *</label>
@@ -446,7 +409,6 @@
               <input type="text" class="form-control" id="regCountry" required placeholder="Italia">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Email *</label>
@@ -457,7 +419,6 @@
               <input type="tel" class="form-control" id="regPhone" required placeholder="+39 340 0000000">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password * (min. 6 caratteri)</label>
@@ -468,18 +429,15 @@
               <input type="password" class="form-control" id="regConfirmPassword" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
-
           <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px;">
             <span>Crea Account VIP</span> <i class="ri-vip-crown-fill"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Hai già un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
-
       <!-- PARTNER REGISTRATION VIEW -->
       <div id="partnerRegFormBox" style="display: none;">
         <h3 style="font-size: 1.6rem; margin-bottom: 8px; color: #facc15;"><i class="ri-hand-heart-fill text-gradient"></i> Diventa Partner ITERCARS</h3>
@@ -496,7 +454,6 @@
               <input type="text" class="form-control" id="partRegVat" required placeholder="IT1234567890">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Nome Referente *</label>
@@ -507,7 +464,6 @@
               <input type="tel" class="form-control" id="partRegPhone" required placeholder="+39 340 0000000">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Indirizzo Email Aziendale *</label>
@@ -518,7 +474,6 @@
               <input type="text" class="form-control" id="partRegAddress" required placeholder="Via Roma 1, Milano">
             </div>
           </div>
-
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
             <div class="form-group">
               <label>Password di Accesso *</label>
@@ -529,23 +484,18 @@
               <input type="password" class="form-control" id="partRegPasswordConfirm" required minlength="6" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢">
             </div>
           </div>
-
           <button type="submit" class="btn btn-outline" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 10px; border-color: #facc15; color: #facc15; font-weight: 700;">
             <span>Completa richiesta</span> <i class="ri-send-plane-fill"></i>
           </button>
         </form>
-
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
           <span style="color: var(--text-muted); font-size: 0.95rem;">Vuoi accedere al portale clienti?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Torna al Login</button>
         </div>
       </div>
-
     </div>
   </div>
-
   
-
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -561,34 +511,27 @@
       <div style="width: 64px; height: 64px; background: rgba(46, 204, 113, 0.15); border: 2px solid #2ecc71; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.8rem; color: #2ecc71;">
         <i class="ri-folder-shield-2-fill"></i>
       </div>
-
       <h3 style="font-size: 1.6rem; margin-bottom: 6px;">Recupera la Tua Pratica</h3>
       <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 22px;">
         Hai già generato un preventivo o avviato un dossier? Inserisci qui il tuo <strong>Codice Preventivo</strong> o cerca per email.
       </p>
-
       <form onsubmit="handleDossierRecoverySubmit(event)" style="display: flex; flex-direction: column; gap: 16px; text-align: left;">
         <div class="form-group">
           <label><i class="ri-barcode-line text-gradient"></i> Codice Preventivo (es. PREV-XXXX o IT-NLT-...)</label>
           <input type="text" class="form-control" id="recoveryQuoteCodeInput" placeholder="Es. PREV-6591 o IT-NLT-..." style="text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
         </div>
-
         <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: -6px 0;">- OPPURE -</div>
-
         <div class="form-group">
           <label><i class="ri-mail-line text-gradient"></i> Cerca con la tua Email</label>
           <input type="email" class="form-control" id="recoveryEmailInput" placeholder="nome.cognome@email.com">
         </div>
-
         <div id="recoveryErrorMsg" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 10px 14px; border-radius: 8px; font-size: 0.88rem; text-align: center;"></div>
-
         <button type="submit" class="btn btn-primary" style="width: 100%; height: 50px; font-size: 1.05rem; margin-top: 6px;">
           <i class="ri-search-eye-line"></i> <span>Riapri Pratica & Documenti</span>
         </button>
       </form>
     </div>
   </div>
-
   <!-- ================= AUTO-RECOVERY FLOATING BANNER ================= -->
   <div id="autoRecoveryToast" style="display: none; position: fixed; bottom: 24px; right: 24px; z-index: 99999; max-width: 420px; background: rgba(15, 20, 32, 0.95); border: 1px solid rgba(46, 204, 113, 0.5); border-radius: 16px; padding: 18px 22px; box-shadow: 0 15px 40px rgba(0,0,0,0.65); backdrop-filter: blur(16px); animation: slideUpToast 0.5s cubic-bezier(0.16, 1, 0.3, 1);">
     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px;">
@@ -621,7 +564,5 @@
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
-
 </body>
 </html>
-

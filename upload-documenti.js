@@ -3,7 +3,6 @@
    Gestisce il caricamento di Patente, Carta d'Identità e Reddito su Supabase (crm_documents)
    e avvia il checkout per il blocco della fee d'istruttoria.
    ========================================================================== */
-
 let CurrentQuote = {
   quoteCode: null,
   leadId: null,
@@ -14,18 +13,15 @@ let CurrentQuote = {
   deposit: 3000,
   uploadedDocs: {}
 };
-
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
   const code = params.get('code') || params.get('quoteCode');
   const lead = params.get('lead') || params.get('leadId');
-
   if (code) {
     CurrentQuote.quoteCode = code;
     if (code.startsWith('IT-NBT-')) CurrentQuote.isNbt = true;
   }
   if (lead) CurrentQuote.leadId = lead;
-
   // 1. Prova a recuperare la pratica da cache locale o da DB
   let quoteData = null;
   try {
@@ -34,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       quoteData = cached;
     }
   } catch(e) {}
-
   // 2. Se connesso a Supabase, interroga il DB per sicurezza
   if (typeof window.supabase !== 'undefined' && window.supabase && code) {
     try {
@@ -47,7 +42,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         `)
         .eq('quote_code', code)
         .maybeSingle();
-
       if (!error && data) {
         quoteData = data;
         if (data.lead_id && !CurrentQuote.leadId) CurrentQuote.leadId = data.lead_id;
@@ -56,7 +50,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       console.warn("Recupero live quote da DB fallito, uso cache o parametri:", err);
     }
   }
-
   // 3. Applica i dati all'interfaccia
   if (quoteData) {
     CurrentQuote.quoteCode = quoteData.quote_code || quoteData.quoteCode || code || 'PREV-2026-VIP';
@@ -77,14 +70,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     } else if (quoteData.carTitle || quoteData.carName) {
       CurrentQuote.carTitle = quoteData.carTitle || quoteData.carName;
     }
-
     if (quoteData.selected_duration_months || quoteData.duration) {
       CurrentQuote.duration = Number(quoteData.selected_duration_months || quoteData.duration);
     }
     if (quoteData.selected_deposit !== undefined || quoteData.deposit !== undefined) {
       CurrentQuote.deposit = Number(quoteData.selected_deposit !== undefined ? quoteData.selected_deposit : quoteData.deposit);
     }
-
     if (quoteData.crm_leads && quoteData.crm_leads.customer_type) {
       switchCustomerType(quoteData.crm_leads.customer_type);
     }
@@ -94,12 +85,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       CurrentQuote.isNbt = true;
     }
   }
-
   renderQuoteDetails();
   initDragAndDrop();
   if (typeof updateVerificationUI === 'function') updateVerificationUI();
 });
-
 function renderQuoteDetails() {
   const codeEl = document.getElementById('uploadQuoteCodeDisplay');
   const titleEl = document.getElementById('uploadCarTitle');
@@ -107,7 +96,6 @@ function renderQuoteDetails() {
   const feeEl = document.getElementById('stripeFeeDisplay');
   const monthlyBox = document.getElementById('uploadQuoteMonthlyBox');
   const monthlyDisplay = document.getElementById('uploadQuoteMonthlyDisplay');
-
   if (codeEl) codeEl.textContent = CurrentQuote.quoteCode || 'PREV-2026-XXXX';
   if (titleEl) titleEl.textContent = CurrentQuote.carTitle || 'Configurazione Vettura ITERCARS';
   
@@ -115,7 +103,6 @@ function renderQuoteDetails() {
     if (monthlyBox) monthlyBox.style.display = 'inline';
     monthlyDisplay.innerHTML = `€ ${CurrentQuote.monthlyPrice.toLocaleString('it-IT')}${CurrentQuote.isNbt ? '/periodo' : '/mese'}`;
   }
-
   // Calcolo fee trattenuta pratica sulle 2 mensilità (o sul periodo NBT)
   let fee = 0;
   if (CurrentQuote.isNbt) {
@@ -139,19 +126,15 @@ function renderQuoteDetails() {
       fee = 144.00; // default es. 600€ * 2 * 12%
     }
   }
-
   // Inserisce correttamente l'importo della fee trattenuta nel box dedicato "Fee Trattenuta Pratica"
   if (priceEl) {
     priceEl.innerHTML = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
-
   if (feeEl) feeEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   const feeTextEl = document.getElementById('stripeFeeTextDisplay');
   if (feeTextEl) feeTextEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-
   const actualChargeEl = document.getElementById('actualChargeDisplay');
   if (actualChargeEl) actualChargeEl.textContent = `€ ${fee.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Oggi`;
-
   const incomeBox = document.getElementById('dz_income_doc');
   if (incomeBox) {
     if (CurrentQuote.isNbt) {
@@ -160,7 +143,6 @@ function renderQuoteDetails() {
       incomeBox.style.display = 'flex';
     }
   }
-
   const docsText = document.getElementById('docsReadyInstructionText');
   if (docsText) {
     if (CurrentQuote.isNbt) {
@@ -170,7 +152,6 @@ function renderQuoteDetails() {
     }
   }
 }
-
 // Scelta Tipologia Cliente per adattare i documenti
 function switchCustomerType(type) {
   document.querySelectorAll('.active-type-btn').forEach(b => b.classList.remove('active-type-btn'));
@@ -178,21 +159,17 @@ function switchCustomerType(type) {
   const pBtn = document.getElementById('typeBtnPrivato');
   const pivaBtn = document.getElementById('typeBtnPiva');
   const azBtn = document.getElementById('typeBtnAzienda');
-
   if (pBtn && type === 'Privato') pBtn.classList.add('active-type-btn');
   if (pivaBtn && type === 'Partita IVA') pivaBtn.classList.add('active-type-btn');
   if (azBtn && type === 'Azienda SRL/SPA') azBtn.classList.add('active-type-btn');
-
   const incomeBox = document.getElementById('dz_income_doc');
   if (incomeBox && CurrentQuote && CurrentQuote.isNbt) {
     incomeBox.style.display = 'none';
   } else if (incomeBox) {
     incomeBox.style.display = 'flex';
   }
-
   const titleEl = document.getElementById('incomeDocTitle');
   const descEl = document.getElementById('incomeDocDesc');
-
   if (titleEl && descEl) {
     if (type === 'Privato') {
       titleEl.textContent = '3. Ultime 2 Buste Paga o 730';
@@ -206,30 +183,25 @@ function switchCustomerType(type) {
     }
   }
 }
-
 function triggerFileInput(inputId) {
   const inp = document.getElementById(inputId);
   if (inp) inp.click();
 }
-
 async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
   const inp = document.getElementById(inputId);
   if (!inp || !inp.files || inp.files.length === 0) return;
   const file = inp.files[0];
-
   // Risolvi in modo intelligente sia il badge di stato che il contenitore (dropzone o mini-sub-box)
   let statusBadge = document.getElementById(dropzoneOrBadgeId);
   if (!statusBadge || !statusBadge.classList.contains('doc-status-badge')) {
     statusBadge = document.getElementById(`status_${dropzoneOrBadgeId}`) || document.getElementById(dropzoneOrBadgeId);
   }
   const parentBox = inp.closest('.upload-dropzone') || inp.closest('.mini-sub-box') || document.getElementById(dropzoneOrBadgeId.replace('status_', ''));
-
   if (parentBox && parentBox.classList) {
     parentBox.classList.add('uploaded');
     parentBox.style.borderColor = '#2ecc71';
     parentBox.style.background = 'rgba(46, 204, 113, 0.08)';
   }
-
   if (statusBadge) {
     statusBadge.style.background = 'rgba(46, 204, 113, 0.25)';
     statusBadge.style.color = '#2ecc71';
@@ -237,7 +209,6 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
     statusBadge.style.fontWeight = 'bold';
     statusBadge.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Elaborazione in corso...`;
   }
-
   try {
     // Converti il file in base64 per salvataggio immediato in crm_documents (o storage Supabase)
     const dataUrl = await new Promise((resolve, reject) => {
@@ -246,20 +217,17 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
-
     CurrentQuote.uploadedDocs[docType] = {
       file: file,
       name: file.name,
       size: file.size,
       dataUrl: dataUrl
     };
-
     // Salvataggio sul database e Storage Bucket Supabase (crm-documents) - tenta subito se c'è leadId
     if (typeof window.supabase !== 'undefined' && window.supabase && CurrentQuote.leadId) {
       let finalFileUrl = '';
       const cleanName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
       const filePath = `leads/${CurrentQuote.leadId}/${docType}_${Date.now()}_${cleanName}`;
-
       try {
         // 1. Carica il file binario effettivo sul bucket di Supabase Storage "crm-documents"
         const { data: uploadData, error: uploadError } = await window.supabase.storage
@@ -268,7 +236,6 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
             cacheControl: '3600',
             upsert: true
           });
-
         if (!uploadError && uploadData) {
           const { data: urlData } = window.supabase.storage
             .from('crm-documents')
@@ -282,7 +249,6 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
         console.warn("Eccezione durante upload su Storage:", storageErr);
         finalFileUrl = dataUrl.length < 500000 ? dataUrl : `storage_fallback_${file.name}`;
       }
-
       // 2. Registra o aggiorna il riferimento nella tabella SQL "crm_documents"
       const { data: existRow } = await window.supabase
         .from('crm_documents')
@@ -290,7 +256,6 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
         .eq('document_type', docType)
         .eq('lead_id', CurrentQuote.leadId)
         .maybeSingle();
-
       if (existRow && existRow.id) {
         await window.supabase.from('crm_documents')
           .update({ file_url: finalFileUrl, verification_status: 'uploaded', updated_at: new Date().toISOString() })
@@ -304,7 +269,6 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
         }]);
       }
     }
-
     if (statusBadge) {
       statusBadge.style.background = 'rgba(46, 204, 113, 0.25)';
       statusBadge.style.color = '#2ecc71';
@@ -321,20 +285,16 @@ async function handleFileSelected(inputId, docType, dropzoneOrBadgeId) {
       statusBadge.innerHTML = `<i class="ri-error-warning-fill"></i> Errore lettura file. Riprova.`;
     }
   }
-
   window.grokVerificationCompleted = false;
   if (typeof updateVerificationUI === 'function') updateVerificationUI();
 }
-
 // CAMBIO FORMATO MINIMAL E DISCRETO (PDF vs FOTO SEPARATE NELLE DROPZONE COMPATTE)
 function selectMiniFormat(event, docKey, format) {
   if (event && event.stopPropagation) event.stopPropagation();
-
   const btnPdf = document.getElementById(`btn_mini_${docKey}_pdf`);
   const btnDual = document.getElementById(`btn_mini_${docKey}_dual`);
   const viewPdf = document.getElementById(`mini_view_${docKey}_pdf`);
   const viewDual = document.getElementById(`mini_view_${docKey}_dual`);
-
   if (btnPdf && btnDual) {
     if (format === 'pdf') {
       btnPdf.classList.add('active');
@@ -352,7 +312,6 @@ function selectMiniFormat(event, docKey, format) {
       btnPdf.style.color = '#fff';
     }
   }
-
   if (viewPdf && viewDual) {
     if (format === 'pdf') {
       viewPdf.style.display = 'flex';
@@ -363,7 +322,6 @@ function selectMiniFormat(event, docKey, format) {
     }
   }
 }
-
 function initDragAndDrop() {
   const zones = [
     { dz: 'mini_view_id_pdf', inp: 'file_id_card', type: 'carta_identita' },
@@ -376,21 +334,17 @@ function initDragAndDrop() {
     { dz: 'dz_inc_1', inp: 'file_inc_1', type: 'busta_paga_1' },
     { dz: 'dz_inc_2', inp: 'file_inc_2', type: 'busta_paga_2' }
   ];
-
   zones.forEach(z => {
     const el = document.getElementById(z.dz);
     const inp = document.getElementById(z.inp);
     if (!el || !inp) return;
-
     el.addEventListener('dragover', (e) => {
       e.preventDefault();
       el.classList.add('dragover');
     });
-
     el.addEventListener('dragleave', () => {
       el.classList.remove('dragover');
     });
-
     el.addEventListener('drop', (e) => {
       e.preventDefault();
       el.classList.remove('dragover');
@@ -401,16 +355,13 @@ function initDragAndDrop() {
     });
   });
 }
-
 window.grokVerificationCompleted = false;
-
 function updateVerificationUI() {
   const count = (typeof CurrentQuote !== 'undefined' && CurrentQuote.uploadedDocs) ? Object.keys(CurrentQuote.uploadedDocs).length : 0;
   const verifyContainer = document.getElementById('verifyButtonContainer');
   const btnVerify = document.getElementById('btnVerifyDocs');
   const btnConfirm = document.getElementById('btnConfirmStep2');
   const statusMsg = document.getElementById('verificationStatusMsg');
-
   if (count > 0 && !window.grokVerificationCompleted) {
     if (verifyContainer) verifyContainer.style.display = 'block';
     if (btnVerify) {
@@ -426,16 +377,13 @@ function updateVerificationUI() {
     if (statusMsg) statusMsg.style.display = 'none';
   }
 }
-
 // ESTRAZIONE TESTO DA PDF O IMMAGINE PER ANALISI OCR & AI
 async function extractDocText(docObj) {
   let extractedText = '';
   if (!docObj || !docObj.file) return '';
-
   try {
     const file = docObj.file;
     const name = (file.name || '').toLowerCase();
-
     if (name.endsWith('.pdf') || file.type === 'application/pdf') {
       // 1. Prova prima tramite PDF.js se disponibile nel browser
       if (typeof pdfjsLib !== 'undefined') {
@@ -454,7 +402,6 @@ async function extractDocText(docObj) {
           console.warn("PDF.js fallback su estrazione binaria grezza:", pdfErr);
         }
       }
-
       // 2. Se PDF.js non ha estratto testo o è mancante, esegui estrazione binaria grezza ASCII/UTF-8
       if (!extractedText || extractedText.trim().length < 15) {
         try {
@@ -483,14 +430,11 @@ async function extractDocText(docObj) {
   } catch (ex) {
     console.warn("Eccezione in extractDocText:", ex);
   }
-
   return (extractedText || '') + ' [FILENAME: ' + (docObj.name || '') + ']';
 }
-
 // MOTORE DI CLASSIFICAZIONE E VALIDAZIONE DOCUMENTALE (RICONOSCIMENTO CONGRUENZA CATEGORIA)
 function validateDocCategory(docType, textString, fileName) {
   const t = (textString || '').toLowerCase() + ' ' + (fileName || '').toLowerCase();
-
   // 1. CONTROLLO INCOMPATIBILITÀ UNIVERSALE: PREVENTIVI / OFFERTE COMMERCIALI NON SONO DOCUMENTI D'IDENTITÀ/REDDITO
   const quoteKeywords = ['preventivo', 'canone mensile', 'offerta commerciale', 'itercars preventivo', 'configurazione vettura', 'importo rata', 'locazione senza conducente - offerta', 'listino prezzi', 'scheda tecnica vettura', 'arval offerta', 'leaseplan preventivo', 'codice preventivo', 'noleggio lungo termine offerta', 'ordine di acquisto'];
   
@@ -501,20 +445,17 @@ function validateDocCategory(docType, textString, fileName) {
       break;
     }
   }
-
   if (foundQuoteKW) {
     return {
       valid: false,
       reason: `Il file "${fileName}" risulta essere un preventivo o un'offerta commerciale, non un documento di identità o reddituale idoneo.`
     };
   }
-
   // 2. CONTROLLI SPECIFICI PER CATEGORIA DI DOCUMENTO
   if (docType === 'carta_identita' || docType === 'carta_identita_fronte' || docType === 'carta_identita_retro') {
     const idMarkers = ['carta', 'identita', 'identità', 'repubblica', 'italiana', 'passaporto', `d'identita`, `d'identità`, 'passport', 'comune di', 'cittadinanza', 'cognome', 'nome', 'nato il', 'nascita', 'codice fiscale', 'scadenza', 'emessa da', 'ministero', 'mraz', 'documento'];
     let matches = 0;
     idMarkers.forEach(m => { if (t.includes(m)) matches++; });
-
     // Se è un PDF o immagine con testo (oltre 150 caratteri) ma 0 marker di identità
     if (t.length > 150 && matches === 0 && !t.includes('id') && !t.includes('doc')) {
       return {
@@ -526,7 +467,6 @@ function validateDocCategory(docType, textString, fileName) {
     const patMarkers = ['patente', 'guida', 'driving', 'licence', 'permis', 'conduire', 'infrastrutture', 'trasporti', 'categoria', 'veicoli', 'rilasciata', 'mctc', 'uco', 'cognome', 'nome', 'scadenza', '4a.', '4b.', '5.'];
     let matches = 0;
     patMarkers.forEach(m => { if (t.includes(m)) matches++; });
-
     if (t.length > 150 && matches === 0 && !t.includes('pat')) {
       return {
         valid: false,
@@ -537,7 +477,6 @@ function validateDocCategory(docType, textString, fileName) {
     const incMarkers = ['busta', 'paga', 'cedolino', 'retribuzione', 'stipendio', 'inps', 'irpef', 'cud', 'certificazione', 'unica', '730', 'agenzia', 'entrate', 'reddito', 'modello', 'unico', 'quadro', 'rn', 're', 'partita', 'iva', 'ricevuta', 'telematica', 'bilancio', 'patrimoniale', 'economico', 'visura', 'camerale', 'camera', 'commercio', 'imprese', 'società', 'srl', 's.r.l.', 's.p.a.', 'netto', 'competenze', 'datore'];
     let matches = 0;
     incMarkers.forEach(m => { if (t.includes(m)) matches++; });
-
     if (t.length > 150 && matches === 0 && !t.includes('inc') && !t.includes('redd')) {
       return {
         valid: false,
@@ -545,10 +484,8 @@ function validateDocCategory(docType, textString, fileName) {
       };
     }
   }
-
   return { valid: true, reason: '' };
 }
-
 async function verifyDocumentsWithGrok(event) {
   if (event && event.preventDefault) event.preventDefault();
   
@@ -557,16 +494,13 @@ async function verifyDocumentsWithGrok(event) {
     alert("Attenzione: carica prima i documenti (Identità, Patente o Reddito) per poter avviare la verifica con Grok AI.");
     return;
   }
-
   const btnVerify = document.getElementById('btnVerifyDocs');
   const statusMsg = document.getElementById('verificationStatusMsg');
   const btnConfirm = document.getElementById('btnConfirmStep2');
-
   if (btnVerify) {
     btnVerify.disabled = true;
     btnVerify.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> <span>Scansione e analisi documenti...</span>`;
   }
-
   if (statusMsg) {
     statusMsg.style.display = 'block';
     statusMsg.style.background = 'rgba(52, 152, 219, 0.15)';
@@ -574,22 +508,18 @@ async function verifyDocumentsWithGrok(event) {
     statusMsg.style.color = '#61dafb';
     statusMsg.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><i class="ri-loader-4-line ri-spin" style="font-size: 1.3rem;"></i> <span>Scansione e analisi documenti...</span></div>`;
   }
-
   try {
     // PREPARAZIONE PAYLOAD E ANALISI OCR & AI INTEGRATA MULTI-LIVELLO
     const docsPayload = [];
     let clientValidationPassed = true;
     let clientErrors = [];
-
     for (const [docType, docObj] of Object.entries(CurrentQuote.uploadedDocs)) {
       // Estrazione testo da PDF/OCR e controllo congruenza categoria
       const extractedText = await extractDocText(docObj);
       const catCheck = validateDocCategory(docType, extractedText, docObj.name);
-
       if (!catCheck.valid) {
         clientValidationPassed = false;
         clientErrors.push(catCheck.reason);
-
         // Evidenzia immediatamente in rosso il badge del documento non idoneo
         let badgeEl = document.getElementById(`status_dz_${docType}`) || document.getElementById(`status_${docType}_badge`) || document.getElementById(`status_dz_id_card`) || document.getElementById(`status_dz_driving_license`) || document.getElementById(`status_dz_income_doc`);
         if (badgeEl) {
@@ -599,7 +529,6 @@ async function verifyDocumentsWithGrok(event) {
           badgeEl.innerHTML = `<i class="ri-close-circle-fill"></i> Non idoneo`;
         }
       }
-
       docsPayload.push({
         document_type: docType,
         file_name: docObj.name,
@@ -610,7 +539,6 @@ async function verifyDocumentsWithGrok(event) {
         client_validation_passed: catCheck.valid
       });
     }
-
     // Se l'analisi OCR e AI locale riscontra documenti errati (es. preventivo caricato al posto dei documenti)
     if (!clientValidationPassed) {
       await new Promise(r => setTimeout(r, 1200)); // Attesa realistica scansione
@@ -638,10 +566,8 @@ async function verifyDocumentsWithGrok(event) {
       if (btnConfirm) btnConfirm.style.display = 'none';
       return;
     }
-
     let verificationSuccess = true;
     let verificationErrorMsg = '';
-
     // CHIAMATA AD EDGE FUNCTION O RPC FUNCTION "verifica_documenti"
     if (typeof window.supabase !== 'undefined' && window.supabase) {
       try {
@@ -654,7 +580,6 @@ async function verifyDocumentsWithGrok(event) {
             files: docsPayload
           }
         });
-
         if (error) {
           console.warn("Supabase Edge Function 'verifica_documenti' ha restituito errore o non è raggiungibile via invoke:", error);
           // 2. Tentativo di chiamata tramite RPC function se non è una Edge Function
@@ -682,7 +607,6 @@ async function verifyDocumentsWithGrok(event) {
       } catch (invokeErr) {
         console.warn("Eccezione durante chiamata alla function verifica_documenti:", invokeErr);
       }
-
       // Se la verifica ha avuto successo, aggiorniamo lo status dei documenti su crm_documents in 'verified_ok'
       if (verificationSuccess && CurrentQuote.leadId) {
         try {
@@ -695,10 +619,8 @@ async function verifyDocumentsWithGrok(event) {
         }
       }
     }
-
     // SIMULAZIONE/ATTESA FISIOLOGICA DI RISPOSTA AI GROK (1.5 secondi)
     await new Promise(r => setTimeout(r, 1500));
-
     if (!verificationSuccess) {
       if (btnVerify) {
         btnVerify.disabled = false;
@@ -724,10 +646,8 @@ async function verifyDocumentsWithGrok(event) {
       if (btnConfirm) btnConfirm.style.display = 'none';
       return;
     }
-
     // ESITO POSITIVO DI GROK:
     window.grokVerificationCompleted = true;
-
     // Aggiorniamo i badge delle singole dropzone con esito verde Verificato
     document.querySelectorAll('.upload-dropzone.uploaded .doc-status-badge, .mini-sub-box.uploaded .doc-status-badge').forEach(badge => {
       badge.style.background = '#2ecc71';
@@ -735,12 +655,10 @@ async function verifyDocumentsWithGrok(event) {
       badge.style.fontWeight = '800';
       badge.innerHTML = `<i class="ri-checkbox-circle-fill"></i> Verificato e conforme (Grok AI)`;
     });
-
     // Nascondiamo il tasto "verifica documenti"
     const verifyContainer = document.getElementById('verifyButtonContainer');
     if (verifyContainer) verifyContainer.style.display = 'none';
     if (btnVerify) btnVerify.style.display = 'none';
-
     // Appare il messaggio in verde: "verifica completata"
     if (statusMsg) {
       statusMsg.style.display = 'block';
@@ -750,13 +668,11 @@ async function verifyDocumentsWithGrok(event) {
       statusMsg.style.boxShadow = '0 0 25px rgba(46, 204, 113, 0.25)';
       statusMsg.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; gap: 10px;"><i class="ri-checkbox-circle-fill" style="font-size: 1.6rem;"></i> <span style="font-size: 1.25rem; font-weight: 900; letter-spacing: 0.5px; text-transform: uppercase;">verifica completata</span></div>`;
     }
-
     // E SOLO IN QUELL'ISTANTE appare il tasto "Invia documenti e vai alla Sezione 3"
     if (btnConfirm) {
       btnConfirm.style.display = 'inline-flex';
       btnConfirm.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-
   } catch (err) {
     console.error("Errore generico in verifyDocumentsWithGrok:", err);
     if (btnVerify) {
@@ -771,7 +687,6 @@ async function verifyDocumentsWithGrok(event) {
     }
   }
 }
-
 // CONFERMA I DOCUMENTI DELLA SEZIONE 2 E SALVA NEL BUCKET SU SUPABASE
 async function confirmStep2AndShowStep3(event) {
   if (event && event.preventDefault) event.preventDefault();
@@ -781,14 +696,12 @@ async function confirmStep2AndShowStep3(event) {
     const ok = confirm("Non hai ancora selezionato alcun file per il dossier. Vuoi confermare comunque la Sezione 2 e procedere con la Sezione 3 (Blocco Pratica e Preaddebito)? Potrai inviare i file successivamente al Concierge.");
     if (!ok) return;
   }
-
   const btnConfirm = document.getElementById('btnConfirmStep2');
   const originalBtnHtml = btnConfirm ? btnConfirm.innerHTML : '';
   if (btnConfirm && count > 0) {
     btnConfirm.disabled = true;
     btnConfirm.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Caricamento dei documenti in corso...';
   }
-
   // Sincronizzazione garantita su Supabase (Storage e tabella crm_documents)
   if (typeof window.supabase !== 'undefined' && window.supabase && count > 0) {
     try {
@@ -810,7 +723,6 @@ async function confirmStep2AndShowStep3(event) {
           if (newLead && newLead.id) CurrentQuote.leadId = newLead.id;
         }
       }
-
       // 2. Upload batch di tutti i file selezionati nel bucket crm-documents e registrazione in crm_documents
       const targetId = CurrentQuote.leadId || CurrentQuote.quoteCode || 'anonymous';
       for (const [docType, docObj] of Object.entries(CurrentQuote.uploadedDocs)) {
@@ -822,7 +734,6 @@ async function confirmStep2AndShowStep3(event) {
           const { data: uploadData, error: uploadErr } = await window.supabase.storage
             .from('crm-documents')
             .upload(filePath, docObj.file, { cacheControl: '3600', upsert: true });
-
           if (!uploadErr && uploadData) {
             const { data: urlData } = window.supabase.storage.from('crm-documents').getPublicUrl(filePath);
             finalUrl = urlData?.publicUrl || `storage:crm-documents/${filePath}`;
@@ -833,7 +744,6 @@ async function confirmStep2AndShowStep3(event) {
         } else if (docObj && docObj.dataUrl) {
           finalUrl = docObj.dataUrl.length < 500000 ? docObj.dataUrl : `storage_fallback_${docObj.name}`;
         }
-
         if (finalUrl) {
           docObj.file_url = finalUrl;
           const { data: existDoc } = await window.supabase
@@ -842,7 +752,6 @@ async function confirmStep2AndShowStep3(event) {
             .eq('document_type', docType)
             .eq('lead_id', CurrentQuote.leadId || null)
             .maybeSingle();
-
           if (existDoc && existDoc.id) {
             await window.supabase
               .from('crm_documents')
@@ -860,7 +769,6 @@ async function confirmStep2AndShowStep3(event) {
           }
         }
       }
-
       if (CurrentQuote.leadId) {
         await window.supabase
           .from('crm_leads')
@@ -871,17 +779,14 @@ async function confirmStep2AndShowStep3(event) {
       console.warn("Avviso durante sincronizzazione batch su Supabase:", syncErr);
     }
   }
-
   // Invio automatico della mail di trasmissione dossier al mandante
   if (typeof inviaMailDossierMandante === 'function' && count > 0) {
     inviaMailDossierMandante();
   }
-
   if (btnConfirm && originalBtnHtml) {
     btnConfirm.disabled = false;
     btnConfirm.innerHTML = originalBtnHtml;
   }
-
   const step2 = document.getElementById('sectionStep2');
   const summary2 = document.getElementById('sectionStep2Summary');
   const step3 = document.getElementById('embeddedCheckoutSection');
@@ -897,12 +802,10 @@ async function confirmStep2AndShowStep3(event) {
     step3.scrollIntoView({ behavior: 'smooth' });
     initOfficialStripeEmbedded();
   }
-
   // Aggiorna la Stepper Bar in alto
   const sItem2 = document.getElementById('stepperItem2');
   const sNum2 = document.getElementById('stepperNum2');
   const sItem3 = document.getElementById('stepperItem3');
-
   if (sItem2) {
     sItem2.classList.remove('active');
     sItem2.classList.add('completed');
@@ -910,17 +813,14 @@ async function confirmStep2AndShowStep3(event) {
   if (sNum2) sNum2.innerHTML = '<i class="ri-check-line"></i>';
   if (sItem3) sItem3.classList.add('active');
 }
-
 // INVIO AUTOMATICO DELLA MAIL AL MANDANTE CON RESEND (VIA SUPABASE EDGE FUNCTION)
 async function inviaMailDossierMandante() {
   try {
     const quoteCode = CurrentQuote.quoteCode || 'PREV-2026-ESCLUSIVO';
     const leadId = CurrentQuote.leadId || null;
-
     // 1. Dati Anagrafici (SOLO Nome/Cognome e Tipologia - RIGOROSAMENTE NO email, NO telefono per privacy)
     let nomeCliente = 'Richiedente Pratica';
     let tipoCliente = 'Privato';
-
     if (CurrentQuote.customerInfo) {
       if (CurrentQuote.customerInfo.firstName || CurrentQuote.customerInfo.lastName) {
         nomeCliente = `${CurrentQuote.customerInfo.firstName || ''} ${CurrentQuote.customerInfo.lastName || ''}`.trim();
@@ -929,7 +829,6 @@ async function inviaMailDossierMandante() {
       }
       if (CurrentQuote.customerInfo.customerType) tipoCliente = CurrentQuote.customerInfo.customerType;
     }
-
     // Prova di recupero da cache locale se non è in CurrentQuote.customerInfo
     if (nomeCliente === 'Richiedente Pratica') {
       try {
@@ -944,7 +843,6 @@ async function inviaMailDossierMandante() {
         }
       } catch (cacheErr) {}
     }
-
     // Prova di recupero dal DB live se ancora generico
     if (nomeCliente === 'Richiedente Pratica' && typeof window.supabase !== 'undefined' && window.supabase && leadId) {
       try {
@@ -959,7 +857,6 @@ async function inviaMailDossierMandante() {
         }
       } catch (dbErr) {}
     }
-
     // 2. Caratteristiche Vettura e Configurazione
     let auto = {
       carTitle: CurrentQuote.carTitle || document.getElementById('uploadCarTitle')?.textContent || 'Vettura in Delibera',
@@ -973,7 +870,6 @@ async function inviaMailDossierMandante() {
       alimentazione: 'N/D',
       cambio: 'Automatico'
     };
-
     if (CurrentQuote.carDetails) {
       auto.marca = CurrentQuote.carDetails.brand || CurrentQuote.carDetails.marca || auto.marca;
       auto.modello = CurrentQuote.carDetails.model || CurrentQuote.carDetails.modello || auto.modello;
@@ -1001,7 +897,6 @@ async function inviaMailDossierMandante() {
         }
       } catch (e) {}
     }
-
     // 3. Documenti caricati con URL e base64/dataUrl per allegarli alla mail
     const documenti = [];
     for (const [docType, docObj] of Object.entries(CurrentQuote.uploadedDocs || {})) {
@@ -1012,7 +907,6 @@ async function inviaMailDossierMandante() {
         file_base64: docObj.dataUrl && docObj.dataUrl.includes(',') ? docObj.dataUrl.split(',')[1] : (docObj.base64 || '')
       });
     }
-
     // Se per caso non ci sono documenti nell'oggetto (o se sono stati caricati in DB prima), interroghiamo crm_documents
     if (documenti.length === 0 && typeof window.supabase !== 'undefined' && window.supabase && leadId) {
       try {
@@ -1028,12 +922,10 @@ async function inviaMailDossierMandante() {
         }
       } catch (errDocs) {}
     }
-
     // 4. Selezione automatica Email del Mandante e Provider
     let mandanteEmail = 'admin@itercars.com';
     let idAzienda = 'Non specificato';
     let nomeAzienda = 'ITERCARS Partner';
-
     if (CurrentQuote.carDetails) {
       if (CurrentQuote.carDetails.provider_id) idAzienda = CurrentQuote.carDetails.provider_id;
       if (CurrentQuote.carDetails.mandante_email && CurrentQuote.carDetails.mandante_email.includes('@')) {
@@ -1052,7 +944,6 @@ async function inviaMailDossierMandante() {
         }
       } catch (e) {}
     }
-
     // 5. Invocazione della Supabase Edge Function
     if (typeof window.supabase !== 'undefined' && window.supabase) {
       console.log(`Invio dossier al mandante (${mandanteEmail}) per Pratica #${quoteCode}...`);
@@ -1074,20 +965,15 @@ async function inviaMailDossierMandante() {
     console.warn("Eccezione durante inviaMailDossierMandante:", ex);
   }
 }
-
 let stripeEmbeddedCheckoutInstance = null;
-
 // INIZIALIZZAZIONE STRIPE EMBEDDED CHECKOUT UFFICIALE (PCI-DSS)
 async function initOfficialStripeEmbedded() {
   if (stripeEmbeddedCheckoutInstance) return;
   if (!typeof window.supabase !== 'undefined' && !window.supabase) return;
-
   const loadingEl = document.getElementById('stripeEmbeddedLoading');
   const officialBox = document.getElementById('stripeOfficialEmbeddedBox');
   const fallbackForm = document.getElementById('embeddedCardForm');
-
   if (loadingEl) loadingEl.style.display = 'block';
-
   try {
     const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
       method: 'POST',
@@ -1097,10 +983,8 @@ async function initOfficialStripeEmbedded() {
       },
       body: JSON.stringify({ quoteCode: CurrentQuote.quoteCode, uiMode: 'embedded' })
     });
-
     const data = await res.json();
     if (loadingEl) loadingEl.style.display = 'none';
-
     if (data && data.clientSecret && data.publishableKey && typeof Stripe !== 'undefined') {
       const stripe = Stripe(data.publishableKey);
       stripeEmbeddedCheckoutInstance = await stripe.initEmbeddedCheckout({
@@ -1119,35 +1003,29 @@ async function initOfficialStripeEmbedded() {
     console.warn("Connessione a Stripe Embedded fallita, utilizzo modulo manuale integrato:", err);
   }
 }
-
 // MODIFICA I DOCUMENTI (TORNA ALLA SEZIONE 2)
 function editStep2Docs() {
   const step2 = document.getElementById('sectionStep2');
   const summary2 = document.getElementById('sectionStep2Summary');
   const step3 = document.getElementById('embeddedCheckoutSection');
-
   if (summary2) summary2.style.display = 'none';
   if (step2) {
     step2.style.display = 'block';
     step2.scrollIntoView({ behavior: 'smooth' });
   }
   if (step3) step3.style.display = 'none';
-
   // Ripristina la Stepper Bar
   const sItem2 = document.getElementById('stepperItem2');
   const sNum2 = document.getElementById('stepperNum2');
   const sItem3 = document.getElementById('stepperItem3');
-
   if (sItem2) {
     sItem2.classList.remove('completed');
     sItem2.classList.add('active');
   }
   if (sNum2) sNum2.textContent = '2';
   if (sItem3) sItem3.classList.remove('active');
-
   if (typeof updateVerificationUI === 'function') updateVerificationUI();
 }
-
 // FORMATTAZIONE AUTOMATICA NUMERO CARTA
 function formatCardNumberInput(input) {
   let v = input.value.replace(/\D/g, '').slice(0, 16);
@@ -1158,7 +1036,6 @@ function formatCardNumberInput(input) {
   }
   input.value = formatted;
 }
-
 // FORMATTAZIONE AUTOMATICA SCADENZA (MM/AA)
 function formatExpiryInput(input) {
   let v = input.value.replace(/\D/g, '').slice(0, 4);
@@ -1172,23 +1049,19 @@ function formatExpiryInput(input) {
     input.value = v;
   }
 }
-
 // INVIA PRATICA CON PRE-AUTORIZZAZIONE STRIPE INTEGRATA ALL'INTERNO DEL SITO
 async function submitEmbeddedPayment(event) {
   const btn = event.currentTarget || document.getElementById('btnSubmitAndPay');
   const toast = document.getElementById('uploadErrorToast');
   if (toast) toast.style.display = 'none';
-
   const holderEl = document.getElementById('embeddedCardHolder');
   const numEl = document.getElementById('embeddedCardNumber');
   const expEl = document.getElementById('embeddedCardExpiry');
   const cvcEl = document.getElementById('embeddedCardCvc');
-
   const holder = holderEl ? holderEl.value.trim() : '';
   const num = numEl ? numEl.value.replace(/\s+/g, '') : '';
   const exp = expEl ? expEl.value.trim() : '';
   const cvc = cvcEl ? cvcEl.value.trim() : '';
-
   if (!holder || num.length < 15 || exp.length < 5 || cvc.length < 3) {
     if (toast) {
       toast.textContent = "ATTENZIONE: Compila correttamente tutti i dati della carta (Intestatario, Numero di 16 cifre, Scadenza MM/AA e CVV).";
@@ -1196,18 +1069,15 @@ async function submitEmbeddedPayment(event) {
     }
     return;
   }
-
   // Verifica che almeno il documento di identità sia stato caricato
   if (Object.keys(CurrentQuote.uploadedDocs).length === 0) {
     const confirmProceed = confirm("Non hai ancora caricato i file di identità/reddito. Vuoi comunque pre-autorizzare la fee per riservare la vettura e inviare i documenti via email a info@itercars.com?");
     if (!confirmProceed) return;
   }
-
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Verifica crittografata e pre-autorizzazione in corso...`;
   }
-
   try {
     // Registra la pre-autorizzazione sicura sul database CRM se connesso
     if (typeof window.supabase !== 'undefined' && window.supabase && CurrentQuote.quoteCode) {
@@ -1217,7 +1087,6 @@ async function submitEmbeddedPayment(event) {
           payment_method: `embedded_stripe_preauth_••••_${num.slice(-4)}`
         })
         .eq('quote_code', CurrentQuote.quoteCode);
-
       if (CurrentQuote.leadId) {
         await window.supabase.from('crm_leads')
           .update({ 
@@ -1227,13 +1096,11 @@ async function submitEmbeddedPayment(event) {
           .eq('id', CurrentQuote.leadId);
       }
     }
-
     // Simulazione latenza di verifica bancaria (Stripe Setup / Preauth Tokenization)
     setTimeout(() => {
       // Transizione fluida e sicura alla Pagina C (success.html) ALL'INTERNO DEL SITO!
       window.location.href = `success.html?quote_code=${CurrentQuote.quoteCode}&preauth=success&last4=${num.slice(-4)}`;
     }, 1400);
-
   } catch (err) {
     console.error("Errore durante la pre-autorizzazione integrata:", err);
     if (toast) {
@@ -1246,13 +1113,11 @@ async function submitEmbeddedPayment(event) {
     }
   }
 }
-
 // OPZIONE ALTERNATIVA: PROCEDI ALLA PAGINA ESTERNA STRIPE CHECKOUT
 async function proceedToStripeExternalCheckout(event) {
   if (event && event.preventDefault) event.preventDefault();
   const toast = document.getElementById('uploadErrorToast');
   if (toast) toast.style.display = 'none';
-
   if (!CurrentQuote.quoteCode) {
     if (toast) {
       toast.textContent = "Codice preventivo mancante. Impossibile avviare il checkout esterno.";
@@ -1260,13 +1125,11 @@ async function proceedToStripeExternalCheckout(event) {
     }
     return;
   }
-
   const btn = document.getElementById('btnSubmitAndPay');
   if (btn) {
     btn.disabled = true;
     btn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Connessione a Stripe Server in corso...`;
   }
-
   try {
     const res = await fetch(`${window.supabase.supabaseUrl}/functions/v1/stripe-checkout`, {
       method: 'POST',
@@ -1276,7 +1139,6 @@ async function proceedToStripeExternalCheckout(event) {
       },
       body: JSON.stringify({ quoteCode: CurrentQuote.quoteCode })
     });
-
     const data = await res.json();
     if (data && data.checkoutUrl) {
       window.location.href = data.checkoutUrl;

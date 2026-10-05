@@ -1,13 +1,11 @@
 /* ==========================================================================
    LUXURY CAR RENTAL - LOGIC & INTERACTIVITY (AutoRent Replica + Multi-Flag i18n)
    ========================================================================== */
-
 // CONFIGURAZIONE SUPABASE CLIENT (ITERCARS Hub Database)
 const SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk';
 var supabase = (typeof window.supabase !== 'undefined' && typeof window.supabase.createClient === 'function') ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : window.supabase;
 window.supabase = supabase;
-
 const langFlags = {
   it: "🇮🇹",
   en: "🇬🇧",
@@ -20,7 +18,6 @@ const langFlags = {
   ja: "🇯🇵",
   pt: "🇵🇹"
 };
-
 // DIZIONARIO DI TRADUZIONE MULTILINGUA
 const translations = {
   it: {
@@ -734,21 +731,17 @@ const translations = {
     "toast.bookingSuccess": "✨ Solicitação enviada com sucesso para {car}! Um concierge entrará em contato em breve."
   }
 };
-
 let currentLang = localStorage.getItem('itercars_lang') || localStorage.getItem('luxdrive_lang') || 'it';
-
 // Gestione Menu a tendina e Modale Lingue
 function toggleLangMenu(event) {
   event.stopPropagation();
   const menu = document.getElementById('langDropdownMenu');
   if (menu) menu.classList.toggle('active');
 }
-
 window.addEventListener('click', () => {
   const menu = document.getElementById('langDropdownMenu');
   if (menu) menu.classList.remove('active');
 });
-
 function openOtherLangsModal() {
   const menu = document.getElementById('langDropdownMenu');
   if (menu) menu.classList.remove('active');
@@ -758,7 +751,6 @@ function openOtherLangsModal() {
     document.body.style.overflow = "hidden";
   }
 }
-
 function closeOtherLangsModal() {
   const modal = document.getElementById('otherLangsModal');
   if (modal) {
@@ -766,24 +758,20 @@ function closeOtherLangsModal() {
     document.body.style.overflow = "auto";
   }
 }
-
 function selectLang(lang) {
   closeOtherLangsModal();
   changeLanguage(lang);
 }
-
 // Funzione Cambio Lingua
 function changeLanguage(lang, silent = false) {
   if (!translations[lang]) return;
   currentLang = lang;
   localStorage.setItem('itercars_lang', lang);
-
   // Aggiorna bandiera e codice sul pulsante del menu
   const flagEl = document.getElementById('currentLangFlag');
   const codeEl = document.getElementById('currentLangCode');
   if (flagEl) flagEl.innerText = langFlags[lang] || "🇮🇹";
   if (codeEl) codeEl.innerText = lang.toUpperCase();
-
   // Se è arabo, imposta la direzione RTL (Right-to-Left) per un effetto WOW autentico
   if (lang === 'ar') {
     document.documentElement.setAttribute('dir', 'rtl');
@@ -792,7 +780,6 @@ function changeLanguage(lang, silent = false) {
     document.documentElement.removeAttribute('dir');
     document.body.style.textAlign = 'left';
   }
-
   // Traduce elementi statici
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -800,7 +787,6 @@ function changeLanguage(lang, silent = false) {
       el.innerHTML = translations[lang][key];
     }
   });
-
   // Re-render flotta con i testi dinamici tradotti
   const activeBtn = document.querySelector(".pill-btn.active");
   let filterCat = "tutti";
@@ -822,14 +808,11 @@ function changeLanguage(lang, silent = false) {
   } else {
     filterFleet(filterCat, null); // Usa la nuova logica per mostrare
   }
-
   if (!silent) {
     showToast(translations[lang]["toast.lang"] || `Lingua cambiata in ${lang.toUpperCase()} ${langFlags[lang] || ''}`);
   }
 }
-
 let fleetData = [];
-
 
 // Registry of Fleet Providers (Fornitori)
 const providersData = {
@@ -841,7 +824,6 @@ const providersData = {
   }
 };
 window.providersData = providersData;
-
 // Automatically assign provider_1 as default for all current cars in fleetData
 fleetData = fleetData.map(car => {
   if (!car.provider) {
@@ -849,9 +831,7 @@ fleetData = fleetData.map(car => {
   }
   return car;
 });
-
 let currentSelectedCarPrice = 0;
-
 document.addEventListener("DOMContentLoaded", () => {
   changeLanguage(currentLang, true);
   setupScrollListener();
@@ -860,25 +840,20 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof loadFleetFromSupabase === 'function') loadFleetFromSupabase();
   
 });
-
 async function loadFleetFromSupabase() {
   if (typeof supabase !== 'undefined' && supabase) {
     try {
       const params = new URLSearchParams(window.location.search);
       const cityFilter = params.get('city');
-
       let query = supabase
         .from('vehicles')
         .select('*')
         .eq('is_active', true)
         .eq('is_luxury', true);
-
       if (cityFilter) {
         query = query.ilike('city', `%${cityFilter}%`);
       }
-
       const { data, error } = await query;
-
       if (!error && data && data.length > 0) {
         console.log("✅ Caricata flotta in tempo reale da Supabase DB:", data.length, "veicoli");
         const mappedCars = data.map(v => {
@@ -910,7 +885,6 @@ async function loadFleetFromSupabase() {
             raw: v
           };
         });
-
         if (mappedCars.length > 0) {
           // I prezzi e le vetture sul sito DEVONO essere al 100% quelli del database (nessun mescolamento con mock offline o prezzi 0)
           fleetData = mappedCars;
@@ -927,9 +901,7 @@ async function loadFleetFromSupabase() {
       console.warn("⚠️ Query Supabase fallita o offline. Utilizzo catalogo locale di fallback.");
     }
   }
-
   try { localStorage.setItem('itercars_fleet_cache', JSON.stringify(fleetData)); } catch(e){}
-
   // Forza il rendering della flotta basato sui dati configurati o dal DB
   const activeBtn = document.querySelector(".pill-btn.active");
   let filterCat = "tutti";
@@ -952,14 +924,11 @@ async function loadFleetFromSupabase() {
     filterFleet(filterCat, null);
   }
 }
-
 // Render della flotta auto
 function renderFleet(cars) {
   const container = document.getElementById("fleetContainer") || document.getElementById("fleetGrid");
   if (!container) return;
-
   const dict = translations[currentLang] || translations.it;
-
   if (cars.length === 0) {
     container.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: rgba(255,255,255,0.02); border-radius: 20px;">
@@ -970,11 +939,9 @@ function renderFleet(cars) {
     `;
     return;
   }
-
   // Group cars by category
   const categories = ["Supercar", "SUV Luxury", "Sportiva", "Cabriolet", "Berline e Sportive", "Luxury"];
   let html = "";
-
   categories.forEach(cat => {
     const catCars = cars.filter(car => {
       if (cat === "Berline e Sportive") return car.category === "Berline e Sportive" || car.category === "Berline" || (car.category === "Sportiva" && !cars.some(c => c.category === "Sportiva" && categories.indexOf("Sportiva") < categories.indexOf("Berline e Sportive")));
@@ -991,7 +958,6 @@ function renderFleet(cars) {
       `;
     }
   });
-
   // Handle any cars that don't fall into the 4 main categories just in case
   const otherCars = cars.filter(car => !categories.includes(car.category));
   if (otherCars.length > 0) {
@@ -1004,7 +970,6 @@ function renderFleet(cars) {
       </div>
     `;
   }
-
   container.innerHTML = html;
   
   // Se stiamo riutilizzando lo stesso ID vecchio, cambiamo classe per sicurezza
@@ -1012,9 +977,7 @@ function renderFleet(cars) {
     container.style.display = "block"; // override CSS grid
   }
 }
-
 function renderCarCard(car, dict) {
-
   
   // Se è Noleggio a Lungo Termine, forziamo l'uso della card NLT (Image 1)
   if (car.is_nlt && car.raw && typeof window.generateNltCardHTML === 'function') {
@@ -1103,10 +1066,8 @@ function renderCarCard(car, dict) {
     
     return window.generateNltCardHTML(nltOffer);
   }
-
   // Altrimenti, usa SEMPRE la nuova card dal design oscuro/moderno (Breve Termine / Standard)
   const v = car.raw || car;
-
   const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs || '{}') : (v.specs || {});
   
   const dailyPrice = Number(car.price) || Number(v.daily_price) || 0;
@@ -1125,7 +1086,6 @@ function renderCarCard(car, dict) {
   const readyDeliv = (specsObj.is_ready_delivery !== undefined) ? !!specsObj.is_ready_delivery : (v.is_ready_delivery !== undefined ? !!v.is_ready_delivery : true);
   const delivWeeks = specsObj.delivery_weeks !== undefined ? Number(specsObj.delivery_weeks) : (v.delivery_weeks !== undefined ? Number(v.delivery_weeks) : 1);
   const delivDate = specsObj.delivery_date || v.delivery_date || '';
-
   let badgeText = `<span class="card-badge badge-ready"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
   if (delivDate && delivDate !== '') {
     let fDate = delivDate;
@@ -1138,7 +1098,6 @@ function renderCarCard(car, dict) {
   } else {
     badgeText = `<span class="card-badge badge-custom" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> Consegna tra ${delivWeeks || 1} sett.</span>`;
   }
-
   // Costruiamo il targetLink
   let targetLink = '';
   if (car.is_nbt || v.is_nbt || v.category === 'Crossover Sportivo') {
@@ -1146,10 +1105,8 @@ function renderCarCard(car, dict) {
   } else {
     targetLink = `car-detail.html?v=4&car=${encodeURIComponent(car.name || model)}&id=${encodeURIComponent(v.id || '')}&cat=${encodeURIComponent(v.category || 'Luxury')}&price=${dailyPrice}&img=${encodeURIComponent(image)}`;
   }
-
   let priceHTML = dailyPrice === 0 ? 'Su Richiesta' : `€ <span>${dailyPrice.toLocaleString('it-IT')}</span>`;
   let priceLabel = dailyPrice === 0 ? '' : '€ / giorno (Assic. Inclusa)';
-
   return `
     <div class="glass-card nlt-card" id="card-${v.id || Math.random()}">
       <div class="nlt-card-img-wrapper">
@@ -1159,13 +1116,11 @@ function renderCarCard(car, dict) {
         </div>
         <div class="nlt-provider-tag"><i class="ri-shield-star-fill"></i> Listino ${providerName}</div>
       </div>
-
       <div class="nlt-card-body">
         <div class="nlt-card-header">
           <span class="nlt-brand-tag">${brand}</span>
           <h3 class="nlt-model-title">${model} <small style="font-size: 0.8rem; font-weight: 400; display: block; color: var(--text-muted);">${trim}</small></h3>
         </div>
-
         <!-- Specifiche Veloci -->
         <div class="nlt-specs-row">
           <span><i class="ri-speed-up-line"></i> ${hp}</span>
@@ -1173,14 +1128,12 @@ function renderCarCard(car, dict) {
           <span><i class="ri-gas-station-line"></i> ${fuel}</span>
           <span><i class="ri-settings-4-line"></i> ${transmission}</span>
         </div>
-
         <!-- Box Prezzo -->
         <div class="nlt-price-box">
           <div class="nlt-price-num text-gradient">${priceHTML}</div>
           <div class="nlt-price-label">${priceLabel}</div>
           <div class="nlt-price-details">Deposito Cauzionale € ${depositPrice.toLocaleString('it-IT')}</div>
         </div>
-
         <!-- Elenco Servizi Inclusi -->
         <div class="nlt-services-list">
           <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assicurazione RCA & Kasko completa</span></div>
@@ -1188,7 +1141,6 @@ function renderCarCard(car, dict) {
           <div><i class="ri-checkbox-circle-fill text-green"></i> <span>Assistenza Stradale H24 ed Auto Sostitutiva</span></div>
           <div style="font-size: 0.75rem; color: var(--accent-primary); margin-top: 2px;">+ Tasse, Oneri e Gestione Pneumatici</div>
         </div>
-
         <!-- Pulsanti d'Azione -->
         <div class="nlt-card-actions">
           <a href="${targetLink}" class="btn btn-primary" style="flex: 1.4; padding: 12px 16px; font-weight: 700; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
@@ -1208,7 +1160,6 @@ function filterFleet(category, btnElement) {
     document.querySelectorAll(".pill-btn").forEach(btn => btn.classList.remove("active"));
     btnElement.classList.add("active");
   }
-
   if (category === "tutti") {
     const container = document.getElementById("fleetContainer") || document.getElementById("fleetGrid");
     if (container) container.innerHTML = "";
@@ -1236,12 +1187,10 @@ function filterFleet(category, btnElement) {
     }
   }
 }
-
 function filterFleetPage(category) {
   // Update URL without reloading
   const newUrl = window.location.pathname + (category !== 'Tutti' ? '?category=' + category : '');
   window.history.pushState({path:newUrl}, '', newUrl);
-
   // Update pills
   const pills = document.querySelectorAll('#fleetFilterPills .btn');
   if (pills.length > 0) {
@@ -1252,7 +1201,6 @@ function filterFleetPage(category) {
       }
     });
   }
-
   // Filter and render
   let filtered = [];
   if (category === "Tutti" || category === "tutti") {
@@ -1273,19 +1221,15 @@ function filterFleetPage(category) {
   
   renderFleet(filtered);
 }
-
 // Ricerca dalla barra di ricerca
 function handleSearch(event) {
   event.preventDefault();
   const location = document.getElementById("searchLocation").value;
   const category = document.getElementById("searchCategory").value;
-
   let filtered = fleetData;
-
   if (category && category !== "tutti") {
     filtered = filtered.filter(car => car.category === category);
   }
-
   renderFleet(filtered);
   
   // Scroll automatico alla flotta
@@ -1293,7 +1237,6 @@ function handleSearch(event) {
   
   showToast(`Trovati ${filtered.length} veicoli`);
 }
-
 // Gestione Modale Prenotazione
 function openModal(carName, price) {
   const modal = document.getElementById("bookingModal");
@@ -1302,14 +1245,12 @@ function openModal(carName, price) {
   const priceInput = document.getElementById("modalCarPrice");
   const carSelectionGroup = document.getElementById("carSelectionGroup");
   const carSelect = document.getElementById("modalCarSelect");
-
   if (carName.includes("Richiesta") || carName.includes("Consulenza")) {
     title.innerText = carName;
     if (carSelectionGroup) carSelectionGroup.style.display = "block";
     carInput.value = "Tutte le Auto";
     priceInput.value = 0;
     currentSelectedCarPrice = 0;
-
     if (carSelect && carSelect.options.length <= 1) {
       fleetData.forEach(car => {
         let opt = document.createElement("option");
@@ -1327,13 +1268,10 @@ function openModal(carName, price) {
     priceInput.value = price;
     currentSelectedCarPrice = price;
   }
-
   updatePriceCalculation();
-
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
 }
-
 window.updateModalCarSelection = function() {
   const select = document.getElementById("modalCarSelect");
   if (!select) return;
@@ -1353,18 +1291,15 @@ window.updateModalCarSelection = function() {
   }
   updatePriceCalculation();
 }
-
 function closeModal() {
   const modal = document.getElementById("bookingModal");
   modal.classList.remove("active");
   document.body.style.overflow = "auto";
 }
-
 function updatePriceCalculation() {
   const days = parseInt(document.getElementById("rentalDays").value) || 1;
   const extra = parseInt(document.getElementById("extraService").value) || 0;
   const totalDisplay = document.getElementById("totalPriceDisplay");
-
   let total = (currentSelectedCarPrice * days) + extra;
   if (currentSelectedCarPrice === 0) {
     totalDisplay.innerText = "Su Preventivo";
@@ -1372,7 +1307,6 @@ function updatePriceCalculation() {
     totalDisplay.innerText = `€ ${total.toLocaleString('it-IT')}`;
   }
 }
-
 async function submitBooking(event) {
   event.preventDefault();
   const carName = document.getElementById("modalCarName").value;
@@ -1383,20 +1317,16 @@ async function submitBooking(event) {
   const clientName = document.getElementById("clientNameInput") ? document.getElementById("clientNameInput").value : "Anonimo";
   const clientPhone = document.getElementById("clientPhoneInput") ? document.getElementById("clientPhoneInput").value : "N/D";
   const clientEmail = document.getElementById("clientEmailInput") ? document.getElementById("clientEmailInput").value : "N/D";
-
   // Cache user data locally
   cacheUserData(clientName, clientEmail, clientPhone);
-
   const total = (carPrice * days) + extraPrice;
   const dict = translations[currentLang] || translations.it;
-
   // Cerca se l'auto selezionata corrisponde a una nel database
   let vehicleId = null;
   const foundCar = fleetData.find(c => c.name === carName);
   if (foundCar && typeof foundCar.id === 'string' && foundCar.id.length > 10) {
     vehicleId = foundCar.id;
   }
-
   // Risolvi il fornitore dell'auto
   const providerKey = foundCar && foundCar.provider ? foundCar.provider : "provider_1";
   const providerInfo = (typeof providersData !== 'undefined' ? providersData[providerKey] : null) || {
@@ -1404,14 +1334,12 @@ async function submitBooking(event) {
     phone: "+393206144070",
     website: "https://mfitalyluxuryrent.com/"
   };
-
   // Salva la prenotazione su Supabase Database
   if (supabase) {
     try {
       const locInput = document.getElementById("searchLocation");
       const chosenLoc = locInput && locInput.value ? locInput.value : "Milano Centrale";
       const userCountry = currentUser && currentUser.user_metadata ? currentUser.user_metadata.country : "Italia";
-
       const { error } = await supabase.from('bookings').insert([{
         user_id: currentUser ? currentUser.id : null,
         vehicle_id: vehicleId,
@@ -1432,7 +1360,6 @@ async function submitBooking(event) {
       console.error("Errore connessione Supabase:", err);
     }
   }
-
   // Invia notifica email al gestore con i dettagli e il fornitore di flotta
   const recipient = "info@itercars.com";
   const payload = {
@@ -1448,7 +1375,6 @@ async function submitBooking(event) {
     "Email Cliente": clientEmail,
     "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
   };
-
   try {
     await fetch(`https://formsubmit.co/ajax/${recipient}`, {
       method: "POST",
@@ -1461,12 +1387,10 @@ async function submitBooking(event) {
   } catch (err) {
     console.warn("Errore invio email FormSubmit:", err);
   }
-
   closeModal();
   let msg = dict["toast.bookingSuccess"].replace("{car}", carName);
   showToast(msg);
 }
-
 // Effetto Scroll Header
 function setupScrollListener() {
   const header = document.getElementById("header");
@@ -1478,7 +1402,6 @@ function setupScrollListener() {
     }
   });
 }
-
 // Visualizzazione Toast Notifica
 function showToast(message) {
   let toast = document.createElement("div");
@@ -1497,9 +1420,7 @@ function showToast(message) {
   toast.style.gap = "10px";
   toast.style.animation = "fadeInUp 0.3s ease";
   toast.innerHTML = `<i class="ri-checkbox-circle-fill" style="font-size: 1.4rem;"></i> <span>${message}</span>`;
-
   document.body.appendChild(toast);
-
   setTimeout(() => {
     toast.style.opacity = "0";
     toast.style.transform = "translateY(10px)";
@@ -1507,12 +1428,10 @@ function showToast(message) {
     setTimeout(() => toast.remove(), 300);
   }, 4000);
 }
-
 /* ==========================================================================
    AUTHENTICATION & AREA RISERVATA LOGIC (Supabase Auth)
    ========================================================================== */
 let currentUser = null;
-
 async function initAuthListener() {
   if (!supabase) return;
   try {
@@ -1524,7 +1443,6 @@ async function initAuthListener() {
   } catch (err) {
     console.warn("Errore getSession Supabase:", err);
   }
-
   try {
     supabase.auth.onAuthStateChange((event, session) => {
       if (session && session.user) {
@@ -1539,7 +1457,6 @@ async function initAuthListener() {
     console.warn("Errore onAuthStateChange:", err);
   }
 }
-
 function updateNavAreaButton(user) {
   const navBtnText = document.getElementById("navAreaText");
   if (navBtnText) {
@@ -1551,7 +1468,6 @@ function updateNavAreaButton(user) {
     navBtnText.innerText = `VIP: ${fullName}`;
   }
 }
-
 function resetNavAreaButton() {
   const navBtnText = document.getElementById("navAreaText");
   const dict = translations[currentLang] || translations.it;
@@ -1559,7 +1475,6 @@ function resetNavAreaButton() {
     navBtnText.innerText = dict["nav.area"] || "Area Riservata";
   }
 }
-
 function openAuthModal() {
   closeVipDashboardModal();
   if (currentUser) {
@@ -1573,7 +1488,6 @@ function openAuthModal() {
     }
   }
 }
-
 function closeAuthModal() {
   const modal = document.getElementById("authModal");
   if (modal) {
@@ -1581,7 +1495,6 @@ function closeAuthModal() {
     document.body.style.overflow = "auto";
   }
 }
-
 function switchAuthMode(mode) {
   const loginBox = document.getElementById("loginFormBox");
   const regBox = document.getElementById("registerFormBox");
@@ -1590,7 +1503,6 @@ function switchAuthMode(mode) {
   if (loginBox) loginBox.style.display = "none";
   if (regBox) regBox.style.display = "none";
   if (partnerRegBox) partnerRegBox.style.display = "none";
-
   if (mode === 'register') {
     if (regBox) regBox.style.display = "block";
   } else if (mode === 'partner_reg') {
@@ -1599,7 +1511,6 @@ function switchAuthMode(mode) {
     if (loginBox) loginBox.style.display = "block";
   }
 }
-
 async function handleLogin(event) {
   event.preventDefault();
   if (!supabase) {
@@ -1608,7 +1519,6 @@ async function handleLogin(event) {
   }
   const email = document.getElementById("authLoginEmail").value;
   const password = document.getElementById("authLoginPassword").value;
-
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) {
     showToast("❌ Errore Login: " + error.message);
@@ -1617,7 +1527,6 @@ async function handleLogin(event) {
     closeAuthModal();
   }
 }
-
 async function handleRegister(event) {
   event.preventDefault();
   if (!supabase) {
@@ -1632,12 +1541,10 @@ async function handleRegister(event) {
   const phone = document.getElementById("regPhone").value;
   const password = document.getElementById("regPassword").value;
   const confirmPassword = document.getElementById("regConfirmPassword").value;
-
   if (password !== confirmPassword) {
     showToast("⚠️ Le due password non corrispondono!");
     return;
   }
-
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -1651,7 +1558,6 @@ async function handleRegister(event) {
       }
     }
   });
-
   if (error) {
     showToast("❌ Errore Registrazione: " + error.message);
   } else {
@@ -1659,11 +1565,9 @@ async function handleRegister(event) {
     closeAuthModal();
   }
 }
-
 async function openVipDashboardModal() {
   const modal = document.getElementById("vipDashboardModal");
   if (!modal || !currentUser) return;
-
   const meta = currentUser.user_metadata || {};
   const nameEl = document.getElementById("vipUserName");
   const emailEl = document.getElementById("vipUserEmail");
@@ -1676,10 +1580,8 @@ async function openVipDashboardModal() {
     nameEl.innerText = `Benvenuto, ${fullName}`;
   }
   if (emailEl) emailEl.innerText = currentUser.email;
-
   modal.classList.add("active");
   document.body.style.overflow = "hidden";
-
   // Carica storico noleggi e paesi visitati
   const container = document.getElementById("vipBookingsContainer");
   if (container) {
@@ -1698,7 +1600,6 @@ async function openVipDashboardModal() {
         console.warn("Errore caricamento storico:", e);
       }
     }
-
     // Se l'utente è nuovo e non ha ancora noleggi nel DB, mostriamo storico VIP di esempio senza prezzi ed emoji
     if (userBookings.length === 0) {
       userBookings = [
@@ -1707,7 +1608,6 @@ async function openVipDashboardModal() {
         { vehicle_name: "Rolls-Royce Cullinan", rental_country: "Svizzera", pickup_location: "Zurigo Aeroporto", rental_days: 4, status: "completed" }
       ];
     }
-
     let html = '';
     userBookings.forEach(b => {
       const country = b.rental_country || 'Italia';
@@ -1716,7 +1616,6 @@ async function openVipDashboardModal() {
       const loc = b.pickup_location || 'Sede Centrale';
       const badgeColor = b.status === 'completed' ? 'var(--accent-primary)' : '#f59e0b';
       const badgeText = b.status === 'completed' ? 'Completato' : 'In Lavorazione';
-
       html += `
         <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 12px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; transition: all 0.2s ease;">
           <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -1733,11 +1632,9 @@ async function openVipDashboardModal() {
         </div>
       `;
     });
-
     container.innerHTML = html;
   }
 }
-
 function closeVipDashboardModal() {
   const modal = document.getElementById("vipDashboardModal");
   if (modal) {
@@ -1745,7 +1642,6 @@ function closeVipDashboardModal() {
     document.body.style.overflow = "auto";
   }
 }
-
 async function handleLogout() {
   if (supabase) {
     try { await supabase.auth.signOut(); } catch(e) {}
@@ -1755,21 +1651,18 @@ async function handleLogout() {
   closeVipDashboardModal();
   showToast("👋 Disconnessione effettuata");
 }
-
 // Rendiamo le funzioni globali sul window per garantire l'accesso dagli eventi onclick HTML
 window.openAuthModal = openAuthModal;
 window.closeAuthModal = closeAuthModal;
 window.switchAuthMode = switchAuthMode;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
-
 async function handlePartnerReg(event) {
   event.preventDefault();
   if (!supabase) {
     alert("Errore di connessione al database. Riprovare più tardi.");
     return;
   }
-
   const companyName = document.getElementById('partRegCompany').value.trim();
   const vat = document.getElementById('partRegVat').value.trim();
   const contactName = document.getElementById('partRegName').value.trim();
@@ -1778,18 +1671,15 @@ async function handlePartnerReg(event) {
   const address = document.getElementById('partRegAddress').value.trim();
   const password = document.getElementById('partRegPassword').value;
   const passwordConfirm = document.getElementById('partRegPasswordConfirm').value;
-
   if (password !== passwordConfirm) {
     alert("Le password non coincidono.");
     return;
   }
-
   const submitBtn = event.target.querySelector('button[type="submit"]');
   if (submitBtn) {
     submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> <span>Invio in corso...</span>`;
     submitBtn.disabled = true;
   }
-
   try {
     // 1. Create Supabase Auth User
     const { data: authData, error: authErr } = await supabase.auth.signUp({
@@ -1803,11 +1693,8 @@ async function handlePartnerReg(event) {
         }
       }
     });
-
     if (authErr) throw authErr;
-
     const authId = authData.user ? authData.user.id : null;
-
     // 2. Insert into supplier_applications with auth_id
     const { error: dbErr } = await supabase.from('supplier_applications').insert([{
       auth_id: authId,
@@ -1822,12 +1709,10 @@ async function handlePartnerReg(event) {
       status: 'new',
       data: new Date().toLocaleString('it-IT')
     }]);
-
     if (dbErr) throw dbErr;
     
     // Auto-logout the pending user so they don't access the VIP dashboard
     await supabase.auth.signOut();
-
     alert("Richiesta inviata con successo! Il team ti contatterà al più presto. Non potrai accedere fino ad approvazione avvenuta.");
     closeAuthModal();
     event.target.reset();
@@ -1845,19 +1730,15 @@ window.switchAuthMode = switchAuthMode;
 window.handleLogin = handleLogin;
 window.handleRegister = handleRegister;
 
-
-
 // Added for Hero Search
 window.handleHeroSearch = async function(event) {
   if (event) { event.preventDefault(); }
   const loc = document.getElementById('searchLocation') ? document.getElementById('searchLocation').value.trim() : '';
   const type = document.getElementById('searchType') ? document.getElementById('searchType').value : 'tutti';
-
   const chkLuxury = document.getElementById('filterLuxury') ? document.getElementById('filterLuxury').checked : false;
   const chkPiccola = document.getElementById('filterPiccola') ? document.getElementById('filterPiccola').checked : false;
   const chkMedia = document.getElementById('filterMedia') ? document.getElementById('filterMedia').checked : false;
   const chkGrande = document.getElementById('filterGrande') ? document.getElementById('filterGrande').checked : false;
-
   
   const resultsSection = document.getElementById("heroSearchResultsSection");
   const container = document.getElementById("heroSearchResultsGrid");
@@ -1870,17 +1751,13 @@ window.handleHeroSearch = async function(event) {
     resultsSection.style.display = 'block';
     resultsSection.scrollIntoView({ behavior: 'smooth' });
   }
-
   container.innerHTML = '<div style="text-align:center; padding: 40px; color: var(--text-muted); width: 100%;"><i class="ri-loader-4-line ri-spin" style="font-size: 2rem;"></i><p style="margin-top: 10px;">Ricerca veicoli in corso...</p></div>';
-
   if (!supabase) return;
-
   let query = supabase.from('vehicles').select('*, nlt_offers(*)').eq('is_active', true);
   
   if (type === 'nbt') query = query.eq('is_nbt', true);
   else if (type === 'nlt') query = query.eq('is_nlt', true);
   else if (type === 'luxury') query = query.eq('is_luxury', true);
-
   // Applica filtri categorie solo se almeno uno  selezionato (se necessario) 
   // Usa OR per le categorie selezionate? No, l'utente ha chiesto che "quando una macchina ha questa casella spuntata su true viene inserita in quella categoria". Se le spunta tutte, cerca le auto che hanno ALMENO una di queste spunte vere?
   // Oppure facciamo dei filtri precisi in AND? Solitamente nei filtri checkbox multipli per tipologia e' un OR.
@@ -1899,11 +1776,9 @@ window.handleHeroSearch = async function(event) {
     query = query.or(categoryOrFilters.join(','));
   }
 
-
   if (loc) {
     query = query.ilike('city', `%${loc}%`);
   }
-
   const { data, error } = await query;
   
   container.innerHTML = '';
@@ -1913,11 +1788,9 @@ window.handleHeroSearch = async function(event) {
     if (subtitle) subtitle.textContent = "Nessun risultato trovato.";
     return;
   }
-
   if (subtitle) {
     subtitle.textContent = `Trovati ${data.length} veicoli corrispondenti alla tua ricerca.`;
   }
-
   const mappedCars = data.map(v => {
     let specsObj = {};
     if (typeof v.specs === 'string') {
@@ -1948,12 +1821,10 @@ window.handleHeroSearch = async function(event) {
       raw: v
     };
   });
-
   mappedCars.forEach(car => {
     container.innerHTML += renderCarCard(car, translations[typeof currentLang !== 'undefined' ? currentLang : 'it'] || translations['it']);
   });
 };
-
 // --- MOBILE MENU TOGGLE ---
 function toggleMobileMenu() {
   const navLinks = document.querySelector('.nav-links');
@@ -1973,7 +1844,6 @@ function toggleMobileMenu() {
 }
 window.toggleMobileMenu = toggleMobileMenu;
 
-
 // ==========================================
 // DOSSIER RECOVERY MODAL LOGIC
 // ==========================================
@@ -1986,7 +1856,6 @@ function openDossierRecoveryModal() {
   }
 }
 window.openDossierRecoveryModal = openDossierRecoveryModal;
-
 function closeDossierRecoveryModal() {
   const modal = document.getElementById('dossierRecoveryModal');
   if (modal) {
@@ -1994,7 +1863,6 @@ function closeDossierRecoveryModal() {
   }
 }
 window.closeDossierRecoveryModal = closeDossierRecoveryModal;
-
 async function handleDossierRecoverySubmit(e) {
   e.preventDefault();
   const code = document.getElementById('recoveryQuoteCodeInput')?.value.trim();
@@ -2015,7 +1883,6 @@ async function handleDossierRecoverySubmit(e) {
     const originalText = btn.innerHTML;
     btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> Ricerca in corso...';
     btn.disabled = true;
-
     if (window.supabase) {
       try {
         let query = window.supabase.from('quotes').select('id, quote_code, vehicle_id, status').order('created_at', { ascending: false });
@@ -2024,9 +1891,7 @@ async function handleDossierRecoverySubmit(e) {
         } else if (email) {
           query = query.eq('client_email', email);
         }
-
         const { data, error } = await query.limit(1).maybeSingle();
-
         if (error || !data) {
           if (errMsg) {
             errMsg.innerText = "Pratica non trovata o scaduta. Assicurati che il codice o l'email siano corretti.";
@@ -2051,13 +1916,11 @@ async function handleDossierRecoverySubmit(e) {
         errMsg.style.display = 'block';
       }
     }
-
     btn.innerHTML = originalText;
     btn.disabled = false;
   }
 }
 window.handleDossierRecoverySubmit = handleDossierRecoverySubmit;
-
 
 // Dropdown Area Riservata
 window.toggleAreaMenu = function(event) {
@@ -2068,17 +1931,352 @@ window.toggleAreaMenu = function(event) {
     menu.style.display = (menu.style.display === 'flex' || menu.style.display === 'block') ? 'none' : 'flex';
   }
 };
-
 window.closeAreaMenu = function() {
   const menu = document.getElementById('areaDropdownMenu');
   if (menu) {
     menu.style.display = 'none';
   }
 };
-
 document.addEventListener('click', function(e) {
   const areaWrapper = e.target.closest('.area-dropdown-wrapper');
   if (!areaWrapper) {
     closeAreaMenu();
   }
 });
+
+
+
+
+/* ==========================================================================
+   INTEGRAZIONE CMS FRONTEND (ULTIMATE BUILDER)
+   ========================================================================== */
+async function loadSiteConfigFrontend() {
+  if (!supabase) return;
+  try {
+    const { data, error } = await supabase.from('site_config').select('*');
+    if (error || !data) return;
+    data.forEach(item => {
+      if (item.category && item.category.startsWith('text_') && !item.config_key.startsWith('css:')) {
+        const lang = item.category.split('_')[1];
+        if (translations && translations[lang]) {
+          const origKey = item.config_key.replace('_' + lang, '');
+          if (item.config_key === 'home_hero_title_' + lang) translations[lang]['hero.title'] = item.config_value;
+          else if (item.config_key === 'home_hero_subtitle_' + lang) translations[lang]['hero.subtitle'] = item.config_value;
+          else translations[lang][origKey] = item.config_value;
+        }
+      }
+      if (item.config_key === 'home_hero_video' && !item.config_key.startsWith('css:')) {
+        const vidEl = document.getElementById('heroBgVideo');
+        if (vidEl) vidEl.src = item.config_value;
+      }
+      
+      if (item.config_key.startsWith('css:')) {
+         const selector = item.config_key.substring(4);
+         try {
+             const el = document.querySelector(selector);
+             if (el) {
+                 if (item.category === 'cms_text') {
+                     el.innerHTML = item.config_value;
+                 } else if (item.category === 'cms_media') {
+                     const tag = el.tagName.toLowerCase();
+                     if (tag === 'img' || tag === 'video' || tag === 'source') {
+                         el.src = item.config_value;
+                     } else {
+                         el.style.backgroundImage = `url('${item.config_value}')`;
+                     }
+                 } else if (item.category === 'cms_link') {
+                     if (el.tagName.toLowerCase() === 'a') el.href = item.config_value;
+                 } else if (item.category === 'cms_html') {
+                     el.outerHTML = item.config_value;
+                 } else if (item.category === 'cms_color') {
+                     el.style.color = item.config_value;
+                 } else if (item.category === 'cms_bgcolor') {
+                     el.style.backgroundColor = item.config_value;
+                 }
+             }
+         } catch(err) {
+             console.warn("Selettore non valido o elemento mancante:", selector);
+         }
+      }
+    });
+    if (typeof changeLanguage === 'function') {
+        changeLanguage(currentLang, true);
+    }
+  } catch (e) {
+    console.warn("CMS Load Error:", e);
+  }
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadSiteConfigFrontend);
+} else {
+  loadSiteConfigFrontend();
+}
+/* ==========================================================================
+   VISUAL BUILDER MODE (Iframe Frontend - PAGE BUILDER COMPLETO)
+   ========================================================================== */
+window.cmsTrackedChanges = window.cmsTrackedChanges || {};
+window.getCmsChanges = () => window.cmsTrackedChanges;
+window.clearCmsChanges = () => { window.cmsTrackedChanges = {}; };
+function getUniqueSelector(el) {
+  if (!el || el.nodeType !== Node.ELEMENT_NODE) return null;
+  if (el.id) return '#' + el.id;
+  if (el.tagName === 'BODY') return 'BODY';
+  const parent = el.parentNode;
+  if (!parent) return el.tagName;
+  let index = 1;
+  for (let sibling = parent.firstElementChild; sibling; sibling = sibling.nextElementSibling) {
+    if (sibling === el) {
+      let selector = getUniqueSelector(parent) + ' > ' + el.tagName;
+      let sameTagSiblings = 0;
+      for (let s = parent.firstElementChild; s; s = s.nextElementSibling) {
+         if (s.tagName === el.tagName) sameTagSiblings++;
+      }
+      if (sameTagSiblings > 1) selector += ':nth-child(' + index + ')';
+      return selector;
+    }
+    index++;
+  }
+  return null;
+}
+function initCmsVisualMode() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('cms_mode') !== 'true') return;
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .cms-hoverable {
+      outline: 2px dashed #9b59b6 !important;
+      outline-offset: 2px;
+      cursor: context-menu !important;
+      background: rgba(155, 89, 182, 0.1) !important;
+      transition: all 0.2s;
+    }
+    .cms-context-menu {
+      position: absolute;
+      z-index: 999999;
+      background: #1a1e2d;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      padding: 6px;
+      min-width: 240px;
+      display: none;
+      flex-direction: column;
+      font-family: 'Inter', sans-serif;
+    }
+    .cms-context-menu.active { display: flex; }
+    .cms-menu-item {
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 300;
+      cursor: pointer;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cms-menu-item:hover { background: rgba(255,255,255,0.1); }
+    .cms-menu-item i { color: #9b59b6; }
+    .cms-menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 4px 0; }
+  `;
+  document.head.appendChild(style);
+  let lastHovered = null;
+  document.body.addEventListener('mouseover', (e) => {
+    if (lastHovered) lastHovered.classList.remove('cms-hoverable');
+    lastHovered = e.target;
+    if (lastHovered !== document.body && lastHovered.id !== 'cmsContextMenu' && !lastHovered.closest('#cmsContextMenu')) {
+      lastHovered.classList.add('cms-hoverable');
+    }
+  });
+  document.body.addEventListener('mouseout', (e) => {
+    if (lastHovered) { lastHovered.classList.remove('cms-hoverable'); lastHovered = null; }
+  });
+  document.body.addEventListener('click', (e) => {
+      if (e.target.tagName === 'A' || e.target.closest('a')) e.preventDefault();
+  });
+  const ctxMenu = document.createElement('div');
+  ctxMenu.className = 'cms-context-menu';
+  ctxMenu.id = 'cmsContextMenu';
+  
+  // Elementi Menu Base
+  const itemEditText = document.createElement('div'); itemEditText.className = 'cms-menu-item'; itemEditText.innerHTML = '<i class="ri-edit-2-line"></i> Modifica Testo';
+  const itemEditMedia = document.createElement('div'); itemEditMedia.className = 'cms-menu-item'; itemEditMedia.innerHTML = '<i class="ri-image-edit-line"></i> Cambia Media/Sfondo';
+  const itemEditLink = document.createElement('div'); itemEditLink.className = 'cms-menu-item'; itemEditLink.innerHTML = '<i class="ri-link"></i> Modifica Link Destinazione';
+  
+  // Colori
+  const itemColorText = document.createElement('div'); itemColorText.className = 'cms-menu-item'; itemColorText.innerHTML = '<i class="ri-palette-line"></i> Colore Testo';
+  const itemColorBg = document.createElement('div'); itemColorBg.className = 'cms-menu-item'; itemColorBg.innerHTML = '<i class="ri-paint-fill"></i> Colore Sfondo';
+  
+  // Creazione
+  const itemDuplicate = document.createElement('div'); itemDuplicate.className = 'cms-menu-item'; itemDuplicate.innerHTML = '<i class="ri-file-copy-line" style="color:#2ecc71;"></i> <strong>Duplica Elemento</strong>';
+  const itemAddText = document.createElement('div'); itemAddText.className = 'cms-menu-item'; itemAddText.innerHTML = '<i class="ri-text" style="color:#2ecc71;"></i> Aggiungi Testo Qui';
+  const itemAddBtn = document.createElement('div'); itemAddBtn.className = 'cms-menu-item'; itemAddBtn.innerHTML = '<i class="ri-add-box-line" style="color:#2ecc71;"></i> Aggiungi Bottone Qui';
+  // Struttura
+  const itemMoveUp = document.createElement('div'); itemMoveUp.className = 'cms-menu-item'; itemMoveUp.innerHTML = '<i class="ri-arrow-up-line"></i> Sposta Prima / Su';
+  const itemMoveDown = document.createElement('div'); itemMoveDown.className = 'cms-menu-item'; itemMoveDown.innerHTML = '<i class="ri-arrow-down-line"></i> Sposta Dopo / Giù';
+  const itemDelete = document.createElement('div'); itemDelete.className = 'cms-menu-item'; itemDelete.innerHTML = '<i class="ri-delete-bin-line" style="color:#ef4444;"></i> Elimina Elemento';
+  const itemSaveHtml = document.createElement('div'); itemSaveHtml.className = 'cms-menu-item'; itemSaveHtml.innerHTML = '<i class="ri-save-line" style="color:#f1c40f;"></i> <strong>Salva Struttura Globale</strong>';
+  const div = () => { const d = document.createElement('div'); d.className = 'cms-menu-divider'; return d; };
+  ctxMenu.append(itemEditText, itemEditMedia, itemEditLink);
+  ctxMenu.append(div(), itemColorText, itemColorBg);
+  ctxMenu.append(div(), itemDuplicate, itemAddText, itemAddBtn);
+  ctxMenu.append(div(), itemMoveUp, itemMoveDown, itemDelete);
+  ctxMenu.append(div(), itemSaveHtml);
+  document.body.appendChild(ctxMenu);
+  let currentTarget = null;
+  let currentSelector = null;
+  document.addEventListener('click', () => {
+    ctxMenu.classList.remove('active');
+    if (currentTarget && currentTarget.hasAttribute('contenteditable')) currentTarget.removeAttribute('contenteditable');
+  });
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target.id === 'cmsContextMenu' || e.target.closest('#cmsContextMenu')) return;
+    e.preventDefault();
+    currentTarget = e.target;
+    currentSelector = getUniqueSelector(currentTarget);
+    if (!currentSelector) return;
+    
+    // Mostra il menu garantendo che sia in primo piano e vicino al cursore
+    ctxMenu.style.left = e.pageX + 'px';
+    ctxMenu.style.top = e.pageY + 'px';
+    ctxMenu.classList.add('active');
+    const tag = currentTarget.tagName.toLowerCase();
+    const isTextLike = ['h1','h2','h3','h4','h5','h6','p','span','a','button','div','label','th','td'].includes(tag);
+    
+    itemEditText.style.display = isTextLike ? 'flex' : 'none';
+    itemEditLink.style.display = tag === 'a' ? 'flex' : 'none';
+  });
+  const closeMenu = (e) => { e.stopPropagation(); ctxMenu.classList.remove('active'); };
+  itemEditText.addEventListener('click', (e) => {
+    closeMenu(e);
+    if (currentTarget && currentSelector) {
+      currentTarget.setAttribute('contenteditable', 'true');
+      currentTarget.focus();
+      currentTarget.addEventListener('input', () => {
+        window.cmsTrackedChanges['css:' + currentSelector] = { value: currentTarget.innerHTML, category: 'cms_text' };
+      }, { once: false });
+    }
+  });
+  itemEditMedia.addEventListener('click', (e) => {
+    closeMenu(e);
+    if (currentTarget && currentSelector) {
+      let currentVal = currentTarget.src || "";
+      if (!currentVal) {
+          const bg = window.getComputedStyle(currentTarget).backgroundImage;
+          if (bg && bg !== 'none') currentVal = bg.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
+      }
+      const newUrl = prompt("Inserisci il nuovo URL:", currentVal);
+      if (newUrl !== null && newUrl.trim() !== "") {
+        if (currentTarget.tagName.toLowerCase() === 'img' || currentTarget.tagName.toLowerCase() === 'video') currentTarget.src = newUrl;
+        else currentTarget.style.backgroundImage = `url('${newUrl}')`;
+        window.cmsTrackedChanges['css:' + currentSelector] = { value: newUrl, category: 'cms_media' };
+      }
+    }
+  });
+  itemEditLink.addEventListener('click', (e) => {
+    closeMenu(e);
+    if (currentTarget && currentSelector) {
+      const newUrl = prompt("Inserisci il nuovo link:", currentTarget.href || "");
+      if (newUrl !== null && newUrl.trim() !== "") {
+        currentTarget.href = newUrl;
+        window.cmsTrackedChanges['css:' + currentSelector] = { value: newUrl, category: 'cms_link' };
+      }
+    }
+  });
+  itemColorText.addEventListener('click', (e) => {
+    closeMenu(e);
+    if (currentTarget && currentSelector) {
+      const color = prompt("Inserisci colore del testo (es. red, #ffffff):");
+      if (color) {
+          currentTarget.style.color = color;
+          window.cmsTrackedChanges['css:' + currentSelector] = { value: color, category: 'cms_color' };
+      }
+    }
+  });
+  itemColorBg.addEventListener('click', (e) => {
+    closeMenu(e);
+    if (currentTarget && currentSelector) {
+      const color = prompt("Inserisci colore di sfondo (es. blue, #000000):");
+      if (color) {
+          currentTarget.style.backgroundColor = color;
+          window.cmsTrackedChanges['css:' + currentSelector] = { value: color, category: 'cms_bgcolor' };
+      }
+    }
+  });
+  itemDuplicate.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget) {
+          const clone = currentTarget.cloneNode(true);
+          currentTarget.parentNode.insertBefore(clone, currentTarget.nextSibling);
+      }
+  });
+  itemAddText.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget) {
+          const p = document.createElement('p');
+          p.innerHTML = "Nuovo Testo (Click Tasto Destro per modificare)";
+          currentTarget.parentNode.insertBefore(p, currentTarget.nextSibling);
+      }
+  });
+  itemAddBtn.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget) {
+          const a = document.createElement('a');
+          a.className = "btn-primary";
+          a.href = "#";
+          a.innerHTML = "Nuovo Bottone";
+          a.style.display = "inline-block";
+          a.style.marginTop = "10px";
+          currentTarget.parentNode.insertBefore(a, currentTarget.nextSibling);
+      }
+  });
+  itemMoveUp.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget && currentTarget.previousElementSibling) {
+          currentTarget.parentNode.insertBefore(currentTarget, currentTarget.previousElementSibling);
+      }
+  });
+  itemMoveDown.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget && currentTarget.nextElementSibling) {
+          currentTarget.parentNode.insertBefore(currentTarget.nextElementSibling, currentTarget);
+      }
+  });
+  itemDelete.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget) {
+          if(confirm("Rimuovere elemento? (Salva la Struttura Globale del genitore per confermare sul sito)")) {
+             currentTarget.remove();
+          }
+      }
+  });
+  itemSaveHtml.addEventListener('click', (e) => {
+      closeMenu(e);
+      if (currentTarget && currentSelector) {
+          if (confirm("Vuoi salvare l'intera struttura di questo blocco su Supabase? Questa diventerà la versione ufficiale per tutto il sito.")) {
+              const clone = currentTarget.cloneNode(true);
+              const removeCmsStuff = (node) => {
+                  if(node.classList) {
+                      node.classList.remove('cms-hoverable');
+                      if (node.classList.length === 0) node.removeAttribute('class');
+                  }
+                  if(node.hasAttribute('contenteditable')) node.removeAttribute('contenteditable');
+                  if(node.id === 'cmsContextMenu' || (node.classList && node.classList.contains('cms-context-menu'))) {
+                      node.remove();
+                  }
+              };
+              removeCmsStuff(clone);
+              clone.querySelectorAll('.cms-hoverable, [contenteditable], .cms-context-menu').forEach(removeCmsStuff);
+              
+              window.cmsTrackedChanges['css:' + currentSelector] = { value: clone.outerHTML, category: 'cms_html' };
+              alert("Struttura salvata in memoria! Clicca 'Salva Modifiche Sito' nel CRM per confermarla sul Database.");
+          }
+      }
+  });
+  console.log("CMS Visual Mode ULTIMATE Inizializzato.");
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => { setTimeout(initCmsVisualMode, 1000); });
+} else {
+  setTimeout(initCmsVisualMode, 1000);
+}

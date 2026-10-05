@@ -2,21 +2,17 @@
    ITERCARS — SAAS PARTNER CRM CONSOLE LOGIC (`crm-partner.js`)
    Engine Multi-Mandante & Noleggiatori per Gestione Flotta e Contratti
    ========================================================================== */
-
 const SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk';
-
 var supabase = (typeof window.supabase !== 'undefined' && window.supabase.createClient) 
   ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) 
   : null;
-
 // Global State per il Partner Loggato
 var CurrentPartner = null;
 var PartnerVehicles = [];
 var PartnerBookings = [];
 var PartnerImportJobs = [];
 var ActiveEditVehicleId = null;
-
 // HD Studio Catalog locale per matching istantaneo sul drag & drop
 const CLIENT_STUDIO_CATALOG = {
   "bmw serie 1": "bmw_serie_1_msport.webp",
@@ -43,12 +39,10 @@ const CLIENT_STUDIO_CATALOG = {
   "lamborghini urus": "lamborghini_urus.webp",
   "alfa romeo stelvio": "category-suv.jpg"
 };
-
 document.addEventListener('DOMContentLoaded', () => {
   checkPartnerAuth();
   setupDropzoneListeners();
 });
-
 /* ==========================================================================
    1. AUTENTICAZIONE E LOGOUT PARTNER
    ========================================================================== */
@@ -59,7 +53,6 @@ async function checkPartnerAuth() {
   try {
     const { data: { session } } = await supabase.auth.getSession();
     const saved = localStorage.getItem('itercars_partner_auth');
-
     if (session && session.user && saved) {
       CurrentPartner = JSON.parse(saved);
       
@@ -80,13 +73,11 @@ async function checkPartnerAuth() {
   } catch(e) {
     console.error("Partner auth check error:", e);
   }
-
   localStorage.removeItem('itercars_partner_auth');
   CurrentPartner = null;
   if (overlay) overlay.classList.add('active');
   if (mainApp) mainApp.style.display = 'none';
 }
-
 async function handlePartnerLogin(event) {
   if (event && event.preventDefault) event.preventDefault();
   
@@ -94,47 +85,38 @@ async function handlePartnerLogin(event) {
   const passwordInput = document.getElementById('partnerPasswordInput');
   const emailVal = (emailInput ? emailInput.value : '').trim();
   const passwordVal = (passwordInput ? passwordInput.value : '');
-
   if (!emailVal || !passwordVal) {
     alert("Inserisci Email e Password.");
     return;
   }
-
   const submitBtn = event.target.querySelector('button[type="submit"]');
   if (submitBtn) {
     submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Accesso in corso...`;
     submitBtn.disabled = true;
   }
-
   try {
     const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
       email: emailVal,
       password: passwordVal
     });
-
     if (authErr) throw authErr;
-
     const authId = authData.user.id;
-
     // Verify if this user is an approved partner in the providers table (using email to prevent lockout if Auth user is recreated)
     const { data: providerData, error: providerErr } = await supabase
       .from('providers')
       .select('*')
       .or(`auth_id.eq.${authId},partner_email.eq.${emailVal},contact_email.eq.${emailVal}`)
       .eq('is_active', true);
-
     if (providerErr || !providerData || providerData.length === 0) {
       // Not an approved partner
       await supabase.auth.signOut();
       alert("Accesso negato. L'account non risulta associato a un partner attivo. Contatta l'amministrazione.");
       return;
     }
-
     // Se l'ID auth è cambiato (es. l'utente ha ricreato l'account da Supabase), aggiorniamolo
     if (providerData[0].auth_id !== authId) {
       await supabase.from('providers').update({ auth_id: authId }).eq('id', providerData[0].id);
     }
-
     CurrentPartner = providerData[0];
     localStorage.setItem('itercars_partner_auth', JSON.stringify(CurrentPartner));
     const overlay = document.getElementById('partnerAuthOverlay');
@@ -153,7 +135,6 @@ async function handlePartnerLogin(event) {
     }
   }
 }
-
 async function partnerLogout() {
   if (confirm("Desideri disconnettere la tua azienda dalla Console Partner?")) {
     await supabase.auth.signOut();
@@ -172,7 +153,6 @@ function switchPartnerTab(tabId, btnElem) {
   const target = document.getElementById(tabId);
   if (target) target.classList.add('active');
   if (btnElem) btnElem.classList.add('active');
-
   const names = {
     'tab-myfleet': 'La Mia Flotta & Tasti Rapidi',
     'tab-import': 'Caricamento Excel & AI Studio',
@@ -180,12 +160,10 @@ function switchPartnerTab(tabId, btnElem) {
     'tab-calendar': 'Calendario Flotta NBT',
     'tab-settings': 'Profilo e Condizioni Aziendali'
   };
-
   const breadcrumb = document.getElementById('partnerBreadcrumbName');
   if (breadcrumb && names[tabId]) {
     breadcrumb.textContent = names[tabId];
   }
-
   if (tabId === 'tab-import' && typeof loadPartnerImportsHistory === 'function') {
     loadPartnerImportsHistory();
   }
@@ -194,13 +172,11 @@ function switchPartnerTab(tabId, btnElem) {
     renderNbtCalendar();
   }
 }
-
 /* ==========================================================================
    3. FETCH & RENDER DATI DEL PARTNER
    ========================================================================== */
 async function loadPartnerDashboard() {
   if (!CurrentPartner) return;
-
   // Mostriamo nome, email e logo in sidebar e header
   if (document.getElementById('displayPartnerName')) document.getElementById('displayPartnerName').textContent = CurrentPartner.name || 'Società Partner';
   if (document.getElementById('displayPartnerPlan')) document.getElementById('displayPartnerPlan').textContent = (CurrentPartner.saas_plan || 'Pro Partner').toUpperCase();
@@ -209,18 +185,15 @@ async function loadPartnerDashboard() {
   if (document.getElementById('settingCompanyEmail')) document.getElementById('settingCompanyEmail').value = CurrentPartner.partner_email || CurrentPartner.contact_email || '';
   if (document.getElementById('settingDefaultDeposit')) document.getElementById('settingDefaultDeposit').value = CurrentPartner.default_deposit || '1500';
   if (document.getElementById('settingAddress')) document.getElementById('settingAddress').value = CurrentPartner.address || '';
-
   await Promise.all([
     fetchPartnerVehicles(),
     fetchPartnerBookings(),
     fetchPartnerImportJobs()
   ]);
-
   renderPartnerVehiclesTable();
   renderPartnerBookingsKanban();
   updatePartnerKpis();
 }
-
 
 async function fetchPartnerImportJobs() {
   if (!supabase || !CurrentPartner) return;
@@ -230,7 +203,6 @@ async function fetchPartnerImportJobs() {
       .select('*')
       .eq('provider_id', CurrentPartner.id)
       .order('created_at', { ascending: false });
-
     if (!error && data) {
       PartnerImportJobs = data;
     } else {
@@ -240,7 +212,6 @@ async function fetchPartnerImportJobs() {
     PartnerImportJobs = [];
   }
 }
-
 async function fetchPartnerVehicles() {
   if (!supabase || !CurrentPartner) return;
   try {
@@ -249,7 +220,6 @@ async function fetchPartnerVehicles() {
       .select('*')
       .eq('provider_id', CurrentPartner.id)
       .order('created_at', { ascending: false });
-
     if (!error && data) {
       PartnerVehicles = data;
     } else {
@@ -260,7 +230,6 @@ async function fetchPartnerVehicles() {
     PartnerVehicles = [];
   }
 }
-
 // Sanitizzazione input per prevenire XSS
 function escapeHTML(str) {
   if (!str) return '';
@@ -271,7 +240,6 @@ function escapeHTML(str) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
-
 async function fetchPartnerBookings() {
   if (!supabase || !CurrentPartner) return;
   try {
@@ -280,7 +248,6 @@ async function fetchPartnerBookings() {
       .select('*')
       .eq('provider_id', CurrentPartner.id)
       .order('created_at', { ascending: false });
-
     if (!error && data) {
       PartnerBookings = data.map(b => {
         // Extract real price if it defaulted to 799 or 0
@@ -310,29 +277,24 @@ async function fetchPartnerBookings() {
     PartnerBookings = [];
   }
 }
-
 function updatePartnerKpis() {
   const totalFleet = PartnerVehicles.length;
   const activeFleet = PartnerVehicles.filter(v => v.is_available !== false).length;
   const activeBookings = PartnerBookings.length;
   const estimatedRev = PartnerVehicles.reduce((acc, v) => acc + (Number(v.daily_price) * 12 || 0), 0);
-
   if (document.getElementById('kpiTotalFleet')) document.getElementById('kpiTotalFleet').textContent = totalFleet;
   if (document.getElementById('kpiActiveFleet')) document.getElementById('kpiActiveFleet').textContent = activeFleet;
   if (document.getElementById('kpiBookingsCount')) document.getElementById('kpiBookingsCount').textContent = activeBookings;
   if (document.getElementById('kpiEstimatedValue')) document.getElementById('kpiEstimatedValue').textContent = `€ ${estimatedRev.toLocaleString('it-IT')}`;
-
   if (document.getElementById('badgeFleetCount')) document.getElementById('badgeFleetCount').textContent = totalFleet;
   if (document.getElementById('badgeBookingsCount')) document.getElementById('badgeBookingsCount').textContent = activeBookings;
 }
-
 /* ==========================================================================
    4. RENDER TABELLA FLOTTA CON TOGGLE SWITCH RAPIDI ( / )
    ========================================================================== */
 function renderPartnerVehiclesTable() {
   const tbody = document.getElementById('partnerVehiclesTableBody');
   if (!tbody) return;
-
   tbody.innerHTML = '';
   
   let pendingJob = null;
@@ -341,7 +303,6 @@ function renderPartnerVehiclesTable() {
     pendingJob = PartnerImportJobs.find(j => j.status === 'pending_approval' || j.status === 'processing_by_direzione' || !j.status);
     rejectedJob = PartnerImportJobs.find(j => j.status === 'rejected');
   }
-
   let bannerHtml = '';
   if (pendingJob) {
     bannerHtml = `
@@ -380,7 +341,6 @@ function renderPartnerVehiclesTable() {
       </tr>
     `;
   }
-
   if (PartnerVehicles.length === 0) {
     if (bannerHtml) {
       tbody.innerHTML = bannerHtml;
@@ -399,9 +359,7 @@ function renderPartnerVehiclesTable() {
     }
     return;
   }
-
   tbody.innerHTML = bannerHtml;
-
   const hasPending = PartnerVehicles.some(v => v.status === 'pending_approval');
   if (hasPending && !pendingJob) {
     const prepBanner = `
@@ -424,14 +382,12 @@ function renderPartnerVehiclesTable() {
     `;
     tbody.innerHTML += prepBanner;
   }
-
   PartnerVehicles.forEach(v => {
     const title = `${v.brand || ''} ${v.model || v.name || 'Auto Flotta'}`.trim();
     const isLive = v.is_available !== false && v.is_active !== false && v.status === 'approved';
     const isPending = v.status === 'pending_approval';
     const isRejected = v.status === 'rejected';
     const photoBadge = `<span style="font-size: 0.68rem; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 6px; border-radius: 4px;"><i class="ri-file-list-line"></i> Scheda Vettura</span>`;
-
     let statusHtml = `
       <!-- INTERRUTTORE ISTANTANEO (TOGGLE SWITCH) -->
       <div class="toggle-wrapper" onclick="togglePartnerVehicleStatus('${v.id}', ${!isLive})" title="Clicca per commutare la disponibilità live">
@@ -441,7 +397,6 @@ function renderPartnerVehiclesTable() {
         <span class="toggle-label ${isLive ? 'available' : 'suspended'}">${isLive ? ' DISPONIBILE' : ' FUORI FLOTTA'}</span>
       </div>
     `;
-
     if (isPending) {
       statusHtml = `
         <div style="font-size: 0.76rem; color: #ffffff; background: transparent; border: 1px solid transparent; padding: 6px 12px; border-radius: 8px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; line-height: 1.25;">
@@ -460,7 +415,6 @@ function renderPartnerVehiclesTable() {
         </div>
       `;
     }
-
     const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
     let delivBadgeHtml = `<span style="display:inline-block; margin-top:6px; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);"><i class="ri-rocket-fill"></i> Pronta Consegna</span>`;
     if (specsObj.delivery_type === 'date' || specsObj.delivery_date) {
@@ -471,7 +425,6 @@ function renderPartnerVehiclesTable() {
       const w = specsObj.delivery_weeks || v.delivery_weeks || 4;
       delivBadgeHtml = `<span style="display:inline-block; margin-top:6px; font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3);"><i class="ri-time-line"></i> In ${w} sett.</span>`;
     }
-
     tbody.innerHTML += `
       <tr>
         <td>
@@ -523,12 +476,10 @@ function renderPartnerVehiclesTable() {
 async function togglePartnerVehicleStatus(vehicleId, newStatus) {
   const v = PartnerVehicles.find(x => x.id === vehicleId);
   if (!v) return;
-
   // 1. Optimistic UI update istantaneo per il partner
   v.is_available = newStatus;
   renderPartnerVehiclesTable();
   updatePartnerKpis();
-
   // 2. Sincronizzazione con il database Supabase
   if (supabase) {
     try {
@@ -543,13 +494,11 @@ async function togglePartnerVehicleStatus(vehicleId, newStatus) {
       // Cascade to nbt_offers and nlt_offers to hide them from nbt.html and nlt.html
       try { await supabase.from('nlt_offers').update({ is_active: newStatus }).eq('vehicle_id', vehicleId); } catch(e){}
       try { await supabase.from('nbt_offers').update({ is_active: newStatus }).eq('vehicle_id', vehicleId); } catch(e){}
-
     } catch(e) {
       console.warn("Errore rete toggle status:", e);
     }
   }
 }
-
 /* ==========================================================================
    5. DRAG & DROP FILE EXCEL/CSV & AI STUDIO SHOT ENGINE
    ========================================================================== */
@@ -557,16 +506,13 @@ function setupDropzoneListeners() {
   const dz = document.getElementById('fleetUploadDropzone');
   const input = document.getElementById('fleetFileInput');
   if (!dz || !input) return;
-
   dz.addEventListener('dragover', (e) => {
     e.preventDefault();
     dz.classList.add('dragover');
   });
-
   dz.addEventListener('dragleave', () => {
     dz.classList.remove('dragover');
   });
-
   dz.addEventListener('drop', (e) => {
     e.preventDefault();
     dz.classList.remove('dragover');
@@ -574,18 +520,15 @@ function setupDropzoneListeners() {
       selectPartnerFileForUpload(e.dataTransfer.files[0]);
     }
   });
-
   input.addEventListener('change', (e) => {
     if (e.target.files && e.target.files.length > 0) {
       selectPartnerFileForUpload(e.target.files[0]);
     }
   });
 }
-
 function selectPartnerFileForUpload(file) {
   if (!file) return;
   window._selectedPartnerFile = file;
-
   const box = document.getElementById('selectedFilePreviewBox');
   const nameDisp = document.getElementById('selectedFileNameDisplay');
   const sizeDisp = document.getElementById('selectedFileSizeDisplay');
@@ -596,7 +539,6 @@ function selectPartnerFileForUpload(file) {
     box.style.display = 'block';
   }
 }
-
 async function submitSelectedPartnerFile() {
   const file = window._selectedPartnerFile;
   const categoryElem = document.getElementById('fleetUploadCategory');
@@ -605,12 +547,10 @@ async function submitSelectedPartnerFile() {
     alert("Seleziona prima un file dal tuo computer o trascinalo nel riquadro.");
     return;
   }
-
   const terminal = document.getElementById('aiStudioLogTerminal');
   const termContent = document.getElementById('aiLogContent');
   if (terminal) terminal.style.display = 'block';
   if (termContent) termContent.innerHTML = '';
-
   function addLog(msg, type = 'info') {
     if (!termContent) return;
     const time = new Date().toLocaleTimeString('it-IT');
@@ -620,19 +560,15 @@ async function submitSelectedPartnerFile() {
     termContent.innerHTML += `<div class="ai-log-line ${type}"><span>[${time}] ${icon} ${msg}</span></div>`;
     termContent.scrollTop = termContent.scrollHeight;
   }
-
   addLog(`Preparazione trasmissione del file '${file.name}' (${Math.round(file.size / 1024)} KB)...`, 'info');
-
   if (!CurrentPartner || !CurrentPartner.id) {
     alert("Errore: devi effettuare l'accesso con le tue credenziali prima di poter inviare un file.");
     return;
   }
-
   const readerUrl = new FileReader();
   readerUrl.onload = async function(evtUrl) {
     const base64File = evtUrl.target.result;
     const jobId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8); return v.toString(16); });
-
     try {
       addLog(`Sincronizzazione anagrafica Mandante ('${CurrentPartner.name}') con Supabase Cloud...`, 'info');
       await supabase.from('providers').upsert([{
@@ -643,7 +579,6 @@ async function submitSelectedPartnerFile() {
         saas_plan: CurrentPartner.saas_plan || 'pro_partner',
         partner_email: CurrentPartner.partner_email || 'partner@itercars.it'
       }], { onConflict: 'id' });
-
       addLog(`Invio sicuro del file alla Console Centrale in corso...`, 'info');
       let payload = {
         id: jobId,
@@ -654,9 +589,7 @@ async function submitSelectedPartnerFile() {
         status: 'pending_approval',
         total_rows: 0
       };
-
       let { error: jobErr } = await supabase.from('import_jobs').insert([payload]);
-
       // Se il database su Supabase non ha la colonna file_url, riproviamo senza file_url (salvando su file_data)
       if (jobErr && jobErr.message && jobErr.message.includes('file_url')) {
         addLog(`Adattamento automatico schema DB (senza colonna file_url)...`, 'info');
@@ -688,7 +621,6 @@ async function submitSelectedPartnerFile() {
           jobErr = minRes.error;
         }
       }
-
       if (jobErr) {
         addLog(`Errore di trasmissione su Supabase: ${jobErr.message}`, 'warn');
         alert(`Errore durante l'invio del file: ${jobErr.message}\n\nSuggerimento: Esegui la query SQL in setup_partner_crm.sql sul tuo Supabase per allineare le colonne della tabella import_jobs.`);
@@ -696,14 +628,11 @@ async function submitSelectedPartnerFile() {
         addLog(` TRASMISSIONE COMPLETATA! Il file '${file.name}' inviato da '${CurrentPartner.name}' è arrivato alla Console Centrale.`, 'success');
         
         // Ora il backend processa direttamente l'import_job_id, non serve più creare un veicolo fittizio per l'Excel.
-
         if (typeof loadPartnerImportsHistory === 'function') loadPartnerImportsHistory();
-
         // Resettiamo il box
         window._selectedPartnerFile = null;
         const box = document.getElementById('selectedFilePreviewBox');
         if (box) box.style.display = 'none';
-
         setTimeout(() => {
           alert(`TRASMISSIONE COMPLETATA CON SUCCESSO!\n\nIl file della tua flotta ('${file.name}') è stato inviato in approvazione alla Direzione.`);
           // Aggiungiamo un ritardo minimo per assicurarci che l'upload appaia nella history prima dello switch
@@ -720,7 +649,6 @@ async function submitSelectedPartnerFile() {
   };
   readerUrl.readAsDataURL(file);
 }
-
 async function loadPartnerImportsHistory() {
   const container = document.getElementById('partnerImportsHistoryContainer');
   if (!container) return;
@@ -728,23 +656,18 @@ async function loadPartnerImportsHistory() {
     container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 16px;">Effettua l'accesso come Partner per visualizzare lo storico delle tue trasmissioni.</div>`;
     return;
   }
-
   container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 14px;"><i class="ri-loader-4-line ri-spin"></i> Verifica stato elaborazione flotta con la Direzione...</div>`;
-
   try {
     const { data: jobs, error } = await supabase
       .from('import_jobs')
       .select('*')
       .eq('provider_id', CurrentPartner.id)
       .order('created_at', { ascending: false });
-
     if (error) throw error;
-
     if (!jobs || jobs.length === 0) {
       container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 18px; font-size: 0.9rem;">Nessun file o flotta inviata finora. Trascina sopra il tuo file Excel o PDF per avviare la prima presa in carico!</div>`;
       return;
     }
-
     container.innerHTML = '';
     jobs.forEach(job => {
       const timeStr = job.created_at ? new Date(job.created_at).toLocaleString('it-IT') : 'Oggi';
@@ -759,11 +682,9 @@ async function loadPartnerImportsHistory() {
           <i class="ri-check-double-line"></i> ELABORATO E PUBBLICATO SUL PORTALE
         </div>
       `;
-
       const statusDesc = isProcessing ? 
         `La tua flotta è stata presa in carico. L'ufficio di Direzione sta verificando il listino e il catalogo per la delibera.` : 
         `Vetture verificate e pubblicate con successo. Puoi consultarle nel tab 'La Mia Flotta'.`;
-
       container.innerHTML += `
         <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
           <div style="display: flex; align-items: center; gap: 14px; max-width: 580px;">
@@ -787,16 +708,13 @@ async function loadPartnerImportsHistory() {
     container.innerHTML = `<div style="text-align: center; color: #ef4444; padding: 14px;">Impossibile caricare lo storico in questo momento.</div>`;
   }
 }
-
 function processUploadedFleetFile(file) {
   if (!file) return;
   selectPartnerFileForUpload(file);
 }
-
 async function parseRowsAndIngestWithAI() {
   // Funzione legacy disabilitata come richiesto dall'utente: non viene eseguita alcuna estrazione né generazione AI.
 }
-
 /* ==========================================================================
    6. GESTIONE E RISPOSTA CONTRATTI / PRENOTAZIONI (`public.bookings`)
    ========================================================================== */
@@ -805,21 +723,16 @@ function renderPartnerBookingsKanban() {
   const colConfirmed = document.getElementById('kanban-cards-confirmed');
   const colDelivered = document.getElementById('kanban-cards-delivered');
   const colClosed = document.getElementById('kanban-cards-closed');
-
   if (!colPending || !colConfirmed || !colDelivered || !colClosed) return;
-
   colPending.innerHTML = '';
   colConfirmed.innerHTML = '';
   colDelivered.innerHTML = '';
   colClosed.innerHTML = '';
-
   let countPending = 0, countConfirmed = 0, countDelivered = 0, countClosed = 0;
-
   PartnerBookings.forEach(b => {
     const timeStr = new Date(b.created_at).toLocaleDateString('it-IT');
     const phoneClean = (b.client_phone || '').replace(/[^0-9]/g, '');
     const waLink = `https://api.whatsapp.com/send?phone=${phoneClean}&text=Buongiorno ${b.client_name}, la contatto per la conferma della sua prenotazione per ${b.vehicle_name}.`;
-
     let isNlt = (b.vehicle_name || '').toLowerCase().includes('nlt') || (b.vehicle_name || '').toLowerCase().includes('lungo');
     let periodText = '';
     if (isNlt) {
@@ -829,7 +742,6 @@ function renderPartnerBookingsKanban() {
       let days = match ? match[1] : (b.rental_days || 3);
       periodText = `(${days} gg)`;
     }
-
     const cardHtml = `
       <div class="kanban-card">
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
@@ -856,7 +768,6 @@ function renderPartnerBookingsKanban() {
         </div>
       </div>
     `;
-
     if (b.status === 'confirmed') {
       colConfirmed.innerHTML += cardHtml;
       countConfirmed++;
@@ -872,19 +783,16 @@ function renderPartnerBookingsKanban() {
       countPending++;
     }
   });
-
   if(document.getElementById('count-pending')) document.getElementById('count-pending').textContent = countPending;
   if(document.getElementById('count-confirmed')) document.getElementById('count-confirmed').textContent = countConfirmed;
   if(document.getElementById('count-delivered')) document.getElementById('count-delivered').textContent = countDelivered;
   if(document.getElementById('count-closed')) document.getElementById('count-closed').textContent = countClosed;
 }
-
 async function advanceBookingStatus(bookingId, nextStatus) {
   if (!nextStatus) return;
   const bk = PartnerBookings.find(x => x.id === bookingId);
   if (bk) bk.status = nextStatus;
   renderPartnerBookingsKanban();
-
   if (supabase) {
     try {
       await supabase.from('bookings').update({ status: nextStatus }).eq('id', bookingId);
@@ -902,7 +810,6 @@ async function advanceBookingStatus(bookingId, nextStatus) {
     } catch(e) { console.warn("Errore update booking status:", e); }
   }
 }
-
 /* ==========================================================================
    9. MOBILE SIDEBAR LOGIC
    ========================================================================== */
@@ -916,7 +823,6 @@ function toggleMobileSidebar() {
     overlay.classList.toggle('active');
   }
 }
-
 /* ==========================================================================
    7. MODIFICA TARIFFA VEICOLO MODAL
    ========================================================================== */
@@ -927,7 +833,6 @@ function toggleDeliveryFields() {
   if (weeksBox) weeksBox.style.display = type === 'weeks' ? 'block' : 'none';
   if (dateBox) dateBox.style.display = type === 'date' ? 'block' : 'none';
 }
-
 function switchPricingTab(tab) {
   console.log("switchPricingTab called with:", tab);
   const currentInput = document.getElementById('currentPricingTab');
@@ -967,15 +872,12 @@ function switchPricingTab(tab) {
     nbtContainer.style.display = 'none';
   }
 }
-
 async function openEditTariffModal(vehicleId) {
   const v = PartnerVehicles.find(x => x.id === vehicleId);
   if (!v) return;
   ActiveEditVehicleId = vehicleId;
-
   const modal = document.getElementById('editTariffModal');
   if (!modal) return;
-
   if (document.getElementById('modalVehTitle')) document.getElementById('modalVehTitle').textContent = `${v.brand} ${v.model} (${v.trim || ''})`;
   if (document.getElementById('editDailyPrice')) document.getElementById('editDailyPrice').value = v.daily_price || 150;
   if (document.getElementById('editDeposit')) document.getElementById('editDeposit').value = v.deposit || 1500;
@@ -988,7 +890,6 @@ async function openEditTariffModal(vehicleId) {
   if (document.getElementById('editNltAdv24')) document.getElementById('editNltAdv24').value = 0;
   if (document.getElementById('editNltAdv36')) document.getElementById('editNltAdv36').value = 0;
   if (document.getElementById('editNltAdv48')) document.getElementById('editNltAdv48').value = 0;
-
   // Try to load NLT offers from DB if available
   if (supabase) {
     try {
@@ -1011,12 +912,10 @@ async function openEditTariffModal(vehicleId) {
       }
     } catch(e) {}
   }
-
   const specsObj = typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {});
   const delivTypeElem = document.getElementById('editDeliveryType');
   const delivWeeksElem = document.getElementById('editDeliveryWeeks');
   const delivDateElem = document.getElementById('editDeliveryDate');
-
   if (delivTypeElem && delivWeeksElem && delivDateElem) {
     if (specsObj.delivery_type === 'date' || (specsObj.delivery_date && specsObj.delivery_date !== '')) {
       delivTypeElem.value = 'date';
@@ -1033,45 +932,35 @@ async function openEditTariffModal(vehicleId) {
     }
     toggleDeliveryFields();
   }
-
   switchPricingTab('nbt'); // Default tab
   modal.classList.add('active');
 }
-
 function closeEditTariffModal() {
   const modal = document.getElementById('editTariffModal');
   if (modal) modal.classList.remove('active');
   ActiveEditVehicleId = null;
 }
-
 async function saveTariffChanges(event) {
   if (event && event.preventDefault) event.preventDefault();
   if (!ActiveEditVehicleId) return;
-
   const v = PartnerVehicles.find(x => x.id === ActiveEditVehicleId);
   if (!v) return;
-
   const rawDay = document.getElementById('editDailyPrice').value;
   const rawDep = document.getElementById('editDeposit').value;
   const newDay = rawDay !== '' ? Number(rawDay) : (v.daily_price !== undefined ? Number(v.daily_price) : 150);
   const newDep = rawDep !== '' ? Number(rawDep) : (v.deposit !== undefined ? Number(v.deposit) : 1500);
-
   const delivType = document.getElementById('editDeliveryType')?.value || 'ready';
   const delivWeeks = Number(document.getElementById('editDeliveryWeeks')?.value) || 4;
   const delivDate = document.getElementById('editDeliveryDate')?.value || '';
-
   const isReady = delivType === 'ready';
   const weeksVal = delivType === 'ready' ? 1 : (delivType === 'weeks' ? delivWeeks : 4);
-
   const updatedSpecs = Object.assign({}, typeof v.specs === 'string' ? JSON.parse(v.specs) : (v.specs || {}), {
     is_ready_delivery: isReady,
     delivery_type: delivType,
     delivery_weeks: weeksVal,
     delivery_date: delivType === 'date' ? delivDate : ''
   });
-
   const currentTab = document.getElementById('currentPricingTab')?.value || 'nbt';
-
   // Assicuriamoci che ci sia una sessione Supabase attiva prima dell'invio al DB
   if (supabase) {
     try {
@@ -1079,14 +968,12 @@ async function saveTariffChanges(event) {
         await supabase.auth.getSession();
       }
     } catch(errAuth) {}
-
     const submitBtn = event.target ? event.target.querySelector('button[type="submit"]') : null;
     const oldBtnText = submitBtn ? submitBtn.innerHTML : '';
     if (submitBtn) {
       submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> Salvataggio su DB in corso...`;
       submitBtn.disabled = true;
     }
-
     try {
       // 1. Aggiornamento tabella vehicles
       // Aggiorniamo sempre le info base del veicolo
@@ -1095,13 +982,11 @@ async function saveTariffChanges(event) {
         .update({ daily_price: newDay, deposit: newDep, specs: updatedSpecs })
         .eq('id', ActiveEditVehicleId)
         .select();
-
       if (vehErr) {
         console.error("❌ Errore aggiornamento DB vehicles:", vehErr);
         if (submitBtn) { submitBtn.innerHTML = oldBtnText; submitBtn.disabled = false; }
         return;
       }
-
       // 2. Aggiornamento in base al tab selezionato
       if (currentTab === 'nbt') {
         let { data: nbtUpdated, error: nbtErr } = await supabase
@@ -1109,17 +994,14 @@ async function saveTariffChanges(event) {
           .update({ daily_price: newDay })
           .eq('vehicle_id', ActiveEditVehicleId)
           .select();
-
         if (nbtErr) {
           alert("Errore aggiornamento NBT (vehicle_id): " + nbtErr.message);
         }
-
         if (!nbtErr && (!nbtUpdated || nbtUpdated.length === 0)) {
           const res2 = await supabase.from('nbt_offers').update({ daily_price: newDay }).eq('id', ActiveEditVehicleId).select();
           nbtUpdated = res2.data;
           if (res2.error) alert("Errore aggiornamento NBT (id): " + res2.error.message);
         }
-
         if (!nbtUpdated || nbtUpdated.length === 0) {
           const { error: insErr } = await supabase.from('nbt_offers').insert([{
             vehicle_id: ActiveEditVehicleId,
@@ -1138,7 +1020,6 @@ async function saveTariffChanges(event) {
         const adv24 = document.getElementById('editNltAdv24').value;
         const adv36 = document.getElementById('editNltAdv36').value;
         const adv48 = document.getElementById('editNltAdv48').value;
-
         const updatePayload = {
             "12_mesi_prezzo": p12 ? `€ ${p12}` : null,
             "24_mesi_prezzo": p24 ? `€ ${p24}` : null,
@@ -1154,7 +1035,6 @@ async function saveTariffChanges(event) {
             km_per_year: 25000,
             mandante_monthly_net: 0
         };
-
         let { data: nltUpdated, error: nltErr } = await supabase
           .from('nlt_offers')
           .update(updatePayload)
@@ -1162,13 +1042,11 @@ async function saveTariffChanges(event) {
           .select();
         
         if (nltErr) alert("Errore aggiornamento NLT (vehicle_id): " + nltErr.message);
-
         if (!nltErr && (!nltUpdated || nltUpdated.length === 0)) {
           const res2 = await supabase.from('nlt_offers').update(updatePayload).eq('id', ActiveEditVehicleId).select();
           nltUpdated = res2.data;
           if (res2.error) alert("Errore aggiornamento NLT (id): " + res2.error.message);
         }
-
         if (!nltUpdated || nltUpdated.length === 0) {
           const { error: insErr } = await supabase.from('nlt_offers').insert([{
             vehicle_id: ActiveEditVehicleId,
@@ -1179,7 +1057,6 @@ async function saveTariffChanges(event) {
           if (insErr) alert("Errore inserimento NLT: " + insErr.message);
         }
       }
-
       console.log("✅ Tariffa e disponibilità salvate con successo sul database Supabase");
       
       // Aggiorna tabella localmente (optimistic UI)
@@ -1200,18 +1077,15 @@ async function saveTariffChanges(event) {
       }
     }
   }
-
   // Applica modifica in memoria e chiudi il modale solo se il salvataggio o fallback è confermato
   v.daily_price = newDay;
   v.deposit = newDep;
   v.specs = updatedSpecs;
   v.is_ready_delivery = isReady;
   v.delivery_weeks = weeksVal;
-
   renderPartnerVehiclesTable();
   updatePartnerKpis();
   closeEditTariffModal();
-
   // Aggiornamento cache locale per riflesso istantaneo se la pagina NBT/NLT è aperta o in cache
   try {
     const nbtCache = JSON.parse(localStorage.getItem('itercars_nbt_cache') || '[]');
@@ -1251,16 +1125,13 @@ async function saveTariffChanges(event) {
     localStorage.setItem('itercars_force_refresh', String(Date.now()));
   } catch(e) {}
 }
-
 async function deletePartnerVehicle(vehicleId) {
   const v = PartnerVehicles.find(x => x.id === vehicleId);
   if (!v) return;
   if (!confirm(`Confermi la rimozione definitiva del veicolo "${v.brand} ${v.model}" dal tuo catalogo?`)) return;
-
   PartnerVehicles = PartnerVehicles.filter(x => x.id !== vehicleId);
   renderPartnerVehiclesTable();
   updatePartnerKpis();
-
   if (supabase) {
     try {
       await supabase.from('nlt_offers').delete().eq('vehicle_id', vehicleId);
@@ -1269,7 +1140,6 @@ async function deletePartnerVehicle(vehicleId) {
     } catch(e) { console.warn("Errore cancellazione:", e); }
   }
 }
-
 async function savePartnerProfile(event) {
   if (event && event.preventDefault) event.preventDefault();
   if (!CurrentPartner || !CurrentPartner.id) return;
@@ -1279,16 +1149,13 @@ async function savePartnerProfile(event) {
   const compEmail = document.getElementById('settingCompanyEmail').value;
   const compDep = document.getElementById('settingDefaultDeposit').value;
   const compAddr = document.getElementById('settingAddress').value;
-
   CurrentPartner.name = compName;
   CurrentPartner.company_vat = compVat;
   CurrentPartner.partner_email = compEmail;
   CurrentPartner.contact_email = compEmail;
   CurrentPartner.default_deposit = compDep;
   CurrentPartner.address = compAddr;
-
   if (document.getElementById('displayPartnerName')) document.getElementById('displayPartnerName').textContent = compName;
-
   if (supabase) {
     try {
       await supabase.from('providers').update({
@@ -1310,10 +1177,7 @@ async function savePartnerProfile(event) {
   localStorage.setItem('itercars_partner_auth', JSON.stringify(CurrentPartner));
 }
 
-
 // Log initial boot
-
-
 
 /* ==========================================================================
    PARTNER REGISTRATION & AUTH SWITCH
@@ -1329,14 +1193,12 @@ window.switchPartnerAuthMode = function(mode) {
     if(regBox) regBox.style.display = 'none';
   }
 };
-
 window.handlePartnerReg = async function(event) {
   event.preventDefault();
   if (!supabase) {
     alert("Errore di connessione al database. Riprovare pi tardi.");
     return;
   }
-
   const companyName = document.getElementById('partRegCompany').value.trim();
   const vat = document.getElementById('partRegVat').value.trim();
   const contactName = document.getElementById('partRegName').value.trim();
@@ -1345,18 +1207,15 @@ window.handlePartnerReg = async function(event) {
   const address = document.getElementById('partRegAddress').value.trim();
   const password = document.getElementById('partRegPassword').value;
   const passwordConfirm = document.getElementById('partRegPasswordConfirm').value;
-
   if (password !== passwordConfirm) {
     alert("Le password non coincidono.");
     return;
   }
-
   const submitBtn = event.target.querySelector('button[type="submit"]');
   if (submitBtn) {
     submitBtn.innerHTML = `<i class="ri-loader-4-line ri-spin"></i> <span>Invio in corso...</span>`;
     submitBtn.disabled = true;
   }
-
   try {
     const { data: authData, error: authErr } = await supabase.auth.signUp({
       email: email,
@@ -1369,10 +1228,8 @@ window.handlePartnerReg = async function(event) {
         }
       }
     });
-
     if (authErr) throw authErr;
     const authId = authData.user ? authData.user.id : null;
-
     const { error: dbErr } = await supabase.from('supplier_applications').insert([{
       auth_id: authId,
       company_name: companyName,
@@ -1386,7 +1243,6 @@ window.handlePartnerReg = async function(event) {
       status: 'new',
       data: new Date().toLocaleString('it-IT')
     }]);
-
     if (dbErr) throw dbErr;
     
     // Invia email di notifica al CEO chiamando la Edge Function
@@ -1404,9 +1260,7 @@ window.handlePartnerReg = async function(event) {
     } catch (fnErr) {
       console.warn("Errore nell'invio della notifica email (ma la registrazione  andata a buon fine):", fnErr);
     }
-
     await supabase.auth.signOut();
-
     alert("Richiesta inviata con successo! Il team ti contatter al pi presto. Non potrai accedere fino ad approvazione avvenuta.");
     window.switchPartnerAuthMode('login');
     event.target.reset();

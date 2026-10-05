@@ -1,13 +1,10 @@
 ﻿# -*- coding: utf-8 -*-
 import codecs
 import re
-
 with codecs.open('magazine.html', 'r', 'utf-8') as f:
     mag = f.read()
-
 # Fix the Bento card image
 mag = mag.replace('zeekr_9x_cover.png', 'zeekr_ai_action.png')
-
 # Inject Hero Slide
 zeekr_slide = '''
         <!-- Zeekr 9X Hero Slide -->
@@ -22,7 +19,6 @@ zeekr_slide = '''
           </div>
         </div>
 '''
-
 if '<!-- Zeekr 9X Hero Slide -->' not in mag:
     # Insert right after the Milano Noleggio slide ends
     # The Milano slide ends with </div> \n      </div> \n    </div> \n  </section>

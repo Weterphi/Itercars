@@ -8,7 +8,6 @@
   
   <!-- Favicon IC Verde e Nero -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230a0f1d' stroke='%232ecc71' stroke-width='6'/%3E%3Ctext x='50%25' y='66%25' font-family='sans-serif' font-weight='900' font-size='56' fill='%232ecc71' text-anchor='middle' letter-spacing='-3'%3EIC%3C/text%3E%3C/svg%3E" />
-
   <!-- Google Fonts: Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +24,6 @@
 <body>
   <!-- MOBILE OVERLAY -->
   <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileSidebar()"></div>
-
   <!-- ADMIN LOGIN GATE OVERLAY (ESATTO COME ORIGINARIO) -->
   <div class="admin-auth-overlay active" id="adminAuthOverlay">
     <div class="admin-auth-box">
@@ -34,32 +32,26 @@
         <h2 style="font-size: 1.35rem; font-weight: 300; color: #fff;">Accesso Riservato Console</h2>
         <p style="color: var(--text-muted); font-size: 0.84rem; margin-top: 4px;">Autenticazione Sicura al Command Center</p>
       </div>
-
       <form onsubmit="handleAdminLogin(event)" style="display: flex; flex-direction: column; gap: 14px;">
         <div class="form-group" style="text-align: left;">
           <label style="font-size: 0.75rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Email Amministratore</label>
           <input type="email" id="adminEmailInput" required class="admin-input" placeholder="admin@itercars.com" />
         </div>
-
         <div class="form-group" style="text-align: left;">
           <label style="font-size: 0.75rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password Riservata</label>
           <input type="password" id="adminPasswordInput" required class="admin-input" placeholder="************" />
         </div>
-
         <button type="submit" class="btn-header btn-header-primary" style="width: 100%; justify-content: center; height: 46px; font-size: 0.95rem; margin-top: 8px;">
           <i class="ri-shield-keyhole-line"></i> Sblocca Console Broker
         </button>
       </form>
-
       <div style="margin-top: 20px; padding-top: 14px; border-top: 1px dashed rgba(255,255,255,0.1); font-size: 0.75rem; color: var(--text-muted); text-align: center;">
         <i class="ri-lock-2-line text-green"></i> Connessione protetta
       </div>
     </div>
   </div>
-
   <!-- APP LAYOUT (SIDEBAR SINISTRA + WORKSPACE CENTRALE) -->
   <div class="app-layout" id="mainAppLayout" style="display: none;">
-
     <!-- BARRA LATERALE SOTTILE (SIDEBAR) -->
     <aside class="sidebar">
       <div class="sidebar-brand">
@@ -68,7 +60,6 @@
           <i class="ri-shield-check-fill" style="font-size: 0.8rem;"></i> BROKER CONSOLE
         </div>
       </div>
-
       <nav class="sidebar-nav">
         <div class="nav-section-title">Core Operations</div>
         
@@ -79,7 +70,6 @@
           </div>
           <span class="nav-badge" id="badgeLeadsCount">0</span>
         </button>
-
         <button class="sidebar-item" onclick="switchTab('tab-fleet', this)">
           <div class="sidebar-item-label">
             <i class="ri-roadster-line"></i>
@@ -87,7 +77,6 @@
           </div>
           <span class="nav-badge" id="badgeVehiclesCount">0</span>
         </button>
-
         <button class="sidebar-item" onclick="switchTab('tab-quotes', this)">
           <div class="sidebar-item-label">
             <i class="ri-file-text-line"></i>
@@ -95,7 +84,6 @@
           </div>
           <span class="nav-badge" id="badgeQuotesCount">0</span>
         </button>
-
         <div class="nav-section-title" style="margin-top: 14px;">Prenotazioni</div>
         <button class="sidebar-item" onclick="switchTab('tab-bookings', this); filterBookingsByCategory('NBT')">
           <div class="sidebar-item-label" style="padding-left: 10px;">
@@ -118,9 +106,7 @@
           </div>
           <span class="nav-badge" id="badgeLuxuryCount">0</span>
         </button>
-
         <div class="nav-section-title">Multi-Mandante</div>
-
         <button class="sidebar-item" onclick="switchTab('tab-comparator', this)">
           <div class="sidebar-item-label">
             <i class="ri-scale-line"></i>
@@ -128,7 +114,6 @@
           </div>
           <span class="nav-badge" style="background: rgba(56,189,248,0.2); color:#ffffff;">LIVE</span>
         </button>
-
         <button class="sidebar-item" onclick="switchTab('tab-fleet-approval', this)">
           <div class="sidebar-item-label">
             <i class="ri-shield-check-line" style="color: #ffffff;"></i>
@@ -136,7 +121,6 @@
           </div>
           <span class="nav-badge" id="badgeFleetPendingCount" style="background: rgba(245,158,11,0.2); color:#ffffff;">0</span>
         </button>
-
         <button class="sidebar-item" onclick="switchTab('tab-dossier', this)">
           <div class="sidebar-item-label">
             <i class="ri-folder-shield-2-line"></i>
@@ -144,7 +128,6 @@
           </div>
           <span class="nav-badge" id="badgeDocsCount">0</span>
         </button>
-
         <button class="sidebar-item" onclick="switchTab('tab-partners', this)">
           <div class="sidebar-item-label">
             <i class="ri-team-line"></i>
@@ -160,8 +143,14 @@
           </div>
           <span class="nav-badge" id="badgeActivePartnersCount">0</span>
         </button>
+        <div class="nav-section-title" style="margin-top: 14px;">Amministrazione Sito</div>
+        <button class="sidebar-item" onclick="switchTab('tab-cms', this)">
+          <div class="sidebar-item-label">
+            <i class="ri-pages-line"></i>
+            <span>Gestione Sito (CMS)</span>
+          </div>
+        </button>
       </nav>
-
       <div class="sidebar-footer">
         <div class="sidebar-status-pill">
           <span class="status-dot"></span>
@@ -172,7 +161,6 @@
         </button>
       </div>
     </aside>
-
     <!-- AREA DI LAVORO CENTRALE (WORKSPACE WRAPPER) -->
     <main class="main-wrapper">
       
@@ -185,7 +173,6 @@
           <i class="ri-dashboard-line" style="color: var(--accent-green); font-size: 1.2rem;"></i>
           <span>ITERCARS HQ / <strong id="currentBreadcrumbName">Pipeline Funnel Leads</strong></span>
         </div>
-
         <div class="topbar-actions">
           <div id="connectionStatus" style="font-size: 0.78rem; display: flex; align-items: center; gap: 6px; background: rgba(255, 255, 255, 0.05); color: #ffffff; padding: 6px 12px; border-radius: 20px; font-weight: 300;">
             <span style="width: 7px; height: 7px; background: #ffffff; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ffffff;"></span>
@@ -199,13 +186,11 @@
           <button class="btn-header btn-header-outline" onclick="openNewLeadModal()" style="border-color: rgba(192, 132, 252, 0.4); color: #ffffff;">
             <i class="ri-user-add-line"></i> + Nuovo Lead CRM
           </button>
-
           <button class="btn-header btn-header-primary" onclick="openNewVehicleModal()">
             <i class="ri-add-line"></i> + Aggiungi Veicolo
           </button>
         </div>
       </header>
-
       <!-- WORKSPACE CONTENT -->
       <div class="workspace">
         
@@ -219,7 +204,6 @@
             <div class="kpi-value" id="kpiNewLeads">0</div>
             <div class="kpi-subtext"><i class="ri-arrow-up-line"></i> Pipeline attiva su Supabase</div>
           </div>
-
           <div class="kpi-card">
             <div class="kpi-card-header">
               <span class="kpi-title">Valore Stimato Pratiche</span>
@@ -228,7 +212,6 @@
             <div class="kpi-value" id="kpiPipelineValue">€ 0</div>
             <div class="kpi-subtext"><i class="ri-check-double-line"></i> Calcolato sui contratti in corso</div>
           </div>
-
           <div class="kpi-card">
             <div class="kpi-card-header">
               <span class="kpi-title">Dossier Credito in Istruttoria</span>
@@ -237,7 +220,6 @@
             <div class="kpi-value" id="kpiDocsPending">0</div>
             <div class="kpi-subtext"><i class="ri-time-line"></i> In attesa di delibera mandante</div>
           </div>
-
           <div class="kpi-card">
             <div class="kpi-card-header">
               <span class="kpi-title">Contratti e Consegne</span>
@@ -247,7 +229,6 @@
             <div class="kpi-subtext"><i class="ri-shield-check-line"></i> NLT / Vendita direzionale completati</div>
           </div>
         </div>
-
         <!-- TAB 1: KANBAN BOARD FUNNEL LEADS -->
         <div id="tab-kanban" class="tab-pane active">
           <div class="kanban-board">
@@ -259,7 +240,6 @@
               </div>
               <div class="kanban-cards" id="cardsColNew"></div>
             </div>
-
             <div class="kanban-column">
               <div class="kanban-header">
                 <span class="kanban-title"><i class="ri-file-paper-line" style="color: var(--accent-gold);"></i> Preventivo Inviato</span>
@@ -267,7 +247,6 @@
               </div>
               <div class="kanban-cards" id="cardsColQuote"></div>
             </div>
-
             <div class="kanban-column">
               <div class="kanban-header">
                 <span class="kanban-title"><i class="ri-folder-shield-2-line" style="color: #f39c12;"></i> Istruttoria Credito</span>
@@ -275,7 +254,6 @@
               </div>
               <div class="kanban-cards" id="cardsColDocs"></div>
             </div>
-
             <div class="kanban-column">
               <div class="kanban-header">
                 <span class="kanban-title"><i class="ri-checkbox-circle-line" style="color: var(--accent-green);"></i> Approvato Mandante</span>
@@ -283,7 +261,6 @@
               </div>
               <div class="kanban-cards" id="cardsColApproved"></div>
             </div>
-
             <div class="kanban-column">
               <div class="kanban-header">
                 <span class="kanban-title"><i class="ri-shake-hands-line" style="color: var(--accent-purple);"></i> Contratto Firmato</span>
@@ -291,10 +268,8 @@
               </div>
               <div class="kanban-cards" id="cardsColSigned"></div>
             </div>
-
           </div>
         </div>
-
         <!-- TAB 2: FLOTTA & LISTINI DB -->
         <div id="tab-fleet" class="tab-pane">
           <!-- SUB-NAVIGATION BAR FOR FLEET CATEGORIES -->
@@ -320,7 +295,6 @@
               <i class="ri-information-line text-green"></i> Seleziona la categoria NBT, NLT o Luxury per lavorare sui prezzi e le impostazioni.
             </div>
           </div>
-
           <!-- SUB-PANEL 1: NBT OFFERS (`nbt_offers`) -->
           <div id="subtab-fleet-nbt" class="fleet-subpane active">
             <div class="data-table-container">
@@ -349,7 +323,6 @@
               </table>
             </div>
           </div>
-
           <!-- SUB-PANEL 2: NLT OFFERS (`nlt_offers`) -->
           <div id="subtab-fleet-nlt" class="fleet-subpane">
             <div class="data-table-container">
@@ -378,7 +351,6 @@
               </table>
             </div>
           </div>
-
           <!-- SUB-PANEL 3: LUXURY FLEET (`vehicles` with is_luxury=true) -->
           <div id="subtab-fleet-luxury" class="fleet-subpane">
             <div class="data-table-container">
@@ -406,7 +378,6 @@
               </table>
             </div>
           </div>
-
           <!-- SUB-PANEL 5: LISTINI PARTNERS (`vehicles` associati ai Partner/Mandanti) -->
           <div id="subtab-fleet-partners" class="fleet-subpane">
             <div class="data-table-container">
@@ -434,7 +405,6 @@
               </table>
             </div>
           </div>
-
           <!-- SUB-PANEL 4: GENERAL VEHICLES (`vehicles`) -->
           <div id="subtab-fleet-general" class="fleet-subpane">
             <div class="data-table-container">
@@ -463,7 +433,6 @@
             </div>
           </div>
         </div>
-
         <!-- TAB 3: REGISTRO PREVENTIVI -->
         <div id="tab-quotes" class="tab-pane">
           <div class="data-table-container">
@@ -489,7 +458,6 @@
             </table>
           </div>
         </div>
-
         <!-- TAB 4: PRENOTAZIONI NBT & CONCIERGE -->
         <div id="tab-bookings" class="tab-pane">
           <div class="data-table-container">
@@ -511,7 +479,6 @@
             </table>
           </div>
         </div>
-
         <!-- TAB 5: COMPARATORE MANDANTI LIVE 1-CLICK -->
         <div id="tab-comparator" class="tab-pane">
           <div class="compare-grid">
@@ -524,7 +491,6 @@
                 <label>Seleziona Veicolo dal Catalogo</label>
                 <select id="compareSelectCar" onchange="runLiveComparison()"></select>
               </div>
-
               <div class="control-group">
                 <label>Durata Noleggio (Mesi)</label>
                 <select id="compareMonths" onchange="runLiveComparison()">
@@ -533,7 +499,6 @@
                   <option value="60">60 Mesi</option>
                 </select>
               </div>
-
               <div class="control-group">
                 <label>Chilometraggio Annuo</label>
                 <select id="compareKm" onchange="runLiveComparison()">
@@ -542,22 +507,18 @@
                   <option value="30000">30.000 Km/anno</option>
                 </select>
               </div>
-
               <div class="control-group">
                 <label>Anticipo Cliente (€)</label>
                 <input type="number" id="compareDeposit" value="3000" oninput="runLiveComparison()" />
               </div>
-
               <div class="control-group">
                 <label>Markup / Ricarico Broker Itercars (€/mese)</label>
                 <input type="number" id="compareBrokerMarkup" value="45" oninput="runLiveComparison()" style="border-color: var(--accent-green); color: var(--accent-green); font-weight: 300;" />
               </div>
-
               <button class="btn-header btn-header-primary" onclick="runLiveComparison()" style="width: 100%; justify-content: center; margin-top: 10px;">
                 <i class="ri-calculator-line"></i> Ricalcola Canoni Mandanti
               </button>
             </div>
-
             <div>
               <div style="margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                 <h4 style="font-size: 1rem; font-weight: 300; color: #fff;">Esito Comparazione Live sulle 4 Mandanti</h4>
@@ -566,10 +527,8 @@
               
               <div class="compare-results" id="compareResultsGrid"></div>
             </div>
-
           </div>
         </div>
-
         <!-- TAB 6: DOSSIER DOCUMENTI CREDITO -->
         <div id="tab-dossier" class="tab-pane">
           <div class="data-table-container" style="padding: 24px;">
@@ -583,7 +542,6 @@
             <div id="docsOverviewContainer" style="display: flex; flex-direction: column; gap: 12px;"></div>
           </div>
         </div>
-
         <!-- TAB 7: CANDIDATURE PARTNER -->
         <div id="tab-partners" class="tab-pane">
           <div class="data-table-container">
@@ -605,7 +563,6 @@
             </table>
           </div>
         </div>
-
         <!-- TAB 7.5: PARTNERS (GESTIONE PROFILI) -->
         <div id="tab-active-partners" class="tab-pane">
           <div class="data-table-container">
@@ -632,7 +589,6 @@
             </table>
           </div>
         </div>
-
         <!-- TAB 8: APPROVAZIONE FLOTTE EXCEL PARTNER (`pending_approval`) -->
         <div id="tab-fleet-approval" class="tab-pane">
           <div class="data-table-container">
@@ -661,13 +617,41 @@
             </table>
           </div>
         </div>
-
+        <!-- TAB 9: GESTIONE SITO CMS (VISUAL BUILDER) -->
+        <div id="tab-cms" class="tab-pane">
+          <div class="data-table-container" style="padding: 0; display: flex; flex-direction: column; height: calc(100vh - 80px);">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--border-subtle);">
+              <div style="display: flex; align-items: center; gap: 16px;">
+                <div>
+                  <h3 style="font-size: 1.1rem; font-weight: 300; color: #fff; margin-bottom: 4px;">Visual Builder CMS</h3>
+                  <p style="color: var(--text-muted); font-size: 0.8rem; margin: 0;">Clicca sui testi per modificarli, poi clicca Salva.</p>
+                </div>
+                <select id="cmsPageSelector" onchange="changeCmsIframeSrc()" style="background: rgba(255,255,255,0.05); color: #fff; border: 1px solid var(--border-subtle); padding: 8px 12px; border-radius: 6px;">
+                  <option value="index.html?cms_mode=true">Home Page</option>
+                  <option value="fleet.html?cms_mode=true">Flotta (Luxury Car)</option>
+                  <option value="noleggio-breve-termine.html?cms_mode=true">Noleggio Breve Termine</option>
+                  <option value="noleggio-lungo-termine.html?cms_mode=true">Noleggio Lungo Termine</option>
+                  <option value="academy.html?cms_mode=true">Academy (Partner)</option>
+                </select>
+              </div>
+              <button class="btn-header btn-header-primary" onclick="saveCmsChanges()" style="background: linear-gradient(135deg, #2ecc71, #27ae60); font-weight: 300;">
+                <i class="ri-save-3-line"></i> Salva Modifiche Sito
+              </button>
+            </div>
+            
+            <div style="flex: 1; position: relative;">
+               <iframe id="cmsIframe" src="about:blank" style="width: 100%; height: 100%; border: none; background: #fff;"></iframe>
+               <script>
+                 setTimeout(() => {
+                   document.getElementById('cmsIframe').src = document.getElementById('cmsPageSelector').value + "&t=" + Date.now();
+                 }, 300);
+               </script>
+            </div>
+          </div>
+        </div>
       </div>
-
     </main>
-
   </div>
-
   
   <!-- MODAL EDIT VEICOLO IN APPROVAZIONE -->
   <div class="modal-overlay" id="vehicleEditModal">
@@ -680,14 +664,12 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
         <div style="grid-column: span 2;">
           
           <label style="color: #fff; font-size: 0.85rem; display: flex; justify-content: space-between;">Immagine (URL o Carica dal PC) 
              <input type="file" id="editVehicleImageFile" accept="image/*" style="font-size: 0.75rem; margin-left: 10px;" onchange="handleVehicleImageUpload(event)" />
           </label>
-
           <input type="text" id="editVehicleImage" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #fff; border-radius: 5px;" />
         </div>
         <div>
@@ -718,7 +700,6 @@
       </div>
     </div>
   </div>
-
 <!-- MODAL 1: DOSSIER DETTAGLIO LEAD -->
   <div class="modal-overlay" id="dossierModal">
     <div class="modal-content">
@@ -731,12 +712,10 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
         <span id="modalClientPhone" style="background: rgba(255,255,255,0.06); padding: 6px 12px; border-radius: 6px; font-size: 0.84rem; font-weight: 300;"></span>
         <span id="modalClientType" style="background: rgba(56,189,248,0.15); color: #ffffff; padding: 6px 12px; border-radius: 6px; font-size: 0.84rem; font-weight: 300; text-transform: uppercase;"></span>
       </div>
-
       <!-- BOX CONTATTO E DATI MANDANTE (`public.providers` agganciato) -->
       <div id="modalMandanteBox" style="background: linear-gradient(135deg, rgba(16,185,129,0.12), rgba(16,185,129,0.03)); border: 1px solid rgba(16,185,129,0.4); border-radius: 10px; padding: 16px; margin-bottom: 20px; display: none;">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
@@ -750,7 +729,6 @@
           <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="modalMandanteActions"></div>
         </div>
       </div>
-
       <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px; margin-bottom: 20px;">
         <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Stato Funnel Pipeline</label>
         <select id="modalStatusSelect" class="admin-input" style="font-weight: 300; color: var(--accent-green);" onchange="updateLeadStatusFromModal()">
@@ -761,7 +739,6 @@
           <option value="contract_signed">Contratto Firmato & Consegna</option>
         </select>
       </div>
-
       <div style="margin-bottom: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <label style="font-size: 0.82rem; font-weight: 300; color: #fff;">Documenti Caricati in `public.crm_documents`</label>
@@ -771,12 +748,10 @@
         </div>
         <div id="modalChecklistContainer" style="display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
-
       <div style="margin-bottom: 20px;">
         <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Note Operative ed Esito Verifiche (`public.crm_leads`)</label>
         <textarea id="modalLeadNotes" rows="3" class="admin-input" placeholder="Aggiungi annotazioni su reddito, garante, preferenze colore o note mandante..."></textarea>
       </div>
-
       <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 16px;">
         <button onclick="deleteCurrentLeadRecord()" class="btn-header btn-header-danger">
           <i class="ri-delete-bin-line"></i> Elimina Pratica CRM
@@ -790,7 +765,6 @@
       </div>
     </div>
   </div>
-
   <!-- MODAL 2: AGGIUNGI VEICOLO AL CATALOGO -->
   <div class="modal-overlay" id="newVehicleModal">
     <div class="modal-content">
@@ -800,7 +774,6 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="handleVehicleFormSubmit(event)">
         <input type="hidden" id="vehEditId" value="" />
         <input type="hidden" id="vehProviderId" value="" />
@@ -815,7 +788,6 @@
             <input type="text" id="vehPrice" required class="admin-input" placeholder="Es. € 789 / mese oppure € 65.000" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Alimentazione / Motore</label>
@@ -832,7 +804,6 @@
             </select>
           </div>
         </div>
-
         <div style="margin-bottom: 14px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Destinazione nel Catalogo Pubblico</label>
           <div style="display: flex; gap: 20px; align-items: center;">
@@ -847,23 +818,19 @@
             </label>
           </div>
         </div>
-
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome File Locale o URL Immagine Veicolo</label>
           <input type="text" id="vehImage" class="admin-input" placeholder="Es. bmw_serie_1_msport.webp oppure https://..." />
           <span style="font-size: 0.72rem; color: var(--text-muted); display: block; margin-top: 4px;"><i class="ri-information-line text-green"></i> Puoi inserire direttamente il nome di un'immagine locale (es. <code>bmw_serie_1_msport.webp</code>) oppure un link Web.</span>
         </div>
-
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Città  / Sede di Ritiro (Opzionale)</label>
           <input type="text" id="vehCity" class="admin-input" placeholder="Es. Milano, Roma..." />
         </div>
-
         <div style="margin-bottom: 20px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Descrizione e Dotazione di Serie</label>
           <textarea id="vehDesc" rows="3" class="admin-input" placeholder="Navigatore satellitare, interni in pelle, fari Matrix LED, cerchi 20 pollici..."></textarea>
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" onclick="closeNewVehicleModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary">
@@ -873,7 +840,6 @@
       </form>
     </div>
   </div>
-
   <!-- MODAL 3: CREAZIONE NUOVO LEAD DAL BACKOFFICE -->
   <div class="modal-overlay" id="newLeadModal">
     <div class="modal-content" style="max-width: 580px;">
@@ -883,7 +849,6 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="handleNewLeadFormSubmit(event)">
         <div class="form-grid-2col">
           <div>
@@ -895,7 +860,6 @@
             <input type="email" id="newLeadEmail" required class="admin-input" placeholder="cliente@azienda.it" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Telefono (*)</label>
@@ -910,17 +874,14 @@
             </select>
           </div>
         </div>
-
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Veicolo Richiesto / Budget</label>
           <input type="text" id="newLeadCar" class="admin-input" placeholder="Es. Porsche Macan GTS o Budget € 1.200/mese" />
         </div>
-
         <div style="margin-bottom: 20px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Note e Richieste Particolari</label>
           <textarea id="newLeadNotes" rows="3" class="admin-input" placeholder="Richiede preventivo 48 mesi 20.000 km, permuta auto attuale..."></textarea>
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" onclick="closeNewLeadModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary">
@@ -930,7 +891,6 @@
       </form>
     </div>
   </div>
-
   <!-- MODAL 4: AGGIUNGI / MODIFICA OFFERTA NBT BREVE TERMINE -->
   <div class="modal-overlay" id="newNbtOfferModal">
     <div class="modal-content" style="max-width: 620px;">
@@ -940,7 +900,6 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="handleNbtOfferSubmit(event)">
         <input type="hidden" id="nbtEditId" value="" />
         
@@ -948,12 +907,10 @@
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Seleziona Veicolo in Flotta (`public.vehicles`)</label>
           <select id="nbtSelectVehicle" class="admin-input" onchange="handleNbtVehicleSelectChange(this)"></select>
         </div>
-
         <div id="nbtNewTitleWrapper" style="margin-bottom: 14px; display: none;">
           <label style="font-size: 0.76rem; font-weight: 300; color: #f1c40f; text-transform: uppercase; margin-bottom: 6px; display: block;">Marca e Modello Nuovo Veicolo (*)</label>
           <input type="text" id="nbtNewTitle" class="admin-input" placeholder="Es. BMW X3 M Sport 2026" />
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: #f1c40f; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera NBT (€/giorno) (*)</label>
@@ -964,7 +921,6 @@
             <input type="number" id="nbtMonthlyPrice" class="admin-input" placeholder="Es. 1200" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Deposito Cauzionale (€)</label>
@@ -975,7 +931,6 @@
             <input type="number" id="nbtDuration" required class="admin-input" value="12" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Km Inclusi / Anno</label>
@@ -989,7 +944,6 @@
             </select>
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Settimane di Consegna</label>
@@ -1000,7 +954,6 @@
             <input type="text" id="nbtProviderCode" class="admin-input" placeholder="Es. NBT-VIP-2026" />
           </div>
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
           <button type="button" onclick="closeNewNbtOfferModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary" style="background: #f1c40f; color: #000;">
@@ -1010,7 +963,6 @@
       </form>
     </div>
   </div>
-
   <!-- MODAL 5: AGGIUNGI / MODIFICA OFFERTA NLT LUNGO TERMINE -->
   <div class="modal-overlay" id="newNltOfferModal">
     <div class="modal-content" style="max-width: 620px;">
@@ -1020,7 +972,6 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="handleNltOfferSubmit(event)">
         <input type="hidden" id="nltEditId" value="" />
         
@@ -1028,12 +979,10 @@
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Seleziona Veicolo in Flotta (`public.vehicles`)</label>
           <select id="nltSelectVehicle" class="admin-input" onchange="handleNltVehicleSelectChange(this)"></select>
         </div>
-
         <div id="nltNewTitleWrapper" style="margin-bottom: 14px; display: none;">
           <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Marca e Modello Nuovo Veicolo (*)</label>
           <input type="text" id="nltNewTitle" class="admin-input" placeholder="Es. Audi Q4 e-tron S Line 2026" />
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Canone Mese NLT (€/mese) (*)</label>
@@ -1044,7 +993,6 @@
             <input type="number" id="nltDeposit" required class="admin-input" value="3000" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Durata Contratto (Mesi)</label>
@@ -1065,7 +1013,6 @@
             </select>
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Pronta Consegna</label>
@@ -1079,12 +1026,10 @@
             <input type="number" id="nltDeliveryWeeks" required class="admin-input" value="4" />
           </div>
         </div>
-
         <div style="margin-bottom: 16px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Codice Offerta Mandante</label>
           <input type="text" id="nltProviderCode" class="admin-input" placeholder="Es. NLT-ALD-48M" />
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
           <button type="button" onclick="closeNewNltOfferModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary" style="background: #ffffff; color: #fff;">
@@ -1094,7 +1039,6 @@
       </form>
     </div>
   </div>
-
   <!-- MODAL 6: AGGIUNGI / MODIFICA VETTURA LUXURY SUPERCAR -->
   <div class="modal-overlay" id="newLuxuryModal">
     <div class="modal-content" style="max-width: 620px;">
@@ -1104,15 +1048,12 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="handleLuxurySubmit(event)">
         <input type="hidden" id="luxuryEditId" value="" />
-
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: #f39c12; text-transform: uppercase; margin-bottom: 6px; display: block;">Marca e Modello Supercar (*)</label>
           <input type="text" id="luxuryTitle" required class="admin-input" placeholder="Es. Ferrari F8 Tributo" />
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: #f39c12; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (€/giorno) (*)</label>
@@ -1123,7 +1064,6 @@
             <input type="number" id="luxuryDeposit" required class="admin-input" placeholder="Es. 5000" value="5000" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Categoria Esclusiva</label>
@@ -1139,7 +1079,6 @@
             <input type="text" id="luxuryHp" required class="admin-input" placeholder="Es. 720 CV" value="650 CV" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Accelerazione 0-100 km/h</label>
@@ -1150,12 +1089,10 @@
             <input type="text" id="luxurySpeed" required class="admin-input" placeholder="Es. 340 km/h" value="320 km/h" />
           </div>
         </div>
-
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">URL Immagine Vettura</label>
           <input type="text" id="luxuryImageUrl" class="admin-input" placeholder="https://..." value="logo_tricolore.png" />
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px;">
           <button type="button" onclick="closeNewLuxuryModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary" style="background: #f39c12; color: #000; font-weight: 300;">
@@ -1165,7 +1102,6 @@
       </form>
     </div>
   </div>
-
   <!-- MODAL 7: AGGIUNGI / MODIFICA MACCHINA PARTNER (`public.vehicles` con provider_id) -->
   <div class="modal-overlay" id="newPartnerOfferModal">
     <div class="modal-content" style="max-width: 620px;">
@@ -1175,7 +1111,6 @@
           <i class="ri-close-line" style="font-size: 1.2rem;"></i>
         </button>
       </div>
-
       <form onsubmit="handlePartnerOfferSubmit(event)">
         <input type="hidden" id="partnerEditId" value="" />
         
@@ -1183,7 +1118,6 @@
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Seleziona Mandante / Azienda Partner (*)</label>
           <select id="partnerSelectProvider" required class="admin-input" style="font-weight: 300; color: #ffffff; border-color: rgba(16,185,129,0.4);"></select>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Modello & Marca (*)</label>
@@ -1200,7 +1134,6 @@
             </select>
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: #ffffff; text-transform: uppercase; margin-bottom: 6px; display: block;">Tariffa Giornaliera (€/giorno) (*)</label>
@@ -1211,7 +1144,6 @@
             <input type="number" id="partnerVehDeposit" required class="admin-input" value="1500" />
           </div>
         </div>
-
         <div class="form-grid-2col">
           <div>
             <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Alimentazione & Motore</label>
@@ -1226,17 +1158,14 @@
             </select>
           </div>
         </div>
-
         <div style="margin-bottom: 14px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome File Immagine / URL Immagine</label>
           <input type="text" id="partnerVehImage" class="admin-input" placeholder="Es. audi_q8_sline.webp oppure https://..." />
         </div>
-
         <div style="margin-bottom: 20px;">
           <label style="font-size: 0.76rem; font-weight: 300; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Note e Dotazione di Serie</label>
           <textarea id="partnerVehDesc" rows="2" class="admin-input" placeholder="Dotazione completa di serie, fari LED, interni in pelle..."></textarea>
         </div>
-
         <div style="display: flex; justify-content: flex-end; gap: 10px;">
           <button type="button" onclick="closeNewPartnerOfferModal()" class="btn-header btn-header-outline">Annulla</button>
           <button type="submit" class="btn-header btn-header-primary" style="background: linear-gradient(135deg, #ffffff, #059669); color: #fff;">
@@ -1246,7 +1175,6 @@
       </form>
     </div>
   </div>
-
   <!-- MODAL: DETTAGLIO PROFILO PARTNER / MANDANTE -->
   <div class="modal-overlay" id="partnerProfileModal">
     <div class="modal-content" style="max-width: 900px; max-height: 90vh; overflow-y: auto;">
@@ -1264,7 +1192,6 @@
           </button>
         </div>
       </div>
-
       <div class="partner-profile-grid" style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-bottom: 20px;">
         
         <!-- COLONNA SINISTRA: DATI AZIENDALI -->
@@ -1295,7 +1222,6 @@
             <button class="btn-header btn-header-outline" style="font-size: 0.75rem; flex: 1; justify-content: center;" onclick="editPartnerDetails()">Modifica Dati</button>
           </div>
         </div>
-
         <!-- COLONNA DESTRA: TABS GESTIONE -->
         <div style="display: flex; flex-direction: column; gap: 16px;">
           
@@ -1308,7 +1234,6 @@
               <i class="ri-folder-open-line"></i> Documenti Caricati
             </button>
           </div>
-
           <!-- TAB FLOTTA -->
           <div id="profileTabFleet" style="display: block;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
@@ -1342,7 +1267,6 @@
               </table>
             </div>
           </div>
-
           <!-- TAB DOCUMENTI -->
           <div id="profileTabDocs" style="display: none;">
              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
@@ -1366,14 +1290,10 @@
               </table>
             </div>
           </div>
-
         </div>
       </div>
-
     </div>
   </div>
-
-  <script src="crm-admin.js?v=45"></script>
+  <script src="crm-admin.js?v=48"></script>
 </body>
 </html>
-

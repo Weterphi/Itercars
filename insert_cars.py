@@ -2,7 +2,6 @@ import pandas as pd
 import requests
 import json
 import re
-
 SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co'
 SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk'
 HEADERS = {
@@ -11,21 +10,17 @@ HEADERS = {
     'Content-Type': 'application/json',
     'Prefer': 'return=representation'
 }
-
 with open('jobs.json', 'r', encoding='utf-8') as f:
     jobs = json.load(f)
 job = jobs[0]
 provider_id = job['provider_id']
 job_id = job['id']
-
 df = pd.read_excel('rubel.xlsx', skiprows=11)
-
 def parse_price(val):
     if pd.isna(val): return 0
     s = str(val).replace('€', '').replace('.', '').replace(',', '.').strip()
     try: return float(s)
     except: return 0
-
 vehicles = []
 for idx, row in df.iterrows():
     name = row['Modello Vettura']
@@ -57,7 +52,6 @@ for idx, row in df.iterrows():
         is_grande = True
     else:
         is_media = True
-
     if 'premium' in cat_lower:
         is_luxury = True
         
@@ -96,12 +90,9 @@ for idx, row in df.iterrows():
         'image_url': 'logo_fallback.png'
     }
     vehicles.append(veh)
-
 res = requests.post(f'{SUPABASE_URL}/rest/v1/vehicles', headers=HEADERS, json=vehicles)
 print("Insert status:", res.status_code)
 print(res.text)
-
 # Also update the job status so it doesn't stay pending
 upd_res = requests.patch(f'{SUPABASE_URL}/rest/v1/import_jobs?id=eq.{job_id}', headers=HEADERS, json={'status': 'completed', 'total_rows_processed': len(vehicles), 'offers_created': len(vehicles)})
 print("Job update status:", upd_res.status_code)
-

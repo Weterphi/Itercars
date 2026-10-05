@@ -1,8 +1,6 @@
 import re
-
 with open('magazine.html', 'r', encoding='utf-8') as f:
     content = f.read()
-
 # Define the HTML snippet to inject. We use a placeholder {id} for the data-article-id.
 actions_html = '''
           <!-- Card Actions -->
@@ -16,12 +14,9 @@ actions_html = '''
           </div>
         </div>
       </a>'''
-
 # Find all occurrences of "</div>\n      </a>" that belong to a bento card.
 # We will do a regex replacement that increments an ID.
-
 import random
-
 counter = 1
 def replacer(match):
     global counter
@@ -31,12 +26,10 @@ def replacer(match):
     res = actions_html.format(id=counter, likes=likes)
     counter += 1
     return res
-
 # The pattern looks for the end of the mag-card-content div and the closing a tag.
 # Since spacing might vary, we'll match:
 pattern = re.compile(r'(\s*</div>\s*</a>)')
 content = pattern.sub(replacer, content)
-
 # Now, we also need to append the JS script before the closing </body> tag.
 js_script = '''
 <script>
@@ -72,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
             likeCountSpan.textContent = currentLikes;
             localStorage.setItem('likes_count_' + articleId, currentLikes);
         });
-
         shareBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -107,10 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 '''
-
 content = content.replace('</body>', js_script + '\\n</body>')
-
 with open('magazine.html', 'w', encoding='utf-8') as f:
     f.write(content)
-
 print("Updated magazine.html successfully")

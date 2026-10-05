@@ -1,7 +1,6 @@
 import os
 import glob
 from PIL import Image
-
 def compress_to_webp():
     png_files = glob.glob("*.png") + glob.glob("*.jpg")
     for file in png_files:
@@ -27,6 +26,5 @@ def compress_to_webp():
             
         except Exception as e:
             print(f"Error converting {file}: {e}")
-
 if __name__ == "__main__":
     compress_to_webp()

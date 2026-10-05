@@ -1,20 +1,17 @@
 import os
-
 files_to_update = [
     'index.html',
     'fleet.html',
     'noleggio-breve-termine.html',
     'noleggio-lungo-termine.html',
     'car-detail.html',
-    'accademy.html',
+    'academy.html',
     'partners.html',
     'nbt-dettaglio.html'
 ]
-
 old_block = """        <button class="btn btn-primary nav-area-btn" id="navAreaBtn" onclick="openAuthModal()" title="Area Riservata">
           <i class="ri-user-3-fill" style="font-size: 1.15rem;"></i> <span data-i18n="nav.area" id="navAreaText">Area Riservata</span>
         </button>"""
-
 new_block = """        <div class="area-dropdown-wrapper" style="position: relative; display: inline-block;">
           <button class="btn btn-primary nav-area-btn" id="navAreaBtn" onclick="toggleAreaMenu(event)" title="Area Riservata" style="display: flex; align-items: center; gap: 6px;">
             <i class="ri-user-3-fill" style="font-size: 1.15rem;"></i> <span data-i18n="nav.area" id="navAreaText">Area Riservata</span>
@@ -30,7 +27,6 @@ new_block = """        <div class="area-dropdown-wrapper" style="position: relat
             </button>
           </div>
         </div>"""
-
 for f in files_to_update:
     path = os.path.join(r"c:\\Users\\alber\\Desktop\\LuxuryCar", f)
     if os.path.exists(path):
@@ -44,11 +40,9 @@ for f in files_to_update:
             print(f"Updated {f}")
         else:
             print(f"Block not found in {f}")
-
 # Update app.js
 app_js_path = os.path.join(r"c:\\Users\\alber\\Desktop\\LuxuryCar", 'app.js')
 app_js_logic = """
-
 // Dropdown Area Riservata
 window.toggleAreaMenu = function(event) {
   event.preventDefault();
@@ -58,14 +52,12 @@ window.toggleAreaMenu = function(event) {
     menu.style.display = (menu.style.display === 'flex' || menu.style.display === 'block') ? 'none' : 'flex';
   }
 };
-
 window.closeAreaMenu = function() {
   const menu = document.getElementById('areaDropdownMenu');
   if (menu) {
     menu.style.display = 'none';
   }
 };
-
 document.addEventListener('click', function(e) {
   const areaWrapper = e.target.closest('.area-dropdown-wrapper');
   if (!areaWrapper) {

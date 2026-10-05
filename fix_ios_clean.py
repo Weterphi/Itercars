@@ -1,8 +1,6 @@
 import re
-
 with open('articolo-milano-noleggio.html', 'r', encoding='utf-8') as f:
     content = f.read()
-
 css = '''
     /* Pseudo Fullscreen Fallback (iOS) */
     .pseudo-fullscreen {
@@ -17,10 +15,8 @@ css = '''
     }
 '''
 content = content.replace('</style>', css + '</style>')
-
 js_replacement = '''
     let isPseudoFullscreen = false;
-
     fsBtn.addEventListener('click', () => {
       const isNativeFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
       
@@ -40,22 +36,18 @@ js_replacement = '''
           req = swiperContainer.msRequestFullscreen();
           canNative = true;
         }
-
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
         if (isIOS) canNative = false;
-
         if (!canNative) {
           swiperContainer.classList.add('pseudo-fullscreen');
           isPseudoFullscreen = true;
           updateFullscreenIcon();
         }
-
         const lockOrientation = () => {
           if (screen.orientation && screen.orientation.lock) {
             screen.orientation.lock('landscape').catch(err => console.log('Orientation lock failed:', err));
           }
         };
-
         if (req && req.then) {
           req.then(lockOrientation).catch(e => {
             swiperContainer.classList.add('pseudo-fullscreen');
@@ -84,7 +76,6 @@ js_replacement = '''
         }
       }
     });
-
     function updateFullscreenIcon() {
       const isNativeFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
       const isFullscreen = isNativeFs || isPseudoFullscreen;
@@ -102,11 +93,9 @@ js_replacement = '''
       }
       updateFsButtonState(isFullscreen);
     }
-
     document.addEventListener('fullscreenchange', updateFullscreenIcon);
     document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
     document.addEventListener('msfullscreenchange', updateFullscreenIcon);
-
     function updateFsButtonState(forcedState = null) {
       const isNativeFs = document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
       const isFullscreen = forcedState !== null ? forcedState : (isNativeFs || isPseudoFullscreen);
@@ -124,13 +113,10 @@ js_replacement = '''
       }
     }
 '''
-
 start_str = "fsBtn.addEventListener('click', () => {"
 end_str = "      }\n    }"
-
 start_idx = content.find(start_str)
 end_idx = content.find(end_str, start_idx) + len(end_str)
-
 if start_idx != -1 and end_idx != -1:
     new_content = content[:start_idx] + js_replacement + content[end_idx:]
     with open('articolo-milano-noleggio.html', 'w', encoding='utf-8') as f:

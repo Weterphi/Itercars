@@ -1,7 +1,6 @@
 import json
 import base64
 import pandas as pd
-
 # The data starts with 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,'
 # Let's read it from jobs.json
 with open('jobs.json', 'r', encoding='utf-8') as f:

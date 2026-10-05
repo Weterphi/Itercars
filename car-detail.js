@@ -1,28 +1,23 @@
 /* ==========================================================================
    CAR DETAIL LOGIC
    ========================================================================== */
-
 document.addEventListener("DOMContentLoaded", async () => {
   // Parsing the URL parameter
   const urlParams = new URLSearchParams(window.location.search);
   const carNameParam = urlParams.get('car');
-
   if (!carNameParam) {
     // Redirect back if no car is specified
     window.location.href = "index.html#flotta";
     return;
   }
-
   // Find the car in fleetData (which is loaded from app.js) or localStorage or Supabase
   let car = fleetData.find(c => c.name === carNameParam || String(c.id) === String(carNameParam) || String(c.db_id) === String(carNameParam) || c.name.toLowerCase().includes(carNameParam.toLowerCase()));
-
   if (!car) {
     try {
       const cached = JSON.parse(localStorage.getItem('itercars_fleet_cache') || '[]');
       car = cached.find(c => c.name === carNameParam || String(c.id) === String(carNameParam) || String(c.db_id) === String(carNameParam) || c.name.toLowerCase().includes(carNameParam.toLowerCase()));
     } catch(e) {}
   }
-
   if (!car && typeof supabase !== 'undefined' && supabase) {
     try {
       const { data } = await supabase.from('vehicles').select('*').or(`name.ilike."%${carNameParam}%",id.eq."${carNameParam}"`).maybeSingle();
@@ -45,7 +40,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     } catch(e) {}
   }
-
   if (!car && carNameParam) {
     car = {
       id: urlParams.get('id') || carNameParam,
@@ -59,14 +53,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       features: ["Navigatore Pro", "Cambio Automatico", "Sensori Park", "Cerchi in Lega"]
     };
   }
-
   if (!car) {
     // Car not found
     document.getElementById("detailCarName").innerText = "Veicolo non trovato";
     document.getElementById("detailDescription").innerText = "Siamo spiacenti, il veicolo richiesto non è al momento disponibile nella nostra flotta.";
     return;
   }
-
   // Populate the UI
   document.title = `${car.name} — Noleggio ITERCARS`;
   document.getElementById("detailCarName").innerText = car.name;
@@ -75,37 +67,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (car.rating) {
     document.getElementById("detailCarRating").innerText = car.rating;
   }
-
   // Set the background image to match the home page hero
   const heroSection = document.getElementById("heroSection");
   if (heroSection) {
     heroSection.style.setProperty('--hero-bg', `url('${car.image}')`);
   }
-
   // Set the main presentation image
   const mainImage = document.getElementById("detailMainImage");
   if (mainImage) {
     mainImage.src = car.image;
     mainImage.alt = car.name;
   }
-
   // Badge rimosso
   const badgeContainer = document.getElementById("detailBadgeContainer");
   if (badgeContainer) badgeContainer.innerHTML = '';
-
   // Specs
   if (car.specs) {
     if (car.specs.speed) document.getElementById("specSpeed").innerText = car.specs.speed;
     if (car.specs.accel) document.getElementById("specAccel").innerText = car.specs.accel;
     if (car.specs.hp) document.getElementById("specHp").innerText = car.specs.hp;
   }
-
   // Motore
   const specEngine = document.getElementById("specEngine");
   if (specEngine) {
     specEngine.innerText = car.badge || "N/D";
   }
-
   // Posti (Calcolo intelligente in base a nome e categoria)
   let seats = "2";
   const nameLow = car.name.toLowerCase();
@@ -121,7 +107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   const specSeats = document.getElementById("specSeats");
   if (specSeats) specSeats.innerText = seats;
-
   // Price
   const detailPriceElem = document.getElementById("detailPrice");
   if (detailPriceElem) {
@@ -134,7 +119,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 });
-
 async function submitDetailBooking(event) {
   event.preventDefault();
   
@@ -145,12 +129,10 @@ async function submitDetailBooking(event) {
   const name = document.getElementById("detailName").value;
   const email = document.getElementById("detailEmail") ? document.getElementById("detailEmail").value : '';
   const phone = document.getElementById("detailPhone").value;
-
   // Cache user data locally if available
   if (typeof cacheUserData === 'function') {
     cacheUserData(name, email, phone);
   }
-
   if (typeof showToast === 'function') {
     showToast(`⏳ Invio richiesta di disponibilità in corso per ${carName}...`);
   }
@@ -175,7 +157,6 @@ async function submitDetailBooking(event) {
          if (error) console.warn("Errore salvataggio bookings:", error.message);
          else console.log("✅ Prenotazione salvata in bookings (NBT)");
       });
-
       // Retrocompatibilità su availability_requests
       supabase.from('availability_requests').insert([{
         name: name,
@@ -189,7 +170,6 @@ async function submitDetailBooking(event) {
       }]).then(() => {});
     } catch(e) { console.warn(e); }
   }
-
   // Trova il fornitore dell'auto
   let providerInfo = {
     name: "Stefano",
@@ -202,7 +182,6 @@ async function submitDetailBooking(event) {
       providerInfo = window.providersData[matchingCar.provider] || providerInfo;
     }
   }
-
   const payload = {
     _subject: `🚙 Nuova Prenotazione Auto (Da Pagina Dettaglio) — ${carName}`,
     _template: "table",
@@ -215,7 +194,6 @@ async function submitDetailBooking(event) {
     "Email Cliente": email,
     "Fornitore Flotta": `${providerInfo.name} (${providerInfo.phone}) — ${providerInfo.website}`
   };
-
   try {
     const response = await fetch(`https://formsubmit.co/ajax/${recipient}`, {
       method: "POST",
@@ -225,7 +203,6 @@ async function submitDetailBooking(event) {
       },
       body: JSON.stringify(payload)
     });
-
     if (response.ok) {
       if (typeof showToast === 'function') {
         showToast(`✨ Richiesta inviata con successo! Un concierge ti contatterà a breve al ${phone}.`);
@@ -246,7 +223,6 @@ async function submitDetailBooking(event) {
     }, 1000);
   }
 }
-
 /* ==========================================================================
    LIGHTBOX ZOOM LOGIC
    ========================================================================== */
@@ -261,7 +237,6 @@ function openLightbox() {
     document.body.style.overflow = "hidden"; // Prevent scrolling
   }
 }
-
 function closeLightbox() {
   const overlay = document.getElementById("lightboxOverlay");
   if (overlay) {
@@ -269,7 +244,6 @@ function closeLightbox() {
     document.body.style.overflow = ""; // Restore scrolling
   }
 }
-
 // Chiudi col tasto ESC
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeLightbox();

@@ -11,7 +11,6 @@
   
   <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
-
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=50">
   <link rel="stylesheet" href="magazine.css">
@@ -36,23 +35,20 @@
   </style>
 </head>
 <body class="magazine-body">
-
   <!-- ================= HEADER / NAVBAR ================= -->
   <header id="header" style="background: rgba(6, 9, 15, 0.85); backdrop-filter: blur(10px);">
     <div class="container nav-container">
       <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS">
         <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
       </a>
-
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
         <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
         <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
         <li><a href="magazine.html" style="color: #fff; font-weight: 700; border-bottom: 2px solid var(--accent-primary);"><i class="ri-article-line"></i> MAGAZINE</a></li>
-        <li><a href="accademy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACCADEMY</a></li>
+        <li><a href="academy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
       </ul>
-
       <div class="nav-actions">
         <!-- Auth / Contact Buttons ... (simplified for static template) -->
         <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
@@ -61,7 +57,6 @@
       </div>
     </div>
   </header>
-
   <!-- ================= HERO SLIDER (MAGAZINE COVER) ================= -->
   <section class="mag-hero-section">
     <!-- Swiper -->
@@ -90,7 +85,6 @@
             <a href="/magazine/articolo-zeekr-9x.html" class="mag-slide-btn">Esplora Ora <i class="ri-arrow-right-line"></i></a>
           </div>
         </div>
-
       </div>
       
       <!-- Navigazione slider principale (visibile all'hover) -->
@@ -100,7 +94,6 @@
       <div class="swiper-pagination"></div>
     </div>
   </section>
-
   <!-- ================= BENTO GRID (LATEST ARTICLES) ================= -->
   <section class="mag-bento-section">
     
@@ -136,7 +129,6 @@
           </div>
         </div>
       </a>
-
       <!-- LATEST ARTICLE: MILANO NOLEGGIO -->
       <a href="/magazine/articolo-milano-noleggio.html" class="mag-bento-card mag-card-large">
         <img src="/milano-lambo.jpg?v=new" alt="Lamborghini a Milano" class="mag-card-img">
@@ -159,10 +151,8 @@
         </div>
       </a>
 
-
     </div>
   </section>
-
   <!-- ================= FOOTER ================= -->
   <footer id="contatti">
     <div class="container">
@@ -172,7 +162,6 @@
       </div>
     </div>
   </footer>
-
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
@@ -195,7 +184,6 @@
       },
     });
   </script>
-
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll('.card-actions');
@@ -229,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
             likeCountSpan.textContent = currentLikes;
             localStorage.setItem('likes_count_' + articleId, currentLikes);
         });
-
         shareBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
