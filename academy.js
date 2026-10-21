@@ -42,35 +42,35 @@ const courseLessons = [
     id: 6,
     title: "Il Segreto del Concierge 24/7 e Gestione Richieste Speciali",
     duration: "11:10",
-    video: "temp_silent.mp4",
+    video: "academy_videos/lesson_6.mp4",
     desc: "I nostri clienti richiedono spesso servizi tailor-made: consegna in elicottero, yacht charter abbinato, scorta di sicurezza o prenotazioni in ristoranti 3 Stelle Michelin. Come coordinare il team Concierge in totale efficienza."
   },
   {
     id: 7,
     title: "Procedure di Sicurezza e Verifica Documentale Clienti Prestige",
     duration: "15:30",
-    video: "aston-martin-video.mp4",
+    video: "academy_videos/lesson_7.mp4",
     desc: "Analisi approfondita dei protocolli KYC (Know Your Customer) per la protezione del patrimonio flotta. Verifica di patenti internazionali, controlli anti-frode e gestione dei depositi cauzionali tramite carta di credito ad alto plafond."
   },
   {
     id: 8,
     title: "Gestione Sinistri e Coperture Kasko Full-Risk: Prassi Operative",
     duration: "13:45",
-    video: "video_promo_ragazza.mp4",
+    video: "academy_videos/lesson_8.mp4",
     desc: "Cosa fare in caso di danno lieve o sinistro stradale. La procedura di documentazione fotografica ad alta risoluzione, la denuncia assicurativa rapida e l'attivazione istantanea del servizio di auto sostitutiva Fly & Drive."
   },
   {
     id: 9,
     title: "Il Catalogo Sportiva e Cabrio: Specifiche e Segreti delle Vetture",
     duration: "18:00",
-    video: "temp_silent.mp4",
+    video: "academy_videos/lesson_9.mp4",
     desc: "Focus tecnico sulle auto più richieste della flotta: dalla BMW M4 Competition alla Ferrari 812 GTS, fino alla Porsche 911 Turbo S. Come presentare le modalità di guida (Track, Sport, Wet) per emozionare il cliente in sicurezza."
   },
   {
     id: 10,
     title: "Partnership Esclusive, Hotel 5 Stelle ed Eventi di Lusso",
     duration: "09:50",
-    video: "aston-martin-video.mp4",
+    video: "academy_videos/lesson_10.mp4",
     desc: "Come sviluppare reti territoriali con Hotel 5 Stelle Lusso, Resort esclusivi e Golf Club per posizionare le vetture Itercars direttamente negli hub di maggior prestigio e intercettare clientela internazionale di altissimo profilo."
   },
   {
