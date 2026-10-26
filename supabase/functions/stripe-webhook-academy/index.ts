@@ -10,7 +10,7 @@ const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY_LIVE") || Deno.env.get
 // Questa è la chiave segreta del webhook (Webhook Endpoint Secret) dal pannello sviluppatori di Stripe
 const endpointSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET_ACADEMY") || "";
 
-serve(async (req) => {
+serve(async (req: Request) => {
   const signature = req.headers.get("stripe-signature");
 
   if (!signature) {
@@ -21,7 +21,7 @@ serve(async (req) => {
   try {
     const body = await req.text();
     event = await stripe.webhooks.constructEventAsync(body, signature, endpointSecret);
-  } catch (err) {
+  } catch (err: any) {
     console.error(`⚠️ Webhook signature verification failed.`, err.message);
     return new Response(`Webhook Error: ${err.message}`, { status: 400 });
   }

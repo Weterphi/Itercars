@@ -42,7 +42,7 @@
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=50">
-  <link rel="stylesheet" href="academy.css?v=7">
+  <link rel="stylesheet" href="academy.css?v=8">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
@@ -94,124 +94,201 @@
 
   <!-- ================= ACADEMY MAIN CONTENT ================= -->
   <main class="academy-section">
-    <div class="container">
-      
-      <!-- ================= 0. PRESENTATION & BROKERAGE INTRO SECTION ================= -->
-      <section id="academyPresentationSection">
-        
-        <!-- Hero Intro -->
-        <div class="presentation-hero-box">
-          <span class="presentation-badge"><i class="ri-briefcase-4-fill"></i> CARRIERA ESCLUSIVA ITERCARS</span>
-          <h1 class="presentation-title font-heading">
-            Diventa un <span class="text-gradient">Broker di Lusso Certificato</span> nel Mercato delle Supercar
+
+    <!-- ================= 0. LANDING PAGE PUBBLICA (FULL-BLEED) ================= -->
+    <div id="academyPresentationSection" class="acd-landing">
+
+      <!-- HERO SLIDE A TUTTA LARGHEZZA -->
+      <section class="acd-hero" aria-labelledby="acdHeroTitle">
+        <div class="acd-hero-bg" role="img" aria-label="Supercar di lusso Itercars"></div>
+        <div class="acd-hero-overlay"></div>
+        <div class="container acd-hero-inner">
+          <span class="presentation-badge acd-reveal"><i class="ri-briefcase-4-fill"></i> Carriera Esclusiva Itercars</span>
+          <h1 id="acdHeroTitle" class="acd-hero-title font-heading acd-reveal">
+            Diventa un <span class="text-gradient">Broker Professionista</span><br>del Noleggio Auto di Lusso
           </h1>
-          <p class="presentation-subtitle">
-            Il settore del noleggio auto di lusso e servizi di lifestyle per clientela High-Net-Worth sta vivendo una crescita senza precedenti. Con il percorso formativo <strong>Itercars Academy</strong> avrai accesso ai protocolli operativi, alle strategie di intermediazione e alla telemetria proprietaria per generare fatturati elevati senza immobilizzare capitale proprio.
+          <p class="acd-hero-sub acd-reveal">
+            La masterclass che ti consegna protocolli operativi, strategie di intermediazione e la piattaforma proprietaria Itercars per generare fatturati elevati <strong>senza immobilizzare capitale proprio</strong>.
           </p>
-          <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-            <a href="javascript:void(0)" onclick="openLoginModal(event)" class="btn btn-primary" style="padding: 16px 36px; font-size: 1.1rem; box-shadow: var(--glow-emerald); text-decoration: none;">
+          <div class="acd-hero-ctas acd-reveal">
+            <a href="javascript:void(0)" id="heroBuyBtn" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+              <i class="ri-vip-crown-fill"></i> <span>Inizia Ora · €279</span>
+            </a>
+            <a href="javascript:void(0)" id="heroLoginBtn" onclick="openLoginModal(event)" class="btn btn-outline acd-btn-lg">
               <i class="ri-lock-unlock-fill"></i> <span>Accedi all'Academy</span>
             </a>
-            <a href="javascript:void(0)" onclick="buyAcademy(event)" class="btn btn-outline" style="padding: 16px 36px; font-size: 1.1rem; border-color: var(--accent-primary); color: #2ecc71; text-decoration: none;">
-              <i class="ri-bank-card-fill"></i> <span>Diventa Broker (€279)</span>
-            </a>
           </div>
+          <ul class="acd-hero-trust acd-reveal">
+            <li><i class="ri-play-circle-fill"></i> 12 Lezioni Video HD</li>
+            <li><i class="ri-award-fill"></i> Certificazione Itercars</li>
+            <li><i class="ri-folder-zip-fill"></i> Materiali PDF Inclusi</li>
+            <li><i class="ri-infinity-line"></i> Accesso Illimitato</li>
+          </ul>
         </div>
+        <a href="#acdStats" class="acd-scroll-cue" aria-label="Scorri verso il basso"><i class="ri-arrow-down-line"></i></a>
+      </section>
 
-        <!-- Statistiche Nazionali e Internazionali -->
-        <div class="brokerage-stats-grid">
-          <div class="broker-stat-card">
-            <div class="stat-icon-wrapper"><i class="ri-line-chart-fill"></i></div>
-            <div class="stat-number">+18.4%</div>
-            <div class="stat-label"><strong>Crescita Annua (CAGR)</strong> del mercato globale noleggio supercar e hypercar</div>
-          </div>
-          <div class="broker-stat-card">
-            <div class="stat-icon-wrapper"><i class="ri-money-euro-box-fill"></i></div>
-            <div class="stat-number">€150k - €350k+</div>
-            <div class="stat-label"><strong>Fatturato Medio Annuo</strong> generato da un Broker Itercars con 5-10 veicoli gestiti</div>
-          </div>
-          <div class="broker-stat-card">
-            <div class="stat-icon-wrapper"><i class="ri-pie-chart-2-fill"></i></div>
-            <div class="stat-number">18% - 25%</div>
-            <div class="stat-label"><strong>Margine Netto di Profitto</strong> sull'intermediazione di noleggi e servizi concierge</div>
-          </div>
-          <div class="broker-stat-card">
-            <div class="stat-icon-wrapper"><i class="ri-user-heart-fill"></i></div>
-            <div class="stat-number">85%</div>
-            <div class="stat-label"><strong>Tasso di Retention VIP</strong> con contratti di noleggio ricorrenti e stagionali</div>
-          </div>
-        </div>
-
-        <!-- I Benefici del Brokeraggio -->
-        <div class="brokerage-benefits-section">
+      <!-- MERCATO IN NUMERI -->
+      <section id="acdStats" class="acd-stats-section" aria-labelledby="acdStatsTitle">
+        <div class="container">
           <div class="brokerage-section-header">
-            <span class="course-badge" style="margin-bottom: 12px; display: inline-block;">I Vantaggi del Modello</span>
-            <h2 class="font-heading" style="font-size: 2.4rem; margin-bottom: 14px;">Perché Diventare <span class="text-gradient">Broker d'élite</span></h2>
-            <p style="color: var(--text-muted); font-size: 1.05rem;">Un modello di business rivoluzionario progettato per massimizzare la redditività  azzerando i rischi di svalutazione e i costi fissi tradizionali.</p>
+            <span class="course-badge">Il Mercato in Numeri</span>
+            <h2 id="acdStatsTitle" class="font-heading acd-h2">Un Settore in <span class="text-gradient">Forte Espansione</span></h2>
+            <p class="acd-lead">I dati che rendono il brokeraggio di supercar una delle opportunità più redditizie del lifestyle di lusso.</p>
           </div>
+          <div class="acd-stats-grid">
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-line-chart-fill"></i></div>
+              <div class="acd-stat-number">+18.4%</div>
+              <div class="acd-stat-title">Crescita Annua (CAGR)</div>
+              <p class="acd-stat-desc">del mercato globale noleggio supercar e hypercar</p>
+            </article>
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-money-euro-box-fill"></i></div>
+              <div class="acd-stat-number">€150k – €350k+</div>
+              <div class="acd-stat-title">Fatturato Medio Annuo</div>
+              <p class="acd-stat-desc">generato da un Broker Itercars con 5-10 veicoli gestiti</p>
+            </article>
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-pie-chart-2-fill"></i></div>
+              <div class="acd-stat-number">18% – 25%</div>
+              <div class="acd-stat-title">Margine Netto di Profitto</div>
+              <p class="acd-stat-desc">sull'intermediazione di noleggi e servizi concierge</p>
+            </article>
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-user-heart-fill"></i></div>
+              <div class="acd-stat-number">85%</div>
+              <div class="acd-stat-title">Tasso di Retention VIP</div>
+              <p class="acd-stat-desc">con contratti di noleggio ricorrenti e stagionali</p>
+            </article>
+          </div>
+        </div>
+      </section>
 
+      <!-- VANTAGGI DEL MODELLO -->
+      <section class="acd-section" aria-labelledby="acdBenefitsTitle">
+        <div class="container">
+          <div class="brokerage-section-header">
+            <span class="course-badge">I Vantaggi del Modello</span>
+            <h2 id="acdBenefitsTitle" class="font-heading acd-h2">Perché Diventare <span class="text-gradient">Broker d'Élite</span></h2>
+            <p class="acd-lead">Un modello di business progettato per massimizzare la redditività azzerando i rischi di svalutazione e i costi fissi tradizionali.</p>
+          </div>
           <div class="brokerage-benefits-grid">
             <div class="benefit-card-broker">
               <div class="benefit-icon-broker"><i class="ri-shield-keyhole-fill"></i></div>
-              <h3>Zero Costi di Luxury Car</h3>
-              <p>Lavori intermediando le supercar di collezionisti privati, concessionarie di lusso e partner certificati, senza la necessità  di acquistare o mantenere fisicamente i veicoli.</p>
+              <h3>Zero Capitale Immobilizzato</h3>
+              <p>Intermedi le supercar di collezionisti privati, concessionarie di lusso e partner certificati, senza acquistare o mantenere fisicamente i veicoli.</p>
             </div>
             <div class="benefit-card-broker">
               <div class="benefit-icon-broker"><i class="ri-global-line"></i></div>
               <h3>Network VIP HNW</h3>
-              <p>Entri a far parte di un'esclusiva rete internazionale che connette imprenditori, sportivi professionisti e celebrità  con servizi di mobilità  e accoglienza 5 stelle.</p>
+              <p>Entri in un'esclusiva rete internazionale che connette imprenditori, sportivi professionisti e celebrità con servizi di mobilità e accoglienza 5 stelle.</p>
             </div>
             <div class="benefit-card-broker">
               <div class="benefit-icon-broker"><i class="ri-cpu-line"></i></div>
-              <h3>Tecnologia & Telemetria</h3>
-              <p>Accedi alla nostra piattaforma proprietaria per il calcolo delle tariffe dinamiche (Dynamic Pricing), contratti digitali istantanei e verifica identità  KYC in tempo reale.</p>
+              <h3>Tecnologia &amp; Telemetria</h3>
+              <p>Accedi alla piattaforma proprietaria per tariffe dinamiche (Dynamic Pricing), contratti digitali istantanei e verifica identità KYC in tempo reale.</p>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Foto Gallery: Concessionarie, Broker e Clienti in Ufficio -->
-        <div class="brokerage-gallery-section">
+      <!-- COME FUNZIONA -->
+      <section class="acd-section acd-section-alt" aria-labelledby="acdStepsTitle">
+        <div class="container">
           <div class="brokerage-section-header">
-            <span class="course-badge" style="margin-bottom: 12px; display: inline-block;">Realtà  Operativa</span>
-            <h2 class="font-heading" style="font-size: 2.4rem; margin-bottom: 14px;">La Nostra Rete in <span class="text-gradient">Azione</span></h2>
-            <p style="color: var(--text-muted); font-size: 1.05rem;">Dalle concessionarie partner di altissimo prestigio agli incontri riservati nei nostri uffici direzionali con clientela VIP.</p>
+            <span class="course-badge">Il Percorso</span>
+            <h2 id="acdStepsTitle" class="font-heading acd-h2">Dall'Iscrizione alla <span class="text-gradient">Certificazione</span></h2>
+            <p class="acd-lead">Tre passaggi chiari per entrare operativamente nel network Itercars.</p>
           </div>
+          <ol class="acd-steps">
+            <li class="acd-step">
+              <span class="acd-step-num">01</span>
+              <h3>Iscriviti</h3>
+              <p>Completa il pagamento sicuro tramite Stripe e ricevi immediatamente le credenziali riservate via email.</p>
+            </li>
+            <li class="acd-step">
+              <span class="acd-step-num">02</span>
+              <h3>Segui le 12 Lezioni</h3>
+              <p>Video HD con sblocco sequenziale e cartelle PDF operative: contratti, pricing, acquisizione clienti HNW.</p>
+            </li>
+            <li class="acd-step">
+              <span class="acd-step-num">03</span>
+              <h3>Ottieni la Certificazione</h3>
+              <p>Superati tutti i moduli diventi Broker certificato Itercars, pronto a operare con la nostra rete di partner.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
 
+      <!-- GALLERY -->
+      <section class="acd-section" aria-labelledby="acdGalleryTitle">
+        <div class="container">
+          <div class="brokerage-section-header">
+            <span class="course-badge">Realtà Operativa</span>
+            <h2 id="acdGalleryTitle" class="font-heading acd-h2">La Nostra Rete in <span class="text-gradient">Azione</span></h2>
+            <p class="acd-lead">Dalle concessionarie partner di altissimo prestigio agli incontri riservati con clientela VIP.</p>
+          </div>
           <div class="broker-gallery-grid">
-            <!-- Foto 1: Concessionaria di Lusso -->
             <div class="gallery-card">
-              <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="Concessionaria di Lusso" class="gallery-img">
+              <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="Concessionaria di Lusso" class="gallery-img" loading="lazy">
               <div class="gallery-overlay">
                 <span class="gallery-tag">Showroom Partner</span>
                 <h4 class="gallery-title">Concessionarie Premium</h4>
-                <p class="gallery-desc">Le nostre location convenzionate per consegne white-glove ed eventi esclusivi di presentazione vetture.</p>
+                <p class="gallery-desc">Location convenzionate per consegne white-glove ed eventi esclusivi di presentazione vetture.</p>
               </div>
             </div>
-
-            <!-- Foto 2: Broker e Clienti in Ufficio -->
             <div class="gallery-card">
-              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" alt="Broker con Clienti in Ufficio" class="gallery-img">
+              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" alt="Broker con Clienti in Ufficio" class="gallery-img" loading="lazy">
               <div class="gallery-overlay">
                 <span class="gallery-tag">Consulenza VIP</span>
                 <h4 class="gallery-title">Incontro in Ufficio Direzionale</h4>
-                <p class="gallery-desc">I nostri broker certificati ricevono i clienti in riservate suite direzionali per la pianificazione di noleggi tailor-made.</p>
+                <p class="gallery-desc">I broker certificati ricevono i clienti in suite riservate per pianificare noleggi tailor-made.</p>
               </div>
             </div>
-
-            <!-- Foto 3: Consegna e Firma Contratto -->
             <div class="gallery-card">
-              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" alt="Consultazione e Firma Contratto" class="gallery-img">
+              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" alt="Consultazione e Firma Contratto" class="gallery-img" loading="lazy">
               <div class="gallery-overlay">
                 <span class="gallery-tag">Accordo Esclusivo</span>
                 <h4 class="gallery-title">Gestione Contrattuale HNW</h4>
-                <p class="gallery-desc">Protocolli di check-in digitali rapidi, discrezione assoluta e assistenza personalizzata 24 ore su 24.</p>
+                <p class="gallery-desc">Check-in digitali rapidi, discrezione assoluta e assistenza personalizzata 24 ore su 24.</p>
               </div>
             </div>
           </div>
         </div>
-
-        <div style="height: 1px; background: var(--border-glass); margin: 60px 0;"></div>
       </section>
+
+      <!-- CTA FINALE / PREZZO -->
+      <section class="acd-cta-section" aria-labelledby="acdCtaTitle">
+        <div class="container">
+          <div class="acd-cta-card">
+            <div class="acd-cta-copy">
+              <span class="course-badge">Itercars VIP Fleet Masterclass</span>
+              <h2 id="acdCtaTitle" class="font-heading acd-h2">Inizia Oggi la Tua <span class="text-gradient">Carriera da Broker</span></h2>
+              <ul class="acd-includes">
+                <li><i class="ri-check-line"></i> 12 lezioni video professionali in HD</li>
+                <li><i class="ri-check-line"></i> Cartelle PDF con contratti e template operativi</li>
+                <li><i class="ri-check-line"></i> Strategie di Dynamic Pricing e acquisizione clienti HNW</li>
+                <li><i class="ri-check-line"></i> Certificazione ufficiale Broker Itercars</li>
+                <li><i class="ri-check-line"></i> Accesso al network di partner e concessionarie</li>
+              </ul>
+            </div>
+            <div class="acd-price-box">
+              <span class="acd-price-label">Accesso completo</span>
+              <div class="acd-price">€279</div>
+              <span class="acd-price-note">Pagamento unico · Nessun abbonamento</span>
+              <a href="javascript:void(0)" id="ctaBuyBtn" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg" style="width: 100%;">
+                <i class="ri-bank-card-fill"></i> <span>Ricevi le Credenziali</span>
+              </a>
+              <a href="javascript:void(0)" id="ctaLoginBtn" onclick="openLoginModal(event)" class="acd-price-login">Hai già le credenziali? Accedi</a>
+              <span class="acd-secure"><i class="ri-shield-check-fill"></i> Pagamento sicuro con Stripe</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="container">
 
 
 

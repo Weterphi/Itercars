@@ -11,7 +11,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
   try {
@@ -24,7 +24,7 @@ serve(async (req) => {
     if (webhookSecret && signature) {
       try {
         event = await stripe.webhooks.constructEventAsync(body, signature, webhookSecret);
-      } catch (err) {
+      } catch (err: any) {
         console.error(`⚠️ Webhook signature verification failed:`, err.message);
         return new Response(JSON.stringify({ error: err.message }), { status: 400 });
       }
@@ -76,7 +76,7 @@ serve(async (req) => {
     }
 
     return new Response(JSON.stringify({ received: true }), { headers: { ...corsHeaders, "Content-Type": "application/json" }});
-  } catch (err) {
+  } catch (err: any) {
     console.error("Errore generico Webhook:", err);
     return new Response(JSON.stringify({ error: err.message }), { status: 400, headers: corsHeaders });
   }

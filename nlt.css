@@ -117,6 +117,7 @@
   border-radius: 4px;
   outline: none;
   -webkit-appearance: none;
+  appearance: none;
 }
 .budget-slider-input::-webkit-slider-thumb {
   -webkit-appearance: none;

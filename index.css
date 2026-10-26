@@ -99,11 +99,13 @@ button {
 .text-gradient {
   background: linear-gradient(135deg, #ffffff 0%, #a7f3d0 50%, #009246 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .text-red {
   background: linear-gradient(135deg, #fef3c7 0%, #ce2b37 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .btn {
@@ -305,6 +307,7 @@ header.scrolled .nav-actions {
   letter-spacing: 0.05em;
   background: var(--accent-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   transition: transform var(--transition-fast), filter var(--transition-fast);
 }

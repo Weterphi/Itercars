@@ -436,6 +436,7 @@
   text-shadow: 0 10px 30px rgba(0,0,0,0.9);
   background: linear-gradient(to right, #fff, #cbd5e1);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 .swipe-indicator {

@@ -77,14 +77,14 @@ const courseLessons = [
     id: 11,
     title: "Programma Fedeltà Itercars Privilege & Retention del Cliente",
     duration: "14:15",
-    video: "video_promo_ragazza.mp4",
+    video: "academy_videos/lesson_11.mp4",
     desc: "I clienti ricorrenti sono il cuore del business luxury. Scopri come funziona il programma di membership Itercars Privilege, l'assegnazione di upgrade gratuiti, inviti ad eventi di guida su pista e regali di fine anno personalizzati."
   },
   {
     id: 12,
     title: "Certificazione Finale ed Espansione Internazionale Flotta",
     duration: "20:00",
-    video: "temp_silent.mp4",
+    video: "academy_videos/lesson_12.mp4",
     desc: "Ultima lezione del percorso Masterclass. Panoramica sulle opportunità di franchising ed espansione europea della flotta. Completando questo modulo, otterrai il Diploma Ufficiale Itercars Certified VIP Partner."
   }
 ];

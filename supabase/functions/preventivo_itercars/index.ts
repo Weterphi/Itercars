@@ -6,7 +6,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-serve(async (req) => {
+serve(async (req: Request) => {
   // Gestione della richiesta preflight CORS
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
@@ -42,7 +42,7 @@ serve(async (req) => {
     ` : '';
 
     // Costruiamo il payload (il "corpo" dell'email) da inviare a Resend
-    const resendPayload = {
+    const resendPayload: Record<string, any> = {
       from: "Richiesta preventivo <info@itercars.com>", 
       to: [email],
       subject: `Il tuo Preventivo Personalizzato Itercars - ${nome}`,
@@ -143,7 +143,7 @@ serve(async (req) => {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     })
 
-  } catch (error) {
+  } catch (error: any) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 400,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
