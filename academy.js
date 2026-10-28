@@ -9,6 +9,7 @@ const courseLessons = [
     title: "Introduzione all'Ecosistema Itercars e Standard di Eccellenza",
     duration: "08:30",
     video: "/academy_videos/lesson_1.mp4",
+    pdfUrl: "/academy_pdfs/lezione_1.pdf",
     desc: "Benvenuto nella Masterclass Itercars. In questa prima lezione fondamentale esploreremo la filosofia del brand, i valori fondanti e i rigorosi standard di qualità 'White-Glove' che definiscono l'esperienza di noleggio nel settore luxury ed exotics."
   },
   {
@@ -16,6 +17,7 @@ const courseLessons = [
     title: "Accoglienza VIP & Protocolli di Consegna White-Glove",
     duration: "12:15",
     video: "/academy_videos/lesson_2.mp4",
+    pdfUrl: "/academy_pdfs/lezione_2.pdf",
     desc: "Scopri come gestire l'incontro iniziale con il cliente ad alto spendente. Dalla presentazione della vettura alla spiegazione delle funzionalità telemetriche, fino alla firma digitale su iPad del verbale di consegna in totale discrezione."
   },
   {
@@ -23,6 +25,7 @@ const courseLessons = [
     title: "Ispezione e Manutenzione Preventiva delle Supercar",
     duration: "14:50",
     video: "/academy_videos/lesson_3.mp4",
+    pdfUrl: "/academy_pdfs/lezione_3.pdf",
     desc: "Le supercar richiedono una cura clinica. Analizzeremo la checklist pre-consegna: controllo pressione pneumatici ad alte prestazioni, verifica livelli fluidi speciali, ispezione freni carbo-ceramici e detailing carrozzeria al quarzo."
   },
   {
@@ -30,6 +33,7 @@ const courseLessons = [
     title: "Gestione della Telemetria e Sicurezza Flotta in Tempo Reale",
     duration: "10:20",
     video: "/academy_videos/lesson_4.mp4",
+    pdfUrl: "/academy_pdfs/lezione_4.pdf",
     desc: "Come monitorare la flotta attraverso la centrale operativa Itercars. Utilizzo dei sistemi GPS geofencing, analisi del comportamento di guida (G-force e fuorigiri) e protocolli di intervento immediato in caso di anomalia."
   },
   {
@@ -37,6 +41,7 @@ const courseLessons = [
     title: "Massimizzare il Rendimento: Tariffe e Dynamic Pricing",
     duration: "16:40",
     video: "/academy_videos/lesson_5.mp4",
+    pdfUrl: "/academy_pdfs/lezione_5.pdf",
     desc: "Impara a gestire l'algoritmo di tariffe dinamiche di Itercars in base alla stagionalità, ai grandi eventi (es. Gran Premio di Monza, Milano Fashion Week) e al tasso di occupazione della flotta per massimizzare il ROI."
   },
   {
@@ -44,6 +49,7 @@ const courseLessons = [
     title: "Il Segreto del Concierge 24/7 e Gestione Richieste Speciali",
     duration: "11:10",
     video: "/academy_videos/lesson_6.mp4",
+    pdfUrl: "/academy_pdfs/lezione_6.pdf",
     desc: "I nostri clienti richiedono spesso servizi tailor-made: consegna in elicottero, yacht charter abbinato, scorta di sicurezza o prenotazioni in ristoranti 3 Stelle Michelin. Come coordinare il team Concierge in totale efficienza."
   },
   {
@@ -51,6 +57,7 @@ const courseLessons = [
     title: "Procedure di Sicurezza e Verifica Documentale Clienti Prestige",
     duration: "15:30",
     video: "/academy_videos/lesson_7.mp4",
+    pdfUrl: "/academy_pdfs/lezione_7.pdf",
     desc: "Analisi approfondita dei protocolli KYC (Know Your Customer) per la protezione del patrimonio flotta. Verifica di patenti internazionali, controlli anti-frode e gestione dei depositi cauzionali tramite carta di credito ad alto plafond."
   },
   {
@@ -58,6 +65,7 @@ const courseLessons = [
     title: "Gestione Sinistri e Coperture Kasko Full-Risk: Prassi Operative",
     duration: "13:45",
     video: "/academy_videos/lesson_8.mp4",
+    pdfUrl: "/academy_pdfs/lezione_8.pdf",
     desc: "Cosa fare in caso di danno lieve o sinistro stradale. La procedura di documentazione fotografica ad alta risoluzione, la denuncia assicurativa rapida e l'attivazione istantanea del servizio di auto sostitutiva Fly & Drive."
   },
   {
@@ -65,6 +73,7 @@ const courseLessons = [
     title: "Il Catalogo Sportiva e Cabrio: Specifiche e Segreti delle Vetture",
     duration: "18:00",
     video: "/academy_videos/lesson_9.mp4",
+    pdfUrl: "/academy_pdfs/lezione_9.pdf",
     desc: "Focus tecnico sulle auto più richieste della flotta: dalla BMW M4 Competition alla Ferrari 812 GTS, fino alla Porsche 911 Turbo S. Come presentare le modalità di guida (Track, Sport, Wet) per emozionare il cliente in sicurezza."
   },
   {
@@ -72,6 +81,7 @@ const courseLessons = [
     title: "Partnership Esclusive, Hotel 5 Stelle ed Eventi di Lusso",
     duration: "09:50",
     video: "/academy_videos/lesson_10.mp4",
+    pdfUrl: "/academy_pdfs/lezione_10.pdf",
     desc: "Come sviluppare reti territoriali con Hotel 5 Stelle Lusso, Resort esclusivi e Golf Club per posizionare le vetture Itercars direttamente negli hub di maggior prestigio e intercettare clientela internazionale di altissimo profilo."
   },
   {
@@ -79,6 +89,7 @@ const courseLessons = [
     title: "Programma Fedeltà Itercars Privilege & Retention del Cliente",
     duration: "14:15",
     video: "/academy_videos/lesson_11.mp4",
+    pdfUrl: "/academy_pdfs/lezione_11.pdf",
     desc: "I clienti ricorrenti sono il cuore del business luxury. Scopri come funziona il programma di membership Itercars Privilege, l'assegnazione di upgrade gratuiti, inviti ad eventi di guida su pista e regali di fine anno personalizzati."
   },
   {
@@ -86,6 +97,7 @@ const courseLessons = [
     title: "Certificazione Finale ed Espansione Internazionale Flotta",
     duration: "20:00",
     video: "/academy_videos/lesson_12.mp4",
+    pdfUrl: "/academy_pdfs/lezione_12.pdf",
     desc: "Ultima lezione del percorso Masterclass. Panoramica sulle opportunità di franchising ed espansione europea della flotta. Completando questo modulo, otterrai il Diploma Ufficiale Itercars Certified VIP Partner."
   }
 ];
@@ -255,6 +267,7 @@ function initCourse() {
   renderPlaylist();
   renderCurrentLesson();
   updateProgressBar();
+  if (typeof renderExamLauncher === 'function') renderExamLauncher();
 }
 
 // Renderizza Playlist
@@ -427,6 +440,7 @@ function completeLesson(autoCompleted = false) {
       currentLessonIndex = unlockedLesson - 1;
     } else {
       showToast(`🎉 CONGRATULAZIONI ASSOLUTE! Hai superato tutte le 12 lezioni del Corso VIP Itercars!`);
+      if (typeof onCourseCompleted === 'function') onCourseCompleted();
     }
     updateProgressBar();
     renderPlaylist();
