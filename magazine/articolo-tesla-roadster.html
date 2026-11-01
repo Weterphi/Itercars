@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oltre l'Asfalto: La Nuova Tesla Roadster | ITERCARS Magazine</title>
+  <meta name="description" content="Dall'architettura a 1.000 Volt ai propulsori a gas freddo di SpaceX: analisi tecnica, strategica e geopolitica con comparatore interattivo.">
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="Oltre l'Asfalto: La Nuova Tesla Roadster | ITERCARS Magazine">
+  <meta property="og:description" content="Dall'architettura a 1.000 Volt ai propulsori a gas freddo di SpaceX: analisi tecnica, strategica e geopolitica con comparatore interattivo.">
+  <meta property="og:image" content="https://www.itercars.com/tesla-roadster.jpg">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://www.itercars.com/magazine/articolo-tesla-roadster.html">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="/index.css?v=50">
+  <link rel="stylesheet" href="/magazine.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+
+  <style>
+    body.tr-page {
+      background: #0a0e17;
+      color: #1f2937;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    
+    .tr-page-header {
+      padding: 105px 20px 25px 20px;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+    
+    .tr-back-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    
+    .tr-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .tr-back-link:hover {
+      color: #e11d48;
+    }
+    
+    .tr-meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(225, 29, 72, 0.15);
+      border: 1px solid rgba(225, 29, 72, 0.4);
+      color: #fb7185;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .tr-social-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tr-action-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .tr-action-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #e11d48;
+    }
+
+    /* INIZIO ARTICOLO TESLA ROADSTER + COMPARATORE INTERATTIVO */
+    .tr-article-wrapper {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.75;
+      color: #1f2937;
+      max-width: 920px;
+      margin: 0 auto 60px auto;
+      padding: 40px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .tr-article-wrapper h1 {
+      font-size: 2.3rem;
+      line-height: 1.25;
+      color: #111827;
+      margin-bottom: 16px;
+      font-weight: 800;
+    }
+    .tr-subtitle {
+      font-size: 1.2rem;
+      color: #4b5563;
+      font-weight: 500;
+      margin-bottom: 28px;
+      border-left: 4px solid #e11d48;
+      padding-left: 16px;
+    }
+    .tr-article-wrapper h2 {
+      font-size: 1.55rem;
+      color: #111827;
+      margin-top: 40px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #f3f4f6;
+    }
+    .tr-article-wrapper p {
+      margin-bottom: 18px;
+      font-size: 1.05rem;
+    }
+    .tr-article-wrapper ul, .tr-article-wrapper ol {
+      margin-bottom: 22px;
+      padding-left: 24px;
+    }
+    .tr-article-wrapper li {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+    .tr-hero-figure {
+      margin: 28px 0;
+      text-align: center;
+    }
+    .tr-hero-figure img {
+      width: 100%;
+      max-height: 520px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    .tr-hero-figure figcaption {
+      font-size: 0.9rem;
+      color: #6b7280;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    /* Tabella Responsiva */
+    .tr-table-container {
+      overflow-x: auto;
+      margin: 28px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .tr-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+      background: #fff;
+    }
+    .tr-table th {
+      background-color: #111827;
+      color: #ffffff;
+      text-align: left;
+      padding: 14px 16px;
+      font-size: 0.95rem;
+    }
+    .tr-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+    .tr-table tr:nth-child(even) {
+      background-color: #f9fafb;
+    }
+    /* Widget Interattivo */
+    .tr-widget-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border-radius: 16px;
+      padding: 28px;
+      margin: 44px 0;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    }
+    .tr-widget-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin: 0 0 8px 0;
+      color: #ffffff;
+    }
+    .tr-widget-desc {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      margin-bottom: 24px;
+    }
+    .tr-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+    .tr-btn {
+      background: #1e293b;
+      color: #cbd5e1;
+      border: 1px solid #334155;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .tr-btn:hover {
+      background: #334155;
+      color: #fff;
+    }
+    .tr-btn.active {
+      background: #e11d48;
+      color: #ffffff;
+      border-color: #e11d48;
+    }
+    .tr-chart-area {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .tr-bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .tr-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    .tr-bar-track {
+      width: 100%;
+      height: 28px;
+      background: #1e293b;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .tr-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #e11d48, #fb7185);
+      border-radius: 6px;
+      width: 0%;
+      transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .tr-charger-box {
+      background: #1e293b;
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+    .tr-slider {
+      width: 100%;
+      margin: 12px 0;
+      accent-color: #e11d48;
+      cursor: pointer;
+    }
+    .tr-charger-stats {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+    .tr-highlight {
+      color: #fb7185;
+      font-weight: 700;
+      font-size: 1.15rem;
+    }
+
+    @media (max-width: 768px) {
+      .tr-article-wrapper {
+        padding: 22px 18px;
+        border-radius: 12px;
+      }
+      .tr-article-wrapper h1 {
+        font-size: 1.75rem;
+      }
+      .tr-subtitle {
+        font-size: 1.05rem;
+      }
+      .tr-widget-box {
+        padding: 20px 16px;
+      }
+    }
+  </style>
+</head>
+<body class="tr-page">
+
+  <!-- ================= NAVBAR ================= -->
+  <header id="header" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10, 14, 23, 0.96); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-glass); padding: 10px 0;">
+    <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 20px;">
+      <a href="/index.html" class="logo" title="ITERCARS Luxury Supercar Rental">
+        <img src="/logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img" style="height: 38px; width: auto;">
+      </a>
+
+      <ul class="nav-links" style="display: flex; align-items: center; gap: 24px; list-style: none;">
+        <li><a href="/index.html">Home</a></li>
+        <li><a href="/fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
+        <li><a href="/noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
+        <li><a href="/noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
+        <li><a href="/magazine.html" style="color: #fff; font-weight: 700; border-bottom: 2px solid var(--accent-primary);"><i class="ri-article-line"></i> MAGAZINE</a></li>
+        <li><a href="/academy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="/magazine.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;">
+          <i class="ri-arrow-left-line"></i> <span>Tutti gli Articoli</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= TOP META BAR ================= -->
+  <div class="tr-page-header">
+    <div class="tr-back-bar">
+      <a href="/magazine.html" class="tr-back-link">
+        <i class="ri-arrow-left-line"></i> Torna a ITERCARS Magazine
+      </a>
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span class="tr-meta-pill"><i class="ri-flashlight-fill"></i> Hypercar Special</span>
+        <span style="color: #9ca3af; font-size: 0.85rem;"><i class="ri-calendar-line"></i> 1 Novembre 2026</span>
+        <span style="color: #9ca3af; font-size: 0.85rem;"><i class="ri-time-line"></i> 10 min read</span>
+      </div>
+      <div class="tr-social-actions">
+        <button class="tr-action-btn" id="trLikeBtn" title="Metti Mi Piace">
+          <i class="ri-heart-3-line" id="trHeartIcon"></i> <span id="trLikeCount">245</span>
+        </button>
+        <button class="tr-action-btn" id="trShareBtn" title="Condividi Articolo">
+          <i class="ri-share-forward-line"></i> <span>Condividi</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- INIZIO ARTICOLO TESLA ROADSTER + COMPARATORE INTERATTIVO -->
+  <article class="tr-article-wrapper">
+    <h1>Oltre l'Asfalto: La Nuova Tesla Roadster tra Ingegneria Aerospaziale, Sfida Cinese e il Crepuscolo della Guida Umana</h1>
+    
+    <div class="tr-subtitle">
+      Dall'architettura a 1.000 Volt ai propulsori a gas freddo di SpaceX: analisi tecnica, strategica e geopolitica dell'hypercar che promette di riscrivere le leggi della fisica automobilistica — se il mercato saprà attenderla.
+    </div>
+
+    <p>Dopo quasi un decennio di promesse, rinvii e speculazioni, il velo è finalmente caduto. Nell'ottobre del 2026, Tesla ha mostrato al mondo la versione definitiva della nuova <strong>Roadster</strong>, un progetto che ha mutato pelle così tante volte da essersi trasformato da "semplice" supercar elettrica a laboratorio su ruote — o meglio, a bassa quota. Non siamo di fronte a un modello pensato per fare volumi di vendita, ma a un'opera di forza tecnologica progettata per riaffermare la supremazia ingegneristica di Elon Musk in un'epoca in cui l'industria dell'auto elettrica parla sempre più mandarino.</p>
+
+    <figure class="tr-hero-figure">
+      <picture>
+        <source srcset="/tesla-roadster.webp" type="image/webp">
+        <img src="/tesla-roadster.jpg" alt="Profilo aerodinamico della nuova Tesla Roadster rossa in movimento su pista" onerror="this.src='../tesla-roadster.jpg'">
+      </picture>
+      <figcaption>Il profilo scolpito della nuova Tesla Roadster in prova su circuito</figcaption>
+    </figure>
+
+    <h2>1. Cuore Meccanico e Telaio: L'Arte della Sottrazione e dell'Effetto Suolo</h2>
+    <p>Sotto una carrozzeria scolpita dal vento, dove ogni superficie è mobile e funzionale, la nuova Roadster abbandona i compromessi delle berline di grande serie per abbracciare soluzioni da prototipo da pista. Per contenere la massa complessiva appena sotto la soglia critica dei <strong>1.700 kg</strong> (un miracolo ingegneristico per un'elettrica di queste prestazioni), Tesla ha fatto ricorso massiccio a <strong>fibra di carbonio, titanio e leghe di magnesio</strong>. Persino i sedili nell'abitacolo "Supersonic" sono strutturalmente integrati nel telaio: non scorrono avanti e indietro, ma è la pedaliera (insieme al volante yoke) a muoversi verso il pilota.</p>
+    <p>La vera rivoluzione meccanica risiede però nella gestione dei flussi d'aria e nella dinamica del veicolo:</p>
+    <ul>
+      <li><strong>Propulsione Elettrica Pura:</strong> La base meccanica poggia su due unità motrici posteriori (nelle configurazioni focalizzate sulla trazione integrale dinamica ed estrema leggerezza anteriore) capaci di erogare oltre <strong>1 Megawatt di potenza (più di 1.360 CV)</strong> e oltre <strong>1.400 Nm di coppia</strong> gestiti al millesimo di secondo.</li>
+      <li><strong>Effetto Suolo Attivo a Velocità Zero:</strong> A partire dalla versione <em>Performance</em>, il fondo scocca integra <strong>quattro ventole multimodali da 20 kW ciascuna</strong>. Lavorando in simbiosi con minigonne mobili che sigillano l'auto all'asfalto, queste turbine aspirano l'aria da sotto il telaio generando una deportanza tale da poter teoricamente mantenere l'auto incollata al soffitto anche da ferma.</li>
+      <li><strong>Controllo Totale By-Wire e Sospensioni:</strong> Spariscono i collegamenti meccanici tradizionali. Lo sterzo (<em>steer-by-wire</em>), i freni carboceramici (<em>brake-by-wire</em>) e l'acceleratore dialogano esclusivamente via cavo ed elettronica con le sospensioni adattive a doppio braccio oscillante, capaci di incollare la vettura a terra nella modalità <em>Track Mode</em>.</li>
+    </ul>
+
+    <h2>2. Il "Fattore SpaceX": Quando i Pneumatici Non Bastano Più</h2>
+    <p>La fisica impone un limite invalicabile alle auto tradizionali: l'attrito della gomma sull'asfalto. Superata una certa potenza, le ruote semplicemente slittano. La risposta di Tesla è stata aggirare il limite delle ruote introducendo gli <strong>"Augments"</strong> (potenziamenti aerospaziali), che dividono la gamma in quattro declinazioni: <em>Standard</em>, <em>Performance</em>, <em>Thrust</em> e l'estrema <em>Rocket</em> (solo su invito e non omologata per la strada pubblica).</p>
+    <p>Nelle versioni <strong>Thrust</strong> e <strong>Rocket</strong>, l'auto monta serbatoi compositi avvolti in carbonio (COPV) derivati dai razzi Falcon di SpaceX, caricati con <strong>azoto compresso fino a 10.000 psi (circa 690 bar)</strong>.</p>
+    <ul>
+      <li><strong>Configurazione Thrust (2 posti):</strong> Integra un serbatoio da 200 litri e quattro ugelli posteriori capaci di generare oltre <strong>80 kN di spinta vettoriale</strong> (4-5 volte la forza trasmissibile dagli pneumatici), abbattendo lo <strong>0-96 km/h (0-60 mph) a 0,81 secondi</strong> (dimostrati dal vivo) con picchi di accelerazione di oltre 3G.</li>
+      <li><strong>Configurazione Rocket (Monoposto):</strong> Sacrifica il sedile del passeggero per alloggiare un serbatoio aggiuntivo da 400 litri (600 litri totali) e aggiunge sei ugelli direzionali laterali e anteriori. Il risultato dichiarato è uno <strong>0-96 km/h in meno di 0,59 secondi</strong> (con una spinta di 4,64G) e la capacità di <strong>sollevarsi temporaneamente da terra</strong>, trasformando l'auto in un veicolo a levitazione controllata per brevi tratti.</li>
+    </ul>
+
+    <div class="tr-table-container">
+      <table class="tr-table">
+        <thead>
+          <tr>
+            <th>Versione</th>
+            <th>Posti</th>
+            <th>Potenza / Spinta Extra</th>
+            <th>0-96 km/h (0-60 mph)</th>
+            <th>Velocità Massima Stimata</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Standard</strong></td>
+            <td>2</td>
+            <td>Oltre 1 MW (Elettrico)</td>
+            <td>~1,9 secondi</td>
+            <td>Oltre 344 km/h</td>
+          </tr>
+          <tr>
+            <td><strong>Performance</strong></td>
+            <td>2</td>
+            <td>Oltre 1 MW + 4 Ventole (80 kW)</td>
+            <td>Meno di 1,6 secondi</td>
+            <td>Oltre 370 km/h</td>
+          </tr>
+          <tr>
+            <td><strong>Thrust</strong></td>
+            <td>2</td>
+            <td>4 Ugelli SpaceX (Serbatoio 200L)</td>
+            <td>0,81 - 0,85 secondi</td>
+            <td>Oltre 400 km/h</td>
+          </tr>
+          <tr>
+            <td><strong>Rocket</strong></td>
+            <td>1</td>
+            <td>10 Ugelli SpaceX (Serbatoio 600L)</td>
+            <td>Meno di 0,59 secondi</td>
+            <td>Oltre 500 km/h (solo pista)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>3. Batterie, kWh e Ricarica: La Nuova Frontiera dell'Energia</h2>
+    <p>Se il prototipo del 2017 prometteva un pacco batteria mastodontico e pesantissimo da <strong>200 kWh</strong> per garantire 1.000 km di autonomia, l'evoluzione tecnica del 2026 ha portato a una scelta molto più raffinata e sportiva. Per non penalizzare l'agilità tra le curve con un peso eccessivo, l'ingegneria Tesla si è concentrata sulla densità di potenza e sulla velocità di rifornimento energetico, strutturando un pacco batteria nell'ordine dei <strong>150 kWh</strong> (con varianti a lunga percorrenza stimate fino alla soglia originaria dei 200 kWh a seconda dell'allestimento) per un'autonomia reale certificabile <strong>superiore ai 480 km (300+ miglia)</strong> in condizioni di utilizzo stradale sportivo.</p>
+    <p>I dettagli tecnici del sistema di accumulo e ricarica segnano un salto generazionale:</p>
+    <ul>
+      <li><strong>Celle 4680 Speciali e Titanio:</strong> Il pacco utilizza un'evoluzione ad altissima scarica delle celle cilindriche 4680 con involucro in alluminio, <strong>raffreddamento su doppio lato</strong> (superiore e inferiore) per dissipare il calore estremo generato dalle scariche da 1 MW, e una piastra superiore strutturale in <strong>titanio</strong>.</li>
+      <li><strong>Architettura a 800–1.000 Volt:</strong> Superando gli standard attuali, il sistema opera ad altissimo voltaggio per ridurre l'intensità di corrente e il peso dei cablaggi.</li>
+      <li><strong>Quanti kW in Ricarica?</strong> Collegata ai Supercharger V4 di ultima generazione, la Roadster è progettata per assorbire <strong>oltre 500 kW di potenza continua in corrente continua (DC)</strong>, con picchi architetturali che sfiorano il Megawatt nei primi istanti.</li>
+      <li><strong>Tempi di Ricarica:</strong> Grazie a questa potenza mostruosa, il passaggio <strong>dal 15% all'80-85% della carica richiede appena 10 minuti</strong>. Per la ricarica domestica o pubblica in corrente alternata (AC), il caricatore di bordo supporta fino a <strong>16,5 kW</strong>, mentre il rifornimento dei serbatoi di azoto ad alta pressione richiede un compressore dedicato (con l'obiettivo di ridurre il tempo di ricarica del gas a circa 30 minuti).</li>
+    </ul>
+
+    <h2>4. Piani Futuri, Mercato e il "Fattore Cina"</h2>
+    <p>Nonostante l'entusiasmo generato dalla presentazione — che ha fatto balzare il titolo Tesla in borsa — la strada verso il garage dei clienti è ancora lunga: <strong>l'avvio effettivo della produzione è fissato per il 2028</strong>, con un prezzo d'attacco stimato a partire da <strong>200.000 - 250.000 dollari</strong> per le versioni stradali, destinato a salire vertiginosamente per le serie speciali <em>Thrust</em> e <em>Rocket</em>.</p>
+    <p>Perché presentare nel 2026 un'auto che verrà prodotta nel 2028? La risposta è geopolitica e industriale, e passa direttamente da <strong>Pechino</strong>. Mentre Tesla rimandava la Roadster, l'industria automobilistica cinese ha compiuto un balzo epocale. Colossi come <strong>BYD</strong> (con la supercar <em>Yangwang U9</em>, capace di saltare sulle sospensioni e danzare), <strong>Xiaomi</strong> (con la <em>SU7 Ultra</em> che ha polverizzato i record al Nürburgring) e <strong>GAC Aion</strong> (con la <em>Hyper SSR</em>) hanno dimostrato al mondo che la Cina non produce più solo utilitarie economiche, ma domina anche il segmento delle hypercar elettriche ad altissima tecnologia, per di più già in vendita e a prezzi inferiori.</p>
+    <p>In Cina, questa nuova Roadster è vista con un misto di <strong>ammirazione tecnologica e scetticismo pragmatico</strong>:</p>
+    <ol>
+      <li><strong>La risposta dell'Impero Americano:</strong> I produttori cinesi sanno di avere il vantaggio sui costi della catena di fornitura delle batterie e sui tempi di industrializzazione, ma Tesla ha calato l'unica carta che nessun concorrente di Shenzhen o Shanghai possiede: <strong>la sinergia diretta con un'azienda aerospaziale (SpaceX)</strong>.</li>
+      <li><strong>Effetto Halo:</strong> In un mercato asiatico dove le vendite dei modelli di massa (Model 3 e Model Y) subiscono la pressione feroce dei marchi locali, la Roadster funge da "faro d'immagine" (<em>Halo Car</em>) per restituire a Tesla l'aura di marchio irraggiungibile e visionario.</li>
+    </ol>
+
+    <h2>5. I Lati Positivi e i Lati Negativi</h2>
+    <p>Ogni rivoluzione porta con sé luci abbaglianti e ombre profonde. Ecco il bilancio oggettivo del progetto Roadster:</p>
+    <p><strong>I Punti di Forza (Pro):</strong></p>
+    <ul>
+      <li><strong>Ingegneria senza precedenti:</strong> L'integrazione tra aerodinamica attiva a ventole, architettura a 1.000V e propulsione a gas freddo crea una categoria di veicoli totalmente nuova.</li>
+      <li><strong>Ricarica lampo e peso contenuto:</strong> Ricaricare in 10 minuti e restare sotto i 1.700 kg risolve i due più grandi talloni d'Achille delle sportive elettriche attuali.</li>
+      <li><strong>Valore collezionistico immediato:</strong> Essendo progettata come un'opera estrema prima dell'era robotica, è destinata a diventare un pezzo da collezione istantaneo.</li>
+    </ul>
+    <p><strong>Le Criticità e le Incognite (Contro):</strong></p>
+    <ul>
+      <li><strong>Il rischio "Vaporware" e l'attesa:</strong> Dal 2017 al 2028 passeranno <strong>11 anni</strong>. Chi ha versato caparre da 50.000 o 250.000 dollari quasi un decennio fa ha visto cambiare il mondo nell'attesa.</li>
+      <li><strong>Incubo omologativo e sicurezza:</strong> Omologare per la circolazione stradale (specialmente in Europa e in Cina) un'auto con serbatoi a 10.000 psi che sparano getti supersonici dal retro, con il rischio di proiettare detriti o generare inquinamento acustico da jet, sarà una sfida legale titanica. Non a caso la versione <em>Rocket</em> è già stata confinata all'uso fuori dalle strade pubbliche.</li>
+      <li><strong>Logistica del gas freddo:</strong> Mentre la rete Supercharger è capillare, ricaricare 200 o 600 litri di azoto a 690 bar dopo pochi secondi di spinta richiede attrezzature industriali non certo presenti nelle normali stazioni di servizio.</li>
+    </ul>
+
+    <h2>6. Le Porte che si Aprono e il Futuro: Il Canto del Cigno della Guida Umana</h2>
+    <p>Qual è il vero significato della Roadster per il futuro dell'automobile? Durante la presentazione, Elon Musk ha lasciato cadere una frase che suona come un epitaffio romantico per gli appassionati di motori: la Roadster potrebbe essere <strong>«l'ultima e unica auto a guida manuale prodotta da Tesla»</strong>.</p>
+    <p>Mentre l'azienda sposta tutto il suo baricentro economico verso l'intelligenza artificiale, i robot umanoidi (<em>Optimus</em>) e le flotte di taxi autonomi privi di volante e pedali (<em>Cybercab</em>), la Roadster rappresenta l'esatto opposto: la celebrazione suprema dell'adrenalina umana, del controllo fisico e dell'emozione pura di guida.</p>
+    <p>Allo stesso tempo, questo modello apre porte tecnologiche fondamentali per le auto di domani: le celle 4680 ad altissimo rendimento termico, i sistemi <em>steer-by-wire</em> e <em>brake-by-wire</em> ultra-rapidi e l'uso di nuovi materiali compositi scenderanno, negli anni a venire, sulle vetture di tutti i giorni, rendendole più leggere, sicure ed efficienti.</p>
+    <p><strong>Sarà un successo?</strong> Se misuriamo il successo in termini di bilanci aziendali o milioni di pezzi venduti, la Roadster resterà una nicchia per pochissimi eletti. Ma se il metro di giudizio è la capacità di spostare i confini dell'immaginazione umana e costringere l'intera industria mondiale a inseguire, Tesla ha già lasciato il segno. Tra promesse di volo, sfide geopolitiche con i giganti asiatici e la scadenza del 2028 all'orizzonte, <strong>se la nuova Roadster sarà ricordata come il più grande capolavoro dell'era elettrica o come un'utopia incompiuta, lo deciderà solo il tempo.</strong></p>
+
+    <!-- WIDGET INTERATTIVO INCORPORATO -->
+    <div class="tr-widget-box">
+      <h3 class="tr-widget-title">Comparatore Interattivo: Prestazioni & Configurazioni Roadster</h3>
+      <div class="tr-widget-desc">Seleziona una metrica per confrontare le 4 versioni svelate da Tesla o usa il simulatore di ricarica in basso.</div>
+      
+      <div class="tr-controls">
+        <button class="tr-btn active" onclick="updateTrChart('tempo_0_96_s', this)">0-96 km/h (Secondi)</button>
+        <button class="tr-btn" onclick="updateTrChart('accelerazione_g', this)">Forza G Massima (G)</button>
+        <button class="tr-btn" onclick="updateTrChart('velocita_max_kmh', this)">Velocità Max (km/h)</button>
+        <button class="tr-btn" onclick="updateTrChart('capacita_azoto_litri', this)">Serbatoio SpaceX (Litri)</button>
+      </div>
+
+      <div class="tr-chart-area" id="trChartArea"></div>
+
+      <div class="tr-charger-box">
+        <div style="font-weight: 600; margin-bottom: 4px;">Simulatore Ricarica Batteria 150 kWh (15% → 80%)</div>
+        <input type="range" id="trKwSlider" class="tr-slider" min="150" max="600" step="25" value="500" oninput="updateTrCharger(this.value)">
+        <div class="tr-charger-stats">
+          <span>Potenza Colonnina: <strong id="trKwVal" class="tr-highlight">500 kW</strong></span>
+          <span>Tempo Stimato (15-80%): <strong id="trTimeVal" class="tr-highlight">~10.0 min</strong></span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="footer" style="background: #080b12; border-top: 1px solid var(--border-glass); padding: 60px 0 30px 0; color: #9ca3af;">
+    <div class="container" style="max-width: 1280px; margin: 0 auto; padding: 0 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid var(--border-glass); padding-bottom: 30px; margin-bottom: 30px;">
+        <div>
+          <img src="/logo_tricolore.png?v=1" alt="ITERCARS" style="height: 34px; width: auto; margin-bottom: 10px;">
+          <p style="font-size: 0.9rem; color: #6b7280;">ITERCARS Magazine · Approfondimenti, analisi e novità sul mondo dell'auto d'élite.</p>
+        </div>
+        <div style="display: flex; gap: 16px;">
+          <a href="/magazine.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem;">Torna al Magazine</a>
+          <a href="/fleet.html" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.9rem;">Scopri la Flotta</a>
+        </div>
+      </div>
+      <div style="text-align: center; font-size: 0.85rem; color: #4b5563;">
+        &copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const trData = [
+      { nome: "Standard (2 Posti)", tempo_0_96_s: 1.90, accelerazione_g: 1.45, velocita_max_kmh: 344, capacita_azoto_litri: 0 },
+      { nome: "Performance (Ventole 80kW)", tempo_0_96_s: 1.55, accelerazione_g: 2.10, velocita_max_kmh: 370, capacita_azoto_litri: 0 },
+      { nome: "Thrust (SpaceX 2 Posti)", tempo_0_96_s: 0.81, accelerazione_g: 3.04, velocita_max_kmh: 402, capacita_azoto_litri: 200 },
+      { nome: "Rocket (SpaceX Monoposto)", tempo_0_96_s: 0.59, accelerazione_g: 4.64, velocita_max_kmh: 531, capacita_azoto_litri: 600 }
+    ];
+
+    const trConfig = {
+      tempo_0_96_s: { unit: " s", max: 2.2 },
+      accelerazione_g: { unit: " G", max: 5.0 },
+      velocita_max_kmh: { unit: " km/h", max: 550 },
+      capacita_azoto_litri: { unit: " L", max: 600 }
+    };
+
+    function updateTrChart(metric, btnEl) {
+      if (btnEl) {
+        document.querySelectorAll('.tr-btn').forEach(b => b.classList.remove('active'));
+        btnEl.classList.add('active');
+      }
+      const container = document.getElementById('trChartArea');
+      const cfg = trConfig[metric];
+      if (!container || !cfg) return;
+      container.innerHTML = '';
+
+      trData.forEach(item => {
+        const val = item[metric];
+        const pct = Math.max((val / cfg.max) * 100, 3);
+        const row = document.createElement('div');
+        row.className = 'tr-bar-row';
+        row.innerHTML = `
+          <div class="tr-bar-label">
+            <span style="color: #cbd5e1;">${item.nome}</span>
+            <span style="color:#fb7185">${val}${cfg.unit}</span>
+          </div>
+          <div class="tr-bar-track">
+            <div class="tr-bar-fill" style="width: ${pct}%"></div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function updateTrCharger(kw) {
+      document.getElementById('trKwVal').innerText = kw + ' kW';
+      const minuti = (5000 / kw).toFixed(1);
+      document.getElementById('trTimeVal').innerText = '~' + minuti + ' min';
+    }
+
+    // Avvio iniziale del grafico
+    updateTrChart('tempo_0_96_s', null);
+
+    // Gestione Like e Condivisione
+    const likeBtn = document.getElementById('trLikeBtn');
+    const heartIcon = document.getElementById('trHeartIcon');
+    const likeCountSpan = document.getElementById('trLikeCount');
+    if (likeBtn && heartIcon && likeCountSpan) {
+      let currentLikes = localStorage.getItem('article_likes_tesla_roadster') ? parseInt(localStorage.getItem('article_likes_tesla_roadster')) : 245;
+      let hasLiked = localStorage.getItem('user_has_liked_tesla_roadster') === 'true';
+      likeCountSpan.textContent = currentLikes;
+      if (hasLiked) {
+        heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill');
+        heartIcon.style.color = '#ef4444';
+      }
+      likeBtn.addEventListener('click', () => {
+        if (!hasLiked) {
+          currentLikes++;
+          hasLiked = true;
+          localStorage.setItem('user_has_liked_tesla_roadster', 'true');
+          heartIcon.classList.replace('ri-heart-3-line', 'ri-heart-3-fill');
+          heartIcon.style.color = '#ef4444';
+        } else {
+          currentLikes--;
+          hasLiked = false;
+          localStorage.setItem('user_has_liked_tesla_roadster', 'false');
+          heartIcon.classList.replace('ri-heart-3-fill', 'ri-heart-3-line');
+          heartIcon.style.color = '#fff';
+        }
+        likeCountSpan.textContent = currentLikes;
+        localStorage.setItem('article_likes_tesla_roadster', currentLikes);
+      });
+    }
+
+    const shareBtn = document.getElementById('trShareBtn');
+    if (shareBtn) {
+      shareBtn.addEventListener('click', async () => {
+        try {
+          if (navigator.share) {
+            await navigator.share({
+              title: "Oltre l'Asfalto: La Nuova Tesla Roadster",
+              text: "Analisi tecnica e geopolitica con comparatore interattivo della nuova Tesla Roadster su Itercars Magazine.",
+              url: window.location.href,
+            });
+          } else {
+            await navigator.clipboard.writeText(window.location.href);
+            alert('Link dell\'articolo copiato negli appunti: ' + window.location.href);
+          }
+        } catch (err) {
+          console.log('Condivisione annullata', err);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
