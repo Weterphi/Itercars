@@ -16,242 +16,287 @@
 
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
   <link rel="stylesheet" href="/index.css?v=50">
   <link rel="stylesheet" href="/magazine.css">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
   <style>
-    body.tr-page {
-      background: #0a0e17;
-      color: #1f2937;
-      min-height: 100vh;
+    /* ================= TEMA BIANCO SU NERO (DARK MODE LUXURY) ================= */
+    body.magazine-body {
+      background: #06080e !important;
+      color: #cbd5e1;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    }
-    
-    .tr-page-header {
-      padding: 105px 20px 25px 20px;
-      max-width: 920px;
-      margin: 0 auto;
-    }
-    
-    .tr-back-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    
-    .tr-back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      color: #9ca3af;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 600;
-      transition: color 0.2s;
-    }
-    .tr-back-link:hover {
-      color: #e11d48;
-    }
-    
-    .tr-meta-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
-      background: rgba(225, 29, 72, 0.15);
-      border: 1px solid rgba(225, 29, 72, 0.4);
-      color: #fb7185;
-      font-size: 0.8rem;
-      font-weight: 700;
-      border-radius: 9999px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
 
-    .tr-social-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+    .glass-responsive {
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    .glass-responsive::-webkit-scrollbar {
+      width: 6px;
+    }
+    .glass-responsive::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    .glass-responsive::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
     }
 
-    .tr-action-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    .tr-action-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: #e11d48;
+    @media (max-width: 768px) {
+      .glass-responsive {
+        left: 50% !important;
+        right: auto !important;
+        transform: translate(-50%, -50%) !important;
+        width: 92% !important;
+        max-width: 100% !important;
+        padding: 22px 18px !important;
+        text-align: center !important;
+        border-radius: 14px !important;
+      }
+      .glass-responsive.glass-top {
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        transform: none !important;
+        border-radius: 0 !important;
+        padding: 16px 5% !important;
+      }
+      .glass-responsive h2 {
+        font-size: 1.55rem !important;
+        margin-bottom: 12px !important;
+      }
+      .glass-responsive p {
+        font-size: 0.95rem !important;
+      }
+      .article-title {
+        font-size: 2.1rem !important;
+      }
+      .tr-article-wrapper {
+        padding: 24px 18px !important;
+        border-radius: 14px !important;
+      }
+      .tr-article-wrapper h1 {
+        font-size: 1.8rem !important;
+      }
+      .tr-subtitle {
+        font-size: 1.05rem !important;
+        padding: 12px 14px !important;
+      }
+      .tr-widget-box {
+        padding: 20px 16px !important;
+      }
     }
 
-    /* INIZIO ARTICOLO TESLA ROADSTER + COMPARATORE INTERATTIVO */
+    /* ARTICOLO BIANCO SU NERO */
     .tr-article-wrapper {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      line-height: 1.75;
-      color: #1f2937;
-      max-width: 920px;
-      margin: 0 auto 60px auto;
-      padding: 40px;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      line-height: 1.8;
+      color: #cbd5e1;
+      max-width: 940px;
+      margin: 0 auto 80px auto;
+      padding: 50px;
+      background: #0d121f;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 30px rgba(225, 29, 72, 0.08);
     }
+
     .tr-article-wrapper h1 {
-      font-size: 2.3rem;
+      font-size: 2.45rem;
       line-height: 1.25;
-      color: #111827;
-      margin-bottom: 16px;
+      color: #ffffff;
+      margin-bottom: 20px;
       font-weight: 800;
+      letter-spacing: -0.02em;
     }
+
     .tr-subtitle {
       font-size: 1.2rem;
-      color: #4b5563;
+      color: #94a3b8;
       font-weight: 500;
-      margin-bottom: 28px;
+      margin-bottom: 32px;
       border-left: 4px solid #e11d48;
-      padding-left: 16px;
+      padding: 14px 18px;
+      background: rgba(225, 29, 72, 0.06);
+      border-radius: 0 10px 10px 0;
+      line-height: 1.6;
     }
+
     .tr-article-wrapper h2 {
-      font-size: 1.55rem;
-      color: #111827;
-      margin-top: 40px;
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #f3f4f6;
+      font-size: 1.65rem;
+      color: #ffffff;
+      margin-top: 48px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      letter-spacing: -0.01em;
     }
+
     .tr-article-wrapper p {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
       font-size: 1.05rem;
+      color: #cbd5e1;
     }
+
+    .tr-article-wrapper strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
     .tr-article-wrapper ul, .tr-article-wrapper ol {
-      margin-bottom: 22px;
+      margin-bottom: 26px;
       padding-left: 24px;
     }
+
     .tr-article-wrapper li {
-      margin-bottom: 10px;
+      margin-bottom: 12px;
       font-size: 1.05rem;
+      color: #cbd5e1;
     }
-    .tr-hero-figure {
-      margin: 28px 0;
+
+    .tr-hero-figure, .tr-article-figure {
+      margin: 36px 0;
       text-align: center;
     }
-    .tr-hero-figure img {
+
+    .tr-hero-figure img, .tr-article-figure img {
       width: 100%;
       max-height: 520px;
       object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border-radius: 14px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .tr-hero-figure figcaption {
+
+    .tr-hero-figure figcaption, .tr-article-figure figcaption {
       font-size: 0.9rem;
-      color: #6b7280;
-      margin-top: 8px;
+      color: #94a3b8;
+      margin-top: 10px;
       font-style: italic;
     }
-    /* Tabella Responsiva */
+
+    /* Tabella Dark */
     .tr-table-container {
       overflow-x: auto;
-      margin: 28px 0;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      margin: 36px 0;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
+
     .tr-table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 600px;
-      background: #fff;
+      min-width: 640px;
+      background: #111827;
     }
+
     .tr-table th {
-      background-color: #111827;
-      color: #ffffff;
+      background-color: #080c14;
+      color: #fb7185;
       text-align: left;
-      padding: 14px 16px;
+      padding: 16px 18px;
       font-size: 0.95rem;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      letter-spacing: 0.03em;
     }
+
     .tr-table td {
-      padding: 14px 16px;
-      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
       font-size: 0.95rem;
+      color: #e2e8f0;
     }
+
     .tr-table tr:nth-child(even) {
-      background-color: #f9fafb;
+      background-color: rgba(255, 255, 255, 0.02);
     }
+
+    .tr-table tr:hover {
+      background-color: rgba(225, 29, 72, 0.06);
+    }
+
     /* Widget Interattivo */
     .tr-widget-box {
-      background: #0f172a;
+      background: #090d16;
       color: #f8fafc;
       border-radius: 16px;
-      padding: 28px;
-      margin: 44px 0;
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      padding: 32px;
+      margin: 48px 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.6), 0 0 25px rgba(225, 29, 72, 0.12);
     }
+
     .tr-widget-title {
-      font-size: 1.4rem;
+      font-size: 1.45rem;
       font-weight: 700;
       margin: 0 0 8px 0;
       color: #ffffff;
     }
+
     .tr-widget-desc {
       font-size: 0.95rem;
       color: #94a3b8;
       margin-bottom: 24px;
     }
+
     .tr-controls {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-bottom: 24px;
     }
+
     .tr-btn {
       background: #1e293b;
       color: #cbd5e1;
       border: 1px solid #334155;
-      padding: 10px 16px;
+      padding: 10px 18px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 0.9rem;
       font-weight: 600;
       transition: all 0.2s ease;
     }
+
     .tr-btn:hover {
       background: #334155;
       color: #fff;
     }
+
     .tr-btn.active {
       background: #e11d48;
       color: #ffffff;
       border-color: #e11d48;
+      box-shadow: 0 0 15px rgba(225, 29, 72, 0.4);
     }
+
     .tr-chart-area {
       display: flex;
       flex-direction: column;
       gap: 16px;
       margin-bottom: 30px;
     }
+
     .tr-bar-row {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
+
     .tr-bar-label {
       display: flex;
       justify-content: space-between;
       font-size: 0.95rem;
       font-weight: 600;
     }
+
     .tr-bar-track {
       width: 100%;
       height: 28px;
@@ -259,25 +304,30 @@
       border-radius: 6px;
       overflow: hidden;
     }
+
     .tr-bar-fill {
       height: 100%;
       background: linear-gradient(90deg, #e11d48, #fb7185);
       border-radius: 6px;
       width: 0%;
       transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 0 10px rgba(225, 29, 72, 0.5);
     }
+
     .tr-charger-box {
-      background: #1e293b;
-      padding: 20px;
+      background: #151d2e;
+      padding: 22px;
       border-radius: 12px;
-      border: 1px solid #334155;
+      border: 1px solid #293548;
     }
+
     .tr-slider {
       width: 100%;
-      margin: 12px 0;
+      margin: 14px 0;
       accent-color: #e11d48;
       cursor: pointer;
     }
+
     .tr-charger-stats {
       display: flex;
       justify-content: space-between;
@@ -286,78 +336,159 @@
       margin-top: 10px;
       font-size: 0.95rem;
     }
+
     .tr-highlight {
       color: #fb7185;
       font-weight: 700;
       font-size: 1.15rem;
     }
-
-    @media (max-width: 768px) {
-      .tr-article-wrapper {
-        padding: 22px 18px;
-        border-radius: 12px;
-      }
-      .tr-article-wrapper h1 {
-        font-size: 1.75rem;
-      }
-      .tr-subtitle {
-        font-size: 1.05rem;
-      }
-      .tr-widget-box {
-        padding: 20px 16px;
-      }
-    }
   </style>
 </head>
-<body class="tr-page">
+<body class="magazine-body">
 
-  <!-- ================= NAVBAR ================= -->
-  <header id="header" style="position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(10, 14, 23, 0.96); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border-glass); padding: 10px 0;">
-    <div class="container nav-container" style="display: flex; align-items: center; justify-content: space-between; max-width: 1280px; margin: 0 auto; padding: 0 20px;">
-      <a href="/index.html" class="logo" title="ITERCARS Luxury Supercar Rental">
-        <img src="/logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img" style="height: 38px; width: auto;">
-      </a>
-
-      <ul class="nav-links" style="display: flex; align-items: center; gap: 24px; list-style: none;">
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
-        <li><a href="/noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
-        <li><a href="/noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
-        <li><a href="/magazine.html" style="color: #fff; font-weight: 700; border-bottom: 2px solid var(--accent-primary);"><i class="ri-article-line"></i> MAGAZINE</a></li>
-        <li><a href="/academy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <a href="/magazine.html" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;">
-          <i class="ri-arrow-left-line"></i> <span>Tutti gli Articoli</span>
-        </a>
+  <!-- ================= HERO IMMERSIVE SLIDER (SWIPER PRESENTATION) ================= -->
+  <section class="mag-hero-article">
+    <div class="swiper immersive-swiper" id="articleSwiper">
+      
+      <!-- Top Action Buttons -->
+      <div class="immersive-actions" style="z-index: 100;">
+        <a href="/magazine.html" class="esc-btn" title="Torna al Magazine">ESC</a>
+        <button class="fullscreen-btn pulse-attention" id="fsToggleBtn" title="Schermo Intero">
+          <i class="ri-fullscreen-line" id="fsIcon"></i>
+        </button>
       </div>
-    </div>
-  </header>
 
-  <!-- ================= TOP META BAR ================= -->
+      <div class="swiper-wrapper">
+      
+        <!-- SLIDE 1: COVER -->
+        <section class="swiper-slide immersive-slide cover-layout" style="background: #04060a;">
+          <picture>
+            <source srcset="/tesla-roadster.webp" type="image/webp">
+            <img src="/tesla-roadster.jpg" alt="Nuova Tesla Roadster" class="cover-bg" style="filter: brightness(0.65);">
+          </picture>
+          <div class="cover-overlay"></div>
+          <div class="cover-content" style="text-align: center; max-width: 960px; padding: 0 5%; z-index: 10;">
+            <span class="mag-slide-category" style="background: rgba(225, 29, 72, 0.25); color: #fb7185; border: 1px solid rgba(225, 29, 72, 0.5); border-radius: 99px; padding: 6px 18px; font-weight: bold; margin-bottom: 22px; display: inline-block; letter-spacing: 0.05em;">HYPERCAR SPECIAL · 2026 REVEAL</span>
+            <h1 class="article-title" style="font-size: 3.5rem; font-weight: 800; color: #fff; margin-bottom: 16px; line-height: 1.15;">Oltre l'Asfalto: La Nuova Tesla Roadster</h1>
+            <p style="font-size: 1.35rem; color: #cbd5e1; margin-bottom: 28px; line-height: 1.5;">Tra Ingegneria Aerospaziale, Sfida Cinese e il Crepuscolo della Guida Umana</p>
+            <div class="article-meta" style="color: #94a3b8; font-size: 0.95rem; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+              <span><i class="ri-user-line"></i> Di Redazione Itercars</span>
+              <span><i class="ri-calendar-line"></i> 1 Novembre 2026</span>
+              <span><i class="ri-time-line"></i> 10 min read</span>
+            </div>
+            <div class="swipe-indicator" style="margin-top: 45px; animation: bounce 2s infinite;">
+              <i class="ri-arrow-down-line" style="font-size: 2rem; color: rgba(255,255,255,0.6);"></i>
+            </div>
+          </div>
+        </section>
+
+        <!-- SLIDE 2: AERODINAMICA E CODA CON ALA ATTIVA -->
+        <section class="swiper-slide immersive-slide split-layout" style="background: #06080e;">
+          <div class="split-image">
+            <picture>
+              <source srcset="/tesla-rear-sunset.webp" type="image/webp">
+              <img src="/tesla-rear-sunset.jpg" alt="Tesla Roadster Posteriore e Alettone">
+            </picture>
+          </div>
+          <div class="split-content" style="z-index: 10;">
+            <span style="color: #fb7185; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">DESIGN & EFFETTO SUOLO</span>
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">L'Arte della Sottrazione e della Portanza Negativa</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">Fibra di carbonio, titanio e leghe di magnesio consentono alla nuova Roadster di contenere la massa complessiva sotto i <strong>1.700 kg</strong>: un miracolo per un'hypercar elettrica da oltre un Megawatt di potenza.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Quattro ventole attive da 20 kW nel fondo scocca aspirano l'aria sigillando l'auto all'asfalto: una deportanza virtuale capace teoricamente di tenerla incollata al soffitto anche da ferma.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 3: I PROPULSORI SPACEX A GAS FREDDO -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <picture>
+            <source srcset="/tesla-thrusters.webp" type="image/webp">
+            <img src="/tesla-thrusters.jpg" alt="SpaceX Cold Gas Thrusters" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(0.85); z-index: 1;">
+          </picture>
+          <div class="glass-responsive" style="position: absolute; right: 4%; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(10, 14, 23, 0.75); backdrop-filter: blur(14px); padding: 36px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 480px; text-align: left; box-shadow: 0 25px 50px rgba(0,0,0,0.6);">
+            <span style="color: #fb7185; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px;">PROPULSIONE AEROSPAZIALE</span>
+            <h2 style="font-size: 2.1rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">Il Fattore SpaceX: 80 kN di Spinta Vettoriale</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">Quando l'attrito degli pneumatici raggiunge il limite fisico, intervengono i serbatoi compositi avvolti in carbonio derivati dai razzi Falcon, pressurizzati ad azoto a <strong>10.000 psi (690 bar)</strong>.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Quattro ugelli posteriori generano una spinta 5 volte superiore a quella della gomma: lo <strong>0-96 km/h si polverizza in 0,81 secondi</strong> con oltre 3G di accelerazione costante.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 4: IL SALTO IN VOLO DELLA CONFIGURAZIONE ROCKET -->
+        <section class="swiper-slide immersive-slide" style="position: relative; background: #000; width: 100%; height: 100%;">
+          <picture>
+            <source srcset="/tesla-jump-semi.webp" type="image/webp">
+            <img src="/tesla-jump-semi.jpg" alt="Tesla Roadster Jump over Semi" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; filter: brightness(0.8); z-index: 1;">
+          </picture>
+          <div class="glass-responsive" style="position: absolute; left: 4%; top: 50%; transform: translateY(-50%); z-index: 10; background: rgba(10, 14, 23, 0.8); backdrop-filter: blur(14px); padding: 36px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.15); max-width: 500px; text-align: left; box-shadow: 0 25px 50px rgba(0,0,0,0.6);">
+            <span style="color: #fb7185; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px;">CONFIGURAZIONE ROCKET</span>
+            <h2 style="font-size: 2.1rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">Quando l'Hypercar Impara a Volare</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">La variante estrema Monoposto sacrifica il sedile passeggero per alloggiare 600 litri di azoto e 10 ugelli omnidirezionali. Il risultato dichiarato è uno <strong>0-96 km/h in meno di 0,59 secondi</strong> (4,64G).</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Grazie alla spinta ascensionale vettoriale, l'auto può letteralmente sollevarsi da terra per brevi tratti, tramutandosi in un veicolo a levitazione controllata.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 5: L'ABITACOLO SUPERSONIC & IL COCKPIT CON VOLANTE YOKE -->
+        <section class="swiper-slide immersive-slide split-layout" style="background: #06080e;">
+          <div class="split-image">
+            <picture>
+              <source srcset="/tesla-cockpit.webp" type="image/webp">
+              <img src="/tesla-cockpit.jpg" alt="Abitacolo e Cockpit Tesla Roadster">
+            </picture>
+          </div>
+          <div class="split-content" style="z-index: 10;">
+            <span style="color: #fb7185; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 12px;">COCKPIT & TELEMETRIA</span>
+            <h2 style="font-size: 2.2rem; font-weight: 800; color: #fff; margin-bottom: 20px; line-height: 1.2;">Abitacolo Supersonic & Volante Yoke</h2>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin-bottom: 15px;">I sedili a guscio ultra-alleggeriti sono integrati nel telaio: pedaliera e volante yoke avanzano verso il pilota. Display OLED centrale con telemetria SpaceX in tempo reale e HUD olografico sul parabrezza per dominare la pista.</p>
+            <p style="color: #e2e8f0; font-size: 1.05rem; line-height: 1.6; margin: 0;">Comandi totalmente <em>steer-by-wire</em> e <em>brake-by-wire</em> per un tempo di reazione istantaneo a ogni minima sollecitazione del guidatore.</p>
+          </div>
+        </section>
+
+        <!-- SLIDE 6: LA LEVITAZIONE SUL PALCO & IL CANTO DEL CIGNO -->
+        <section class="swiper-slide immersive-slide cover-layout" style="background: #020306;">
+          <picture>
+            <source srcset="/tesla-hover-stage.webp" type="image/webp">
+            <img src="/tesla-hover-stage.jpg" alt="Levitazione sul Palco Tesla Roadster" class="cover-bg" style="opacity: 0.45;">
+          </picture>
+          <div class="cover-content" style="max-width: 900px; z-index: 10;">
+            <span style="color: #fb7185; font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; display: block; margin-bottom: 20px;">L'EPITAFFIO DI ELON MUSK</span>
+            <div class="immersive-quote" style="font-size: 2.4rem; text-align: left; padding: 35px; border-left: 6px solid #e11d48; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); border-radius: 0 14px 14px 0; color: #fff;">
+              "La Roadster potrebbe essere l'ultima e unica auto a guida manuale che produrremo mai. La celebrazione suprema del controllo umano prima dell'era autonoma."
+            </div>
+          </div>
+        </section>
+
+      </div>
+      
+      <!-- Paginazione Swiper -->
+      <div class="swiper-pagination"></div>
+      <!-- Frecce di navigazione -->
+      <div class="swiper-button-next" style="color: rgba(255,255,255,0.4); right: 20px;"></div>
+      <div class="swiper-button-prev" style="color: rgba(255,255,255,0.4); left: 20px;"></div>
+    </div>
+  </section>
+
+  <!-- ================= TOP META & SOCIAL BAR ================= -->
   <div class="tr-page-header">
-    <div class="tr-back-bar">
-      <a href="/magazine.html" class="tr-back-link">
+    <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 20px;">
+      <a href="/magazine.html" style="color: #9ca3af; text-decoration: none; font-size: 0.95rem; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: color 0.2s;" onmouseover="this.style.color='#e11d48'" onmouseout="this.style.color='#9ca3af'">
         <i class="ri-arrow-left-line"></i> Torna a ITERCARS Magazine
       </a>
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <span class="tr-meta-pill"><i class="ri-flashlight-fill"></i> Hypercar Special</span>
-        <span style="color: #9ca3af; font-size: 0.85rem;"><i class="ri-calendar-line"></i> 1 Novembre 2026</span>
-        <span style="color: #9ca3af; font-size: 0.85rem;"><i class="ri-time-line"></i> 10 min read</span>
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span style="background: rgba(225, 29, 72, 0.2); border: 1px solid rgba(225, 29, 72, 0.4); color: #fb7185; padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Hypercar Special</span>
+        <span style="color: #64748b; font-size: 0.88rem;"><i class="ri-calendar-line"></i> 1 Novembre 2026</span>
+        <span style="color: #64748b; font-size: 0.88rem;"><i class="ri-time-line"></i> 10 min read</span>
       </div>
-      <div class="tr-social-actions">
-        <button class="tr-action-btn" id="trLikeBtn" title="Metti Mi Piace">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <button id="trLikeBtn" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;">
           <i class="ri-heart-3-line" id="trHeartIcon"></i> <span id="trLikeCount">245</span>
         </button>
-        <button class="tr-action-btn" id="trShareBtn" title="Condividi Articolo">
+        <button id="trShareBtn" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; padding: 6px 14px; border-radius: 20px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; transition: all 0.2s;">
           <i class="ri-share-forward-line"></i> <span>Condividi</span>
         </button>
       </div>
     </div>
   </div>
 
-  <!-- INIZIO ARTICOLO TESLA ROADSTER + COMPARATORE INTERATTIVO -->
+  <!-- ================= TESTO COMPLETO DELL'ARTICOLO BIANCO SU NERO ================= -->
   <article class="tr-article-wrapper">
     <h1>Oltre l'Asfalto: La Nuova Tesla Roadster tra Ingegneria Aerospaziale, Sfida Cinese e il Crepuscolo della Guida Umana</h1>
     
@@ -372,7 +503,7 @@
         <source srcset="/tesla-roadster.webp" type="image/webp">
         <img src="/tesla-roadster.jpg" alt="Profilo aerodinamico della nuova Tesla Roadster rossa in movimento su pista" onerror="this.src='../tesla-roadster.jpg'">
       </picture>
-      <figcaption>Il profilo scolpito della nuova Tesla Roadster in prova su circuito</figcaption>
+      <figcaption>Il profilo scolpito della nuova Tesla Roadster in azione dinamica su circuito</figcaption>
     </figure>
 
     <h2>1. Cuore Meccanico e Telaio: L'Arte della Sottrazione e dell'Effetto Suolo</h2>
@@ -384,6 +515,14 @@
       <li><strong>Controllo Totale By-Wire e Sospensioni:</strong> Spariscono i collegamenti meccanici tradizionali. Lo sterzo (<em>steer-by-wire</em>), i freni carboceramici (<em>brake-by-wire</em>) e l'acceleratore dialogano esclusivamente via cavo ed elettronica con le sospensioni adattive a doppio braccio oscillante, capaci di incollare la vettura a terra nella modalità <em>Track Mode</em>.</li>
     </ul>
 
+    <figure class="tr-article-figure">
+      <picture>
+        <source srcset="/tesla-rear-sunset.webp" type="image/webp">
+        <img src="/tesla-rear-sunset.jpg" alt="Vista posteriore della Tesla Roadster con ala mobile e diffusore" onerror="this.src='../tesla-rear-sunset.jpg'">
+      </picture>
+      <figcaption>Coda aerodinamica con alettone attivo e diffusore per la massima deportanza ad altissima velocità</figcaption>
+    </figure>
+
     <h2>2. Il "Fattore SpaceX": Quando i Pneumatici Non Bastano Più</h2>
     <p>La fisica impone un limite invalicabile alle auto tradizionali: l'attrito della gomma sull'asfalto. Superata una certa potenza, le ruote semplicemente slittano. La risposta di Tesla è stata aggirare il limite delle ruote introducendo gli <strong>"Augments"</strong> (potenziamenti aerospaziali), che dividono la gamma in quattro declinazioni: <em>Standard</em>, <em>Performance</em>, <em>Thrust</em> e l'estrema <em>Rocket</em> (solo su invito e non omologata per la strada pubblica).</p>
     <p>Nelle versioni <strong>Thrust</strong> e <strong>Rocket</strong>, l'auto monta serbatoi compositi avvolti in carbonio (COPV) derivati dai razzi Falcon di SpaceX, caricati con <strong>azoto compresso fino a 10.000 psi (circa 690 bar)</strong>.</p>
@@ -391,6 +530,14 @@
       <li><strong>Configurazione Thrust (2 posti):</strong> Integra un serbatoio da 200 litri e quattro ugelli posteriori capaci di generare oltre <strong>80 kN di spinta vettoriale</strong> (4-5 volte la forza trasmissibile dagli pneumatici), abbattendo lo <strong>0-96 km/h (0-60 mph) a 0,81 secondi</strong> (dimostrati dal vivo) con picchi di accelerazione di oltre 3G.</li>
       <li><strong>Configurazione Rocket (Monoposto):</strong> Sacrifica il sedile del passeggero per alloggiare un serbatoio aggiuntivo da 400 litri (600 litri totali) e aggiunge sei ugelli direzionali laterali e anteriori. Il risultato dichiarato è uno <strong>0-96 km/h in meno di 0,59 secondi</strong> (con una spinta di 4,64G) e la capacità di <strong>sollevarsi temporaneamente da terra</strong>, trasformando l'auto in un veicolo a levitazione controllata per brevi tratti.</li>
     </ul>
+
+    <figure class="tr-article-figure">
+      <picture>
+        <source srcset="/tesla-thrusters.webp" type="image/webp">
+        <img src="/tesla-thrusters.jpg" alt="Getti di azoto ad alta pressione dagli ugelli posteriori SpaceX" onerror="this.src='../tesla-thrusters.jpg'">
+      </picture>
+      <figcaption>Getti supersonici ad azoto compresso erogati dagli ugelli COPV SpaceX</figcaption>
+    </figure>
 
     <div class="tr-table-container">
       <table class="tr-table">
@@ -436,6 +583,14 @@
       </table>
     </div>
 
+    <figure class="tr-article-figure">
+      <picture>
+        <source srcset="/tesla-jump-semi.webp" type="image/webp">
+        <img src="/tesla-jump-semi.jpg" alt="Volo acrobatico della Tesla Roadster in configurazione Rocket" onerror="this.src='../tesla-jump-semi.jpg'">
+      </picture>
+      <figcaption>La dimostrazione della spinta ascensionale: la Roadster in volo balistico controllato</figcaption>
+    </figure>
+
     <h2>3. Batterie, kWh e Ricarica: La Nuova Frontiera dell'Energia</h2>
     <p>Se il prototipo del 2017 prometteva un pacco batteria mastodontico e pesantissimo da <strong>200 kWh</strong> per garantire 1.000 km di autonomia, l'evoluzione tecnica del 2026 ha portato a una scelta molto più raffinata e sportiva. Per non penalizzare l'agilità tra le curve con un peso eccessivo, l'ingegneria Tesla si è concentrata sulla densità di potenza e sulla velocità di rifornimento energetico, strutturando un pacco batteria nell'ordine dei <strong>150 kWh</strong> (con varianti a lunga percorrenza stimate fino alla soglia originaria dei 200 kWh a seconda dell'allestimento) per un'autonomia reale certificabile <strong>superiore ai 480 km (300+ miglia)</strong> in condizioni di utilizzo stradale sportivo.</p>
     <p>I dettagli tecnici del sistema di accumulo e ricarica segnano un salto generazionale:</p>
@@ -445,6 +600,30 @@
       <li><strong>Quanti kW in Ricarica?</strong> Collegata ai Supercharger V4 di ultima generazione, la Roadster è progettata per assorbire <strong>oltre 500 kW di potenza continua in corrente continua (DC)</strong>, con picchi architetturali che sfiorano il Megawatt nei primi istanti.</li>
       <li><strong>Tempi di Ricarica:</strong> Grazie a questa potenza mostruosa, il passaggio <strong>dal 15% all'80-85% della carica richiede appena 10 minuti</strong>. Per la ricarica domestica o pubblica in corrente alternata (AC), il caricatore di bordo supporta fino a <strong>16,5 kW</strong>, mentre il rifornimento dei serbatoi di azoto ad alta pressione richiede un compressore dedicato (con l'obiettivo di ridurre il tempo di ricarica del gas a circa 30 minuti).</li>
     </ul>
+
+    <!-- COMPARATORE INTERATTIVO -->
+    <div class="tr-widget-box">
+      <h3 class="tr-widget-title">Comparatore Interattivo: Prestazioni & Configurazioni Roadster</h3>
+      <div class="tr-widget-desc">Seleziona una metrica per confrontare le 4 versioni svelate da Tesla o usa il simulatore di ricarica in basso.</div>
+      
+      <div class="tr-controls">
+        <button class="tr-btn active" onclick="updateTrChart('tempo_0_96_s', this)">0-96 km/h (Secondi)</button>
+        <button class="tr-btn" onclick="updateTrChart('accelerazione_g', this)">Forza G Massima (G)</button>
+        <button class="tr-btn" onclick="updateTrChart('velocita_max_kmh', this)">Velocità Max (km/h)</button>
+        <button class="tr-btn" onclick="updateTrChart('capacita_azoto_litri', this)">Serbatoio SpaceX (Litri)</button>
+      </div>
+
+      <div class="tr-chart-area" id="trChartArea"></div>
+
+      <div class="tr-charger-box">
+        <div style="font-weight: 600; margin-bottom: 4px; color: #fff;">Simulatore Ricarica Batteria 150 kWh (15% → 80%)</div>
+        <input type="range" id="trKwSlider" class="tr-slider" min="150" max="600" step="25" value="500" oninput="updateTrCharger(this.value)">
+        <div class="tr-charger-stats">
+          <span>Potenza Colonnina: <strong id="trKwVal" class="tr-highlight">500 kW</strong></span>
+          <span>Tempo Stimato (15-80%): <strong id="trTimeVal" class="tr-highlight">~10.0 min</strong></span>
+        </div>
+      </div>
+    </div>
 
     <h2>4. Piani Futuri, Mercato e il "Fattore Cina"</h2>
     <p>Nonostante l'entusiasmo generato dalla presentazione — che ha fatto balzare il titolo Tesla in borsa — la strada verso il garage dei clienti è ancora lunga: <strong>l'avvio effettivo della produzione è fissato per il 2028</strong>, con un prezzo d'attacco stimato a partire da <strong>200.000 - 250.000 dollari</strong> per le versioni stradali, destinato a salire vertiginosamente per le serie speciali <em>Thrust</em> e <em>Rocket</em>.</p>
@@ -473,32 +652,26 @@
     <h2>6. Le Porte che si Aprono e il Futuro: Il Canto del Cigno della Guida Umana</h2>
     <p>Qual è il vero significato della Roadster per il futuro dell'automobile? Durante la presentazione, Elon Musk ha lasciato cadere una frase che suona come un epitaffio romantico per gli appassionati di motori: la Roadster potrebbe essere <strong>«l'ultima e unica auto a guida manuale prodotta da Tesla»</strong>.</p>
     <p>Mentre l'azienda sposta tutto il suo baricentro economico verso l'intelligenza artificiale, i robot umanoidi (<em>Optimus</em>) e le flotte di taxi autonomi privi di volante e pedali (<em>Cybercab</em>), la Roadster rappresenta l'esatto opposto: la celebrazione suprema dell'adrenalina umana, del controllo fisico e dell'emozione pura di guida.</p>
+    
+    <figure class="tr-article-figure">
+      <picture>
+        <source srcset="/tesla-cockpit.webp" type="image/webp">
+        <img src="/tesla-cockpit.jpg" alt="Abitacolo e volante Yoke della nuova Tesla Roadster" onerror="this.src='../tesla-cockpit.jpg'">
+      </picture>
+      <figcaption>L'abitacolo Supersonic: display OLED con telemetria da corsa, volante Yoke e HUD olografico</figcaption>
+    </figure>
+
     <p>Allo stesso tempo, questo modello apre porte tecnologiche fondamentali per le auto di domani: le celle 4680 ad altissimo rendimento termico, i sistemi <em>steer-by-wire</em> e <em>brake-by-wire</em> ultra-rapidi e l'uso di nuovi materiali compositi scenderanno, negli anni a venire, sulle vetture di tutti i giorni, rendendole più leggere, sicure ed efficienti.</p>
+
+    <figure class="tr-article-figure">
+      <picture>
+        <source srcset="/tesla-hover-stage.webp" type="image/webp">
+        <img src="/tesla-hover-stage.jpg" alt="Levitazione della Tesla Roadster sul palco" onerror="this.src='../tesla-hover-stage.jpg'">
+      </picture>
+      <figcaption>La Roadster sospesa a mezz'aria sui suoi propulsori di azoto: una pietra miliare tecnologica</figcaption>
+    </figure>
+
     <p><strong>Sarà un successo?</strong> Se misuriamo il successo in termini di bilanci aziendali o milioni di pezzi venduti, la Roadster resterà una nicchia per pochissimi eletti. Ma se il metro di giudizio è la capacità di spostare i confini dell'immaginazione umana e costringere l'intera industria mondiale a inseguire, Tesla ha già lasciato il segno. Tra promesse di volo, sfide geopolitiche con i giganti asiatici e la scadenza del 2028 all'orizzonte, <strong>se la nuova Roadster sarà ricordata come il più grande capolavoro dell'era elettrica o come un'utopia incompiuta, lo deciderà solo il tempo.</strong></p>
-
-    <!-- WIDGET INTERATTIVO INCORPORATO -->
-    <div class="tr-widget-box">
-      <h3 class="tr-widget-title">Comparatore Interattivo: Prestazioni & Configurazioni Roadster</h3>
-      <div class="tr-widget-desc">Seleziona una metrica per confrontare le 4 versioni svelate da Tesla o usa il simulatore di ricarica in basso.</div>
-      
-      <div class="tr-controls">
-        <button class="tr-btn active" onclick="updateTrChart('tempo_0_96_s', this)">0-96 km/h (Secondi)</button>
-        <button class="tr-btn" onclick="updateTrChart('accelerazione_g', this)">Forza G Massima (G)</button>
-        <button class="tr-btn" onclick="updateTrChart('velocita_max_kmh', this)">Velocità Max (km/h)</button>
-        <button class="tr-btn" onclick="updateTrChart('capacita_azoto_litri', this)">Serbatoio SpaceX (Litri)</button>
-      </div>
-
-      <div class="tr-chart-area" id="trChartArea"></div>
-
-      <div class="tr-charger-box">
-        <div style="font-weight: 600; margin-bottom: 4px;">Simulatore Ricarica Batteria 150 kWh (15% → 80%)</div>
-        <input type="range" id="trKwSlider" class="tr-slider" min="150" max="600" step="25" value="500" oninput="updateTrCharger(this.value)">
-        <div class="tr-charger-stats">
-          <span>Potenza Colonnina: <strong id="trKwVal" class="tr-highlight">500 kW</strong></span>
-          <span>Tempo Stimato (15-80%): <strong id="trTimeVal" class="tr-highlight">~10.0 min</strong></span>
-        </div>
-      </div>
-    </div>
   </article>
 
   <!-- ================= FOOTER ================= -->
@@ -520,7 +693,78 @@
     </div>
   </footer>
 
+  <!-- Swiper JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
   <script>
+    // Inizializzazione Swiper Hero Article
+    var articleSwiper = new Swiper('#articleSwiper', {
+      direction: 'horizontal',
+      slidesPerView: 1,
+      spaceBetween: 0,
+      keyboard: { enabled: true },
+      pagination: { el: '.swiper-pagination', type: 'progressbar' },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      on: {
+        slideChange: function () {
+          updateFsButtonState();
+        }
+      }
+    });
+
+    // Gestione Schermo Intero (Fullscreen)
+    const fsBtn = document.getElementById('fsToggleBtn');
+    const swiperContainer = document.getElementById('articleSwiper');
+    const fsIcon = document.getElementById('fsIcon');
+    
+    if (fsBtn && swiperContainer && fsIcon) {
+      fsBtn.addEventListener('click', () => {
+        if (!document.fullscreenElement) {
+          if (swiperContainer.requestFullscreen) { swiperContainer.requestFullscreen();
+          } else if (swiperContainer.webkitRequestFullscreen) { swiperContainer.webkitRequestFullscreen();
+          } else if (swiperContainer.msRequestFullscreen) { swiperContainer.msRequestFullscreen(); }
+        } else {
+          if (document.exitFullscreen) { document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) { document.webkitExitFullscreen();
+          } else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+        }
+      });
+
+      function updateFullscreenIcon() {
+        if (document.fullscreenElement) {
+          fsIcon.classList.remove('ri-fullscreen-line');
+          fsIcon.classList.add('ri-fullscreen-exit-line');
+          fsBtn.style.background = 'rgba(225, 29, 72, 0.4)';
+          fsBtn.style.borderColor = '#e11d48';
+        } else {
+          fsIcon.classList.remove('ri-fullscreen-exit-line');
+          fsIcon.classList.add('ri-fullscreen-line');
+          fsBtn.style.background = 'transparent';
+          fsBtn.style.borderColor = 'transparent';
+        }
+        updateFsButtonState();
+      }
+
+      document.addEventListener('fullscreenchange', updateFullscreenIcon);
+      document.addEventListener('webkitfullscreenchange', updateFullscreenIcon);
+      document.addEventListener('msfullscreenchange', updateFullscreenIcon);
+
+      function updateFsButtonState() {
+        if (document.fullscreenElement) {
+          fsBtn.classList.remove('pulse-attention', 'show-always');
+        } else {
+          if (articleSwiper.activeIndex === 0) {
+            fsBtn.classList.add('pulse-attention');
+            fsBtn.classList.remove('show-always');
+          } else {
+            fsBtn.classList.remove('pulse-attention');
+            fsBtn.classList.add('show-always');
+          }
+        }
+      }
+    }
+
+    // Dati Comparatore
     const trData = [
       { nome: "Standard (2 Posti)", tempo_0_96_s: 1.90, accelerazione_g: 1.45, velocita_max_kmh: 344, capacita_azoto_litri: 0 },
       { nome: "Performance (Ventole 80kW)", tempo_0_96_s: 1.55, accelerazione_g: 2.10, velocita_max_kmh: 370, capacita_azoto_litri: 0 },
