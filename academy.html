@@ -42,7 +42,7 @@
   
   <!-- CSS -->
   <link rel="stylesheet" href="index.css?v=50">
-  <link rel="stylesheet" href="academy.css?v=9">
+  <link rel="stylesheet" href="academy.css?v=10">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
@@ -97,6 +97,318 @@
 
     <!-- ================= 0. LANDING PAGE PUBBLICA (FULL-BLEED) ================= -->
     <div id="academyPresentationSection" class="acd-landing">
+
+      <!-- ================= HERO STORY SLIDER: IL PERCORSO DI CARRIERA E SUCCESSO ================= -->
+      <section class="acd-story-slider" id="academyStorySlider" aria-label="Percorso di Carriera e Successo Itercars Academy">
+        <!-- Progress Bar -->
+        <div class="acd-slider-progress-track">
+          <div class="acd-slider-progress-bar" id="acdSliderProgressBar"></div>
+        </div>
+
+        <!-- Top Status Bar: Badge & Counter -->
+        <div class="acd-slider-top-bar container">
+          <div class="acd-slider-tag-pill">
+            <span class="pulse-dot"></span>
+            <span>Masterclass Itercars · Il Tuo Percorso di Trasformazione</span>
+          </div>
+          <div class="acd-slider-counter" aria-live="polite">
+            <span class="counter-current" id="acdCurrentSlideNum">01</span>
+            <span class="counter-sep">/</span>
+            <span class="counter-total">08</span>
+          </div>
+        </div>
+
+        <!-- Slides Container -->
+        <div class="acd-slides-wrapper" id="acdSlidesWrapper">
+
+          <!-- SLIDE 1 -->
+          <article class="acd-story-slide active" data-slide-index="0">
+            <picture class="acd-slide-media">
+              <source srcset="slides/1.webp" type="image/webp">
+              <img src="slides/1.jpg" alt="Mentorship e Ingresso nel Settore Supercar" class="acd-slide-img" fetchpriority="high">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-compass-3-fill"></i> FASE 01 · L'INIZIO DEL VIAGGIO
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Il Tuo Ingresso Esclusivo in un Settore da <span class="text-gradient">€140 Miliardi</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Il mercato del noleggio auto di lusso e supercar sta vivendo un boom senza precedenti. Con <strong>Itercars Academy</strong> non ti serve acquistare veicoli né immobilizzare capitali: ricevi la guida esperta, i protocolli riservati e l’affiancamento continuo per iniziare subito da zero e costruire una carriera prestigiosa.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-shield-check-fill"></i> Zero Capitale Immobilizzato</span>
+                <span class="acd-pill"><i class="ri-user-star-fill"></i> Mentorship Diretta</span>
+                <span class="acd-pill"><i class="ri-line-chart-fill"></i> Modello di Brokeraggio Collaudato</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Inizia Ora il Tuo Percorso · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 02</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 2 -->
+          <article class="acd-story-slide" data-slide-index="1">
+            <picture class="acd-slide-media">
+              <source srcset="slides/2.webp" type="image/webp">
+              <img src="slides/2.jpg" alt="Competenze Operative del Broker Digitale" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-laptop-fill"></i> FASE 02 · LE COMPETENZE OPERATIVE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Impara la Professione del <span class="text-gradient">Broker Digitale</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Dalla formulazione di preventivi su misura per breve e lungo termine, alla stipula di contratti blindati: acquisirai la padronanza della piattaforma CRM Itercars e imparerai a selezionare i modelli più richiesti per chiudere accordi profittevoli comodamente dal tuo computer o smartphone.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-video-fill"></i> 12 Video Lezioni HD Pratiche</span>
+                <span class="acd-pill"><i class="ri-file-text-fill"></i> Modelli Contrattuali Inclusi</span>
+                <span class="acd-pill"><i class="ri-cpu-line"></i> Piattaforma & Software Esclusivi</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Accedi al Corso Completo · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 03</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 3 -->
+          <article class="acd-story-slide" data-slide-index="2">
+            <picture class="acd-slide-media">
+              <source srcset="slides/3.webp" type="image/webp">
+              <img src="slides/3.jpg" alt="Clientela VIP ed Imprenditori" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-briefcase-5-fill"></i> FASE 03 · IL TARGET HIGH-TICKET
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Entra in Contatto con <span class="text-gradient">Clienti VIP e Imprenditori</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Top manager, professionisti e celebrità richiedono quotidianamente berline di rappresentanza e supercar per affari e tempo libero. Nel corso imparerai il linguaggio, la psicologia di vendita e il posizionamento per conquistare e fidelizzare la clientela più facoltosa e redditizia.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-funds-box-fill"></i> Fatturati Medi Elevati</span>
+                <span class="acd-pill"><i class="ri-user-follow-fill"></i> Clientela Ricorrente e Fedele</span>
+                <span class="acd-pill"><i class="ri-award-line"></i> Posizionamento di Altissimo Livello</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Unisciti all'Academy · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 04</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 4 -->
+          <article class="acd-story-slide" data-slide-index="3">
+            <picture class="acd-slide-media">
+              <source srcset="slides/4.webp" type="image/webp">
+              <img src="slides/4.jpg" alt="Trattative ad Alto Valore nel Lusso" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-money-dollar-circle-fill"></i> FASE 04 · IL POTERE DELLE TRATTATIVE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Accordi a <span class="text-gradient">4 e 5 Zeri</span> con Margini Fino al 25%
+              </h2>
+              <p class="acd-slide-desc">
+                Nel mercato del lusso non si fa la guerra sul prezzo: si offrono status, esclusività e affidabilità impeccabile. Acquisirai le tecniche di negoziazione avanzata per chiudere noleggi a breve e lungo termine con provvigioni nette fino al 25% sul margine complessivo.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-percent-fill"></i> Fino al 25% di Margine Netto</span>
+                <span class="acd-pill"><i class="ri-car-fill"></i> Flotta Supercar Pronta all'Uso</span>
+                <span class="acd-pill"><i class="ri-lock-2-fill"></i> Zero Rischi di Svalutazione Auto</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Sblocca il Metodo · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 05</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 5 -->
+          <article class="acd-story-slide" data-slide-index="4">
+            <picture class="acd-slide-media">
+              <source srcset="slides/5.webp" type="image/webp">
+              <img src="slides/5.jpg" alt="Contratti Conclusi e Partnership Ufficiali" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-handshake-fill"></i> FASE 05 · SUCCESSO COMMERCIALE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Dalle Trattative ai <span class="text-gradient">Contratti Chiusi</span>
+              </h2>
+              <p class="acd-slide-desc">
+                La teoria diventa fatturato reale. L'Academy ti guida passo dopo passo nella chiusura delle operazioni, mostrandoti come formalizzare contratti di noleggio a lungo termine e forniture aziendali con il supporto e la garanzia della rete ufficiale Itercars.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-check-line"></i> Pagamenti Sicuri & Puntuali</span>
+                <span class="acd-pill"><i class="ri-building-line"></i> Accordi B2B e B2C Solidi</span>
+                <span class="acd-pill"><i class="ri-team-fill"></i> Supporto Operativo Dedicato</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Inizia a Chiudere Contratti · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 06</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 6 -->
+          <article class="acd-story-slide" data-slide-index="5">
+            <picture class="acd-slide-media">
+              <source srcset="slides/6.webp" type="image/webp">
+              <img src="slides/6.jpg" alt="Matrimoni ed Eventi Esclusivi con Auto di Lusso" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-heart-3-fill"></i> FASE 06 · MERCATI DI NICCHIA LUCRATIVI
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Matrimoni d'Élite, <span class="text-gradient">VIP Concierge & Grandi Eventi</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Il settore wedding, red carpet e ricevimenti di lusso rappresenta una miniera d'oro: Maybach, Rolls-Royce e berline iconiche vengono noleggiate a tariffe record. Ti insegneremo a stringere accordi privilegiati con wedding planner, hotel di lusso e agenzie di moda.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-calendar-check-fill"></i> Prenotazioni Anticipate con Acconto</span>
+                <span class="acd-pill"><i class="ri-sparkling-fill"></i> Servizi White-Glove ad Alto Margine</span>
+                <span class="acd-pill"><i class="ri-loop-right-line"></i> Flusso Costante di Richieste</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Accedi alle Nicchie Esclusive · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 07</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 7 -->
+          <article class="acd-story-slide" data-slide-index="6">
+            <picture class="acd-slide-media">
+              <source srcset="slides/7.webp" type="image/webp">
+              <img src="slides/7.jpg" alt="Network Internazionale a Montecarlo e Capitali del Lusso" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-global-fill"></i> FASE 07 · NETWORK INTERNAZIONALE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Un Network di Relazioni nelle <span class="text-gradient">Capitali del Lusso</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Da Montecarlo a Milano, da Roma a Dubai: operare come broker Itercars significa accedere a salotti esclusivi, eventi motoristici d’élite e cerimonie internazionali. Le relazioni di valore che stringerai accelereranno esponenzialmente la tua reputazione e i tuoi guadagni.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-goblet-fill"></i> Accesso a Eventi & Yacht Club</span>
+                <span class="acd-pill"><i class="ri-user-shared-fill"></i> Community Riservata di Broker</span>
+                <span class="acd-pill"><i class="ri-medal-fill"></i> Prestigio e Credibilità Immediata</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Entra nel Network Ufficiale · €279</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri il Tuo Traguardo</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 8 -->
+          <article class="acd-story-slide" data-slide-index="7">
+            <picture class="acd-slide-media">
+              <source srcset="slides/8.webp" type="image/webp">
+              <img src="slides/8.jpg" alt="Libertà Finanziaria e Geografica a Miami Beach" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-sun-fill"></i> FASE 08 · LA TUA VERA LIBERTÀ
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                La <span class="text-gradient">Libertà Finanziaria e Geografica</span> che Meriti
+              </h2>
+              <p class="acd-slide-desc">
+                Il valore delle competenze che acquisirai va oltre il denaro: significa conquistare la piena padronanza del tuo tempo, lavorare da dove desideri e creare entrate consistenti senza dipendere da nessuno. Il settore delle auto di lusso è pronto ad accoglierti: la decisione è nelle tue mani.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-plane-fill"></i> Lavora da Qualsiasi Parte del Mondo</span>
+                <span class="acd-pill"><i class="ri-time-fill"></i> Totale Padronanza del Tuo Tempo</span>
+                <span class="acd-pill"><i class="ri-award-fill"></i> Certificazione Ufficiale Itercars</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg acd-btn-glow">
+                  <i class="ri-rocket-fill"></i> <span>Inizia Ora la Tua Nuova Vita · Solo €279</span>
+                </button>
+                <button type="button" onclick="openLoginModal(event)" class="btn btn-outline acd-btn-lg">
+                  <i class="ri-lock-unlock-fill"></i> <span>Hai Già il Corso? Accedi Qui</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Arrows Navigation -->
+        <button class="acd-slider-arrow acd-slider-prev" onclick="prevAcademySlide()" aria-label="Slide Precedente" title="Precedente">
+          <i class="ri-arrow-left-s-line"></i>
+        </button>
+        <button class="acd-slider-arrow acd-slider-next" onclick="nextAcademySlide()" aria-label="Slide Successiva" title="Successiva">
+          <i class="ri-arrow-right-s-line"></i>
+        </button>
+
+        <!-- Bottom Controls Bar: Dots & Play/Pause -->
+        <div class="acd-slider-bottom-bar container">
+          <div class="acd-slider-dots" id="acdSliderDots" role="tablist" aria-label="Seleziona slide"></div>
+          <button class="acd-slider-playpause" id="acdSliderPlayPause" onclick="toggleAcademySliderAutoplay()" aria-label="Metti in pausa la presentazione" title="Pausa / Riproduci">
+            <i class="ri-pause-line"></i>
+          </button>
+        </div>
+
+        <!-- Scroll down cue -->
+        <a href="#acdHeroTitle" class="acd-slider-scroll-cue" aria-label="Approfondisci il programma completo">
+          <span class="scroll-cue-text">Approfondisci il Programma</span>
+          <i class="ri-arrow-down-double-line"></i>
+        </a>
+      </section>
 
       <!-- HERO SLIDE A TUTTA LARGHEZZA -->
       <section class="acd-hero" aria-labelledby="acdHeroTitle">
@@ -536,6 +848,7 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="academy-exam.js?v=1"></script>
   <script src="academy.js?v=9"></script>
+  <script src="academy-slider.js?v=1"></script>
   <script src="cookie-banner.js?v=5"></script>
 </body>
 </html>
