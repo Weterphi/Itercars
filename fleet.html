@@ -33,7 +33,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ITERCARS - Noleggio Auto Premium & Esclusive | Marketplace</title>
-  <meta name="description" content="Esplora e noleggia le supercar e auto di lusso pi� esclusive al mondo. Servizio concierge 24/7, consegna a domicilio e flotta garantita.">
+  <meta name="description" content="Esplora e noleggia le supercar e auto di lusso pi� esclusive al mondo. Servizio concierge 24/7, consegna a domicilio e flotta garantita.">
   
   <!-- Remix Icons CDN -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
@@ -75,8 +75,8 @@
           <div class="glass-card lang-dropdown-menu" id="langDropdownMenu">
             <button onclick="selectLang('it')"><span class="lang-flag">🇮🇹</span> <strong>IT</strong> - Italiano</button>
             <button onclick="selectLang('en')"><span class="lang-flag">🇬🇧</span> <strong>EN</strong> - English</button>
-            <button onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <strong>ES</strong> - Espa�ol</button>
-            <button onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <strong>FR</strong> - Fran�ais</button>
+            <button onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <strong>ES</strong> - Espa�ol</button>
+            <button onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <strong>FR</strong> - Fran�ais</button>
             <div style="height: 1px; background: var(--border-glass); margin: 6px 0;"></div>
             <button onclick="openOtherLangsModal()" style="color: var(--accent-primary); font-weight: 600;">
               <i class="ri-global-line"></i> <span data-i18n="lang.other">Altre lingue...</span>
@@ -109,9 +109,10 @@
   </header>
   <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
   <div class="hero-bg-wrapper" style="position: relative; overflow: hidden; background: #0a0e17 !important;">
-    <video autoplay muted="muted" loop playsinline class="hero-bg-video" id="fleetHeroVideo" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
-      <source src="fleet-intro-video.mp4" type="video/mp4">
-    </video>
+    <picture class="hero-bg-video hero-bg-img">
+      <source srcset="luxury.webp" type="image/webp">
+      <img src="luxury.png" alt="Itercars Luxury Fleet" class="hero-bg-video hero-bg-img" id="fleetHeroImg" fetchpriority="high" decoding="async" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: 100%; height: 100%; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.05) contrast(1.05); pointer-events: none;">
+    </picture>
     <div class="hero-bg-overlay" style="background: linear-gradient(to bottom, rgba(10, 14, 23, 0) 0%, rgba(10, 14, 23, 0) 70%, #0a0e17 100%) !important; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
     <section class="hero" id="home" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; padding-bottom: 40px; background: transparent !important;">
       <div class="container hero-content" style="position: relative; z-index: 2; padding-top: 90px; width: 100%;">
@@ -220,7 +221,7 @@
           </button>
         </form>
         <div style="text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border-glass);">
-          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai gi� un account?</span>
+          <span style="color: var(--text-muted); font-size: 0.95rem;">Hai gi� un account?</span>
           <button type="button" onclick="switchAuthMode('login')" style="background: none; border: none; color: var(--accent-primary); font-weight: 600; cursor: pointer; margin-left: 6px; text-decoration: underline;">Accedi qui</button>
         </div>
       </div>
@@ -236,14 +237,14 @@
       <div class="langs-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 6px;">
         <button class="lang-grid-item" onclick="selectLang('it')"><span class="lang-flag">🇮🇹</span> <span><strong>IT</strong> - Italiano</span></button>
         <button class="lang-grid-item" onclick="selectLang('en')"><span class="lang-flag">🇬🇧</span> <span><strong>EN</strong> - English</span></button>
-        <button class="lang-grid-item" onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <span><strong>ES</strong> - Espa�ol</span></button>
-        <button class="lang-grid-item" onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <span><strong>FR</strong> - Fran�ais</span></button>
+        <button class="lang-grid-item" onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <span><strong>ES</strong> - Espa�ol</span></button>
+        <button class="lang-grid-item" onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <span><strong>FR</strong> - Fran�ais</span></button>
         <button class="lang-grid-item" onclick="selectLang('de')"><span class="lang-flag">🇩🇪</span> <span><strong>DE</strong> - Deutsch</span></button>
         <button class="lang-grid-item" onclick="selectLang('ru')"><span class="lang-flag">🇷🇺</span> <span><strong>RU</strong> - Русский</span></button>
         <button class="lang-grid-item" onclick="selectLang('zh')"><span class="lang-flag">🇨🇳</span> <span><strong>ZH</strong> - 中文</span></button>
         <button class="lang-grid-item" onclick="selectLang('ar')"><span class="lang-flag">🇸🇦</span> <span><strong>AR</strong> - العربية</span></button>
         <button class="lang-grid-item" onclick="selectLang('ja')"><span class="lang-flag">🇯🇵</span> <span><strong>JA</strong> - 日本語</span></button>
-        <button class="lang-grid-item" onclick="selectLang('pt')"><span class="lang-flag">🇵🇹</span> <span><strong>PT</strong> - Portugu�s</span></button>
+        <button class="lang-grid-item" onclick="selectLang('pt')"><span class="lang-flag">🇵🇹</span> <span><strong>PT</strong> - Portugu�s</span></button>
       </div>
     </div>
   </div>
@@ -286,8 +287,8 @@
             <label data-i18n="modal.extras">Servizi Aggiuntivi</label>
             <select class="form-control" id="extraService" onchange="updatePriceCalculation()">
               <option value="0" data-i18n="modal.extra0">Consegna Standard (Inclusa)</option>
-              <option value="150" data-i18n="modal.extra150">Consegna in Villa / Aeroporto (+�150)</option>
-              <option value="300" data-i18n="modal.extra300">Autista Privato mezza giornata (+�300)</option>
+              <option value="150" data-i18n="modal.extra150">Consegna in Villa / Aeroporto (+�150)</option>
+              <option value="300" data-i18n="modal.extra300">Autista Privato mezza giornata (+�300)</option>
             </select>
           </div>
         </div>
@@ -295,7 +296,7 @@
         <div style="background: rgba(0, 146, 70, 0.1); border: 1px solid rgba(0, 146, 70, 0.3); padding: 16px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
           <div>
             <span style="font-size: 0.85rem; color: var(--text-muted); display: block;" data-i18n="modal.estimate">Stima Totale Preventivo:</span>
-            <strong style="font-size: 1.4rem; color: var(--accent-primary);" id="totalPriceDisplay">� 0</strong>
+            <strong style="font-size: 1.4rem; color: var(--accent-primary);" id="totalPriceDisplay">� 0</strong>
           </div>
           <span style="font-size: 0.8rem; background: rgba(0,0,0,0.4); padding: 4px 10px; border-radius: 4px;" data-i18n="modal.kaskoInc">Assicurazione Inclusa</span>
         </div>
@@ -326,14 +327,14 @@
           <div class="footer-links">
             <a href="javascript:void(0)" onclick="filterFleetPage('Supercar')">Supercar & Hypercar</a>
             <a href="javascript:void(0)" onclick="filterFleetPage('SUV')">SUV di Lusso</a>
-            <a href="javascript:void(0)" onclick="filterFleetPage('Sportiva')">Coup� & Cabriolet</a>
+            <a href="javascript:void(0)" onclick="filterFleetPage('Sportiva')">Coup� & Cabriolet</a>
             <a href="javascript:void(0)" onclick="filterFleetPage('Elettrica')">Luxury Car Elettriche</a>
           </div>
         </div>
         <div class="footer-col">
           <h4 data-i18n="footer.col2Title">Link Utili</h4>
           <div class="footer-links">
-            <a href="index.html#perche-noi">Perch� Noi</a>
+            <a href="index.html#perche-noi">Perch� Noi</a>
             <a href="index.html#servizi">Servizi VIP</a>
             <a href="index.html#home" data-i18n="nav.home">Chi Siamo</a>
             <a href="index.html#perche-noi" data-i18n="footer.linkConditions">Condizioni di Noleggio</a>
@@ -415,8 +416,8 @@
     <div class="glass-card modal-content" style="max-width: 500px;">
       <button type="button" onclick="closeAvailabilityModal()" class="close-modal"><i class="ri-close-line"></i></button>
       <div style="text-align: center; margin-bottom: 24px;">
-        <h3 style="font-size: 1.8rem; margin-bottom: 8px;">Richiesta Disponibilit�</h3>
-        <p style="color: var(--text-muted); font-size: 0.9rem;">Compila i tuoi contatti per ricevere la disponibilit� esatta sui veicoli selezionati.</p>
+        <h3 style="font-size: 1.8rem; margin-bottom: 8px;">Richiesta Disponibilit�</h3>
+        <p style="color: var(--text-muted); font-size: 0.9rem;">Compila i tuoi contatti per ricevere la disponibilit� esatta sui veicoli selezionati.</p>
       </div>
       <form onsubmit="handleAvailabilitySubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); text-align: left;">

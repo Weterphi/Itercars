@@ -373,7 +373,8 @@ header.scrolled .nav-actions {
   padding-bottom: 30px;
   border-bottom: 1px solid var(--border-glass);
 }
-.hero-bg-video {
+.hero-bg-video,
+.hero-bg-img {
   position: absolute;
   top: 50%;
   left: 50%;

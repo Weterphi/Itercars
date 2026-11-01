@@ -110,9 +110,10 @@
   </header>
   <!-- ================= HERO WITH BACKGROUND WRAPPER ================= -->
   <div class="hero-bg-wrapper">
-    <video autoplay muted="muted" loop playsinline class="hero-bg-video" id="heroBgVideo" volume="0">
-      <source src="aston-martin-video.mp4" type="video/mp4">
-    </video>
+    <picture class="hero-bg-video hero-bg-img">
+      <source srcset="home.webp" type="image/webp">
+      <img src="home.png" alt="Itercars Luxury Car Rental" class="hero-bg-video hero-bg-img" id="heroBgImg" fetchpriority="high" decoding="async">
+    </picture>
     <div class="hero-bg-overlay"></div>
     <section class="hero" id="home">
       <div class="container hero-content">
