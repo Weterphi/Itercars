@@ -577,6 +577,11 @@ function resetAllFilters() {
 
 // Modale Preventivo 1-Click & Dossier Scoring
 function openQuoteModal(offerId) {
+  setTimeout(() => {
+    const locG = document.getElementById('searchLocation');
+    const locM = document.getElementById('quoteClientLocation');
+    if (locG && locM && locG.value) locM.value = locG.value;
+  }, 50);
   const offer = NbtState.offers.find(o => o.id === offerId);
   if (!offer) return;
   
@@ -641,7 +646,7 @@ async function handleGeneratePDFSubmit(event) {
       let rawProvId = offer.provider_id || (offer.vehicles && offer.vehicles.provider_id) || null;
       let provUuid = (rawProvId && uuidRegex.test(rawProvId)) ? rawProvId : null;
       let provName = offer.providerName || offer.provider_company_name || 'Mandante NBT';
-      const locElem = document.getElementById('searchLocation');
+      const locElem = document.getElementById('quoteClientLocation') || document.getElementById('searchLocation');
       const locText = (locElem && locElem.value) ? ' [Località: ' + locElem.value + ']' : '';
       const leadPayload = {
         first_name: name.split(' ')[0] || name,
@@ -655,7 +660,7 @@ async function handleGeneratePDFSubmit(event) {
         provider_id: provUuid,
         interested_offer_id: null,
         interested_vehicle_id: vehicleUuid,
-        notes: `Preventivo 1-Click NBT per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/periodo [Mandante: ${provName}]`
+        notes: `Preventivo 1-Click NBT per ${offer.brand} ${offer.model}: ${priceInfo.details} - Canone ${priceInfo.price} €/periodo [Mandante: ${provName}]` + locText
       };
       const { error: leadErr } = await window.supabase.from('crm_leads').insert([leadPayload]);
       if (leadErr) {

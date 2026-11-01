@@ -116,6 +116,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   const paramBrand = params.get('brand');
   const paramImg = params.get('img');
   const paramTrim = params.get('trim');
+  if (paramLoc) {
+    const locSelect = document.getElementById('quoteClientLocation');
+    if (locSelect) {
+      for (let opt of locSelect.options) {
+        if (opt.value.toLowerCase() === paramLoc.toLowerCase() || opt.text.toLowerCase().includes(paramLoc.toLowerCase())) {
+          locSelect.value = opt.value;
+          break;
+        }
+      }
+    }
+  }
   // Eager load per velocizzare il sito (Zero-Layout-Shift)
   if (paramImg) {
     const imgEl = document.getElementById('detailMainImg');
@@ -497,6 +508,8 @@ async function handleQuoteSubmit(event) {
   const email = document.getElementById('quoteClientEmail').value;
   const phone = document.getElementById('quoteClientPhone').value;
   const type = document.getElementById('quoteClientType').value;
+  const locSelect = document.getElementById('quoteClientLocation');
+  const location = (locSelect && locSelect.value) ? locSelect.value : (paramLoc || 'Italia (Hub Principale)');
   const c = ConfigState.car;
   const quoteCode = `IT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
   localStorage.setItem('itercars_last_quote_code', quoteCode);
@@ -504,6 +517,8 @@ async function handleQuoteSubmit(event) {
     quote_code: quoteCode,
     final_monthly_price: ConfigState.finalMonthlyPrice,
     carTitle: `${c.brand} ${c.model} ${c.trim}`,
+    pickup_location: location,
+    location: location,
     selected_duration_months: ConfigState.durationMonths,
     selected_deposit: ConfigState.depositAmount,
     crm_leads: { first_name: name, email: email, customer_type: type },
@@ -571,6 +586,9 @@ async function handleQuoteSubmit(event) {
               Km compresi: <span style="color: #2ecc71;">${ConfigState.kmPerYear >= 35000 ? ConfigState.kmPerYear.toLocaleString('it-IT') + ' km totali (' + Math.round(ConfigState.kmPerYear / (ConfigState.durationMonths / 12)).toLocaleString('it-IT') + ' km/anno)' : ConfigState.kmPerYear.toLocaleString('it-IT') + ' km/anno'}</span> • 
               Anticipo: <span style="color: #2ecc71;">€ ${ConfigState.depositAmount.toLocaleString('it-IT')}</span>
             </div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin-top: 6px;">
+              <i class="ri-map-pin-2-fill" style="color: #2ecc71;"></i> Luogo di Ritiro: <span style="color: #2ecc71;">${location}</span>
+            </div>
             <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">Kasko Integral ${ConfigState.kaskoFranchigia === 'zero' ? '(Franchigia Zero 0€)' : '(Franchigia Standard)'} + Bollo & Manutenzione H24</div>
             <div style="font-size: 0.82rem; color: #f39c12; margin-top: 4px; font-weight: 600;"><i class="ri-information-line"></i> Costo Km Extra da tabella mandante compreso nel contratto</div>
           </div>
@@ -590,7 +608,7 @@ async function handleQuoteSubmit(event) {
           <button type="button" class="btn btn-outline" onclick="window.print()" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <i class="ri-printer-line" style="font-size: 1.3rem;"></i> Scarica PDF
           </button>
-          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationMonths}', '${ConfigState.kmPerYear}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}')" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationMonths}', '${ConfigState.kmPerYear}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}', '${location}')" style="height: 50px; font-size: 1rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 8px;">
             <i class="ri-whatsapp-line" style="font-size: 1.3rem;"></i> Invia su WhatsApp
           </button>
         </div>
@@ -611,7 +629,7 @@ async function handleQuoteSubmit(event) {
           <button type="button" class="btn btn-outline" onclick="window.print()" style="height: 48px; font-size: 0.95rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px;">
             <i class="ri-printer-line" style="font-size: 1.2rem;"></i> Scarica PDF
           </button>
-          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationMonths}', '${ConfigState.kmPerYear}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}')" style="height: 48px; font-size: 0.95rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px;">
+          <button type="button" class="btn btn-outline" onclick="sendCustomQuoteWhatsApp('${phone}', '${c.brand} ${c.model}', '${ConfigState.durationMonths}', '${ConfigState.kmPerYear}', '${ConfigState.depositAmount}', '${ConfigState.finalMonthlyPrice}', '${location}')" style="height: 48px; font-size: 0.95rem; font-weight: 800; border-color: #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 0 8px;">
             <i class="ri-whatsapp-line" style="font-size: 1.2rem;"></i> Invia su WhatsApp
           </button>
         </div>
@@ -628,7 +646,7 @@ async function handleQuoteSubmit(event) {
     try {
       let pdfBase64 = null;
       try {
-        const doc = await generateNativePDF(c, name, email, phone, type, quoteCode);
+        const doc = await generateNativePDF(c, name, email, phone, type, quoteCode, location);
         const dataUri = doc.output('datauristring');
         pdfBase64 = dataUri.split(',')[1];
       } catch (pdfErr) {
@@ -647,7 +665,7 @@ async function handleQuoteSubmit(event) {
           phone: phone,
           email: email,
           customer_type: type || 'Privato',
-          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (${ConfigState.durationMonths} Mesi / ${ConfigState.kmPerYear} km/anno - Rata €${ConfigState.finalMonthlyPrice}/mese)` + (paramLoc ? ` [Località: ${paramLoc}]` : ''),
+          vehicle_interest: `${c.brand} ${c.model} ${c.trim || ''}`.trim() + ` (${ConfigState.durationMonths} Mesi / ${ConfigState.kmPerYear} km/anno - Rata €${ConfigState.finalMonthlyPrice}/mese)` + (location ? ` [Luogo di Ritiro: ${location}]` : ''),
           pipeline_status: 'new_lead',
           assigned_broker_agent: 'Consulente Senior ITERCARS',
           provider_id: provUuid,
@@ -684,6 +702,7 @@ async function handleQuoteSubmit(event) {
           selected_deposit: ConfigState.depositAmount,
           final_monthly_price: ConfigState.finalMonthlyPrice,
           services_snapshot: {
+            pickup_location: location,
             kasko: ConfigState.kaskoFranchigia === 'zero' ? 'Zero Franchigia' : 'Standard',
             maintenance: 'Full',
             road_tax: 'Included',
@@ -727,7 +746,12 @@ async function handleQuoteSubmit(event) {
     }
   })();
 }
-function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
+function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price, location) {
+  const locText = location ? `\n📍 Luogo di Ritiro: *${location}*` : '';
+  const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n⏱ Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/anno*\n💳 Anticipo: *€ ${deposit}*${locText}\n\n💶 *Canone Calcolato: € ${price} / mese Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
+  window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
+}
+function _unused_nlt_sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
   const msg = `Ciao ITERCARS Concierge! Ho appena configurato e generato il preventivo online per:\n\n*${carName}*\n📅 Durata: *${months} mesi*\n🛣️ Chilometri: *${km} km/anno*\n💰 Anticipo: *€ ${deposit}*\n\n🔥 *Canone Calcolato: € ${price} / mese Tutto Incluso*\n\nVorrei confermare l'ordine o ricevere la modulistica per la delibera del credito!`;
   window.open(`https://api.whatsapp.com/send?phone=393755942143&text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -736,7 +760,7 @@ function sendCustomQuoteWhatsApp(phone, carName, months, km, deposit, price) {
  * Enterprise Mode PDF Generator (Native jsPDF)
  * Disegna vettorialmente il PDF per evitare qualsiasi sfarfallio o ritaglio.
  */
-async function generateNativePDF(c, name, email, phone, type, quoteCode) {
+async function generateNativePDF(c, name, email, phone, type, quoteCode, location) {
   const jsPDF = window.jspdf ? window.jspdf.jsPDF : window.jsPDF;
   if (!jsPDF) {
     throw new Error("Libreria jsPDF non trovata.");
@@ -818,14 +842,15 @@ async function generateNativePDF(c, name, email, phone, type, quoteCode) {
   doc.roundedRect(15, boxY, 85, 30, 2, 2, 'FD');
   doc.setFontSize(9);
   doc.setTextColor(0, 146, 70);
-  doc.text("INTESTATARIO", 20, boxY + 7);
+  doc.text("INTESTATARIO & RITIRO", 20, boxY + 7);
   doc.setFontSize(11);
   doc.setTextColor(0, 0, 0);
   doc.text(name, 20, boxY + 14);
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(80, 80, 80);
-  doc.text(`${type}\n${email}\n${phone}`, 20, boxY + 20);
+  doc.setFontSize(8);
+  doc.text(`${type} • ${email}\nTel: ${phone}\nRitiro: ${location || 'Da concordare'}`, 20, boxY + 18);
   doc.setFont("helvetica", "bold");
   doc.setFillColor(249, 249, 249);
   doc.roundedRect(110, boxY, 85, 30, 2, 2, 'FD');
