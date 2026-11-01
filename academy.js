@@ -350,6 +350,12 @@ function renderCurrentLesson() {
         window.hlsPlayer = hls;
         hls.loadSource(videoSrc);
         hls.attachMedia(videoPlayer);
+        hls.on(Hls.Events.ERROR, function (event, data) {
+          console.warn('HLS error:', data.type, data.details);
+          if (!data.fatal) return;
+          if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
+          else if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
+        });
         hls.on(Hls.Events.MANIFEST_PARSED, function () {
           if (savedTime > 0) videoPlayer.currentTime = savedTime;
           videoPlayer.play().catch(err => console.log('Autoplay bloccato:', err));
