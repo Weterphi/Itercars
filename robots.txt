@@ -1,5 +1,8 @@
 User-agent: *
+Disallow: /crm-admin.html
+Disallow: /crm-partner.html
+Disallow: /upload-documenti.html
+Disallow: /success.html
 Allow: /
 
 Sitemap: https://www.itercars.com/sitemap.xml
-
