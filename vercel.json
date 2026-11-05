@@ -1,26 +1,29 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false,
   "redirects": [
     {
-      "source": "/willie-toribio/academy(.*)",
+      "source": "/willie-toribio/academy",
       "destination": "/academy",
-      "permanent": true
+      "permanent": false
     },
     {
-      "source": "/willie-toribio/chi-siamo(.*)",
-      "destination": "/chi-siamo.html",
-      "permanent": true
+      "source": "/willie-toribio/academy.html",
+      "destination": "/academy",
+      "permanent": false
     },
     {
-      "source": "/willie-toribio/fleet(.*)",
-      "destination": "/fleet.html",
-      "permanent": true
+      "source": "/willie-toribio/chi-siamo",
+      "destination": "/chi-siamo",
+      "permanent": false
     },
     {
-      "source": "/willie-toribio/index(.*)",
-      "destination": "/",
-      "permanent": true
+      "source": "/willie-toribio/chi-siamo.html",
+      "destination": "/chi-siamo",
+      "permanent": false
+    },
+    {
+      "source": "/willie-toribio/:slug+",
+      "destination": "/:slug+",
+      "permanent": false
     }
   ]
 }
