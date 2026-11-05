@@ -25,7 +25,12 @@ const MIME = {
 const server = http.createServer((req, res) => {
   let reqPath = decodeURI(req.url.split('?')[0]);
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
-  const filePath = path.join(ROOT_DIR, reqPath);
+  let filePath = path.join(ROOT_DIR, reqPath);
+
+  // Support clean URLs without .html
+  if (!fs.existsSync(filePath) && fs.existsSync(filePath + '.html')) {
+    filePath += '.html';
+  }
 
   // Security check
   if (!filePath.startsWith(ROOT_DIR)) {
