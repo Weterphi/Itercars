@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <base href="/">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; script-src 'self' https: 'unsafe-inline' 'unsafe-eval'; style-src 'self' https: 'unsafe-inline'; font-src 'self' https: data:; img-src 'self' https: data: blob:; media-src 'self' https: data: blob:; worker-src 'self' blob:; connect-src 'self' https: data: blob:;">
+  <!-- Google tag (gtag.js) & Google Consent Mode v2 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H6JBRXTWJL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    // GDPR Google Consent Mode v2: controlla il consenso salvato
+    const savedConsent = localStorage.getItem('itercars_cookie_consent');
+    const isGranted = savedConsent === 'accepted' ? 'granted' : 'denied';
+    gtag('consent', 'default', {
+      'analytics_storage': isGranted,
+      'ad_storage': isGranted,
+      'ad_user_data': isGranted,
+      'ad_personalization': isGranted
+    });
+
+    gtag('config', 'G-H6JBRXTWJL');
+  </script>
+  <!-- Microsoft Clarity -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xj5lxydl3i");
+    if (localStorage.getItem('itercars_cookie_consent') === 'accepted') {
+      window.clarity('consent');
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITERCARS Academy - Formazione Esclusiva & Masterclass VIP</title>
+  <meta name="description" content="Accedi all'area privilegiata Itercars Academy. Il corso video di formazione esclusiva per partner VIP, gestori di flotta e ambassador di supercar.">
+  
+  <!-- Remix Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="index.css?v=50">
+  <link rel="stylesheet" href="academy.css?v=10">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512x512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+</head>
+<body class="fleet-page">
+
+  <!-- ================= HEADER / NAVBAR ================= -->
+  <header id="header">
+    <div class="container nav-container">
+      <a href="index.html" class="logo logo-animating" id="navbarLogoContainer" title="ITERCARS Luxury Supercar Rental">
+        <img src="logo_tricolore.png?v=1" alt="ITERCARS Logo" class="navbar-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav.home">Home</a></li>
+        <li><a href="fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
+        <li><a href="noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
+        <li><a href="noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
+        <li><a href="magazine.html" style="color: #fff; font-weight: 700;"><i class="ri-article-line"></i> MAGAZINE</a></li>
+        <li><a href="academy.html" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
+        <li><a href="index.html#contatti" data-i18n="nav.contacts" style="font-weight: 600;">CONTATTI</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="tel:+393755942143" class="btn btn-outline nav-phone-btn" title="Contatta Concierge">
+          <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
+        </a>
+        <div class="area-dropdown-wrapper" style="position: relative; display: inline-block;">
+          <button class="btn btn-primary nav-area-btn" id="navAreaBtn" onclick="toggleAreaMenu(event)" title="Area Riservata" style="display: flex; align-items: center; gap: 6px;">
+            <i class="ri-user-3-fill" style="font-size: 1.15rem;"></i> <span data-i18n="nav.area" id="navAreaText">Area VIP</span>
+            <i class="ri-arrow-down-s-line" style="margin-left: 2px;"></i>
+          </button>
+          <div class="glass-card area-dropdown-menu" id="areaDropdownMenu" style="display: none; position: absolute; top: calc(100% + 10px); right: 0; min-width: 200px; z-index: 1000; flex-direction: column; padding: 8px; gap: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            <button onclick="if(localStorage.getItem('itercars_academy_user')){ window.location.hash='#dashboard'; location.reload(); } else { openLoginModal(event); closeAreaMenu(); }" style="width: 100%; text-align: left; padding: 10px 14px; background: transparent; border: none; color: #fff; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+              <i class="ri-user-star-fill" style="color: #2ecc71;"></i> Area Academy
+            </button>
+            <div style="height: 1px; background: var(--border-glass); margin: 4px 0;"></div>
+            <button onclick="window.location.href='crm-partner.html'" style="width: 100%; text-align: left; padding: 10px 14px; background: transparent; border: none; color: #fff; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+              <i class="ri-building-4-fill" style="color: #facc15;"></i> Area Partner
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= ACADEMY MAIN CONTENT ================= -->
+  <main class="academy-section">
+
+    <!-- ================= 0. LANDING PAGE PUBBLICA (FULL-BLEED) ================= -->
+    <div id="academyPresentationSection" class="acd-landing">
+
+      <!-- ================= HERO STORY SLIDER: IL PERCORSO DI CARRIERA E SUCCESSO ================= -->
+      <section class="acd-story-slider" id="academyStorySlider" aria-label="Percorso di Carriera e Successo Itercars Academy">
+        <!-- Progress Bar -->
+        <div class="acd-slider-progress-track">
+          <div class="acd-slider-progress-bar" id="acdSliderProgressBar"></div>
+        </div>
+
+        <!-- Top Status Bar: Badge & Counter -->
+        <div class="acd-slider-top-bar container">
+          <div class="acd-slider-tag-pill">
+            <span class="pulse-dot"></span>
+            <span>Masterclass Itercars · Il Tuo Percorso di Trasformazione</span>
+          </div>
+          <div class="acd-slider-counter" aria-live="polite">
+            <span class="counter-current" id="acdCurrentSlideNum">01</span>
+            <span class="counter-sep">/</span>
+            <span class="counter-total">08</span>
+          </div>
+        </div>
+
+        <!-- Slides Container -->
+        <div class="acd-slides-wrapper" id="acdSlidesWrapper">
+
+          <!-- SLIDE 1 -->
+          <article class="acd-story-slide active" data-slide-index="0">
+            <picture class="acd-slide-media">
+              <source srcset="slides/1.webp" type="image/webp">
+              <img src="slides/1.jpg" alt="Mentorship e Ingresso nel Settore Supercar" class="acd-slide-img" fetchpriority="high">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-compass-3-fill"></i> FASE 01 · L'INIZIO DEL VIAGGIO
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Il Tuo Ingresso Esclusivo in un Settore da <span class="text-gradient">€140 Miliardi</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Il mercato del noleggio auto di lusso e supercar sta vivendo un boom senza precedenti. Con <strong>Itercars Academy</strong> non ti serve acquistare veicoli né immobilizzare capitali: ricevi la guida esperta, i protocolli riservati e l’affiancamento continuo per iniziare subito da zero e costruire una carriera prestigiosa.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-shield-check-fill"></i> Zero Capitale Immobilizzato</span>
+                <span class="acd-pill"><i class="ri-user-star-fill"></i> Mentorship Diretta</span>
+                <span class="acd-pill"><i class="ri-line-chart-fill"></i> Modello di Brokeraggio Collaudato</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Inizia Ora il Tuo Percorso</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 02</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 2 -->
+          <article class="acd-story-slide" data-slide-index="1">
+            <picture class="acd-slide-media">
+              <source srcset="slides/2.webp" type="image/webp">
+              <img src="slides/2.jpg" alt="Competenze Operative del Broker Digitale" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-laptop-fill"></i> FASE 02 · LE COMPETENZE OPERATIVE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Impara la Professione del <span class="text-gradient">Broker Digitale</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Dalla formulazione di preventivi su misura per breve e lungo termine, alla stipula di contratti blindati: acquisirai la padronanza della piattaforma CRM Itercars e imparerai a selezionare i modelli più richiesti per chiudere accordi profittevoli comodamente dal tuo computer o smartphone.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-video-fill"></i> 12 Video Lezioni HD Pratiche</span>
+                <span class="acd-pill"><i class="ri-file-text-fill"></i> Modelli Contrattuali Inclusi</span>
+                <span class="acd-pill"><i class="ri-cpu-line"></i> Piattaforma & Software Esclusivi</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Accedi al Corso Completo</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 03</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 3 -->
+          <article class="acd-story-slide" data-slide-index="2">
+            <picture class="acd-slide-media">
+              <source srcset="slides/3.webp" type="image/webp">
+              <img src="slides/3.jpg" alt="Clientela VIP ed Imprenditori" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-briefcase-5-fill"></i> FASE 03 · IL TARGET HIGH-TICKET
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Entra in Contatto con <span class="text-gradient">Clienti VIP e Imprenditori</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Top manager, professionisti e celebrità richiedono quotidianamente berline di rappresentanza e supercar per affari e tempo libero. Nel corso imparerai il linguaggio, la psicologia di vendita e il posizionamento per conquistare e fidelizzare la clientela più facoltosa e redditizia.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-funds-box-fill"></i> Fatturati Medi Elevati</span>
+                <span class="acd-pill"><i class="ri-user-follow-fill"></i> Clientela Ricorrente e Fedele</span>
+                <span class="acd-pill"><i class="ri-award-line"></i> Posizionamento di Altissimo Livello</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Unisciti all'Academy</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 04</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 4 -->
+          <article class="acd-story-slide" data-slide-index="3">
+            <picture class="acd-slide-media">
+              <source srcset="slides/4.webp" type="image/webp">
+              <img src="slides/4.jpg" alt="Trattative ad Alto Valore nel Lusso" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-money-dollar-circle-fill"></i> FASE 04 · IL POTERE DELLE TRATTATIVE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Accordi a <span class="text-gradient">4 e 5 Zeri</span> con Margini Fino al 25%
+              </h2>
+              <p class="acd-slide-desc">
+                Nel mercato del lusso non si fa la guerra sul prezzo: si offrono status, esclusività e affidabilità impeccabile. Acquisirai le tecniche di negoziazione avanzata per chiudere noleggi a breve e lungo termine con provvigioni nette fino al 25% sul margine complessivo.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-percent-fill"></i> Fino al 25% di Margine Netto</span>
+                <span class="acd-pill"><i class="ri-car-fill"></i> Flotta Supercar Pronta all'Uso</span>
+                <span class="acd-pill"><i class="ri-lock-2-fill"></i> Zero Rischi di Svalutazione Auto</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Sblocca il Metodo</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 05</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 5 -->
+          <article class="acd-story-slide" data-slide-index="4">
+            <picture class="acd-slide-media">
+              <source srcset="slides/5.webp" type="image/webp">
+              <img src="slides/5.jpg" alt="Contratti Conclusi e Partnership Ufficiali" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-handshake-fill"></i> FASE 05 · SUCCESSO COMMERCIALE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Dalle Trattative ai <span class="text-gradient">Contratti Chiusi</span>
+              </h2>
+              <p class="acd-slide-desc">
+                La teoria diventa fatturato reale. L'Academy ti guida passo dopo passo nella chiusura delle operazioni, mostrandoti come formalizzare contratti di noleggio a lungo termine e forniture aziendali con il supporto e la garanzia della rete ufficiale Itercars.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-check-line"></i> Pagamenti Sicuri & Puntuali</span>
+                <span class="acd-pill"><i class="ri-building-line"></i> Accordi B2B e B2C Solidi</span>
+                <span class="acd-pill"><i class="ri-team-fill"></i> Supporto Operativo Dedicato</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Inizia a Chiudere Contratti</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 06</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 6 -->
+          <article class="acd-story-slide" data-slide-index="5">
+            <picture class="acd-slide-media">
+              <source srcset="slides/6.webp" type="image/webp">
+              <img src="slides/6.jpg" alt="Matrimoni ed Eventi Esclusivi con Auto di Lusso" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-heart-3-fill"></i> FASE 06 · MERCATI DI NICCHIA LUCRATIVI
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Matrimoni d'Élite, <span class="text-gradient">VIP Concierge & Grandi Eventi</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Il settore wedding, red carpet e ricevimenti di lusso rappresenta una miniera d'oro: Maybach, Rolls-Royce e berline iconiche vengono noleggiate a tariffe record. Ti insegneremo a stringere accordi privilegiati con wedding planner, hotel di lusso e agenzie di moda.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-calendar-check-fill"></i> Prenotazioni Anticipate con Acconto</span>
+                <span class="acd-pill"><i class="ri-sparkling-fill"></i> Servizi White-Glove ad Alto Margine</span>
+                <span class="acd-pill"><i class="ri-loop-right-line"></i> Flusso Costante di Richieste</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Accedi alle Nicchie Esclusive</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri la Fase 07</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 7 -->
+          <article class="acd-story-slide" data-slide-index="6">
+            <picture class="acd-slide-media">
+              <source srcset="slides/7.webp" type="image/webp">
+              <img src="slides/7.jpg" alt="Network Internazionale a Montecarlo e Capitali del Lusso" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-global-fill"></i> FASE 07 · NETWORK INTERNAZIONALE
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                Un Network di Relazioni nelle <span class="text-gradient">Capitali del Lusso</span>
+              </h2>
+              <p class="acd-slide-desc">
+                Da Montecarlo a Milano, da Roma a Dubai: operare come broker Itercars significa accedere a salotti esclusivi, eventi motoristici d’élite e cerimonie internazionali. Le relazioni di valore che stringerai accelereranno esponenzialmente la tua reputazione e i tuoi guadagni.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-goblet-fill"></i> Accesso a Eventi & Yacht Club</span>
+                <span class="acd-pill"><i class="ri-user-shared-fill"></i> Community Riservata di Broker</span>
+                <span class="acd-pill"><i class="ri-medal-fill"></i> Prestigio e Credibilità Immediata</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+                  <i class="ri-vip-crown-fill"></i> <span>Entra nel Network Ufficiale</span>
+                </button>
+                <button type="button" onclick="nextAcademySlide()" class="btn btn-outline acd-btn-lg">
+                  <span>Scopri il Tuo Traguardo</span> <i class="ri-arrow-right-line"></i>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- SLIDE 8 -->
+          <article class="acd-story-slide" data-slide-index="7">
+            <picture class="acd-slide-media">
+              <source srcset="slides/8.webp" type="image/webp">
+              <img src="slides/8.jpg" alt="Libertà Finanziaria e Geografica a Miami Beach" class="acd-slide-img" loading="lazy">
+            </picture>
+            <div class="acd-slide-overlay"></div>
+            <div class="container acd-slide-content">
+              <div class="acd-slide-badge">
+                <i class="ri-sun-fill"></i> FASE 08 · LA TUA VERA LIBERTÀ
+              </div>
+              <h2 class="acd-slide-title font-heading">
+                La <span class="text-gradient">Libertà Finanziaria e Geografica</span> che Meriti
+              </h2>
+              <p class="acd-slide-desc">
+                Il valore delle competenze che acquisirai va oltre il denaro: significa conquistare la piena padronanza del tuo tempo, lavorare da dove desideri e creare entrate consistenti senza dipendere da nessuno. Il settore delle auto di lusso è pronto ad accoglierti: la decisione è nelle tue mani.
+              </p>
+              <div class="acd-slide-pills">
+                <span class="acd-pill"><i class="ri-plane-fill"></i> Lavora da Qualsiasi Parte del Mondo</span>
+                <span class="acd-pill"><i class="ri-time-fill"></i> Totale Padronanza del Tuo Tempo</span>
+                <span class="acd-pill"><i class="ri-award-fill"></i> Certificazione Ufficiale Itercars</span>
+              </div>
+              <div class="acd-slide-actions">
+                <button type="button" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg acd-btn-glow">
+                  <i class="ri-rocket-fill"></i> <span>Inizia Ora la Tua Nuova Vita</span>
+                </button>
+                <button type="button" onclick="openLoginModal(event)" class="btn btn-outline acd-btn-lg">
+                  <i class="ri-lock-unlock-fill"></i> <span>Hai Già il Corso? Accedi Qui</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Arrows Navigation -->
+        <button class="acd-slider-arrow acd-slider-prev" onclick="prevAcademySlide()" aria-label="Slide Precedente" title="Precedente">
+          <i class="ri-arrow-left-s-line"></i>
+        </button>
+        <button class="acd-slider-arrow acd-slider-next" onclick="nextAcademySlide()" aria-label="Slide Successiva" title="Successiva">
+          <i class="ri-arrow-right-s-line"></i>
+        </button>
+
+        <!-- Bottom Controls Bar: Dots & Play/Pause -->
+        <div class="acd-slider-bottom-bar container">
+          <div class="acd-slider-dots" id="acdSliderDots" role="tablist" aria-label="Seleziona slide"></div>
+          <button class="acd-slider-playpause" id="acdSliderPlayPause" onclick="toggleAcademySliderAutoplay()" aria-label="Metti in pausa la presentazione" title="Pausa / Riproduci">
+            <i class="ri-pause-line"></i>
+          </button>
+        </div>
+
+        <!-- Scroll down cue -->
+        <a href="#acdHeroTitle" class="acd-slider-scroll-cue" aria-label="Approfondisci il programma completo">
+          <span class="scroll-cue-text">Approfondisci il Programma</span>
+          <i class="ri-arrow-down-double-line"></i>
+        </a>
+      </section>
+
+      <!-- HERO SLIDE A TUTTA LARGHEZZA -->
+      <section class="acd-hero" aria-labelledby="acdHeroTitle">
+        <div class="acd-hero-bg" role="img" aria-label="Supercar di lusso Itercars"></div>
+        <div class="acd-hero-overlay"></div>
+        <div class="container acd-hero-inner">
+          <span class="presentation-badge acd-reveal"><i class="ri-briefcase-4-fill"></i> Carriera Esclusiva Itercars</span>
+          <h1 id="acdHeroTitle" class="acd-hero-title font-heading acd-reveal">
+            Diventa un <span class="text-gradient">Broker Professionista</span><br>del Noleggio Auto di Lusso
+          </h1>
+          <p class="acd-hero-sub acd-reveal">
+            La masterclass che ti consegna protocolli operativi, strategie di intermediazione e la piattaforma proprietaria Itercars per generare fatturati elevati <strong>senza immobilizzare capitale proprio</strong>.
+          </p>
+          <div class="acd-hero-ctas acd-reveal">
+            <a href="javascript:void(0)" id="heroBuyBtn" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg">
+              <i class="ri-vip-crown-fill"></i> <span>Inizia Ora · €279</span>
+            </a>
+            <a href="javascript:void(0)" id="heroLoginBtn" onclick="openLoginModal(event)" class="btn btn-outline acd-btn-lg">
+              <i class="ri-lock-unlock-fill"></i> <span>Accedi all'Academy</span>
+            </a>
+          </div>
+          <ul class="acd-hero-trust acd-reveal">
+            <li><i class="ri-play-circle-fill"></i> 12 Lezioni Video HD</li>
+            <li><i class="ri-award-fill"></i> Certificazione Itercars</li>
+            <li><i class="ri-folder-zip-fill"></i> Materiali PDF Inclusi</li>
+            <li><i class="ri-infinity-line"></i> Accesso Illimitato</li>
+          </ul>
+        </div>
+        <a href="#acdStats" class="acd-scroll-cue" aria-label="Scorri verso il basso"><i class="ri-arrow-down-line"></i></a>
+      </section>
+
+      <!-- MERCATO IN NUMERI -->
+      <section id="acdStats" class="acd-stats-section" aria-labelledby="acdStatsTitle">
+        <div class="container">
+          <div class="brokerage-section-header">
+            <span class="course-badge">Il Mercato in Numeri</span>
+            <h2 id="acdStatsTitle" class="font-heading acd-h2">Un Settore in <span class="text-gradient">Forte Espansione</span></h2>
+            <p class="acd-lead">I dati che rendono il brokeraggio di supercar una delle opportunità più redditizie del lifestyle di lusso.</p>
+          </div>
+          <div class="acd-stats-grid">
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-line-chart-fill"></i></div>
+              <div class="acd-stat-number">+18.4%</div>
+              <div class="acd-stat-title">Crescita Annua (CAGR)</div>
+              <p class="acd-stat-desc">del mercato globale noleggio supercar e hypercar</p>
+            </article>
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-money-euro-box-fill"></i></div>
+              <div class="acd-stat-number">€150k – €350k+</div>
+              <div class="acd-stat-title">Fatturato Medio Annuo</div>
+              <p class="acd-stat-desc">generato da un Broker Itercars con 5-10 veicoli gestiti</p>
+            </article>
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-pie-chart-2-fill"></i></div>
+              <div class="acd-stat-number">18% – 25%</div>
+              <div class="acd-stat-title">Margine Netto di Profitto</div>
+              <p class="acd-stat-desc">sull'intermediazione di noleggi e servizi concierge</p>
+            </article>
+            <article class="acd-stat">
+              <div class="stat-icon-wrapper"><i class="ri-user-heart-fill"></i></div>
+              <div class="acd-stat-number">85%</div>
+              <div class="acd-stat-title">Tasso di Retention VIP</div>
+              <p class="acd-stat-desc">con contratti di noleggio ricorrenti e stagionali</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- VANTAGGI DEL MODELLO -->
+      <section class="acd-section" aria-labelledby="acdBenefitsTitle">
+        <div class="container">
+          <div class="brokerage-section-header">
+            <span class="course-badge">I Vantaggi del Modello</span>
+            <h2 id="acdBenefitsTitle" class="font-heading acd-h2">Perché Diventare <span class="text-gradient">Broker d'Élite</span></h2>
+            <p class="acd-lead">Un modello di business progettato per massimizzare la redditività azzerando i rischi di svalutazione e i costi fissi tradizionali.</p>
+          </div>
+          <div class="brokerage-benefits-grid">
+            <div class="benefit-card-broker">
+              <div class="benefit-icon-broker"><i class="ri-shield-keyhole-fill"></i></div>
+              <h3>Zero Capitale Immobilizzato</h3>
+              <p>Intermedi le supercar di collezionisti privati, concessionarie di lusso e partner certificati, senza acquistare o mantenere fisicamente i veicoli.</p>
+            </div>
+            <div class="benefit-card-broker">
+              <div class="benefit-icon-broker"><i class="ri-global-line"></i></div>
+              <h3>Network VIP HNW</h3>
+              <p>Entri in un'esclusiva rete internazionale che connette imprenditori, sportivi professionisti e celebrità con servizi di mobilità e accoglienza 5 stelle.</p>
+            </div>
+            <div class="benefit-card-broker">
+              <div class="benefit-icon-broker"><i class="ri-cpu-line"></i></div>
+              <h3>Tecnologia &amp; Telemetria</h3>
+              <p>Accedi alla piattaforma proprietaria per tariffe dinamiche (Dynamic Pricing), contratti digitali istantanei e verifica identità KYC in tempo reale.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COME FUNZIONA -->
+      <section class="acd-section acd-section-alt" aria-labelledby="acdStepsTitle">
+        <div class="container">
+          <div class="brokerage-section-header">
+            <span class="course-badge">Il Percorso</span>
+            <h2 id="acdStepsTitle" class="font-heading acd-h2">Dall'Iscrizione alla <span class="text-gradient">Certificazione</span></h2>
+            <p class="acd-lead">Tre passaggi chiari per entrare operativamente nel network Itercars.</p>
+          </div>
+          <ol class="acd-steps">
+            <li class="acd-step">
+              <span class="acd-step-num">01</span>
+              <h3>Iscriviti</h3>
+              <p>Completa il pagamento sicuro tramite Stripe e ricevi immediatamente le credenziali riservate via email.</p>
+            </li>
+            <li class="acd-step">
+              <span class="acd-step-num">02</span>
+              <h3>Segui le 12 Lezioni</h3>
+              <p>Video HD con sblocco sequenziale e cartelle PDF operative: contratti, pricing, acquisizione clienti HNW.</p>
+            </li>
+            <li class="acd-step">
+              <span class="acd-step-num">03</span>
+              <h3>Ottieni la Certificazione</h3>
+              <p>Superati tutti i moduli diventi Broker certificato Itercars, pronto a operare con la nostra rete di partner.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- GALLERY -->
+      <section class="acd-section" aria-labelledby="acdGalleryTitle">
+        <div class="container">
+          <div class="brokerage-section-header">
+            <span class="course-badge">Realtà Operativa</span>
+            <h2 id="acdGalleryTitle" class="font-heading acd-h2">La Nostra Rete in <span class="text-gradient">Azione</span></h2>
+            <p class="acd-lead">Dalle concessionarie partner di altissimo prestigio agli incontri riservati con clientela VIP.</p>
+          </div>
+          <div class="broker-gallery-grid">
+            <div class="gallery-card">
+              <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" alt="Concessionaria di Lusso" class="gallery-img" loading="lazy">
+              <div class="gallery-overlay">
+                <span class="gallery-tag">Showroom Partner</span>
+                <h4 class="gallery-title">Concessionarie Premium</h4>
+                <p class="gallery-desc">Location convenzionate per consegne white-glove ed eventi esclusivi di presentazione vetture.</p>
+              </div>
+            </div>
+            <div class="gallery-card">
+              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80" alt="Broker con Clienti in Ufficio" class="gallery-img" loading="lazy">
+              <div class="gallery-overlay">
+                <span class="gallery-tag">Consulenza VIP</span>
+                <h4 class="gallery-title">Incontro in Ufficio Direzionale</h4>
+                <p class="gallery-desc">I broker certificati ricevono i clienti in suite riservate per pianificare noleggi tailor-made.</p>
+              </div>
+            </div>
+            <div class="gallery-card">
+              <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&w=800&q=80" alt="Consultazione e Firma Contratto" class="gallery-img" loading="lazy">
+              <div class="gallery-overlay">
+                <span class="gallery-tag">Accordo Esclusivo</span>
+                <h4 class="gallery-title">Gestione Contrattuale HNW</h4>
+                <p class="gallery-desc">Check-in digitali rapidi, discrezione assoluta e assistenza personalizzata 24 ore su 24.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA FINALE / PREZZO -->
+      <section class="acd-cta-section" aria-labelledby="acdCtaTitle">
+        <div class="container">
+          <div class="acd-cta-card">
+            <div class="acd-cta-copy">
+              <span class="course-badge">Itercars VIP Fleet Masterclass</span>
+              <h2 id="acdCtaTitle" class="font-heading acd-h2">Inizia Oggi la Tua <span class="text-gradient">Carriera da Broker</span></h2>
+              <ul class="acd-includes">
+                <li><i class="ri-check-line"></i> 12 lezioni video professionali in HD</li>
+                <li><i class="ri-check-line"></i> Cartelle PDF con contratti e template operativi</li>
+                <li><i class="ri-check-line"></i> Strategie di Dynamic Pricing e acquisizione clienti HNW</li>
+                <li><i class="ri-check-line"></i> Certificazione ufficiale Broker Itercars</li>
+                <li><i class="ri-check-line"></i> Accesso al network di partner e concessionarie</li>
+              </ul>
+            </div>
+            <div class="acd-price-box">
+              <span class="acd-price-label">Accesso completo</span>
+              <div class="acd-price">€279</div>
+              <span class="acd-price-note">Pagamento unico · Nessun abbonamento</span>
+              <a href="javascript:void(0)" id="ctaBuyBtn" onclick="buyAcademy(event)" class="btn btn-primary acd-btn-lg" style="width: 100%;">
+                <i class="ri-bank-card-fill"></i> <span>Ricevi le Credenziali</span>
+              </a>
+              <a href="javascript:void(0)" id="ctaLoginBtn" onclick="openLoginModal(event)" class="acd-price-login">Hai già le credenziali? Accedi</a>
+              <span class="acd-secure"><i class="ri-shield-check-fill"></i> Pagamento sicuro con Stripe</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="container">
+
+
+
+
+      <!-- ================= 2. PRIVATE DASHBOARD SECTION (CORSO 12 VIDEO) ================= -->
+      <section id="academyDashboardSection" style="display: none;">
+        
+        <!-- Top Bar -->
+        <div class="glass-card academy-top-bar">
+          <div class="academy-title-area">
+            <h2 class="font-heading"><i class="ri-graduation-cap-line text-gradient"></i> Itercars VIP Fleet Masterclass</h2>
+            <span class="course-badge"><i class="ri-verified-badge-fill"></i> 12 Lezioni Certificate</span>
+          </div>
+          
+          <div class="academy-user-actions">
+            <div class="user-welcome-badge">
+              <i class="ri-shield-check-fill" style="color: var(--accent-primary);"></i>
+              <span>Membro VIP: <strong id="loggedUsername">Partner</strong></span>
+            </div>
+            
+            <div class="settings-dropdown-wrapper" style="position: relative; display: inline-block;">
+              <button class="btn btn-outline nav-area-btn" onclick="toggleSettingsMenu(event)" title="Impostazioni" style="padding: 10px 16px; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+                <i class="ri-settings-3-line"></i> <span>Impostazioni</span>
+                <i class="ri-arrow-down-s-line" style="margin-left: 2px;"></i>
+              </button>
+              <div class="glass-card settings-dropdown-menu" id="settingsDropdownMenu" style="display: none; position: absolute; top: calc(100% + 10px); right: 0; min-width: 220px; z-index: 1000; flex-direction: column; padding: 12px; gap: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <button onclick="toggleAudio()" style="width: 100%; text-align: left; padding: 10px 14px; background: transparent; border: none; color: #fff; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                  <i class="ri-volume-up-fill" id="settingsAudioIcon" style="color: #3498db;"></i> <span id="settingsAudioText">Audio Abilitato</span>
+                </button>
+                <div style="height: 1px; background: var(--border-glass); margin: 4px 0;"></div>
+                <button onclick="resetProgress()" style="width: 100%; text-align: left; padding: 10px 14px; background: transparent; border: none; color: #ef4444; cursor: pointer; border-radius: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 600; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='transparent'">
+                  <i class="ri-refresh-line"></i> Azzera Lezioni
+                </button>
+              </div>
+            </div>
+
+            <button class="btn btn-black" onclick="logoutAcademy()" style="padding: 10px 20px; border: 1px solid var(--border-glass);">
+              <i class="ri-logout-box-r-line" style="color: #ef4444;"></i> <span>Esci</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Progress Bar Card -->
+        <div class="glass-card course-progress-container">
+          <div class="progress-header">
+            <span id="courseProgressText">0 di 12 Lezioni Superate (0%)</span>
+            <span style="color: var(--accent-primary); font-weight: 700;"><i class="ri-award-fill"></i> Obiettivo: Certificazione Itercars</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="courseProgressFill" style="width: 8%;"></div>
+          </div>
+        </div>
+
+        <!-- Course 2-Column Grid -->
+        <div class="course-grid">
+          
+          <!-- LEFT COLUMN: PLAYLIST OF 12 LESSONS -->
+          <div class="glass-card playlist-column" id="playlistColumn">
+            <div class="playlist-header">
+              <h3 class="font-heading"><i class="ri-play-list-2-fill text-gradient"></i> Lezioni del Corso</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);"><i class="ri-lock-unlock-line"></i> Sblocco sequenziale</span>
+            </div>
+            <div class="lessons-list" id="lessonsListContainer">
+              <!-- Lezioni generate dinamicamente da academy.js -->
+            </div>
+          </div>
+
+          <!-- RIGHT/CENTER COLUMN: CURRENT VIDEO PLAYER & DETAILS -->
+          <div class="video-column">
+            
+            <!-- Video Player -->
+            <div class="video-view-controls" id="videoViewControls" style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px;">
+              <button class="btn btn-outline view-mode-btn active" id="btnModeNormal" onclick="setVideoMode('normal')" title="Visualizzazione Normale" style="padding: 6px 12px; font-size: 0.8rem; border-color: var(--accent-primary);"><i class="ri-layout-column-line"></i> Normale</button>
+              <button class="btn btn-outline view-mode-btn" id="btnModeTheater" onclick="setVideoMode('theater')" title="Visualizzazione Espansa (Teatro)" style="padding: 6px 12px; font-size: 0.8rem;"><i class="ri-layout-top-line"></i> Espansa</button>
+              <button class="btn btn-outline view-mode-btn" id="btnModeFullscreen" onclick="setVideoMode('fullscreen')" title="Schermo Intero" style="padding: 6px 12px; font-size: 0.8rem;"><i class="ri-fullscreen-line"></i> Full Screen</button>
+            </div>
+            <div class="video-player-container">
+              <video id="courseVideoPlayer" controls muted="muted" playsinline volume="0" preload="metadata">
+
+                Il tuo browser non supporta il tag video HTML5.
+              </video>
+            </div>
+
+            <!-- Lesson Details Card -->
+            <div class="glass-card lesson-details-card">
+              <div class="lesson-header-row" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 16px;">
+                <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap; flex: 1; min-width: 280px;">
+                  <h3 id="currentLessonTitle" class="font-heading" style="margin: 0; font-size: 1.5rem;">Lezione 1: Caricamento in corso...</h3>
+                  <a id="currentLessonPdfBtn" href="javascript:void(0)" onclick="downloadLessonPdf(event)" class="btn btn-outline" style="padding: 8px 16px; font-size: 0.88rem; border-color: var(--accent-primary); color: #2ecc71; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 6px; background: rgba(0, 146, 70, 0.1); box-shadow: 0 0 10px rgba(46,204,113,0.15);">
+                    <i class="ri-folder-zip-fill" style="font-size: 1.15rem; color: #2ecc71;"></i> <span>Cartella PDF</span>
+                  </a>
+                </div>
+                <div id="currentLessonStatusTag" class="lesson-status-tag tag-uncompleted">
+                  <i class="ri-time-fill"></i> Da Superare
+                </div>
+              </div>
+
+              <p id="currentLessonDesc" class="lesson-description">
+                Descrizione dettagliata della lezione in caricamento.
+              </p>
+
+              <div class="lesson-action-area">
+                <div style="font-size: 0.9rem; color: var(--text-muted);">
+                  <i class="ri-information-line"></i> Per sbloccare la lezione successiva devi superare questo modulo.
+                </div>
+                
+                <button id="completeLessonBtn" class="btn btn-primary" style="font-size: 1.05rem; padding: 16px 32px;">
+                  <i class="ri-shield-check-fill"></i> Ho Superato Questa Lezione (Sblocca Successiva <i class="ri-arrow-right-line"></i>)
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ================= LOGIN MODAL (ACCEDI ALL'ACADEMY) ================= -->
+  <div class="modal-overlay" id="academyLoginModal" onclick="if(event.target === this) closeLoginModal();" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); z-index: 999999; display: none; align-items: center; justify-content: center; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.3s ease, visibility 0.3s ease;">
+    <div class="glass-card modal-content academy-login-container" style="box-shadow: var(--shadow-lg), var(--glow-emerald); border: 1px solid rgba(0, 146, 70, 0.4); text-align: left; max-height: 90vh; overflow-y: auto; margin: 0;">
+      <button type="button" onclick="closeLoginModal()" class="close-modal"><i class="ri-close-line"></i></button>
+      
+      <div class="academy-login-header" style="text-align: center; margin-bottom: 24px;">
+        <i class="ri-shield-user-fill text-gradient" style="font-size: 3rem; display: block; margin-bottom: 10px;"></i>
+        <h2 class="font-heading" style="font-size: 2rem; margin-bottom: 8px;">Accesso Privilegiato <span class="text-gradient">Academy</span></h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;">Inserisci le tue credenziali riservate per accedere all'area di formazione esclusiva per Partner e Fleet Manager.</p>
+      </div>
+
+      <form id="academyLoginForm">
+        <div class="login-form-group" style="margin-bottom: 18px;">
+          <label for="academyUsername" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Nome Utente / ID Partner</label>
+          <div class="login-input-wrapper" style="position: relative; display: flex; align-items: center;">
+            <i class="ri-user-star-line" style="position: absolute; left: 16px; color: #2ecc71; font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
+            <input type="text" id="academyUsername" placeholder="Es. admin / itercars_vip" required autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="email" style="width: 100%; padding: 14px 16px 14px 48px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+          </div>
+        </div>
+
+        <div class="login-form-group" style="margin-bottom: 24px;">
+          <label for="academyPassword" style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; display: block;">Password Riservata</label>
+          <div class="login-input-wrapper" style="position: relative; display: flex; align-items: center;">
+            <i class="ri-lock-2-line" style="position: absolute; left: 16px; color: #2ecc71; font-size: 1.2rem; pointer-events: none; z-index: 2;"></i>
+            <input type="password" id="academyPassword" placeholder="********" required autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" style="width: 100%; padding: 14px 16px 14px 48px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 8px; color: #fff; font-size: 1rem;">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 6px; font-size: 1.1rem; padding: 16px; box-shadow: var(--glow-emerald);">
+          <i class="ri-login-circle-fill"></i> <span>Accedi al Corso VIP (12 Lezioni)</span>
+        </button>
+      </form>
+
+      <div class="login-notice" style="margin-top: 22px; background: rgba(0, 146, 70, 0.1); border: 1px solid rgba(0, 146, 70, 0.3); padding: 12px 16px; border-radius: 8px; font-size: 0.88rem; color: var(--text-muted); display: flex; align-items: center; gap: 10px;">
+        <i class="ri-information-fill" style="font-size: 1.4rem; color: #2ecc71;"></i>
+        <span><strong>Nota di Sicurezza:</strong> L'accesso è strettamente riservato ai membri autorizzati.</span>
+      </div>
+
+      <div style="text-align: center; margin-top: 22px; padding-top: 22px; border-top: 1px solid var(--border-glass);">
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;">Non hai ancora le credenziali per la Masterclass VIP?</p>
+        <a href="javascript:void(0)" onclick="closeLoginModal(); buyAcademy(event);" class="btn btn-outline" style="width: 100%; border-color: var(--accent-primary); color: #2ecc71; padding: 14px; display: inline-block; text-align: center; text-decoration: none;">
+          <i class="ri-bank-card-fill"></i> <span>Acquista la Masterclass a €279</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer id="contatti">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <a href="index.html" class="logo" style="margin-bottom: 16px;" title="ITERCARS Luxury Supercar Rental">
+            <img src="logo_tricolore.png?v=17" alt="ITERCARS Logo" class="footer-logo-img">
+          </a>
+          <p data-i18n="footer.desc">Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Powered by passione e design.</p>
+          <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-instagram-line"></i></a>
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-facebook-fill"></i></a>
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-linkedin-fill"></i></a>
+            <a href="#" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem;"><i class="ri-whatsapp-line"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footer.col1Title">Categorie Luxury Car</h4>
+          <div class="footer-links">
+            <a href="fleet.html?category=Supercar">Supercar & Hypercar</a>
+            <a href="fleet.html?category=SUV">SUV di Lusso</a>
+            <a href="fleet.html?category=Sportiva">Coupé & Cabriolet</a>
+            <a href="fleet.html?category=Elettrica">Luxury Car Elettriche</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footer.col2Title">Link Utili</h4>
+          <div class="footer-links">
+            <a href="index.html#perche-noi">Perché Noi</a>
+            <a href="index.html#servizi">Servizi VIP</a>
+            <a href="chi-siamo.html" style="color: #facc15; font-weight: 700;"><i class="ri-team-line"></i> Il Nostro Team / Chi Siamo</a>
+            <a href="academy.html" style="color: var(--accent-primary); font-weight: 600;"><i class="ri-graduation-cap-fill"></i> Academy VIP</a>
+            <a href="index.html#perche-noi" data-i18n="footer.linkConditions">Condizioni di Noleggio</a>
+            <a href="partners.html" data-i18n="footer.linkPartner">Lavora con noi / Partner</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <h4 data-i18n="footer.col3Title">Sede Legale & Contatti</h4>
+          <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
+            <p><i class="ri-global-line text-gradient"></i> <strong>Sede Legale:</strong> Piattaforma Digitale Online</p>
+            <p><i class="ri-phone-fill text-gradient"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
+            <p><i class="ri-mail-send-fill text-gradient"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
+            <p><i class="ri-customer-service-2-fill text-gradient"></i> <a href="mailto:supporto@itercars.com" style="color: inherit;">supporto@itercars.com</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 ITERCARS Marketplace. Tutti i diritti riservati. Progetto LuxuryCar.</p>
+        <div style="display: flex; gap: 20px;">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Termini di Servizio</a>
+          <a href="#">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Mobile Phone Button -->
+  <a href="tel:+393755942143" class="mobile-floating-phone" title="Chiama ITERCARS" aria-label="Chiama +39 375 594 2143">
+    <i class="ri-phone-fill"></i>
+    <span>+39 375 594 2143</span>
+  </a>
+
+  <!-- Supabase Database -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://brqayhwdrvgllwwjnyvz.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJycWF5aHdkcnZnbGx3d2pueXZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3NDczMTgsImV4cCI6MjA5ODMyMzMxOH0.NZsHj4B_5ylWCcCXy5NKrkLWXNy-6GV4yg5Cv1keaWk';
+    window.supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+
+  <!-- JS -->
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script src="academy-exam.js?v=1"></script>
+  <script src="academy.js?v=9"></script>
+  <script src="academy-slider.js?v=1"></script>
+  <script src="cookie-banner.js?v=5"></script>
+</body>
+</html>
+
+
