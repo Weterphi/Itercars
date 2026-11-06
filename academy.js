@@ -111,6 +111,15 @@ let videoSecuritySetup = false;
 
 // Inizializzazione al caricamento del DOM
 document.addEventListener('DOMContentLoaded', () => {
+  const navAreaBtn = document.getElementById('navAreaBtn');
+  if (navAreaBtn) {
+    navAreaBtn.addEventListener('click', handleAcademyNavLogin);
+    navAreaBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleAcademyNavLogin(e);
+    });
+  }
+
   checkAuth();
 
   const loginForm = document.getElementById('academyLoginForm');
@@ -597,6 +606,28 @@ function showToast(message, isError = false) {
   setTimeout(() => toast.classList.add('show'), 10);
   setTimeout(() => toast.classList.remove('show'), 4000);
 }
+
+
+// Gestione Login da Navbar (Omino verde mobile / pulsante Accedi)
+function handleAcademyNavLogin(event) {
+  if (event) {
+    if (event.preventDefault) event.preventDefault();
+    if (event.stopPropagation) event.stopPropagation();
+  }
+  if (localStorage.getItem('itercars_academy_user')) {
+    window.location.hash = '#dashboard';
+    if (typeof checkAuth === 'function') {
+      checkAuth();
+    } else {
+      location.reload();
+    }
+  } else {
+    openLoginModal(event);
+  }
+}
+window.handleAcademyNavLogin = handleAcademyNavLogin;
+window.toggleAreaMenu = handleAcademyNavLogin;
+window.closeAreaMenu = function() {};
 
 function openLoginModal(event) {
   if (event && event.preventDefault) event.preventDefault();
