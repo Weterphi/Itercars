@@ -1694,3 +1694,95 @@
     width: 20px;
   }
 }
+
+/* ==========================================================================
+   DESKTOP HERO SLIDER: MINIMALIST LEFT-ALIGNED LAYOUT WITH THIN FRAMING LINES
+   Spazio aperto per supercar / lifestyle con inquadratura minimalista a sinistra
+   ========================================================================== */
+@media (min-width: 992px) {
+  .acd-story-slide {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding-left: clamp(60px, 6.5vw, 110px) !important;
+    padding-right: 40px !important;
+  }
+
+  .acd-story-slide .acd-slide-content {
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    max-width: 550px !important;
+    width: 100% !important;
+    padding: 34px 28px !important;
+    position: relative !important;
+    background: linear-gradient(135deg, rgba(6, 8, 14, 0.85) 0%, rgba(10, 15, 26, 0.65) 80%, rgba(6, 8, 14, 0.25) 100%) !important;
+    backdrop-filter: blur(14px) !important;
+    -webkit-backdrop-filter: blur(14px) !important;
+    border-radius: 4px !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.45) !important;
+  }
+
+  /* Linea superiore sottilissima (inquadra il testo) */
+  .acd-story-slide .acd-slide-content::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, #2ecc71 0%, rgba(255, 255, 255, 0.45) 35%, rgba(46, 204, 113, 0.2) 80%, transparent 100%) !important;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.5) !important;
+    pointer-events: none !important;
+  }
+
+  /* Linea inferiore sottilissima (inquadra le call to action) */
+  .acd-story-slide .acd-slide-content::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: linear-gradient(90deg, #2ecc71 0%, rgba(255, 255, 255, 0.45) 35%, rgba(46, 204, 113, 0.2) 80%, transparent 100%) !important;
+    box-shadow: 0 0 8px rgba(46, 204, 113, 0.5) !important;
+    pointer-events: none !important;
+  }
+
+  .acd-slide-badge {
+    margin-bottom: 16px !important;
+  }
+
+  .acd-slide-title {
+    font-size: 2.3rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 16px !important;
+  }
+
+  .acd-slide-desc {
+    font-size: 1.02rem !important;
+    line-height: 1.62 !important;
+    margin-bottom: 20px !important;
+    max-width: 490px !important;
+  }
+
+  .acd-slide-pills {
+    margin-bottom: 24px !important;
+    gap: 8px !important;
+  }
+
+  .acd-slide-actions {
+    gap: 12px !important;
+  }
+
+  .acd-slider-prev {
+    left: 18px !important;
+  }
+
+  /* Overlay alleggerito sul centro-destra per far risaltare al massimo la supercar */
+  .acd-slide-overlay {
+    background:
+      linear-gradient(to right, rgba(6, 8, 14, 0.92) 0%, rgba(6, 8, 14, 0.72) 42%, rgba(6, 8, 14, 0.15) 75%, rgba(6, 8, 14, 0.35) 100%),
+      linear-gradient(to top, rgba(6, 8, 14, 0.88) 0%, transparent 35%, rgba(6, 8, 14, 0.6) 100%) !important;
+  }
+}
+
