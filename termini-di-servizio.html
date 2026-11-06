@@ -5,31 +5,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Termini e Condizioni di Servizio | ITERCARS Marketplace & Academy</title>
-  <meta name="description" content="Termini e condizioni d'uso della piattaforma broker ITERCARS e condizioni generali per il noleggio auto di lusso e per il video corso ITERCARS Academy.">
-  <meta name="keywords" content="termini di servizio itercars, condizioni noleggio supercar, termini itercars academy, condizioni recesso video corso">
+  <meta name="description" content="Termini e condizioni generali di servizio per il noleggio di auto di lusso, supercar e percorsi formativi ITERCARS Academy.">
   <link rel="canonical" href="https://www.itercars.com/termini-di-servizio.html">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Termini e Condizioni di Servizio | ITERCARS">
-  <meta property="og:description" content="Condizioni di utilizzo della piattaforma broker ITERCARS e condizioni contrattuali per i servizi di noleggio e per la masterclass ITERCARS Academy.">
+  <meta property="og:description" content="Condizioni generali di noleggio supercar, protocolli operativi white-glove e regolamento contrattuale ITERCARS Academy.">
   <meta property="og:url" content="https://www.itercars.com/termini-di-servizio.html">
   <meta property="og:type" content="website">
 
   <!-- Remix Icons & CSS -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
-  <link rel="stylesheet" href="/index.css?v=54">
+  <link rel="stylesheet" href="/index.css?v=55">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  
   <style>
     :root {
-      --gold-gradient: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
-      --emerald-gradient: linear-gradient(135deg, #2ecc71 0%, #009245 100%);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --card-bg: rgba(15, 23, 42, 0.7);
+      --bg-dark: #06080e;
+      --bg-card: rgba(13, 17, 28, 0.75);
+      --accent: #2ecc71;
+      --accent-muted: rgba(46, 204, 113, 0.15);
+      --accent-border: rgba(46, 204, 113, 0.35);
+      --border-line: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
     }
     body {
-      background-color: #040711;
+      background-color: var(--bg-dark);
       color: #cbd5e1;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow-x: hidden;
@@ -37,59 +39,74 @@
     }
     .legal-hero {
       position: relative;
-      padding: 150px 0 60px 0;
-      background: radial-gradient(circle at 50% 10%, rgba(0, 146, 70, 0.12) 0%, rgba(4, 7, 17, 0.98) 70%);
-      border-bottom: 1px solid var(--border-subtle);
+      padding: 140px 0 50px 0;
+      background: radial-gradient(circle at 50% 0%, rgba(46, 204, 113, 0.08) 0%, var(--bg-dark) 70%);
+      border-bottom: 1px solid var(--border-line);
       text-align: center;
     }
     .legal-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 18px;
-      background: rgba(0, 146, 70, 0.15);
-      border: 1px solid rgba(0, 146, 70, 0.4);
+      padding: 6px 16px;
+      background: var(--accent-muted);
+      border: 1px solid var(--accent-border);
       border-radius: 99px;
-      color: #2ecc71;
-      font-size: 0.85rem;
+      color: var(--accent);
+      font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 16px;
     }
     .legal-hero h1 {
-      font-size: clamp(2.4rem, 5vw, 3.6rem);
-      font-weight: 950;
-      color: #fff;
-      margin-bottom: 16px;
-      line-height: 1.15;
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .legal-hero h1 span {
+      color: var(--accent);
     }
     .legal-hero p {
-      color: #94a3b8;
-      font-size: 1.1rem;
-      max-width: 720px;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
       margin: 0 auto;
     }
     .legal-container {
-      max-width: 1040px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 60px 20px 100px 20px;
+      padding: 50px 20px 90px 20px;
     }
     .legal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      background: var(--bg-card);
+      border: 1px solid var(--border-line);
+      border-radius: 16px;
+      padding: 44px 36px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    .legal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
     }
     @media (max-width: 768px) {
       .legal-card {
-        padding: 24px 20px;
+        padding: 24px 18px;
       }
     }
     .legal-section {
-      margin-bottom: 40px;
-      padding-bottom: 30px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-line);
     }
     .legal-section:last-child {
       margin-bottom: 0;
@@ -97,66 +114,76 @@
       border-bottom: none;
     }
     .legal-section h2 {
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 16px;
+      color: var(--text-main);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      letter-spacing: -0.01em;
     }
     .legal-section h2 i {
-      color: #2ecc71;
+      color: var(--accent);
+      font-size: 1.2rem;
     }
     .legal-section h3 {
-      color: #facc15;
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin: 22px 0 10px 0;
+      color: var(--text-main);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 20px 0 8px 0;
     }
     .legal-section p, .legal-section li {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       color: #94a3b8;
       line-height: 1.75;
       margin-bottom: 12px;
     }
     .legal-section ul {
-      padding-left: 24px;
+      padding-left: 20px;
       margin-bottom: 16px;
     }
     .legal-section li {
       margin-bottom: 8px;
     }
-    .legal-alert {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-left: 4px solid #ef4444;
-      border-radius: 12px;
-      padding: 22px 24px;
-      margin: 24px 0;
+    .legal-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-line);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin: 20px 0;
     }
-    .legal-alert.gold {
-      background: rgba(250, 204, 21, 0.08);
-      border-color: rgba(250, 204, 21, 0.35);
-      border-left-color: #facc15;
-    }
-    .legal-alert h4 {
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 8px;
+    .legal-box h4 {
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .legal-alert p {
-      color: #e2e8f0;
-      font-size: 0.95rem;
+    .legal-box h4 i {
+      color: var(--accent);
+    }
+    .legal-box p {
+      color: #cbd5e1;
+      font-size: 0.92rem;
       margin: 0;
-      line-height: 1.7;
+      line-height: 1.65;
+    }
+    .legal-contact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .legal-contact-pill:hover {
+      text-decoration: underline;
     }
   </style>
-
 </head>
 <body>
 
@@ -169,12 +196,12 @@
 
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="/fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
-        <li><a href="/noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
-        <li><a href="/noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
-        <li><a href="/magazine.html" style="color: #fff; font-weight: 700;"><i class="ri-article-line"></i> MAGAZINE</a></li>
-        <li><a href="/academy" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
-        <li><a href="/chi-siamo.html" style="color: #facc15; font-weight: 700;"><i class="ri-team-fill"></i> Chi Siamo</a></li>
+        <li><a href="/fleet.html">Luxury</a></li>
+        <li><a href="/noleggio-lungo-termine.html">Lungo Termine</a></li>
+        <li><a href="/noleggio-breve-termine.html">Breve Termine</a></li>
+        <li><a href="/magazine.html">Magazine</a></li>
+        <li><a href="/academy">Academy</a></li>
+        <li><a href="/chi-siamo.html">Chi Siamo</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -182,7 +209,7 @@
           <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
         </a>
         <a href="/academy" class="btn btn-primary nav-area-btn" title="Area Academy" style="display: flex; align-items: center; gap: 6px;">
-          <i class="ri-user-star-fill" style="font-size: 1.15rem;"></i> <span>Academy</span>
+          <i class="ri-graduation-cap-fill" style="font-size: 1.15rem;"></i> <span>Academy</span>
         </a>
       </div>
     </div>
@@ -190,10 +217,10 @@
 
   <section class="legal-hero">
     <div class="container">
-      <span class="legal-badge"><i class="ri-file-shield-2-fill"></i> Condizioni Contrattuali Ufficiali</span>
-      <h1>Termini di <span class="text-gradient">Servizio</span></h1>
-      <p>Regolamento generale per l'utilizzo della piattaforma broker ITERCARS, per i contratti di noleggio e per l'accesso ai contenuti formativi di ITERCARS Academy.</p>
-      <div style="margin-top: 18px; font-size: 0.9rem; color: #64748b;">
+      <span class="legal-badge"><i class="ri-shield-check-fill"></i> Condizioni Contrattuali Ufficiali</span>
+      <h1>Termini di <span>Servizio</span></h1>
+      <p>Disciplina generale dei servizi di noleggio auto di lusso, logistica white-glove e regolamento contrattuale ITERCARS Academy.</p>
+      <div style="margin-top: 14px; font-size: 0.85rem; color: #64748b;">
         <span>Ultimo aggiornamento: <strong>Novembre 2026</strong></span>
       </div>
     </div>
@@ -202,84 +229,84 @@
   <main class="legal-container">
     <div class="legal-card">
       
-      <!-- ART. 1 -->
+      <!-- SEZIONE 1 -->
       <section class="legal-section">
-        <h2><i class="ri-information-fill"></i> 1. Premessa e Definizioni</h2>
-        <p>I presenti Termini e Condizioni di Servizio disciplinano l'accesso e l'utilizzo del sito web <strong>www.itercars.com</strong> e di tutte le relative piattaforme, aree riservate e servizi digitali forniti da <strong>ITERCARS</strong>, piattaforma broker indipendente con direzione e leadership di <strong>Willie Toribio</strong> (CEO & Founder).</p>
-        <p>Per "Utente" o "Cliente" si intende qualsiasi persona fisica o giuridica che naviga sul sito, richiede preventivi, prenota servizi di noleggio o acquista percorsi formativi digitali.</p>
+        <h2><i class="ri-article-line"></i> 1. Disposizioni Generali e Oggetto</h2>
+        <p>I presenti Termini e Condizioni di Servizio regolano l'accesso e l'utilizzo del portale <strong>www.itercars.com</strong> e di tutte le relative prestazioni fornite da <strong>ITERCARS Marketplace</strong>.</p>
+        <p>ITERCARS opera come piattaforma broker indipendente e marketplace specializzato nella mobilità di alta gamma, connettendo la clientela privata e corporate ai migliori parchi auto di concessionarie e società di noleggio convenzionate in Italia e in Europa, oltre a curare l'erogazione dei percorsi formativi digitali dell'Academy.</p>
+        <p>L'invio di una richiesta di noleggio, la sottoscrizione del modulo d'ordine o l'acquisto del percorso formativo implica l'accettazione integrale ed incondizionata delle presenti condizioni.</p>
       </section>
 
-      <!-- ART. 2 -->
+      <!-- SEZIONE 2 -->
       <section class="legal-section">
-        <h2><i class="ri-building-4-fill"></i> 2. Natura della Piattaforma Broker</h2>
-        <p>ITERCARS opera quale <strong>piattaforma broker e intermediario indipendente</strong> nel settore automotive e della mobilità di lusso. Connettiamo clienti privati, aziende e personalità con primarie società di noleggio, concessionarie ufficiali e collezionisti terzi partner.</p>
-        <p>I singoli contratti di noleggio (a breve o lungo termine) e le relative coperture assicurative sono regolati dalle condizioni generali del fornitore convenzionato formalmente incaricato della fornitura del veicolo.</p>
-      </section>
-
-      <!-- ART. 3 -->
-      <section class="legal-section">
-        <h2><i class="ri-roadster-fill"></i> 3. Noleggio Breve Termine e Lungo Termine</h2>
-        <p>I dettagli specifici per il noleggio veicoli prevedono:</p>
+        <h2><i class="ri-steering-fill"></i> 2. Requisiti di Noleggio Supercar e Protocolli di Guida</h2>
+        <p>In considerazione delle prestazioni e del profilo di rischio delle vetture intermediate (Ferrari, Lamborghini, Porsche, McLaren, Bentley, Rolls-Royce, Aston Martin, Mercedes-AMG, BMW M, Audi RS):</p>
         <ul>
-          <li><strong>Requisiti di Guida:</strong> Il conducente deve essere in possesso di patente di guida valida da almeno 1-3 anni (in funzione della potenza del veicolo) e aver compiuto l'età minima richiesta (generalmente 21 o 25 anni per supercar ed hypercar).</li>
-          <li><strong>Deposito Cauzionale:</strong> Prima della consegna del veicolo a breve termine, è richiesta la pre-autorizzazione di un deposito cauzionale su carta di credito a garanzia di franchigie, danni o penali. Il deposito viene rilasciato a conclusione del noleggio previa verifica dello stato d'uso.</li>
-          <li><strong>Noleggio Lungo Termine (NLT):</strong> L'approvazione dell'ordine e l'eventuale concessione della formula ad anticipo zero sono subordinate alla valutazione dello scoring finanziario del cliente da parte delle società di locazione mandanti.</li>
+          <li><strong>Età Minima e Anzianità di Guida:</strong> Il conducente principale e gli eventuali secondi conducenti autorizzati devono aver compiuto almeno 21, 25 o 28 anni (a seconda della categoria del veicolo) ed essere titolari di patente di guida valida da almeno 1 o 3 anni consecutivi.</li>
+          <li><strong>Documentazione Obbligatoria (KYC):</strong> È obbligatoria la presentazione di patente di guida valida, documento d'identità in corso di validità (passaporto per residenti extra-UE) e codice fiscale o partita IVA.</li>
+          <li><strong>Divieto di Cessione a Terzi:</strong> Il veicolo può essere condotto esclusivamente dai soggetti formalmente identificati e autorizzati nel contratto di noleggio. È tassativamente vietata la cessione, il subnoleggio o l'affidamento della vettura a persone non registrate.</li>
+          <li><strong>Limiti di Utilizzo e Condotta:</strong> È severamente vietato l'utilizzo del veicolo per gare, competizioni sportive, track day in autodromo/pista, corsi di guida veloce, traino o su strade sterrate e non asfaltate. I sistemi di telemetria satellitare a bordo registrano e segnalano all'istante eventuali utilizzi impropri.</li>
+          <li><strong>Carburante Specifico:</strong> Su tutte le supercar ad alte prestazioni è obbligatorio l'utilizzo di benzina ad elevato numero di ottani (Superplus 98/100 ottani), con conservazione delle ricevute di rifornimento su richiesta del noleggiatore.</li>
         </ul>
       </section>
 
-      <!-- ART. 4 - CRUCIALE: ACADEMY E NO-REFUND POLICY -->
+      <!-- SEZIONE 3 -->
+      <section class="legal-section">
+        <h2><i class="ri-bank-card-line"></i> 3. Deposito Cauzionale, Franchigie e Pagamenti</h2>
+        <p>A garanzia dell'adempimento delle obbligazioni contrattuali e della restituzione integra della vettura:</p>
+        <ul>
+          <li><strong>Pre-autorizzazione su Carta di Credito:</strong> Prima della consegna è richiesta la costituzione di un deposito cauzionale mediante pre-autorizzazione su carta di credito bancaria (circuito Visa o Mastercard tradizionale intestata al conducente principale, non sono ammesse carte prepagate per il segmento supercar) o bonifico preventivo.</li>
+          <li><strong>Importo della Cauzione:</strong> L'importo varia a seconda del modello (tipicamente compreso tra €3.000 e €15.000 per hypercar) ed è parametrato alla franchigia assicurativa kasko, furto e incendio.</li>
+          <li><strong>Sblocco della Cauzione:</strong> Al termine del noleggio, previa verifica congiunta del verbale di stato d'uso (assenza di danni alla carrozzeria, cerchi in lega, sottoscocca e interni), la pre-autorizzazione viene tempestivamente rilasciata nei tempi tecnici bancari (solitamente 3-10 giorni lavorativi).</li>
+          <li><strong>Sanzioni Stradali, ZTL e Pedaggi:</strong> Tutte le infrazioni al Codice della Strada, i mancati pagamenti dei pedaggi autostradali (Telepass) e gli accessi non autorizzati in zone a traffico limitato (ZTL) rilevati durante la locazione sono ad esclusivo carico del locatario, con addebito delle spese vive e del costo di gestione amministrativa per la reintestazione del verbale.</li>
+        </ul>
+      </section>
+
+      <!-- SEZIONE 4 -->
       <section class="legal-section" id="academy-termini">
-        <h2><i class="ri-graduation-cap-fill"></i> 4. ITERCARS Academy: Fornitura di Contenuti Digitali e Politica di NON RIMBORSO (No-Refund)</h2>
-        <p>La presente sezione disciplina in modo specifico ed inderogabile l'acquisto e la fruizione del percorso formativo digitale <strong>"ITERCARS Academy"</strong> (Masterclass VIP per aspiranti broker di auto a noleggio), comprensivo di 12 moduli video HD in streaming, documentazione contrattuale e kit operativi in PDF scaricabili.</p>
-
-        <div class="legal-alert">
-          <h4><i class="ri-alert-fill"></i> CLAUSOLA FONDAMENTALE DI ESCLUSIONE DEL RECESSO E NESSUN RIMBORSO</h4>
+        <h2><i class="ri-graduation-cap-line"></i> 4. ITERCARS Academy: Contenuto Digitale e Politica di Non Rimborso</h2>
+        <p>La presente clausola disciplina specificamente l'acquisto e la fruizione del percorso formativo digitale <strong>"ITERCARS Academy"</strong> (Masterclass video e documentazione contrattuale operativa per aspiranti broker di noleggio auto di lusso):</p>
+        
+        <div class="legal-box">
+          <h4><i class="ri-alert-line"></i> Esclusione del Diritto di Recesso e Nessun Rimborso</h4>
           <p>
-            <strong>AI SENSI DELL'ART. 59, COMMA 1, LETTERA O) DEL DECRETO LEGISLATIVO 6 SETTEMBRE 2005, N. 206 (CODICE DEL CONSUMO)</strong>, CHE RECEPISCE LA DIRETTIVA EUROPEA 2011/83/UE SUI DIRITTI DEI CONSUMATORI, IL DIRITTO DI RECESSO ENTRO 14 GIORNI È ESPRESSAMENTE ESCLUSO PER I CONTRATTI DI FORNITURA DI CONTENUTO DIGITALE MEDIANTE SUPPORTO NON MATERIALE QUALORA L'ESECUZIONE SIA INIZIATA CON IL PREVIO CONSENSO ESPRESSO DEL CONSUMATORE E CON L'ACCETTAZIONE DELLA CONSEGUENTE PERDITA DEL DIRITTO DI RECESSO.
+            <strong>Ai sensi dell'Art. 59, comma 1, lettera o) del Decreto Legislativo 6 settembre 2005, n. 206 (Codice del Consumo)</strong>, che recepisce la Direttiva Europea 2011/83/UE, il diritto di recesso entro 14 giorni è espressamente escluso per i contratti di fornitura di contenuto digitale mediante supporto non materiale una volta iniziata l'esecuzione con il consenso espresso del consumatore.
           </p>
         </div>
 
-        <p>In applicazione di tale normativa vigente:</p>
         <ul>
-          <li><strong>Esecuzione Immediata:</strong> Al momento del pagamento del prezzo di iscrizione (€279,00 o diverso importo promozionale indicato), l'acquirente richiede espressamente l'attivazione immediata del servizio e la generazione delle credenziali personali per l'accesso riservato ai contenuti didattici.</li>
-          <li><strong>Nessun Rimborso Accettato:</strong> <strong>NON SI ACCETTANO RIMBORSI, NÉ TOTALI NÉ PARZIALI, DOPO L'ACQUISTO DEL VIDEO CORSO</strong>. Poiché le credenziali di accesso sbloccano immediatamente l'intero patrimonio informativo protetto da copyright (moduli video, dispense operative e modelli contrattuali), il prodotto digitale è considerato integralmente erogato, consumato e non restituibile.</li>
-          <li><strong>Nessuna Deroga per Mancata Fruizione:</strong> Non saranno accolte richieste di rimborso motivate da ripensamento, mancata visualizzazione delle lezioni, impossibilità sopravvenuta dell'utente, problemi hardware/software del dispositivo dell'acquirente o mancata idoneità soggettiva all'attività commerciale.</li>
+          <li><strong>Esecuzione Immediata:</strong> Al perfezionamento del pagamento del corso (€279,00 o altro importo promozionale indicato), l'acquirente acconsente espressamente alla fornitura immediata del contenuto e all'invio delle credenziali personali per l'accesso riservato ai moduli video e ai documenti scaricabili, con contestuale decadenza del diritto di recesso.</li>
+          <li><strong>Nessun Rimborso Accettato:</strong> <strong>NON SI ACCETTANO RIMBORSI, NÉ TOTALI NÉ PARZIALI, DOPO L'ACQUISTO DEL VIDEO CORSO</strong>. Trattandosi di materiale formativo ad alto valore strategico e proprietà intellettuale immediatamente consultabile, il prodotto digitale è considerato consumato e non rimborsabile.</li>
+          <li><strong>Personalità dell'Account:</strong> Le credenziali di accesso sono strettamente personali e non cedibili. È vietata la condivisione, rivendita, registrazione o diffusione dei contenuti didattici, pena l'immediata revoca dell'accesso e l'addebito dei danni morali e patrimoniali.</li>
         </ul>
-
-        <div class="legal-alert gold">
-          <h4><i class="ri-shield-keyhole-fill"></i> Credenziali Strettamente Personali e Divieto di Condivisione</h4>
-          <p>
-            L'account e le credenziali di accesso fornite allo studente sono strettamente personali, nominali ed intrasferibili. È tassativamente vietato cedere, vendere, condividere o divulgare a terzi le credenziali, nonché registrare, riprodurre, ridistribuire o pubblicare online i video e i documenti riservati dell'Academy. La violazione comporterà l'immediata disattivazione definitiva dell'account senza alcun rimborso e l'avvio delle azioni legali per risarcimento danni da violazione di proprietà intellettuale.
-          </p>
-        </div>
       </section>
 
-      <!-- ART. 5 -->
+      <!-- SEZIONE 5 -->
       <section class="legal-section">
-        <h2><i class="ri-bank-card-fill"></i> 5. Prezzi e Modalità di Pagamento</h2>
-        <p>I pagamenti relativi all'Academy e agli acconti dei noleggi vengono elaborati tramite circuiti internazionali sicuri (es. Stripe) con crittografia end-to-end SSL/TLS. ITERCARS non memorizza né ha accesso diretto ai numeri completi delle carte di credito degli utenti.</p>
-      </section>
-
-      <!-- ART. 6 -->
-      <section class="legal-section">
-        <h2><i class="ri-copyright-fill"></i> 6. Proprietà Intellettuale</h2>
-        <p>Tutti i contenuti presenti sul sito www.itercars.com — inclusi testi, marchi, loghi, grafica, video, immagini, codice sorgente e materiali didattici di ITERCARS Academy — sono di proprietà esclusiva di ITERCARS e dei rispettivi titolari, protetti dalle leggi italiane ed internazionali sul diritto d'autore e sulla proprietà industriale.</p>
-      </section>
-
-      <!-- ART. 7 -->
-      <section class="legal-section">
-        <h2><i class="ri-scales-3-fill"></i> 7. Legge Applicabile e Foro Competente</h2>
-        <p>I presenti Termini di Servizio sono regolati e interpretati in conformità alla legge italiana. Per qualsiasi controversia civile derivante dall'interpretazione, esecuzione o risoluzione dei presenti termini, sarà competente in via esclusiva il Foro territorialmente competente secondo la normativa italiana, salvo le disposizioni inderogabili a favore del consumatore residente in territorio UE.</p>
-      </section>
-
-      <!-- ART. 8 -->
-      <section class="legal-section">
-        <h2><i class="ri-customer-service-2-fill"></i> 8. Assistenza e Contatti</h2>
-        <p>Per chiarimenti relativi ai Termini di Servizio o all'assistenza clienti:</p>
+        <h2><i class="ri-flight-takeoff-line"></i> 5. Consegna White-Glove e Ritiro delle Vetture</h2>
+        <p>I servizi di consegna e ritiro personalizzati (aeroporti, hotel, residenze private) sono soggetti a precise disposizioni operative:</p>
         <ul>
-          <li><strong>Email Direzione:</strong> <a href="mailto:ceotoribio@itercars.com" style="color: #facc15; text-decoration: none;">ceotoribio@itercars.com</a></li>
-          <li><strong>Email Generale:</strong> <a href="mailto:info@itercars.com" style="color: #2ecc71; text-decoration: none;">info@itercars.com</a></li>
-          <li><strong>Telefono / WhatsApp Concierge:</strong> <a href="tel:+393755942143" style="color: #cbd5e1; text-decoration: none;">+39 375 594 2143</a></li>
+          <li><strong>Verbale di Consegna (Check-in):</strong> All'atto della consegna, il concierge ITERCARS o il personale del partner convenzionato redige un verbale digitale con dettagli fotografici dello stato del veicolo, chilometraggio di partenza e livello del carburante. Il cliente è tenuto a segnalare contestualmente qualsiasi anomalia prima della partenza.</li>
+          <li><strong>Restituzione (Check-out):</strong> Il veicolo deve essere riconsegnato nel luogo, giorno e ora concordati, con il medesimo livello di carburante (pieno per pieno) e nello stato d'uso originario, salvo la normale usura da rotolamento pneumatici.</li>
+          <li><strong>Ritardi nella Riconsegna:</strong> Qualsiasi ritardo non preventivamente autorizzato superiore a 59 minuti comporterà l'addebito di un'ulteriore giornata di noleggio e l'eventuale risarcimento danni per mancata disponibilità verso prenotazioni successive.</li>
+        </ul>
+      </section>
+
+      <!-- SEZIONE 6 -->
+      <section class="legal-section">
+        <h2><i class="ri-shield-check-line"></i> 6. Limitazione di Responsabilità</h2>
+        <p>ITERCARS si adopera costantemente per garantire la massima accuratezza delle schede tecniche, della disponibilità dei modelli e dell'affidabilità dei partner convenzionati. Tuttavia, nei limiti massimi consentiti dalla legge applicabile, ITERCARS non potrà essere ritenuta responsabile per danni indiretti, perdita di coincidenze di viaggio, ritardi dovuti a cause di forza maggiore (condizioni meteo estreme, blocchi stradali, scioperi o guasti meccanici imprevisti immediatamente sostituiti da veicolo di categoria equivalente).</p>
+      </section>
+
+      <!-- SEZIONE 7 -->
+      <section class="legal-section">
+        <h2><i class="ri-government-line"></i> 7. Legge Applicabile e Foro Competente</h2>
+        <p>I presenti Termini di Servizio sono regolati e interpretati in conformità alla <strong>legge italiana</strong>.</p>
+        <p>Per qualsiasi controversia derivante dall'interpretazione, esecuzione o validità dei presenti accordi con clienti professionisti o societari (B2B), sarà competente in via esclusiva il Foro territorialmente designato secondo le normative civilistiche italiane. Per i clienti qualificabili come consumatori (B2C), si applicano le disposizioni inderogabili del Codice del Consumo in merito al foro di residenza o domicilio elettivo del consumatore.</p>
+        <p>Per comunicazioni legali, notifiche o quesiti contrattuali:</p>
+        <ul>
+          <li>Email Direzione: <a href="mailto:ceotoribio@itercars.com" class="legal-contact-pill">ceotoribio@itercars.com</a></li>
+          <li>Email Ufficio Contratti: <a href="mailto:info@itercars.com" class="legal-contact-pill">info@itercars.com</a></li>
         </ul>
       </section>
 
@@ -294,11 +321,10 @@
           <a href="/" class="logo" style="margin-bottom: 16px;" title="ITERCARS Luxury Supercar Rental">
             <img src="/logo_tricolore.png?v=17" alt="ITERCARS - Marketplace Noleggio Auto di Lusso e Supercar" class="footer-logo-img">
           </a>
-          <p>Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Piattaforma broker e polo formativo ITERCARS Academy. Fondata da Willie Toribio.</p>
+          <p>Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Piattaforma broker e polo formativo ITERCARS Academy.</p>
           <div style="display: flex; gap: 12px; margin-top: 20px;">
-            <a href="https://www.linkedin.com/in/willie-toribio-522344111/" target="_blank" rel="noopener" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0a66c2;"><i class="ri-linkedin-fill"></i></a>
-            <a href="mailto:ceotoribio@itercars.com" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #facc15;"><i class="ri-mail-fill"></i></a>
-            <a href="https://wa.me/393755942143" target="_blank" rel="noopener" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2ecc71;"><i class="ri-whatsapp-line"></i></a>
+            <a href="mailto:ceotoribio@itercars.com" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2ecc71;" title="Email Direzione"><i class="ri-mail-fill"></i></a>
+            <a href="https://wa.me/393755942143" target="_blank" rel="noopener" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2ecc71;" title="WhatsApp Concierge"><i class="ri-whatsapp-line"></i></a>
           </div>
         </div>
 
@@ -315,21 +341,20 @@
         <div class="footer-col">
           <h4>Link Utili</h4>
           <div class="footer-links">
-            <a href="/chi-siamo.html" style="color: #facc15; font-weight: 700;"><i class="ri-team-line"></i> Il Nostro Team / Chi Siamo</a>
-            <a href="/willie-toribio" style="color: #facc15;"><i class="ri-user-star-line"></i> Willie Toribio (Biografia CEO)</a>
-            <a href="/academy" style="color: #2ecc71; font-weight: 600;"><i class="ri-graduation-cap-fill"></i> ITERCARS Academy</a>
+            <a href="/chi-siamo.html">Il Nostro Team / Chi Siamo</a>
+            <a href="/academy">ITERCARS Academy</a>
             <a href="/magazine.html">Magazine & News</a>
             <a href="/partners.html">Lavora con noi / Partner</a>
           </div>
         </div>
 
         <div class="footer-col">
-          <h4>Sede Legale & Contatti</h4>
+          <h4>Sede & Contatti Ufficiali</h4>
           <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
-            <p><i class="ri-global-line text-gradient"></i> <strong>Sede:</strong> Piattaforma Digitale Online</p>
-            <p><i class="ri-phone-fill text-gradient"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
-            <p><i class="ri-mail-send-fill text-gradient"></i> <a href="mailto:ceotoribio@itercars.com" style="color: inherit;">ceotoribio@itercars.com</a></p>
-            <p><i class="ri-customer-service-2-fill text-gradient"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
+            <p><i class="ri-global-line" style="color: #2ecc71;"></i> <strong>Sede:</strong> Piattaforma Digitale Online</p>
+            <p><i class="ri-phone-fill" style="color: #2ecc71;"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
+            <p><i class="ri-mail-send-fill" style="color: #2ecc71;"></i> <a href="mailto:ceotoribio@itercars.com" style="color: inherit;">ceotoribio@itercars.com</a></p>
+            <p><i class="ri-customer-service-2-fill" style="color: #2ecc71;"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
           </div>
         </div>
       </div>

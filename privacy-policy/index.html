@@ -5,91 +5,110 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Informativa Privacy e Protezione Dati (GDPR) | ITERCARS</title>
-  <meta name="description" content="Informativa sul trattamento dei dati personali ai sensi del Regolamento UE 2016/679 (GDPR). Scopri come ITERCARS raccoglie, protegge e gestisce i tuoi dati.">
-  <meta name="keywords" content="privacy policy itercars, gdpr itercars, trattamento dati noleggio auto, sicurezza dati personali">
+  <meta name="description" content="Informativa sul trattamento dei dati personali ai sensi del Regolamento UE 2016/679 (GDPR) specifica per il noleggio di auto di lusso e supercar di ITERCARS.">
   <link rel="canonical" href="https://www.itercars.com/privacy-policy.html">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Informativa Privacy e Protezione Dati (GDPR) | ITERCARS">
-  <meta property="og:description" content="Informativa completa sul trattamento dei dati personali conforme al GDPR (Regolamento UE 2016/679).">
+  <meta property="og:description" content="Informativa sul trattamento dei dati personali ai sensi del GDPR (Regolamento UE 2016/679) per il settore noleggio auto di lusso e supercar.">
   <meta property="og:url" content="https://www.itercars.com/privacy-policy.html">
   <meta property="og:type" content="website">
 
   <!-- Remix Icons & CSS -->
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
-  <link rel="stylesheet" href="/index.css?v=54">
+  <link rel="stylesheet" href="/index.css?v=55">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 
-  
   <style>
     :root {
-      --gold-gradient: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
-      --emerald-gradient: linear-gradient(135deg, #2ecc71 0%, #009245 100%);
-      --border-subtle: rgba(255, 255, 255, 0.08);
-      --card-bg: rgba(15, 23, 42, 0.7);
+      --bg-dark: #06080e;
+      --bg-card: rgba(13, 17, 28, 0.75);
+      --accent: #2ecc71;
+      --accent-muted: rgba(46, 204, 113, 0.15);
+      --accent-border: rgba(46, 204, 113, 0.35);
+      --border-line: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
     }
     body {
-      background-color: #040711;
+      background-color: var(--bg-dark);
       color: #cbd5e1;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       overflow-x: hidden;
       line-height: 1.8;
     }
+    /* Minimalist Legal Header */
     .legal-hero {
       position: relative;
-      padding: 150px 0 60px 0;
-      background: radial-gradient(circle at 50% 10%, rgba(0, 146, 70, 0.12) 0%, rgba(4, 7, 17, 0.98) 70%);
-      border-bottom: 1px solid var(--border-subtle);
+      padding: 140px 0 50px 0;
+      background: radial-gradient(circle at 50% 0%, rgba(46, 204, 113, 0.08) 0%, var(--bg-dark) 70%);
+      border-bottom: 1px solid var(--border-line);
       text-align: center;
     }
     .legal-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 18px;
-      background: rgba(0, 146, 70, 0.15);
-      border: 1px solid rgba(0, 146, 70, 0.4);
+      padding: 6px 16px;
+      background: var(--accent-muted);
+      border: 1px solid var(--accent-border);
       border-radius: 99px;
-      color: #2ecc71;
-      font-size: 0.85rem;
+      color: var(--accent);
+      font-size: 0.8rem;
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
       margin-bottom: 16px;
     }
     .legal-hero h1 {
-      font-size: clamp(2.4rem, 5vw, 3.6rem);
-      font-weight: 950;
-      color: #fff;
-      margin-bottom: 16px;
-      line-height: 1.15;
+      font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 14px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+    .legal-hero h1 span {
+      color: var(--accent);
     }
     .legal-hero p {
-      color: #94a3b8;
-      font-size: 1.1rem;
-      max-width: 720px;
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 680px;
       margin: 0 auto;
     }
     .legal-container {
-      max-width: 1040px;
+      max-width: 960px;
       margin: 0 auto;
-      padding: 60px 20px 100px 20px;
+      padding: 50px 20px 90px 20px;
     }
     .legal-card {
-      background: var(--card-bg);
-      border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+      background: var(--bg-card);
+      border: 1px solid var(--border-line);
+      border-radius: 16px;
+      padding: 44px 36px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+      position: relative;
+    }
+    /* Subtle minimalist top framing line */
+    .legal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
     }
     @media (max-width: 768px) {
       .legal-card {
-        padding: 24px 20px;
+        padding: 24px 18px;
       }
     }
     .legal-section {
-      margin-bottom: 40px;
-      padding-bottom: 30px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 36px;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--border-line);
     }
     .legal-section:last-child {
       margin-bottom: 0;
@@ -97,66 +116,76 @@
       border-bottom: none;
     }
     .legal-section h2 {
-      color: #fff;
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 16px;
+      color: var(--text-main);
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
+      letter-spacing: -0.01em;
     }
     .legal-section h2 i {
-      color: #2ecc71;
+      color: var(--accent);
+      font-size: 1.2rem;
     }
     .legal-section h3 {
-      color: #facc15;
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin: 22px 0 10px 0;
+      color: var(--text-main);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 20px 0 8px 0;
     }
     .legal-section p, .legal-section li {
-      font-size: 0.98rem;
+      font-size: 0.95rem;
       color: #94a3b8;
       line-height: 1.75;
       margin-bottom: 12px;
     }
     .legal-section ul {
-      padding-left: 24px;
+      padding-left: 20px;
       margin-bottom: 16px;
     }
     .legal-section li {
       margin-bottom: 8px;
     }
-    .legal-alert {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.35);
-      border-left: 4px solid #ef4444;
-      border-radius: 12px;
-      padding: 22px 24px;
-      margin: 24px 0;
+    .legal-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-line);
+      border-left: 3px solid var(--accent);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin: 20px 0;
     }
-    .legal-alert.gold {
-      background: rgba(250, 204, 21, 0.08);
-      border-color: rgba(250, 204, 21, 0.35);
-      border-left-color: #facc15;
-    }
-    .legal-alert h4 {
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 8px;
+    .legal-box h4 {
+      color: var(--text-main);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       gap: 8px;
     }
-    .legal-alert p {
-      color: #e2e8f0;
-      font-size: 0.95rem;
+    .legal-box h4 i {
+      color: var(--accent);
+    }
+    .legal-box p {
+      color: #cbd5e1;
+      font-size: 0.92rem;
       margin: 0;
-      line-height: 1.7;
+      line-height: 1.65;
+    }
+    .legal-contact-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .legal-contact-pill:hover {
+      text-decoration: underline;
     }
   </style>
-
 </head>
 <body>
 
@@ -169,12 +198,12 @@
 
       <ul class="nav-links">
         <li><a href="/">Home</a></li>
-        <li><a href="/fleet.html" style="color: #f39c12; font-weight: 700;"><i class="ri-vip-crown-fill"></i> Luxury</a></li>
-        <li><a href="/noleggio-lungo-termine.html" style="font-weight: 600;"><i class="ri-calendar-event-fill"></i> Lungo Termine</a></li>
-        <li><a href="/noleggio-breve-termine.html" style="font-weight: 600;"><i class="ri-timer-flash-line"></i> Breve Termine</a></li>
-        <li><a href="/magazine.html" style="color: #fff; font-weight: 700;"><i class="ri-article-line"></i> MAGAZINE</a></li>
-        <li><a href="/academy" style="color: #2ecc71; font-weight: 700;"><i class="ri-graduation-cap-fill"></i> ACADEMY</a></li>
-        <li><a href="/chi-siamo.html" style="color: #facc15; font-weight: 700;"><i class="ri-team-fill"></i> Chi Siamo</a></li>
+        <li><a href="/fleet.html">Luxury</a></li>
+        <li><a href="/noleggio-lungo-termine.html">Lungo Termine</a></li>
+        <li><a href="/noleggio-breve-termine.html">Breve Termine</a></li>
+        <li><a href="/magazine.html">Magazine</a></li>
+        <li><a href="/academy">Academy</a></li>
+        <li><a href="/chi-siamo.html">Chi Siamo</a></li>
       </ul>
 
       <div class="nav-actions">
@@ -182,7 +211,7 @@
           <i class="ri-phone-line" style="font-size: 1.15rem;"></i> <span class="phone-text">+39 375 594 2143</span>
         </a>
         <a href="/academy" class="btn btn-primary nav-area-btn" title="Area Academy" style="display: flex; align-items: center; gap: 6px;">
-          <i class="ri-user-star-fill" style="font-size: 1.15rem;"></i> <span>Academy</span>
+          <i class="ri-graduation-cap-fill" style="font-size: 1.15rem;"></i> <span>Academy</span>
         </a>
       </div>
     </div>
@@ -191,9 +220,9 @@
   <section class="legal-hero">
     <div class="container">
       <span class="legal-badge"><i class="ri-shield-check-fill"></i> Conformità GDPR (Regolamento UE 2016/679)</span>
-      <h1>Informativa sulla <span class="text-gradient">Privacy</span></h1>
-      <p>Trasparenza, riservatezza e protezione assoluta dei tuoi dati personali sono principi cardine di ITERCARS.</p>
-      <div style="margin-top: 18px; font-size: 0.9rem; color: #64748b;">
+      <h1>Informativa sulla <span>Privacy</span></h1>
+      <p>Trasparenza, riservatezza e standard elevati di sicurezza nel trattamento dei dati per i servizi di autonoleggio di lusso e brokerage.</p>
+      <div style="margin-top: 14px; font-size: 0.85rem; color: #64748b;">
         <span>Ultimo aggiornamento: <strong>Novembre 2026</strong></span>
       </div>
     </div>
@@ -204,70 +233,93 @@
       
       <!-- SEZIONE 1 -->
       <section class="legal-section">
-        <h2><i class="ri-user-star-fill"></i> 1. Titolare del Trattamento dei Dati</h2>
-        <p>Il Titolare del trattamento dei dati personali raccolti tramite il sito web <strong>www.itercars.com</strong> è <strong>ITERCARS</strong>, piattaforma broker indipendente con direzione e leadership di <strong>Willie Toribio</strong> (CEO & Fondatore).</p>
-        <p>Per qualsiasi richiesta in materia di privacy o per l'esercizio dei diritti previsti dal GDPR, è possibile contattare direttamente il Titolare all'indirizzo email dedicato: <a href="mailto:privacy@itercars.com" style="color: #2ecc71; text-decoration: none; font-weight: 600;">privacy@itercars.com</a> o <a href="mailto:ceotoribio@itercars.com" style="color: #facc15; text-decoration: none; font-weight: 600;">ceotoribio@itercars.com</a>.</p>
+        <h2><i class="ri-building-line"></i> 1. Titolare del Trattamento</h2>
+        <p>Il Titolare del trattamento dei dati personali raccolti tramite il sito web <strong>www.itercars.com</strong> è <strong>ITERCARS Marketplace</strong>, piattaforma indipendente di brokerage e mobilità di lusso.</p>
+        <p>Per qualsiasi richiesta in materia di privacy, esercizio dei diritti previsti dal Regolamento UE 2016/679 (GDPR) o rettifica dei dati forniti, è possibile contattare l'amministrazione ai seguenti recapiti ufficiali:</p>
+        <ul>
+          <li>Email Direzione: <a href="mailto:ceotoribio@itercars.com" class="legal-contact-pill">ceotoribio@itercars.com</a></li>
+          <li>Email Informazioni & Privacy: <a href="mailto:info@itercars.com" class="legal-contact-pill">info@itercars.com</a></li>
+        </ul>
       </section>
 
       <!-- SEZIONE 2 -->
       <section class="legal-section">
-        <h2><i class="ri-database-2-fill"></i> 2. Tipologie di Dati Raccolti</h2>
-        <p>ITERCARS raccoglie e tratta esclusivamente i dati necessari per l'erogazione dei servizi richiesti:</p>
+        <h2><i class="ri-file-shield-line"></i> 2. Dati Trattati nel Segmento Autonoleggio di Lusso</h2>
+        <p>Data la particolare natura e l'elevato valore economico e prestazionale delle vetture intermediate (supercar, hypercar, SUV d'alta gamma e berline di rappresentanza), ITERCARS tratta dati specifici per garantire la conformità contrattuale, assicurativa e di pubblica sicurezza:</p>
         <ul>
-          <li><strong>Dati di Contatto e Anagrafici:</strong> Nome, cognome, indirizzo email, recapito telefonico, indirizzo di residenza o sede legale aziendale forniti nei moduli di richiesta preventivo, contatto WhatsApp o registrazione.</li>
-          <li><strong>Dati di Guida e Verifica Identità (KYC):</strong> Per le pratiche di noleggio, patente di guida, codice fiscale / partita IVA, documento di identità per la formalizzazione contrattuale e la verifica assicurativa con i partner noleggiatori.</li>
-          <li><strong>Dati di Fatturazione e Pagamento:</strong> Dati fiscali e dettagli di transazione gestiti in sicurezza mediante circuiti certificati PCI-DSS (Stripe).</li>
-          <li><strong>Dati di Navigazione Tecnici:</strong> Indirizzi IP anonimizzati, log di sistema, parametri del browser secondo le preferenze espresse tramite il banner cookie conforme a Google Consent Mode v2.</li>
+          <li><strong>Dati Anagrafici e di Contatto:</strong> Nome, cognome, codice fiscale/partita IVA, nazionalità, indirizzo di residenza o domicilio, recapito telefonico ed email.</li>
+          <li><strong>Documenti di Guida e Verifica Identità (KYC):</strong> Copia della patente di guida in corso di validità (con verifica del possesso dei requisiti di anzianità di guida, tipicamente non inferiore a 1 o 3 anni per supercar ad alte prestazioni), carta d'identità o passaporto internazionale, eventuale patente internazionale per conducenti extra-UE.</li>
+          <li><strong>Dati di Garanzia Finanziaria e Cauzionale:</strong> Dati relativi alla carta di credito (gestiti tramite provider certificati PCI-DSS) o attestazioni di bonifico per la pre-autorizzazione del deposito cauzionale previsto a copertura delle franchigie kasko, furto e incendio.</li>
+          <li><strong>Dati di Consegna White-Glove:</strong> Indirizzi di consegna e ritiro personalizzati (hotel 5 stelle, ville private, porti turistici o terminal aeroportuali di aviazione generale come Milano Linate Prime, Malpensa VIP, Roma Ciampino, Olbia Eccelsa).</li>
+          <li><strong>Verbali di Stato d'Uso:</strong> Documentazione fotografica e chilometrica all'inizio e al termine del noleggio, sottoscritta dalle parti per la constatazione dello stato del veicolo.</li>
         </ul>
       </section>
 
       <!-- SEZIONE 3 -->
       <section class="legal-section">
-        <h2><i class="ri-file-list-3-fill"></i> 3. Finalità e Base Giuridica del Trattamento</h2>
-        <p>I dati personali sono trattati lecitamente per le seguenti finalità:</p>
-        <ul>
-          <li><strong>Erogazione dei Servizi di Noleggio (Base contrattuale):</strong> Elaborazione di preventivi personalizzati, gestione delle prenotazioni, consegna delle vetture e supporto concierge.</li>
-          <li><strong>Accesso a ITERCARS Academy (Base contrattuale):</strong> Creazione e gestione dell'account corsista, abilitazione alla fruizione dei video e rilascio della certificazione ufficiale.</li>
-          <li><strong>Adempimenti Legali e Fiscali (Obbligo di legge):</strong> Emissione fatture, tenuta delle scritture contabili e conformità alle normative antiriciclaggio e di pubblica sicurezza.</li>
-          <li><strong>Sicurezza e Prevenzione Frodi (Legittimo interesse):</strong> Verifica dell'integrità delle transazioni e salvaguardia del patrimonio automobilistico intermediato.</li>
-        </ul>
+        <h2><i class="ri-radar-line"></i> 3. Sistemi di Telemetria Satellitare e Geolocalizzazione GPS</h2>
+        <p>Tutti i veicoli del parco auto partner collegati alla piattaforma sono dotati di dispositivi di bordo satellitari (antifurto GPS, telemetria e scatola nera) installati a tutela dell'integrità del bene patrimoniale e della sicurezza stradale.</p>
+        <div class="legal-box">
+          <h4><i class="ri-information-line"></i> Base Giuridica e Finalità della Localizzazione</h4>
+          <p>La geolocalizzazione GPS viene trattata sulla base del <strong>legittimo interesse</strong> del proprietario e del noleggiatore alla tutela dei veicoli ad alto valore patrimoniale, per finalità esclusive di:</p>
+          <ul style="margin: 8px 0 0 16px;">
+            <li>Recupero del mezzo in caso di furto, appropriazione indebita o mancata restituzione nei termini contrattuali.</li>
+            <li>Soccorso stradale immediato in caso di guasto o sinistro.</li>
+            <li>Rilevazione di allarmi critici (superamento confini geografici non autorizzati o uso in pista/circuito non consentito dal contratto).</li>
+          </ul>
+        </div>
       </section>
 
       <!-- SEZIONE 4 -->
       <section class="legal-section">
-        <h2><i class="ri-share-forward-fill"></i> 4. Comunicazione dei Dati a Terzi</h2>
-        <p>I dati dell'utente non vengono venduti o ceduti a scopo pubblicitario a soggetti terzi. Possono essere comunicati esclusivamente a:</p>
+        <h2><i class="ri-scales-line"></i> 4. Finalità e Basi Giuridiche del Trattamento</h2>
+        <p>I dati personali sono trattati lecitamente nel pieno rispetto dell'Art. 6 del GDPR per le seguenti finalità:</p>
         <ul>
-          <li>Società di noleggio e concessionarie partner ufficialmente incaricate della fornitura e consegna del veicolo.</li>
-          <li>Fornitori di servizi IT, hosting cloud certificati (Vercel, Supabase) e gateway di pagamento sicuri (Stripe).</li>
-          <li>Autorità giudiziarie o forze dell'ordine nei soli casi previsti dalla legge.</li>
+          <li><strong>Esecuzione di Misure Contrattuali e Precontrattuali (Art. 6.1.b):</strong> Elaborazione di preventivi personalizzati, stipula dei contratti di noleggio a breve e lungo termine, assistenza concierge h24 e gestione logistica.</li>
+          <li><strong>Accesso e Fruizione di ITERCARS Academy (Art. 6.1.b):</strong> Attivazione delle credenziali personali per la visione del video corso broker auto, gestione didattica e rilascio attestati.</li>
+          <li><strong>Adempimenti di Obblighi di Legge (Art. 6.1.c):</strong> Fatturazione, adempimenti fiscali, archiviazione contabile e rispetto delle norme sulla pubblica sicurezza (comunicazione dei dati alle autorità preposte).</li>
+          <li><strong>Gestione delle Sanzioni del Codice della Strada (Art. 6.1.f):</strong> Comunicazione dei dati anagrafici del locatario agli enti accertatori (Polizia Locale, Polizia Stradale) per la reintestazione e notifica di contravvenzioni, varchi ZTL o mancati pedaggi autostradali verificatisi durante il periodo di locazione.</li>
         </ul>
       </section>
 
       <!-- SEZIONE 5 -->
       <section class="legal-section">
-        <h2><i class="ri-time-fill"></i> 5. Periodo di Conservazione dei Dati</h2>
-        <p>I dati personali vengono conservati per il tempo strettamente necessario a conseguire gli scopi per cui sono stati raccolti, e nello specifico:</p>
+        <h2><i class="ri-share-forward-line"></i> 5. Ambito di Comunicazione dei Dati</h2>
+        <p>I dati non sono soggetti a diffusione indiscriminata né a vendita a terzi per scopi promozionali. Possono essere comunicati unicamente a soggetti strettamente correlati all'erogazione del servizio:</p>
         <ul>
-          <li>I dati contabili e di fatturazione per un periodo di 10 anni in ottemperanza agli obblighi fiscali di legge.</li>
-          <li>I dati relativi all'account ITERCARS Academy fino alla richiesta di cancellazione da parte dell'utente, per garantire la fruizione continuativa delle lezioni acquistate.</li>
-          <li>I dati di contatto per richieste preventivo per un massimo di 24 mesi dall'ultimo contatto.</li>
+          <li>Società di noleggio e concessionarie partner titolari del veicolo o delegate alla consegna e manutenzione.</li>
+          <li>Compagnie assicurative e periti incaricati in caso di apertura di sinistri o danni.</li>
+          <li>Istituti bancari e provider di pagamento sicuri conformi PCI-DSS (es. Stripe) per l'elaborazione dei corrispettivi e delle cauzioni.</li>
+          <li>Autorità di pubblica sicurezza, forze dell'ordine e organi giudiziari nei casi espressamente previsti dalla legge.</li>
         </ul>
       </section>
 
       <!-- SEZIONE 6 -->
       <section class="legal-section">
-        <h2><i class="ri-shield-user-fill"></i> 6. Diritti dell'Interessato (Artt. 15-22 GDPR)</h2>
-        <p>In ogni momento, l'interessato ha il diritto di:</p>
+        <h2><i class="ri-time-line"></i> 6. Periodo di Conservazione dei Dati</h2>
+        <p>I dati personali vengono conservati per il tempo strettamente necessario al raggiungimento delle finalità per cui sono stati raccolti:</p>
         <ul>
-          <li>Ottenere la conferma dell'esistenza di dati personali che lo riguardano e l'accesso agli stessi.</li>
-          <li>Chiedere la rettifica, l'aggiornamento o l'integrazione dei dati inesatti.</li>
-          <li>Richiedere la cancellazione dei dati ("diritto all'oblio"), compatibilmente con gli obblighi di legge.</li>
-          <li>Ottenere la limitazione del trattamento o opporsi al trattamento per motivi legittimi.</li>
-          <li>Richiedere la portabilità dei dati in formato strutturato e leggibile da dispositivo automatico.</li>
-          <li>Proporre reclamo all'Autorità Garante per la Protezione dei Dati Personali (www.garanteprivacy.it).</li>
+          <li><strong>Dati Contabili e Fiscali:</strong> 10 anni in conformità all'Art. 2220 del Codice Civile italiano.</li>
+          <li><strong>Pratiche di Noleggio e Contratti:</strong> 5 anni dalla conclusione del contratto a fini di tutela legale, contestazione di danni o reinoltro di verbali e contravvenzioni stradali.</li>
+          <li><strong>Credenziali e Dati ITERCARS Academy:</strong> Fino alla richiesta di cancellazione da parte del cliente, per garantire l'accesso permanente al materiale didattico acquistato.</li>
+          <li><strong>Preventivi non Finalizzati:</strong> 12 mesi dalla richiesta, decorsi i quali vengono cancellati o anonimizzati.</li>
         </ul>
-        <p>Per esercitare tali diritti, è sufficiente inviare una comunicazione scritta a <a href="mailto:privacy@itercars.com" style="color: #2ecc71; text-decoration: none;">privacy@itercars.com</a>.</p>
+      </section>
+
+      <!-- SEZIONE 7 -->
+      <section class="legal-section">
+        <h2><i class="ri-user-settings-line"></i> 7. Diritti dell'Interessato (Artt. 15-22 GDPR)</h2>
+        <p>In ogni momento l'utente può esercitare i propri diritti sanciti dal Regolamento UE 2016/679:</p>
+        <ul>
+          <li>Diritto di accesso ai dati personali trattati (Art. 15).</li>
+          <li>Diritto di rettifica dei dati inesatti o incompleti (Art. 16).</li>
+          <li>Diritto alla cancellazione (diritto all'oblio) nei limiti consentiti dagli obblighi di legge e contabili (Art. 17).</li>
+          <li>Diritto di limitazione del trattamento (Art. 18).</li>
+          <li>Diritto alla portabilità dei dati in formato strutturato di uso comune (Art. 20).</li>
+          <li>Diritto di opposizione al trattamento per motivi legittimi (Art. 21).</li>
+          <li>Diritto di reclamo all'Autorità Garante per la Protezione dei Dati Personali (Piazza Venezia 11, 00187 Roma, www.garanteprivacy.it).</li>
+        </ul>
+        <p>Le richieste di esercizio dei diritti possono essere inoltrate senza formalità scrivendo a <a href="mailto:info@itercars.com" class="legal-contact-pill">info@itercars.com</a> o <a href="mailto:ceotoribio@itercars.com" class="legal-contact-pill">ceotoribio@itercars.com</a>.</p>
       </section>
 
     </div>
@@ -281,11 +333,10 @@
           <a href="/" class="logo" style="margin-bottom: 16px;" title="ITERCARS Luxury Supercar Rental">
             <img src="/logo_tricolore.png?v=17" alt="ITERCARS - Marketplace Noleggio Auto di Lusso e Supercar" class="footer-logo-img">
           </a>
-          <p>Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Piattaforma broker e polo formativo ITERCARS Academy. Fondata da Willie Toribio.</p>
+          <p>Il marketplace di riferimento per il noleggio di auto di lusso, sportive ed esclusive in Italia e in Europa. Piattaforma broker e polo formativo ITERCARS Academy.</p>
           <div style="display: flex; gap: 12px; margin-top: 20px;">
-            <a href="https://www.linkedin.com/in/willie-toribio-522344111/" target="_blank" rel="noopener" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #0a66c2;"><i class="ri-linkedin-fill"></i></a>
-            <a href="mailto:ceotoribio@itercars.com" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #facc15;"><i class="ri-mail-fill"></i></a>
-            <a href="https://wa.me/393755942143" target="_blank" rel="noopener" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2ecc71;"><i class="ri-whatsapp-line"></i></a>
+            <a href="mailto:ceotoribio@itercars.com" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2ecc71;" title="Email Direzione"><i class="ri-mail-fill"></i></a>
+            <a href="https://wa.me/393755942143" target="_blank" rel="noopener" style="width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #2ecc71;" title="WhatsApp Concierge"><i class="ri-whatsapp-line"></i></a>
           </div>
         </div>
 
@@ -302,21 +353,20 @@
         <div class="footer-col">
           <h4>Link Utili</h4>
           <div class="footer-links">
-            <a href="/chi-siamo.html" style="color: #facc15; font-weight: 700;"><i class="ri-team-line"></i> Il Nostro Team / Chi Siamo</a>
-            <a href="/willie-toribio" style="color: #facc15;"><i class="ri-user-star-line"></i> Willie Toribio (Biografia CEO)</a>
-            <a href="/academy" style="color: #2ecc71; font-weight: 600;"><i class="ri-graduation-cap-fill"></i> ITERCARS Academy</a>
+            <a href="/chi-siamo.html">Il Nostro Team / Chi Siamo</a>
+            <a href="/academy">ITERCARS Academy</a>
             <a href="/magazine.html">Magazine & News</a>
             <a href="/partners.html">Lavora con noi / Partner</a>
           </div>
         </div>
 
         <div class="footer-col">
-          <h4>Sede Legale & Contatti</h4>
+          <h4>Sede & Contatti Ufficiali</h4>
           <div class="footer-links" style="color: var(--text-muted); font-size: 0.95rem;">
-            <p><i class="ri-global-line text-gradient"></i> <strong>Sede:</strong> Piattaforma Digitale Online</p>
-            <p><i class="ri-phone-fill text-gradient"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
-            <p><i class="ri-mail-send-fill text-gradient"></i> <a href="mailto:ceotoribio@itercars.com" style="color: inherit;">ceotoribio@itercars.com</a></p>
-            <p><i class="ri-customer-service-2-fill text-gradient"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
+            <p><i class="ri-global-line" style="color: #2ecc71;"></i> <strong>Sede:</strong> Piattaforma Digitale Online</p>
+            <p><i class="ri-phone-fill" style="color: #2ecc71;"></i> <a href="tel:+393755942143" style="color: inherit;">+39 375 594 2143</a></p>
+            <p><i class="ri-mail-send-fill" style="color: #2ecc71;"></i> <a href="mailto:ceotoribio@itercars.com" style="color: inherit;">ceotoribio@itercars.com</a></p>
+            <p><i class="ri-customer-service-2-fill" style="color: #2ecc71;"></i> <a href="mailto:info@itercars.com" style="color: inherit;">info@itercars.com</a></p>
           </div>
         </div>
       </div>
