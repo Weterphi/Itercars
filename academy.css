@@ -458,15 +458,18 @@
   align-items: center;
   gap: 8px;
   padding: 8px 18px;
-  background: rgba(0, 146, 70, 0.15);
-  border: 1px solid rgba(0, 146, 70, 0.35);
-  border-radius: 99px;
+  background: rgba(0, 146, 70, 0.18);
+  border: 1px solid rgba(46, 204, 113, 0.45);
+  border-radius: var(--radius-full);
   color: #2ecc71;
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 24px;
+  letter-spacing: 0.08em;
+  margin-bottom: 18px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 146, 70, 0.25);
 }
 .presentation-title {
   font-size: 3.2rem;
@@ -796,21 +799,22 @@
 .acd-hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
-  min-height: 100svh;
+  min-height: 85vh;
+  min-height: 85svh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 140px 0 110px;
+  padding: 100px 0 85px;
   isolation: isolate;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 .acd-hero-bg {
   position: absolute;
   inset: 0;
   background: url('academy_hero_bg.jpg') center / cover no-repeat;
   z-index: -2;
-  transform: scale(1.08);
+  transform: scale(1.06);
   animation: acdKenBurns 22s ease-out forwards;
 }
 @keyframes acdKenBurns { to { transform: scale(1); } }
@@ -819,42 +823,44 @@
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(ellipse at center, rgba(10, 14, 23, 0.35) 0%, rgba(10, 14, 23, 0.75) 70%),
-    linear-gradient(180deg, rgba(10, 14, 23, 0.55) 0%, rgba(10, 14, 23, 0.2) 40%, var(--bg-primary) 100%);
+    radial-gradient(ellipse at center, rgba(10, 14, 23, 0.45) 0%, rgba(10, 14, 23, 0.8) 75%),
+    linear-gradient(180deg, rgba(10, 14, 23, 0.6) 0%, rgba(10, 14, 23, 0.3) 40%, var(--bg-primary) 100%);
 }
-.acd-hero-inner { max-width: 980px; display: flex; flex-direction: column; align-items: center; }
+.acd-hero-inner { max-width: 860px; display: flex; flex-direction: column; align-items: center; }
 .acd-hero-title {
-  font-size: clamp(2.3rem, 5.5vw, 4.4rem);
-  line-height: 1.08;
-  margin-bottom: 22px;
-  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+  font-size: clamp(1.95rem, 3.2vw, 2.45rem);
+  line-height: 1.22;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.6);
 }
 .acd-hero-sub {
-  font-size: clamp(1rem, 1.6vw, 1.22rem);
-  color: #e2e8f0;
-  line-height: 1.7;
-  max-width: 760px;
-  margin-bottom: 36px;
+  font-size: 1.02rem;
+  color: #cbd5e1;
+  line-height: 1.65;
+  max-width: 680px;
+  margin-bottom: 30px;
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
 }
 .acd-hero-sub strong { color: #fff; }
-.acd-hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px; }
-.acd-btn-lg { padding: 17px 36px; font-size: 1.05rem; text-decoration: none; }
+.acd-hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 34px; }
+.acd-btn-lg { padding: 14px 30px; font-size: 0.98rem; font-weight: 700; text-decoration: none; border-radius: var(--radius-sm); }
 .acd-hero-ctas .btn-outline { border-color: rgba(255, 255, 255, 0.35); color: #fff; }
 .acd-hero-trust {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 10px 28px;
-  padding: 16px 28px;
+  gap: 8px 24px;
+  padding: 12px 24px;
   border-radius: var(--radius-full);
-  background: rgba(10, 14, 23, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 14, 23, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
-.acd-hero-trust li { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: #e5e7eb; }
-.acd-hero-trust i { color: #2ecc71; font-size: 1.1rem; }
+.acd-hero-trust li { display: flex; align-items: center; gap: 8px; font-size: 0.86rem; font-weight: 600; color: #e5e7eb; }
+.acd-hero-trust i { color: #2ecc71; font-size: 1.05rem; }
 .acd-scroll-cue {
   position: absolute;
   bottom: 28px;
