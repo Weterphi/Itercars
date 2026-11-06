@@ -1632,72 +1632,177 @@
   .acd-slider-next { right: 12px; }
 }
 
-@media (max-width: 768px) {
+/* ==========================================================================
+   MOBILE HERO STORY SLIDER: FOCALIZZATO SULL'IMMAGINE CON TITOLO E CTA IN BASSO
+   Elimina il muro di testo per far risaltare al 100% l'auto su smartphone
+   ========================================================================== */
+@media (max-width: 991px) {
   .acd-story-slider {
     min-height: 100vh;
     min-height: 100svh;
-    padding: 100px 0 110px 0;
+    padding: 0 !important;
+    display: flex;
+    align-items: flex-end;
   }
+
+  .acd-slide-img {
+    object-position: center 28% !important;
+  }
+
+  /* Overlay sfumato: parte superiore e centrale chiara per ammirare l'auto, base scura per il testo */
+  .acd-slide-overlay {
+    background:
+      linear-gradient(to top, rgba(4, 7, 17, 0.96) 0%, rgba(4, 7, 17, 0.72) 35%, rgba(4, 7, 17, 0.1) 62%, rgba(4, 7, 17, 0.35) 100%) !important;
+  }
+
   .acd-slider-top-bar {
-    top: 85px;
+    top: 78px;
+    padding: 0 16px;
   }
+
   .acd-slider-tag-pill {
     font-size: 0.72rem;
     padding: 4px 10px;
   }
-  .acd-slide-badge {
-    font-size: 0.75rem;
-    padding: 6px 14px;
-    margin-bottom: 14px;
+
+  .acd-slider-counter {
+    font-size: 0.88rem;
+    padding: 4px 12px;
   }
-  .acd-slide-title {
-    font-size: 1.65rem;
-    line-height: 1.25;
-    margin-bottom: 14px;
+
+  .acd-slider-counter .counter-current {
+    font-size: 1rem;
   }
-  .acd-slide-desc {
-    font-size: 0.95rem;
-    line-height: 1.55;
-    margin-bottom: 18px;
+
+  /* Ancoraggio del contenuto in basso per lasciare libera la visuale dell'auto */
+  .acd-story-slide {
+    align-items: flex-end !important;
+    justify-content: center !important;
+    padding-bottom: 72px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
   }
-  .acd-slide-pills {
-    gap: 6px;
-    margin-bottom: 22px;
-  }
-  .acd-pill {
-    font-size: 0.78rem;
-    padding: 6px 10px;
-  }
-  .acd-slide-actions {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-  .acd-slide-actions .btn {
+
+  .acd-slide-content {
+    position: relative !important;
+    z-index: 3 !important;
+    max-width: 520px !important;
     width: 100% !important;
-    justify-content: center;
+    padding: 0 6px !important;
+    margin: 0 auto !important;
+    text-align: center !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
   }
+
+  .acd-slide-content::before,
+  .acd-slide-content::after {
+    display: none !important;
+  }
+
+  /* Badge FASE compatto ed elegante */
+  .acd-slide-badge {
+    display: inline-flex !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    padding: 5px 12px !important;
+    margin-bottom: 8px !important;
+    background: rgba(0, 146, 70, 0.25) !important;
+    border: 1px solid rgba(46, 204, 113, 0.5) !important;
+    border-radius: var(--radius-full) !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+  }
+
+  /* Titolo della slide compatto e visibile */
+  .acd-slide-title {
+    font-size: clamp(1.35rem, 4.6vw, 1.65rem) !important;
+    line-height: 1.22 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.02em !important;
+    margin-bottom: 14px !important;
+    text-shadow: 0 3px 18px rgba(0, 0, 0, 0.9) !important;
+  }
+
+  /* Nascondi la descrizione lunga e le pillole su mobile: solo immagine, titolo e CTA */
+  .acd-slide-desc {
+    display: none !important;
+  }
+
+  .acd-slide-pills {
+    display: none !important;
+  }
+
+  /* Call to action affiancate e snelle su mobile */
+  .acd-slide-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  .acd-slide-actions .btn {
+    padding: 10px 14px !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-sm) !important;
+    justify-content: center !important;
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: 180px !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.01em !important;
+  }
+
   .acd-slider-arrow {
-    display: none !important; /* Su mobile si usa swipe e dots */
+    display: none !important; /* Su mobile navigazione via touch swipe e dots */
   }
+
   .acd-slider-bottom-bar {
-    bottom: 15px;
-    justify-content: center;
+    bottom: 14px !important;
+    justify-content: center !important;
+    padding: 0 16px !important;
   }
+
   .acd-slider-scroll-cue {
-    display: none;
+    display: none !important;
   }
+
   .acd-slider-dots {
-    gap: 5px;
+    gap: 4px !important;
   }
+
   .acd-slider-dot {
-    padding: 4px 6px;
+    padding: 3px 5px !important;
   }
+
   .acd-slider-dot .dot-bar {
-    width: 14px;
+    width: 12px !important;
+    height: 3px !important;
   }
+
   .acd-slider-dot.active .dot-bar {
-    width: 20px;
+    width: 18px !important;
+  }
+
+  .acd-slider-playpause {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .acd-slide-actions .btn {
+    font-size: 0.76rem !important;
+    padding: 9px 8px !important;
+  }
+  .acd-slide-actions .btn i {
+    display: none;
   }
 }
 
@@ -1765,6 +1870,7 @@
   }
 
   .acd-slide-desc {
+    display: block !important;
     font-size: 1.02rem !important;
     line-height: 1.62 !important;
     margin-bottom: 20px !important;
@@ -1772,6 +1878,7 @@
   }
 
   .acd-slide-pills {
+    display: flex !important;
     margin-bottom: 24px !important;
     gap: 8px !important;
   }
