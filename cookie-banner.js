@@ -167,7 +167,7 @@
       <div class="cookie-banner-buttons">
         <button id="btnCookieAccept" class="btn-cookie-accept"><i class="ri-check-line"></i> Accetta Tutto</button>
         <button id="btnCookieReject" class="btn-cookie-reject">Solo Necessari</button>
-        <button id="btnCookiePolicy" class="btn-cookie-policy">Informativa Privacy</button>
+        <a href="/cookie-policy.html" class="btn-cookie-policy" style="text-decoration: underline; display: inline-flex; align-items: center; justify-content: center;">Informativa Cookie & Privacy</a>
       </div>
     `;
     document.body.appendChild(banner);
@@ -212,9 +212,7 @@
         showToast("🛡️ Preferenze salvate: Attivi solo i cookie tecnici essenziali.");
       }
     });
-    document.getElementById('btnCookiePolicy').addEventListener('click', () => {
-      alert("Informativa Privacy & Cookie Policy ITERCARS:\\n\\nIn conformità al Regolamento Europeo (GDPR), i dati raccolti tramite Google Analytics 4 e Microsoft Clarity vengono utilizzati in forma anonimizzata ed esclusivamente per fini statistici e di miglioramento del servizio di noleggio supercar e brokerage.\\n\\nPuoi modificare o revocare il tuo consenso in qualsiasi momento cancellando i dati di navigazione o cliccando su Cookie Policy nel footer.");
-    });
+
   }
   function closeBanner(banner) {
     banner.classList.remove('show');
@@ -232,19 +230,12 @@
       showBanner();
     }
   }
-  // Permetti di riaprire dal footer
+  // Permetti di riaprire dal footer se richiesto esplicitamente tramite funzione
   window.reopenCookieBanner = function(e) {
     if (e && e.preventDefault) e.preventDefault();
     showBanner();
   };
-  // Aggancia automaticamente ai link 'Cookie Policy' nel footer se presenti
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('a').forEach(a => {
-      if (a.textContent.toLowerCase().includes('cookie')) {
-        a.href = "javascript:void(0)";
-        a.addEventListener('click', window.reopenCookieBanner);
-      }
-    });
     // =========================================================================
     // GLOBAL MOBILE VIDEO AUTOPLAY ENFORCER & TOUCH BUTTON OPTIMIZER
     // =========================================================================
