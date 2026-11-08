@@ -193,9 +193,7 @@
       try {
         window.dispatchEvent(new CustomEvent('itercars_cookie_consent_saved', { detail: 'accepted' }));
       } catch (e) {}
-      if (typeof showToast === 'function') {
-        showToast("Preferenze salvate: Consenso ai cookie analitici e di miglioramento servizi registrato.");
-      }
+      showSubtleCookieNote("cookie accettati");
     });
     document.getElementById('btnCookieReject').addEventListener('click', () => {
       localStorage.setItem('itercars_cookie_consent', 'rejected');
@@ -214,11 +212,40 @@
       try {
         window.dispatchEvent(new CustomEvent('itercars_cookie_consent_saved', { detail: 'rejected' }));
       } catch (e) {}
-      if (typeof showToast === 'function') {
-        showToast("Preferenze salvate: Attivi solo i cookie tecnici essenziali.");
-      }
+      showSubtleCookieNote("cookie rifiutati");
     });
 
+  }
+
+  // Notifica quasi impercettibile senza box né sfondo verde: solo testo in piccolo
+  function showSubtleCookieNote(text) {
+    const note = document.createElement('div');
+    note.style.position = 'fixed';
+    note.style.bottom = '16px';
+    note.style.left = '20px';
+    note.style.zIndex = '99999';
+    note.style.fontSize = '11px';
+    note.style.fontWeight = '500';
+    note.style.fontFamily = 'monospace, sans-serif';
+    note.style.color = 'rgba(255, 255, 255, 0.45)';
+    note.style.background = 'transparent';
+    note.style.border = 'none';
+    note.style.boxShadow = 'none';
+    note.style.padding = '0';
+    note.style.margin = '0';
+    note.style.pointerEvents = 'none';
+    note.style.letterSpacing = '0.3px';
+    note.style.opacity = '0';
+    note.style.transition = 'opacity 0.4s ease';
+    note.textContent = text;
+    document.body.appendChild(note);
+    setTimeout(() => { note.style.opacity = '1'; }, 40);
+    setTimeout(() => {
+      note.style.opacity = '0';
+      setTimeout(() => {
+        if (note && note.parentNode) note.parentNode.removeChild(note);
+      }, 400);
+    }, 2000);
   }
   function closeBanner(banner) {
     banner.classList.remove('show');
