@@ -11,9 +11,22 @@
   const CRM_WEBHOOK_URL = 'https://europe-west1-stratoshub-2a295.cloudfunctions.net/ingestLead';
   const STORAGE_KEY_SUBMITTED = 'itercars_promo_lead_submitted';
   const STORAGE_KEY_DISMISSED = 'itercars_promo_modal_dismissed';
+  const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01';
+
+  const isAcademyPage =
+    window.location.pathname.includes('academy') ||
+    window.location.href.includes('academy') ||
+    !!document.querySelector('.acd-hero, #academyPresentationSection');
+
+  let pendingStripeRedirect = false;
 
   // Se l'utente ha già compilato e inviato il modulo in precedenza, non mostrare né popup né targhettina
   if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
+    window.openItercarsPromoModal = function (fromStripe) {
+      if (fromStripe) {
+        window.location.href = STRIPE_CHECKOUT_URL;
+      }
+    };
     return;
   }
 
@@ -645,7 +658,9 @@
     <span class="itc-tab-title">SCONTO PARTECIPAZIONE</span>
     <span class="itc-tab-badge">-50%</span>
   `;
-  document.body.appendChild(stickyTab);
+  if (!isAcademyPage) {
+    document.body.appendChild(stickyTab);
+  }
 
   // 2. Creazione DOM del Modale con Foto Verticale Utente e Testi Diretti
   const modalContainer = document.createElement('div');
@@ -773,7 +788,7 @@
             </div>
 
             <p id="itcDisplayExpiry" style="font-size: 0.82rem; color: #f59e0b; margin-top: 10px; margin-bottom: 0; font-weight: 700;">
-              ⏰ Il tuo codice ha validità di 7 giorni a partire da oggi.
+              <i class="ri-time-line"></i> Il tuo codice ha validità di 7 giorni a partire da oggi.
             </p>
           </div>
 
@@ -797,6 +812,7 @@
 
   // Funzione Mostra Targhettina Verde Permanente
   function showStickyTab() {
+    if (isAcademyPage) return;
     if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') return;
     if (stickyTab) {
       stickyTab.classList.add('itc-tab-visible');
@@ -811,17 +827,34 @@
   }
 
   // Funzione Apertura Modale
-  function openPromoModal() {
-    if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') return;
+  function openPromoModal(fromStripe) {
+    if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
+      if (fromStripe) {
+        window.location.href = STRIPE_CHECKOUT_URL;
+      }
+      return;
+    }
+    if (fromStripe === true) {
+      pendingStripeRedirect = true;
+    }
     hideStickyTab();
     modalContainer.classList.add('itc-active');
   }
 
-  // Funzione Chiusura Modale (fa apparire la targhettina verde permanente al margine inferiore)
+  // Funzione Chiusura Modale (se aperto da click Stripe, reindirizza direttamente a Stripe; altrimenti mostra targhettina)
   function closePromoModal() {
     modalContainer.classList.remove('itc-active');
     sessionStorage.setItem(STORAGE_KEY_DISMISSED, 'true');
-    showStickyTab();
+
+    if (pendingStripeRedirect) {
+      pendingStripeRedirect = false;
+      window.location.href = STRIPE_CHECKOUT_URL;
+      return;
+    }
+
+    if (!isAcademyPage) {
+      showStickyTab();
+    }
   }
 
   // Event Listener Chiusura
@@ -851,10 +884,12 @@
     });
   }
 
-  // Event Listener Click sulla Targhettina Verde per riaprire il modale
-  stickyTab.addEventListener('click', function () {
-    openPromoModal();
-  });
+  // Event Listener Click sulla Targhettina Verde per riaprire il modale (solo se non su Academy)
+  if (stickyTab && !isAcademyPage) {
+    stickyTab.addEventListener('click', function () {
+      openPromoModal();
+    });
+  }
 
   // Chiudi cliccando fuori dalla card
   modalContainer.addEventListener('click', function (e) {
@@ -1021,6 +1056,7 @@
         if (response.ok && result.success !== false) {
           // Memorizza che l'utente ha completato la richiesta
           localStorage.setItem(STORAGE_KEY_SUBMITTED, 'true');
+          pendingStripeRedirect = false;
 
           // Rimuovi la targhettina dal fondo
           hideStickyTab();
@@ -1040,7 +1076,7 @@
           if (expiryDisplay) {
             const expDate = result.discountExpiresAt ? new Date(result.discountExpiresAt) : new Date(Date.now() + 7 * 86400000);
             const expStr = expDate.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
-            expiryDisplay.innerHTML = `⏰ Il tuo codice ha <strong>validità di 7 giorni</strong> a partire da oggi (scadenza: <strong>${expStr}</strong>).`;
+            expiryDisplay.innerHTML = `<i class="ri-time-line"></i> Il tuo codice ha <strong>validità di 7 giorni</strong> a partire da oggi (scadenza: <strong>${expStr}</strong>).`;
           }
 
           const directBtn = document.getElementById('itcDirectCheckoutBtn');
@@ -1066,6 +1102,11 @@
   const DELAY_AFTER_COOKIES_MS = 20000; // 20 secondi esatti per lasciar respirare e navigare l'utente
 
   function schedulePromoModal() {
+    if (isAcademyPage) {
+      // Su Academy il popup promozionale non deve mai apparire da solo su timer:
+      // apparirà solo quando l'utente clicca un pulsante verso Stripe
+      return;
+    }
     if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
       return;
     }
@@ -1083,6 +1124,10 @@
   }
 
   function initPromoTrigger() {
+    if (isAcademyPage) {
+      // Su Academy disabilitiamo l'apertura automatica legata ai cookie o timer
+      return;
+    }
     if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
       return;
     }

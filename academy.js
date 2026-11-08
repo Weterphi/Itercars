@@ -664,11 +664,20 @@ window.closeLoginModal = closeLoginModal;
 function buyAcademy(event) {
   if (event) event.preventDefault();
   const btn = event.currentTarget || event.target.closest('a') || event.target.closest('button');
-  if (!btn) return;
-  btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> <span>Connessione a Stripe...</span>';
+
+  // Se l'utente non ha ancora compilato la richiesta di sconto promozionale 50%, apri il modulo promo
+  const promoSubmitted = localStorage.getItem('itercars_promo_lead_submitted') === 'true';
+  if (!promoSubmitted && typeof window.openItercarsPromoModal === 'function') {
+    window.openItercarsPromoModal(true);
+    return;
+  }
+
+  if (btn) {
+    btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> <span>Connessione a Stripe...</span>';
+  }
   setTimeout(() => {
     window.location.href = "https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01";
-  }, 800);
+  }, 600);
 }
 window.buyAcademy = buyAcademy;
 
