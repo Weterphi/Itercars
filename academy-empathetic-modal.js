@@ -1183,7 +1183,15 @@
         interestTag: 'broker corso',
         source: 'sito_web',
         campaignName: 'Candidatura Partenariato / Masterclass ITERCARS',
-        notes: `Percorso: ${step1Selection} | Esperienza: ${q1Selection} | Dedizione: ${q2Selection} | Consenso Marketing: ${marketing ? 'Si' : 'No'} | Candidatura ITERCARS Academy`
+        notes: `Percorso: ${step1Selection} | Esperienza: ${q1Selection} | Dedizione: ${q2Selection} | Consenso Marketing: ${marketing ? 'Si' : 'No'} | Candidatura ITERCARS Academy`,
+        answers: {
+          'Percorso Candidatura': step1Selection,
+          'Esperienza Lavorativa': q1Selection,
+          'Tempo / Dedizione': q2Selection,
+          'Consenso Marketing': marketing ? 'Si (Autorizzato)' : 'No',
+          'Informativa Privacy': 'Accettata (GDPR)'
+        },
+        marketingConsent: marketing
       };
 
       try {

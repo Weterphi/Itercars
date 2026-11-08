@@ -1597,12 +1597,14 @@
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  z-index: 8;
-  transition: color var(--transition-fast);
+  z-index: 12;
+  cursor: pointer;
+  transition: color var(--transition-fast), transform 0.2s;
 }
 
 .acd-slider-scroll-cue:hover {
   color: #2ecc71;
+  transform: translateX(-50%) translateY(2px);
 }
 
 .acd-slider-scroll-cue i {
@@ -1795,7 +1797,10 @@
   }
 
   .acd-slider-scroll-cue {
-    display: none !important;
+    display: flex !important;
+    bottom: 46px !important;
+    font-size: 0.7rem !important;
+    z-index: 15 !important;
   }
 
   .acd-slider-dots {

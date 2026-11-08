@@ -1037,6 +1037,11 @@
         notes: 'Richiesta Sconto Partecipazione 50% - Accesso Riservato Opportunità Privilegiata Itercars Academy - Valido 1 settimana',
         source: 'sito_web',
         campaignName: 'Accesso Riservato Opportunità Privilegiata',
+        answers: {
+          'Tipo Richiesta': 'Sconto 50% Masterclass Broker Auto',
+          'Validità': '7 Giorni',
+          'Informativa Privacy': 'Accettata (GDPR)'
+        },
         sendDiscountCode: true
       };
 

@@ -681,6 +681,21 @@ function buyAcademy(event) {
 }
 window.buyAcademy = buyAcademy;
 
+function scrollToNextSection(event) {
+  if (event) event.preventDefault();
+  const target = document.getElementById('acdHeroSection') || document.querySelector('.acd-hero') || document.getElementById('percorso-mestiere');
+  if (target) {
+    const nav = document.querySelector('nav, .navbar, .header, #mainNavbar');
+    const navHeight = nav ? nav.offsetHeight : 70;
+    const targetPos = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+    window.scrollTo({
+      top: Math.max(0, targetPos),
+      behavior: 'smooth'
+    });
+  }
+}
+window.scrollToNextSection = scrollToNextSection;
+
 document.addEventListener("DOMContentLoaded", () => {
   const savedVol = parseFloat(localStorage.getItem('itercars_academy_volume'));
   const isMuted = savedVol === 0;
