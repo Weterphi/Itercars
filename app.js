@@ -767,10 +767,10 @@ function changeLanguage(lang, silent = false) {
   if (!translations[lang]) return;
   currentLang = lang;
   localStorage.setItem('itercars_lang', lang);
-  // Aggiorna bandiera e codice sul pulsante del menu
+  // Aggiorna indicatore e codice sul pulsante del menu (pulito da mojibake/emoji rotte)
   const flagEl = document.getElementById('currentLangFlag');
   const codeEl = document.getElementById('currentLangCode');
-  if (flagEl) flagEl.innerText = langFlags[lang] || "🇮🇹";
+  if (flagEl) flagEl.innerHTML = '<i class="ri-global-line text-gradient" style="font-size: 1.15rem;"></i>';
   if (codeEl) codeEl.innerText = lang.toUpperCase();
   // Se è arabo, imposta la direzione RTL (Right-to-Left) per un effetto WOW autentico
   if (lang === 'ar') {
@@ -2280,3 +2280,42 @@ if (document.readyState === 'loading') {
 } else {
   setTimeout(initCmsVisualMode, 1000);
 }
+
+/* ==========================================================================
+   VIDEO AUTOPLAY RELIABILITY (Mobile & Desktop)
+   ========================================================================== */
+(function setupVideoAutoplay() {
+  function activateVideos() {
+    const vids = document.querySelectorAll('video');
+    vids.forEach(v => {
+      v.muted = true;
+      v.defaultMuted = true;
+      v.playsInline = true;
+      v.setAttribute('playsinline', '');
+      v.setAttribute('webkit-playsinline', '');
+      v.setAttribute('muted', '');
+      
+      const playPromise = v.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Fallback per browser mobile con restrizioni di autoplay: avvia al primo tocco/scroll
+          const playOnInteraction = () => {
+            v.play().catch(() => {});
+            ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
+              window.removeEventListener(evt, playOnInteraction, { passive: true });
+            });
+          };
+          ['touchstart', 'touchend', 'click', 'scroll'].forEach(evt => {
+            window.addEventListener(evt, playOnInteraction, { passive: true });
+          });
+        });
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', activateVideos);
+  } else {
+    activateVideos();
+  }
+})();

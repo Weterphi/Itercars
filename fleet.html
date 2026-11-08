@@ -180,16 +180,16 @@
         <!-- Custom Language Selector -->
         <div class="lang-dropdown-wrapper" style="position: relative;">
           <button class="btn btn-outline" id="langDropdownBtn" onclick="toggleLangMenu(event)" style="padding: 8px 16px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; border-radius: var(--radius-full);">
-            <span id="currentLangFlag" style="font-size: 1.2rem;">🇮🇹</span>
-            <span id="currentLangCode" style="font-weight: 700;">IT</span>
+            <span id="currentLangFlag" style="display: flex; align-items: center;"><i class="ri-global-line text-gradient" style="font-size: 1.15rem;"></i></span>
+            <span id="currentLangCode" style="font-weight: 700; letter-spacing: 0.5px;">IT</span>
             <i class="ri-arrow-down-s-line"></i>
           </button>
           <!-- Dropdown Menu -->
           <div class="glass-card lang-dropdown-menu" id="langDropdownMenu">
-            <button onclick="selectLang('it')"><span class="lang-flag">🇮🇹</span> <strong>IT</strong> - Italiano</button>
-            <button onclick="selectLang('en')"><span class="lang-flag">🇬🇧</span> <strong>EN</strong> - English</button>
-            <button onclick="selectLang('es')"><span class="lang-flag">🇪🇸</span> <strong>ES</strong> - Espa�ol</button>
-            <button onclick="selectLang('fr')"><span class="lang-flag">🇫🇷</span> <strong>FR</strong> - Fran�ais</button>
+            <button onclick="selectLang('it')"><span class="lang-code-pill">IT</span> <strong>Italiano</strong></button>
+            <button onclick="selectLang('en')"><span class="lang-code-pill">EN</span> <strong>English</strong></button>
+            <button onclick="selectLang('es')"><span class="lang-code-pill">ES</span> <strong>Español</strong></button>
+            <button onclick="selectLang('fr')"><span class="lang-code-pill">FR</span> <strong>Français</strong></button>
             <div style="height: 1px; background: var(--border-glass); margin: 6px 0;"></div>
             <button onclick="openOtherLangsModal()" style="color: var(--accent-primary); font-weight: 600;">
               <i class="ri-global-line"></i> <span data-i18n="lang.other">Altre lingue...</span>
@@ -228,32 +228,26 @@
       <img src="luxury.jpg?v=2" alt="Flotta noleggio supercar e auto di lusso in Italia - ITERCARS" class="hero-bg-video hero-bg-img" id="fleetHeroImg" fetchpriority="high" decoding="async" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: 100%; height: 100%; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.05) contrast(1.05); pointer-events: none;">
     </picture>
     <!-- Mobile: Video hero originale -->
-    <video autoplay muted="muted" loop playsinline webkit-playsinline class="hero-bg-video hero-mobile-media" id="fleetHeroVideo" volume="0" style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); z-index: 0; object-fit: cover; filter: brightness(1.08) contrast(1.05);">
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" class="hero-bg-video hero-mobile-media" id="fleetHeroVideo">
       <source src="fleet-intro-video.mp4" type="video/mp4">
     </video>
     <div class="hero-bg-overlay" style="background: linear-gradient(to bottom, rgba(10, 14, 23, 0) 0%, rgba(10, 14, 23, 0) 70%, #0a0e17 100%) !important; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-    <section class="hero" id="home" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; padding-bottom: 40px; background: transparent !important;">
-      <div class="container hero-content" style="position: relative; z-index: 2; padding-top: 90px; width: 100%;">
-        <div class="hero-text text-center" style="text-align: center; width: 100%;">
-          <h1 class="fleet-hero-title">Flotta Luxury: <span class="text-gradient">Noleggio Supercar e Auto di Lusso</span> in Italia</h1>
-          <p class="fleet-hero-sub">Dalle hypercar da pista ai SUV più sontuosi: esplora la collezione completa di veicoli esclusivi pronti per la consegna immediata in tutta Italia.</p>
-          
-          <div class="fleet-hero-filters-anim">
-            <div class="fleet-glass-filters" id="fleetFilterPills">
-              <button class="btn fleet-pill-btn active" onclick="filterFleetPage('Tutti')"><i class="ri-apps-2-line"></i> Tutti i Veicoli</button>
-              <button class="btn fleet-pill-btn" onclick="filterFleetPage('Supercar')"><i class="ri-roadster-fill"></i> Supercar</button>
-              <button class="btn fleet-pill-btn" onclick="filterFleetPage('Cabrio')"><i class="ri-sun-fill"></i> Cabrio</button>
-              <button class="btn fleet-pill-btn" onclick="filterFleetPage('SUV')"><i class="ri-shield-star-line"></i> SUV</button>
-              <button class="btn fleet-pill-btn" onclick="filterFleetPage('Sportiva')"><i class="ri-vip-crown-fill"></i> Prestige</button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <section class="hero" id="home" style="min-height: 55vh; display: flex; align-items: center; justify-content: center; position: relative; z-index: 2; background: transparent !important;">
+      <!-- Video di presentazione pulito senza scritte -->
     </section>
   </div>
-  <section class="fleet-page-content" style="position: relative; z-index: 5; padding-top: 20px;">
+  <section class="fleet-page-content" style="position: relative; z-index: 5; padding-top: 30px;">
     <!-- Cars Grid -->
     <div class="container">
+      <div class="fleet-hero-filters-anim" style="margin-bottom: 24px;">
+        <div class="fleet-glass-filters" id="fleetFilterPills" style="justify-content: center;">
+          <button class="btn fleet-pill-btn active" onclick="filterFleetPage('Tutti')"><i class="ri-apps-2-line"></i> Tutti i Veicoli</button>
+          <button class="btn fleet-pill-btn" onclick="filterFleetPage('Supercar')"><i class="ri-roadster-fill"></i> Supercar</button>
+          <button class="btn fleet-pill-btn" onclick="filterFleetPage('Cabrio')"><i class="ri-sun-fill"></i> Cabrio</button>
+          <button class="btn fleet-pill-btn" onclick="filterFleetPage('SUV')"><i class="ri-shield-star-line"></i> SUV</button>
+          <button class="btn fleet-pill-btn" onclick="filterFleetPage('Sportiva')"><i class="ri-vip-crown-fill"></i> Prestige</button>
+        </div>
+      </div>
       <div id="fleetGrid">
         <!-- Le auto verranno generate dinamicamente con JS -->
       </div>

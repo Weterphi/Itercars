@@ -1649,6 +1649,12 @@
     object-position: center 28% !important;
   }
 
+  /* Prima slide: inquadratura spostata verso sinistra per inquadrare perfettamente entrambi i soggetti e la stretta di mano */
+  .acd-story-slide[data-slide-index="0"] .acd-slide-img,
+  .acd-story-slide:first-child .acd-slide-img {
+    object-position: 70% 25% !important;
+  }
+
   /* Overlay sfumato: parte superiore e centrale chiara per ammirare l'auto, base scura per il testo */
   .acd-slide-overlay {
     background:

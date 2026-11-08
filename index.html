@@ -169,16 +169,16 @@
         <!-- Custom Language Selector -->
         <div class="lang-dropdown-wrapper" style="position: relative;">
           <button class="btn btn-outline" id="langDropdownBtn" onclick="toggleLangMenu(event)" style="padding: 8px 16px; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; border-radius: var(--radius-full);">
-            <span id="currentLangFlag" style="font-size: 1.2rem;">ðŸ‡®ðŸ‡¹</span>
-            <span id="currentLangCode" style="font-weight: 700;">IT</span>
+            <span id="currentLangFlag" style="display: flex; align-items: center;"><i class="ri-global-line text-gradient" style="font-size: 1.15rem;"></i></span>
+            <span id="currentLangCode" style="font-weight: 700; letter-spacing: 0.5px;">IT</span>
             <i class="ri-arrow-down-s-line"></i>
           </button>
           <!-- Dropdown Menu -->
           <div class="glass-card lang-dropdown-menu" id="langDropdownMenu">
-            <button onclick="selectLang('it')"><span class="lang-flag">ðŸ‡®ðŸ‡¹</span> <strong>IT</strong> - Italiano</button>
-            <button onclick="selectLang('en')"><span class="lang-flag">ðŸ‡¬ðŸ‡§</span> <strong>EN</strong> - English</button>
-            <button onclick="selectLang('es')"><span class="lang-flag">ðŸ‡ªðŸ‡¸</span> <strong>ES</strong> - Espaà±ol</button>
-            <button onclick="selectLang('fr')"><span class="lang-flag">ðŸ‡«ðŸ‡·</span> <strong>FR</strong> - Franà§ais</button>
+            <button onclick="selectLang('it')"><span class="lang-code-pill">IT</span> <strong>Italiano</strong></button>
+            <button onclick="selectLang('en')"><span class="lang-code-pill">EN</span> <strong>English</strong></button>
+            <button onclick="selectLang('es')"><span class="lang-code-pill">ES</span> <strong>Español</strong></button>
+            <button onclick="selectLang('fr')"><span class="lang-code-pill">FR</span> <strong>Français</strong></button>
             <div style="height: 1px; background: var(--border-glass); margin: 6px 0;"></div>
             <button onclick="openOtherLangsModal()" style="color: var(--accent-primary); font-weight: 600;">
               <i class="ri-global-line"></i> <span data-i18n="lang.other">Altre lingue...</span>
@@ -217,7 +217,7 @@
       <img src="home.jpg?v=10" alt="Noleggio auto di lusso e supercar in Italia - ITERCARS Marketplace" class="hero-bg-video hero-bg-img" id="heroBgImg" fetchpriority="high" decoding="async">
     </picture>
     <!-- Mobile: Video hero originale -->
-    <video autoplay muted="muted" loop playsinline webkit-playsinline class="hero-bg-video hero-mobile-media" id="heroBgVideo" volume="0">
+    <video autoplay muted loop playsinline webkit-playsinline preload="auto" class="hero-bg-video hero-mobile-media" id="heroBgVideo">
       <source src="aston-martin-video.mp4" type="video/mp4">
     </video>
     <div class="hero-bg-overlay"></div>
@@ -888,16 +888,16 @@
       <h3 style="font-size: 1.5rem; margin-bottom: 8px;"><i class="ri-global-line text-gradient"></i> <span data-i18n="lang.modalTitle">Seleziona Lingua</span></h3>
       <p style="color: var(--text-muted); margin-bottom: 24px;" data-i18n="lang.modalSub">Scegli la lingua di visualizzazione per il marketplace ITERCARS.</p>
       <div class="langs-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; max-height: 400px; overflow-y: auto; padding-right: 6px;">
-        <button class="lang-grid-item" onclick="selectLang('it')"><span class="lang-flag">ðŸ‡®ðŸ‡¹</span> <span><strong>IT</strong> - Italiano</span></button>
-        <button class="lang-grid-item" onclick="selectLang('en')"><span class="lang-flag">ðŸ‡¬ðŸ‡§</span> <span><strong>EN</strong> - English</span></button>
-        <button class="lang-grid-item" onclick="selectLang('es')"><span class="lang-flag">ðŸ‡ªðŸ‡¸</span> <span><strong>ES</strong> - Espaà±ol</span></button>
-        <button class="lang-grid-item" onclick="selectLang('fr')"><span class="lang-flag">ðŸ‡«ðŸ‡·</span> <span><strong>FR</strong> - Franà§ais</span></button>
-        <button class="lang-grid-item" onclick="selectLang('de')"><span class="lang-flag">ðŸ‡©ðŸ‡ª</span> <span><strong>DE</strong> - Deutsch</span></button>
-        <button class="lang-grid-item" onclick="selectLang('ru')"><span class="lang-flag">ðŸ‡·ðŸ‡º</span> <span><strong>RU</strong> - Ð ÑƒÑÑÐºÐ¸Ð¹</span></button>
-        <button class="lang-grid-item" onclick="selectLang('zh')"><span class="lang-flag">ðŸ‡¨ðŸ‡³</span> <span><strong>ZH</strong> - ä¸­æ–‡</span></button>
-        <button class="lang-grid-item" onclick="selectLang('ar')"><span class="lang-flag">ðŸ‡¸ðŸ‡¦</span> <span><strong>AR</strong> - Ø§Ù„Ø¹Ø±Ø¨ÙŠØ©</span></button>
-        <button class="lang-grid-item" onclick="selectLang('ja')"><span class="lang-flag">ðŸ‡¯ðŸ‡µ</span> <span><strong>JA</strong> - æ—¥æœ¬èªž</span></button>
-        <button class="lang-grid-item" onclick="selectLang('pt')"><span class="lang-flag">ðŸ‡µðŸ‡¹</span> <span><strong>PT</strong> - Portuguàªs</span></button>
+        <button class="lang-grid-item" onclick="selectLang('it')"><span class="lang-code-pill">IT</span> <span><strong>Italiano</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('en')"><span class="lang-code-pill">EN</span> <span><strong>English</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('es')"><span class="lang-code-pill">ES</span> <span><strong>Español</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('fr')"><span class="lang-code-pill">FR</span> <span><strong>Français</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('de')"><span class="lang-code-pill">DE</span> <span><strong>Deutsch</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('ru')"><span class="lang-code-pill">RU</span> <span><strong>Русский</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('zh')"><span class="lang-code-pill">ZH</span> <span><strong>中文</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('ar')"><span class="lang-code-pill">AR</span> <span><strong>العربية</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('ja')"><span class="lang-code-pill">JA</span> <span><strong>日本語</strong></span></button>
+        <button class="lang-grid-item" onclick="selectLang('pt')"><span class="lang-code-pill">PT</span> <span><strong>Português</strong></span></button>
       </div>
     </div>
   </div>
@@ -1185,9 +1185,9 @@
       </div>
       <form onsubmit="handleAvailabilitySubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
         <div style="background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; font-size: 0.85rem; color: var(--text-muted); text-align: left;">
-          <p style="margin-bottom: 4px;"><strong>ðŸ“ Luogo:</strong> <span id="availLuogo"></span></p>
-          <p style="margin-bottom: 4px;"><strong>ðŸ“… Date:</strong> <span id="availDate"></span></p>
-          <p style="margin-bottom: 0;"><strong>ðŸŽ Categoria:</strong> <span id="availCategoria"></span></p>
+          <p style="margin-bottom: 4px;"><strong> Luogo:</strong> <span id="availLuogo"></span></p>
+          <p style="margin-bottom: 4px;"><strong><i class="ri-calendar-line text-gradient"></i> Date:</strong> <span id="availDate"></span></p>
+          <p style="margin-bottom: 0;"><strong><i class="ri-roadster-fill text-gradient"></i> Categoria:</strong> <span id="availCategoria"></span></p>
         </div>
         <div class="form-group" style="text-align: left;">
           <label>Nome e Cognome *</label>
@@ -1278,6 +1278,8 @@
     }
   </style>
   <script src="cookie-banner.js?v=6"></script>
+  <!-- Popup Modulo Promo Sconto 50% Corso Broker Auto - Ingestione StratosHub CRM -->
+  <script src="promo-lead-modal.js?v=7" defer></script>
     <script>
     function handleMobileHeroSearch(event) {
       if(event) event.preventDefault();
