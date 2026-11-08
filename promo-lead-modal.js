@@ -535,13 +535,13 @@
   stickyTab.type = 'button';
   stickyTab.id = 'itcStickyPromoTab';
   stickyTab.className = 'itc-sticky-tab';
-  stickyTab.setAttribute('aria-label', 'Ricevi Sconto Partenariato Corso Broker Auto');
+  stickyTab.setAttribute('aria-label', 'Ricevi Sconto Partecipazione Corso Broker Auto');
   stickyTab.innerHTML = `
     <div class="itc-tab-icon">
       <i class="ri-shield-star-fill"></i>
     </div>
-    <span class="itc-tab-title">SCONTO PARTENARIATO</span>
-    <span class="itc-tab-badge">RISERVATO</span>
+    <span class="itc-tab-title">SCONTO PARTECIPAZIONE</span>
+    <span class="itc-tab-badge">-50%</span>
   `;
   document.body.appendChild(stickyTab);
 
@@ -576,16 +576,16 @@
         <!-- VISTA FORM PRINCIPALE -->
         <div id="itcPromoFormWrapper">
           <div class="itc-promo-badge">
-            <i class="ri-shield-star-fill"></i> ACCESSO RISERVATO
+            <i class="ri-shield-star-fill"></i> ACCESSO RISERVATO • SCONTO DEL 50%
           </div>
 
-          <!-- TITOLO PRIVILEGIATO SENZA RIFERIMENTI DI PREZZO -->
+          <!-- TITOLO PRIVILEGIATO -->
           <h2 class="itc-promo-title" id="itcPromoTitle">
             Accesso Riservato all'<span>Opportunità Privilegiata</span>
           </h2>
 
           <p class="itc-promo-desc">
-            Compila il modulo per ricevere via email il tuo codice sconto esclusivo di partenariato, valido per una settimana dall'attivazione.
+            Compila il modulo per ricevere via email il tuo codice sconto esclusivo per la partecipazione, valido per una settimana dall'attivazione.
           </p>
 
           <form id="itcLeadPromoForm">
@@ -630,9 +630,9 @@
 
             <div id="itcFormError" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 12px; text-align: center;"></div>
 
-            <!-- TASTO VERDE CALL TO ACTION: RICEVI SCONTO PARTENARIATO -->
+            <!-- TASTO VERDE CALL TO ACTION: RICEVI SCONTO PARTECIPAZIONE -->
             <button type="submit" id="itcSubmitBtn" class="itc-submit-btn">
-              <span>RICEVI SCONTO PARTENARIATO</span>
+              <span>RICEVI SCONTO PARTECIPAZIONE</span>
               <i class="ri-arrow-right-line"></i>
             </button>
 
@@ -653,13 +653,13 @@
           </h3>
 
           <p class="itc-success-text" style="font-size: 0.88rem; color: #94a3b8; line-height: 1.5; margin-bottom: 16px;">
-            Il tuo codice sconto esclusivo di partenariato è stato generato ed è ora attivo.<br>
+            Il tuo codice sconto del <strong>50%</strong> per la partecipazione è stato generato ed è ora attivo.<br>
             Abbiamo inviato una copia completa all'indirizzo <strong id="itcDisplayEmail" style="color: #2ecc71;"></strong>.
           </p>
 
           <!-- Box Codice Stripe Personale -->
           <div style="background: rgba(0, 146, 70, 0.12); border: 2px dashed rgba(46, 204, 113, 0.55); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
-            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 8px; text-transform: uppercase;">IL TUO CODICE SCONTO PARTENARIATO</span>
+            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 8px; text-transform: uppercase;">IL TUO CODICE SCONTO DEL 50%</span>
             
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
               <div id="itcDisplayCode" style="font-size: 1.65rem; font-weight: 900; letter-spacing: 2px; color: #2ecc71; font-family: monospace; background: rgba(0,0,0,0.5); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(46, 204, 113, 0.35);">
@@ -897,7 +897,7 @@
         phone: phoneCheck.formatted,
         city: city,
         interestTag: 'broker corso',
-        notes: 'Richiesta Sconto Partenariato - Accesso Riservato Opportunità Privilegiata Itercars Academy - Valido 1 settimana',
+        notes: 'Richiesta Sconto Partecipazione 50% - Accesso Riservato Opportunità Privilegiata Itercars Academy - Valido 1 settimana',
         source: 'sito_web',
         campaignName: 'Accesso Riservato Opportunità Privilegiata',
         sendDiscountCode: true
