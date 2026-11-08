@@ -686,44 +686,56 @@
           </form>
         </div>
 
-        <!-- VISTA SUCCESSO (POST INVIO) -->
+        <!-- VISTA SUCCESSO E RINGRAZIAMENTO (POST INVIO) -->
         <div id="itcPromoSuccessWrapper" class="itc-success-view" style="display: none; text-align: center; padding: 10px 0;">
           <div class="itc-success-icon" style="font-size: 2.8rem; color: #2ecc71; margin-bottom: 8px;">
             <i class="ri-checkbox-circle-fill"></i>
           </div>
 
           <h3 class="itc-success-title" style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
-            Codice Sconto Generato!
+            Grazie! Richiesta inviata con successo
           </h3>
 
-          <p class="itc-success-text" style="font-size: 0.9rem; color: #94a3b8; line-height: 1.45; margin-bottom: 16px;">
-            Il tuo sconto del <strong>50%</strong> è attivo per la Masterclass (<strong>139,50 €</strong> anziché 279,00 €).
+          <p class="itc-success-text" style="font-size: 0.88rem; color: #94a3b8; line-height: 1.5; margin-bottom: 16px;">
+            Il tuo codice promozionale personale del <strong>50%</strong> è stato generato ed è ora attivo.<br>
+            Abbiamo inviato una copia completa all'indirizzo <strong id="itcDisplayEmail" style="color: #2ecc71;"></strong>.
           </p>
 
           <!-- Box Codice Stripe Personale -->
           <div style="background: rgba(0, 146, 70, 0.12); border: 2px dashed rgba(46, 204, 113, 0.55); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
-            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 6px; text-transform: uppercase;">IL TUO CODICE STRIPE PERSONALE</span>
-            <div id="itcDisplayCode" style="font-size: 1.65rem; font-weight: 900; letter-spacing: 2px; color: #2ecc71; font-family: monospace; background: rgba(0,0,0,0.4); padding: 8px; border-radius: 8px; display: inline-block;">
-              GENERAZIONE...
+            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 8px; text-transform: uppercase;">IL TUO CODICE STRIPE PERSONALE (50%)</span>
+            
+            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
+              <div id="itcDisplayCode" style="font-size: 1.65rem; font-weight: 900; letter-spacing: 2px; color: #2ecc71; font-family: monospace; background: rgba(0,0,0,0.5); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(46, 204, 113, 0.35);">
+                GENERAZIONE...
+              </div>
+              <button type="button" id="itcCopyCodeBtn" style="background: rgba(46, 204, 113, 0.2); border: 1px solid rgba(46, 204, 113, 0.5); color: #2ecc71; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s;" title="Copia codice">
+                <i class="ri-file-copy-line"></i> Copia
+              </button>
             </div>
-            <p style="font-size: 0.75rem; color: #f59e0b; margin-top: 8px; margin-bottom: 0; font-weight: 600;">
-              ⏰ Valido per 7 giorni dall'attivazione
+
+            <div style="margin-top: 10px; text-align: center;">
+              <span style="font-size: 0.9rem; color: #94a3b8; text-decoration: line-through; margin-right: 8px;">€ 279,00</span>
+              <span style="font-size: 1.35rem; font-weight: 900; color: #ffffff; margin-right: 8px;">€ 139,50</span>
+              <span style="font-size: 0.72rem; background: #2ecc71; color: #030712; font-weight: 800; padding: 2px 7px; border-radius: 4px;">-50%</span>
+            </div>
+
+            <p id="itcDisplayExpiry" style="font-size: 0.82rem; color: #f59e0b; margin-top: 12px; margin-bottom: 0; font-weight: 700;">
+              ⏰ Il tuo codice ha validità di 7 giorni a partire da oggi.
             </p>
           </div>
 
-          <p style="font-size: 0.82rem; color: #cbd5e1; margin-bottom: 18px; line-height: 1.4;">
-            Abbiamo inviato il codice e le istruzioni dettagliate all'indirizzo <strong id="itcDisplayEmail" style="color: #2ecc71;"></strong>.
-          </p>
-
+          <!-- Azioni: Chiudi per continuare a navigare sul sito -->
           <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a id="itcDirectCheckoutBtn" href="https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01" target="_blank" rel="noopener" class="itc-submit-btn" style="text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.92rem; padding: 13px 20px;">
-              <span>RISCATTA CORSO A 139,50 €</span>
-              <i class="ri-arrow-right-line"></i>
-            </a>
-
-            <button type="button" id="itcSuccessCloseBtn" style="background: transparent; border: 1px solid rgba(255,255,255,0.15); color: #94a3b8; padding: 8px 16px; border-radius: 99px; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#94a3b8'">
-              Chiudi Finestra
+            <button type="button" id="itcSuccessCloseBtn" class="itc-submit-btn" style="background: linear-gradient(135deg, #009246 0%, #2ecc71 100%); cursor: pointer; font-size: 0.92rem; padding: 13px 20px;">
+              <i class="ri-check-line"></i>
+              <span>HO SALVATO IL CODICE, CONTINUA SUL SITO</span>
             </button>
+
+            <!-- Link discreto facoltativo (apre in una nuova scheda senza abbandonare il sito) -->
+            <a id="itcDirectCheckoutBtn" href="https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01" target="_blank" rel="noopener" style="color: #94a3b8; font-size: 0.78rem; text-decoration: underline; transition: color 0.2s; padding: 4px;" onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#94a3b8'">
+              Oppure procedi subito al pagamento sicuro Stripe con sconto già inserito ↗
+            </a>
           </div>
         </div>
       </div>
@@ -770,6 +782,22 @@
     hideStickyTab();
     if (stickyTab) stickyTab.remove();
   });
+
+  const copyBtn = document.getElementById('itcCopyCodeBtn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', function () {
+      const codeEl = document.getElementById('itcDisplayCode');
+      const code = codeEl ? codeEl.textContent.trim() : '';
+      if (navigator.clipboard && code) {
+        navigator.clipboard.writeText(code).then(function () {
+          copyBtn.innerHTML = '<i class="ri-check-line"></i> Copiato!';
+          setTimeout(function () {
+            copyBtn.innerHTML = '<i class="ri-file-copy-line"></i> Copia';
+          }, 2000);
+        });
+      }
+    });
+  }
 
   // Event Listener Click sulla Targhettina Verde per riaprire il modale
   stickyTab.addEventListener('click', function () {
@@ -939,14 +967,14 @@
         });
 
         if (response.ok && result.success !== false) {
-          // Memorizza che l'utente ha compilato il modulo (non verrà mai più mostrato né popup né targhettina)
+          // Memorizza che l'utente ha completato la richiesta
           localStorage.setItem(STORAGE_KEY_SUBMITTED, 'true');
 
-          // Rimuovi definitivamente la targhettina
+          // Rimuovi la targhettina dal fondo
           hideStickyTab();
           if (stickyTab) stickyTab.remove();
 
-          // Dati del codice generato da Stripe e URL checkout
+          // Dati del codice generato da Stripe
           const discountCode = result.discountCode || 'BROKER50-PROMO';
           const checkoutUrl = result.checkoutUrl || ('https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01?prefilled_promo_code=' + discountCode);
 
@@ -954,12 +982,19 @@
           if (codeDisplay) codeDisplay.textContent = discountCode;
 
           const emailDisplay = document.getElementById('itcDisplayEmail');
-          if (emailDisplay) emailDisplay.textContent = email;
+          if (emailDisplay) emailDisplay.textContent = emailCheck.clean;
+
+          const expiryDisplay = document.getElementById('itcDisplayExpiry');
+          if (expiryDisplay) {
+            const expDate = result.discountExpiresAt ? new Date(result.discountExpiresAt) : new Date(Date.now() + 7 * 86400000);
+            const expStr = expDate.toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' });
+            expiryDisplay.innerHTML = `⏰ Il tuo codice ha <strong>validità di 7 giorni</strong> a partire da oggi (scadenza: <strong>${expStr}</strong>).`;
+          }
 
           const directBtn = document.getElementById('itcDirectCheckoutBtn');
           if (directBtn) directBtn.href = checkoutUrl;
 
-          // Passaggio alla schermata di successo
+          // Mostra la schermata di ringraziamento e conferma (NON reindirizza l'utente a Stripe)
           formWrapper.style.display = 'none';
           successWrapper.style.display = 'block';
         } else {
