@@ -118,6 +118,23 @@ document.addEventListener("DOMContentLoaded", async () => {
       detailPriceElem.innerText = `€ ${car.price}/giorno`;
     }
   }
+
+  // Precompila i recapiti se memorizzati
+  if (typeof prefillBookingFields === 'function') {
+    prefillBookingFields();
+  }
+
+  ['detailName', 'detailEmail', 'detailPhone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('blur', () => {
+        const n = document.getElementById('detailName')?.value;
+        const e = document.getElementById('detailEmail')?.value;
+        const p = document.getElementById('detailPhone')?.value;
+        if (typeof cacheUserData === 'function') cacheUserData(n, e, p);
+      });
+    }
+  });
 });
 async function submitDetailBooking(event) {
   event.preventDefault();

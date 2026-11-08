@@ -1237,8 +1237,69 @@ function handleSearch(event) {
   
   showToast(`Trovati ${filtered.length} veicoli`);
 }
+// =========================================================================
+// SISTEMA DI PERSISTENZA E AUTOFILL RECAPITI ITERCARS
+// =========================================================================
+function cacheUserData(name, email, phone) {
+  try {
+    const raw = localStorage.getItem('itercars_contact_cache');
+    let current = {};
+    if (raw) {
+      try { current = JSON.parse(raw) || {}; } catch (e) {}
+    }
+    const cleanN = (name && name !== 'Anonimo' ? name : current.name || '').trim();
+    const cleanE = (email && email !== 'N/D' ? email : current.email || '').trim();
+    const cleanP = (phone && phone !== 'N/D' ? phone : current.phone || '').trim();
+
+    const data = {
+      name: cleanN,
+      email: cleanE,
+      phone: cleanP,
+      city: current.city || '',
+      updatedAt: Date.now()
+    };
+    if (cleanN || cleanE || cleanP) {
+      localStorage.setItem('itercars_contact_cache', JSON.stringify(data));
+      localStorage.setItem('stratoshub_contact_cache', JSON.stringify(data));
+      if (cleanN) localStorage.setItem('itercars_user_name', cleanN);
+      if (cleanE) localStorage.setItem('itercars_user_email', cleanE);
+      if (cleanP) localStorage.setItem('itercars_user_phone', cleanP);
+    }
+  } catch (e) {}
+}
+window.cacheUserData = cacheUserData;
+
+function prefillBookingFields() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlName = params.get('nome') || params.get('name') || '';
+    const urlEmail = params.get('email') || params.get('mail') || '';
+    const urlPhone = params.get('telefono') || params.get('phone') || params.get('tel') || '';
+
+    let localData = {};
+    const raw = localStorage.getItem('itercars_contact_cache') || localStorage.getItem('stratoshub_contact_cache');
+    if (raw) {
+      try { localData = JSON.parse(raw) || {}; } catch (e) {}
+    }
+
+    const name = urlName || localData.name || localStorage.getItem('itercars_user_name') || '';
+    const email = urlEmail || localData.email || localStorage.getItem('itercars_user_email') || '';
+    const phone = urlPhone || localData.phone || localStorage.getItem('itercars_user_phone') || '';
+
+    const nameInp = document.getElementById('clientNameInput') || document.getElementById('detailName');
+    const emailInp = document.getElementById('clientEmailInput') || document.getElementById('detailEmail');
+    const phoneInp = document.getElementById('clientPhoneInput') || document.getElementById('detailPhone');
+
+    if (nameInp && !nameInp.value && name) nameInp.value = name;
+    if (emailInp && !emailInp.value && email) emailInp.value = email;
+    if (phoneInp && !phoneInp.value && phone) phoneInp.value = phone;
+  } catch (e) {}
+}
+window.prefillBookingFields = prefillBookingFields;
+
 // Gestione Modale Prenotazione
 function openModal(carName, price) {
+  prefillBookingFields();
   const modal = document.getElementById("bookingModal");
   const title = document.getElementById("modalTitle");
   const carInput = document.getElementById("modalCarName");

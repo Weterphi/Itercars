@@ -709,22 +709,22 @@
             <div class="itc-form-grid">
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadName">Nome e Cognome *</label>
-                <input type="text" id="itcLeadName" class="itc-form-input" placeholder="es. Mario Rossi" required autocomplete="name" />
+                <input type="text" id="itcLeadName" name="name" class="itc-form-input" placeholder="es. Mario Rossi" required autocomplete="name" autocapitalize="words" />
               </div>
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadCity">Città *</label>
-                <input type="text" id="itcLeadCity" class="itc-form-input" placeholder="es. Milano" required autocomplete="address-level2" />
+                <input type="text" id="itcLeadCity" name="city" class="itc-form-input" placeholder="es. Milano" required autocomplete="address-level2" autocapitalize="words" />
               </div>
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadPhone">Cellulare / WhatsApp *</label>
-                <input type="tel" id="itcLeadPhone" class="itc-form-input" placeholder="+39 340 123 4567" required autocomplete="tel" />
+                <input type="tel" id="itcLeadPhone" name="tel" class="itc-form-input" placeholder="+39 340 123 4567" required autocomplete="tel" inputmode="tel" />
               </div>
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadEmail">Email *</label>
-                <input type="email" id="itcLeadEmail" class="itc-form-input" placeholder="es. mario.rossi@email.it" required autocomplete="email" />
+                <input type="email" id="itcLeadEmail" name="email" class="itc-form-input" placeholder="es. mario.rossi@email.it" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" />
               </div>
             </div>
 
@@ -828,8 +828,91 @@
     }
   }
 
+  // =========================================================================
+  // SISTEMA AUTOFILL MULTI-LIVELLO: NATIVO DISPOSITIVO + CACHE CONDIVISA + URL
+  // =========================================================================
+  const CONTACT_CACHE_KEY = 'itercars_contact_cache';
+
+  function getStoredContactInfo() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlName = params.get('nome') || params.get('name') || '';
+      const urlEmail = params.get('email') || params.get('mail') || '';
+      const urlPhone = params.get('telefono') || params.get('phone') || params.get('tel') || params.get('cellulare') || '';
+      const urlCity = params.get('citta') || params.get('city') || '';
+
+      let localData = {};
+      const raw = localStorage.getItem(CONTACT_CACHE_KEY);
+      if (raw) {
+        try { localData = JSON.parse(raw) || {}; } catch (e) {}
+      }
+
+      let stratData = {};
+      const rawStrat = localStorage.getItem('stratoshub_contact_cache');
+      if (rawStrat) {
+        try { stratData = JSON.parse(rawStrat) || {}; } catch (e) {}
+      }
+
+      const altName = localStorage.getItem('itercars_user_name') || localStorage.getItem('stratoshub_user_name') || '';
+      const altEmail = localStorage.getItem('itercars_user_email') || localStorage.getItem('stratoshub_user_email') || '';
+      const altPhone = localStorage.getItem('itercars_user_phone') || localStorage.getItem('stratoshub_user_phone') || '';
+
+      return {
+        name: urlName || localData.name || stratData.name || altName || '',
+        email: urlEmail || localData.email || stratData.email || altEmail || '',
+        phone: urlPhone || localData.phone || stratData.phone || altPhone || '',
+        city: urlCity || localData.city || stratData.city || ''
+      };
+    } catch (e) {
+      return { name: '', email: '', phone: '', city: '' };
+    }
+  }
+
+  function saveStoredContactInfo(info) {
+    try {
+      if (!info) return;
+      const current = getStoredContactInfo();
+      const updated = {
+        name: (info.name !== undefined ? info.name : current.name).trim(),
+        email: (info.email !== undefined ? info.email : current.email).trim(),
+        phone: (info.phone !== undefined ? info.phone : current.phone).trim(),
+        city: (info.city !== undefined ? info.city : current.city).trim(),
+        updatedAt: Date.now()
+      };
+      if (updated.name || updated.email || updated.phone) {
+        localStorage.setItem(CONTACT_CACHE_KEY, JSON.stringify(updated));
+        localStorage.setItem('stratoshub_contact_cache', JSON.stringify(updated));
+        if (updated.name) localStorage.setItem('itercars_user_name', updated.name);
+        if (updated.email) localStorage.setItem('itercars_user_email', updated.email);
+        if (updated.phone) localStorage.setItem('itercars_user_phone', updated.phone);
+      }
+    } catch (e) {}
+  }
+
+  function autoFillPromoFields() {
+    const contact = getStoredContactInfo();
+    const nameInput = document.getElementById('itcLeadName');
+    const cityInput = document.getElementById('itcLeadCity');
+    const phoneInput = document.getElementById('itcLeadPhone');
+    const emailInput = document.getElementById('itcLeadEmail');
+
+    if (nameInput && !nameInput.value && contact.name) {
+      nameInput.value = contact.name;
+    }
+    if (cityInput && !cityInput.value && contact.city) {
+      cityInput.value = contact.city;
+    }
+    if (phoneInput && !phoneInput.value && contact.phone) {
+      phoneInput.value = contact.phone;
+    }
+    if (emailInput && !emailInput.value && contact.email) {
+      emailInput.value = contact.email;
+    }
+  }
+
   // Funzione Apertura Modale
   function openPromoModal(fromStripe) {
+    autoFillPromoFields();
     if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
       if (fromStripe) {
         window.location.href = STRIPE_CHECKOUT_URL;
@@ -1068,6 +1151,12 @@
         if (response.ok && result.success !== false) {
           // Memorizza che l'utente ha completato la richiesta
           localStorage.setItem(STORAGE_KEY_SUBMITTED, 'true');
+          saveStoredContactInfo({
+            name: name,
+            city: city,
+            phone: phoneCheck.formatted,
+            email: emailCheck.clean
+          });
           pendingStripeRedirect = false;
 
           // Rimuovi la targhettina dal fondo
@@ -1109,6 +1198,32 @@
         submitBtn.innerHTML = originalBtnText;
       }
     });
+
+    // Ascolto digitazione per memorizzazione immediata
+    ['itcLeadName', 'itcLeadCity', 'itcLeadPhone', 'itcLeadEmail'].forEach(function (id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.addEventListener('blur', function () {
+          saveStoredContactInfo({
+            name: document.getElementById('itcLeadName')?.value,
+            city: document.getElementById('itcLeadCity')?.value,
+            phone: document.getElementById('itcLeadPhone')?.value,
+            email: document.getElementById('itcLeadEmail')?.value
+          });
+        });
+        el.addEventListener('change', function () {
+          saveStoredContactInfo({
+            name: document.getElementById('itcLeadName')?.value,
+            city: document.getElementById('itcLeadCity')?.value,
+            phone: document.getElementById('itcLeadPhone')?.value,
+            email: document.getElementById('itcLeadEmail')?.value
+          });
+        });
+      }
+    });
+
+    // Precompila campi se già disponibili
+    autoFillPromoFields();
   }
 
   // APPARIZIONE AUTOMATICA: SOLO DOPO CHIUSURA COOKIE + 20 SECONDI DI NAVIGAZIONE

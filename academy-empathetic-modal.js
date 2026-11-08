@@ -880,7 +880,7 @@
               <label class="itc-emp-label">A chi dobbiamo intestare la candidatura? *</label>
               <div class="itc-emp-input-wrap">
                 <i class="ri-user-line itc-emp-input-icon"></i>
-                <input type="text" class="itc-emp-input" id="itcEmpName" required placeholder="es. Marco Rossi" />
+                <input type="text" class="itc-emp-input" id="itcEmpName" name="name" autocomplete="name" autocapitalize="words" required placeholder="es. Marco Rossi" />
               </div>
             </div>
 
@@ -888,7 +888,7 @@
               <label class="itc-emp-label">A quale email inviamo il programma e la documentazione? *</label>
               <div class="itc-emp-input-wrap">
                 <i class="ri-mail-line itc-emp-input-icon"></i>
-                <input type="email" class="itc-emp-input" id="itcEmpEmail" required placeholder="es. marco.rossi@email.it" />
+                <input type="email" class="itc-emp-input" id="itcEmpEmail" name="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" required placeholder="es. marco.rossi@email.it" />
               </div>
             </div>
 
@@ -896,7 +896,7 @@
               <label class="itc-emp-label">A quale numero preferisci ricevere il colloquio informativo? *</label>
               <div class="itc-emp-input-wrap">
                 <i class="ri-phone-line itc-emp-input-icon"></i>
-                <input type="tel" class="itc-emp-input" id="itcEmpPhone" required placeholder="Inserisci il tuo cellulare" />
+                <input type="tel" class="itc-emp-input" id="itcEmpPhone" name="tel" autocomplete="tel" inputmode="tel" required placeholder="Inserisci il tuo cellulare" />
               </div>
             </div>
 
@@ -989,6 +989,84 @@
     if (progressLabel) progressLabel.textContent = `Fase ${step} di 3`;
     if (progressPercent) progressPercent.textContent = `${pct}%`;
     if (progressFill) progressFill.style.width = `${pct}%`;
+  }
+
+  // =========================================================================
+  // SISTEMA AUTOFILL MULTI-LIVELLO: NATIVO DISPOSITIVO + CACHE CONDIVISA + URL
+  // =========================================================================
+  const CONTACT_CACHE_KEY = 'itercars_contact_cache';
+
+  function getStoredContactInfo() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlName = params.get('nome') || params.get('name') || '';
+      const urlEmail = params.get('email') || params.get('mail') || '';
+      const urlPhone = params.get('telefono') || params.get('phone') || params.get('tel') || params.get('cellulare') || '';
+      const urlCity = params.get('citta') || params.get('city') || '';
+
+      let localData = {};
+      const raw = localStorage.getItem(CONTACT_CACHE_KEY);
+      if (raw) {
+        try { localData = JSON.parse(raw) || {}; } catch (e) {}
+      }
+
+      let stratData = {};
+      const rawStrat = localStorage.getItem('stratoshub_contact_cache');
+      if (rawStrat) {
+        try { stratData = JSON.parse(rawStrat) || {}; } catch (e) {}
+      }
+
+      const altName = localStorage.getItem('itercars_user_name') || localStorage.getItem('stratoshub_user_name') || '';
+      const altEmail = localStorage.getItem('itercars_user_email') || localStorage.getItem('stratoshub_user_email') || '';
+      const altPhone = localStorage.getItem('itercars_user_phone') || localStorage.getItem('stratoshub_user_phone') || '';
+
+      return {
+        name: urlName || localData.name || stratData.name || altName || '',
+        email: urlEmail || localData.email || stratData.email || altEmail || '',
+        phone: urlPhone || localData.phone || stratData.phone || altPhone || '',
+        city: urlCity || localData.city || stratData.city || ''
+      };
+    } catch (e) {
+      return { name: '', email: '', phone: '', city: '' };
+    }
+  }
+
+  function saveStoredContactInfo(info) {
+    try {
+      if (!info) return;
+      const current = getStoredContactInfo();
+      const updated = {
+        name: (info.name !== undefined ? info.name : current.name).trim(),
+        email: (info.email !== undefined ? info.email : current.email).trim(),
+        phone: (info.phone !== undefined ? info.phone : current.phone).trim(),
+        city: (info.city !== undefined ? info.city : current.city).trim(),
+        updatedAt: Date.now()
+      };
+      if (updated.name || updated.email || updated.phone) {
+        localStorage.setItem(CONTACT_CACHE_KEY, JSON.stringify(updated));
+        localStorage.setItem('stratoshub_contact_cache', JSON.stringify(updated));
+        if (updated.name) localStorage.setItem('itercars_user_name', updated.name);
+        if (updated.email) localStorage.setItem('itercars_user_email', updated.email);
+        if (updated.phone) localStorage.setItem('itercars_user_phone', updated.phone);
+      }
+    } catch (e) {}
+  }
+
+  function autoFillContactFields() {
+    const contact = getStoredContactInfo();
+    const nameInput = document.getElementById('itcEmpName');
+    const emailInput = document.getElementById('itcEmpEmail');
+    const phoneInput = document.getElementById('itcEmpPhone');
+
+    if (nameInput && !nameInput.value && contact.name) {
+      nameInput.value = contact.name;
+    }
+    if (emailInput && !emailInput.value && contact.email) {
+      emailInput.value = contact.email;
+    }
+    if (phoneInput && !phoneInput.value && contact.phone) {
+      phoneInput.value = contact.phone;
+    }
   }
 
   function isLoginModalOpen() {
@@ -1235,8 +1313,30 @@
       step3Box.style.display = 'none';
       step4Box.style.display = 'block';
       setProgress(3, 95);
+      autoFillContactFields();
     });
   }
+
+  // Salvataggio automatico durante la digitazione
+  ['itcEmpName', 'itcEmpEmail', 'itcEmpPhone'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('blur', function () {
+        saveStoredContactInfo({
+          name: document.getElementById('itcEmpName')?.value,
+          email: document.getElementById('itcEmpEmail')?.value,
+          phone: document.getElementById('itcEmpPhone')?.value
+        });
+      });
+      el.addEventListener('change', function () {
+        saveStoredContactInfo({
+          name: document.getElementById('itcEmpName')?.value,
+          email: document.getElementById('itcEmpEmail')?.value,
+          phone: document.getElementById('itcEmpPhone')?.value
+        });
+      });
+    }
+  });
 
   // STEP 4: Invio Form Candidatura
   const form = document.getElementById('itcEmpLeadForm');
@@ -1319,6 +1419,7 @@
         if (success) {
           localStorage.setItem(STORAGE_SUBMITTED, 'true');
           sessionStorage.setItem(STORAGE_DISMISSED, 'true');
+          saveStoredContactInfo({ name, email, phone });
 
           hideLeftTab();
           if (leftTab) leftTab.remove();
@@ -1357,6 +1458,7 @@
 
   // APPARIZIONE IMMEDIATA: PRIMA COSA ASSOLUTA ALL'APERTURA DELLA PAGINA ACADEMY
   function initEmpatheticApp() {
+    autoFillContactFields();
     if (localStorage.getItem(STORAGE_SUBMITTED) === 'true') {
       return;
     }
