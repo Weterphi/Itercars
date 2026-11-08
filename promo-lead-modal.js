@@ -792,23 +792,25 @@
             </p>
           </div>
 
-          <!-- Azioni: Chiudi per continuare a navigare sul sito -->
+          <!-- Azioni: Procedi al pagamento su Stripe con codice inserito o rimani sul sito -->
           <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button type="button" id="itcSuccessCloseBtn" class="itc-submit-btn" style="background: linear-gradient(135deg, #009246 0%, #2ecc71 100%); cursor: pointer; font-size: 0.92rem; padding: 13px 20px;">
-              <i class="ri-check-line"></i>
-              <span>HO SALVATO IL CODICE, CONTINUA SUL SITO</span>
+            <button type="button" id="itcSuccessCloseBtn" class="itc-submit-btn" style="background: linear-gradient(135deg, #009246 0%, #2ecc71 100%); cursor: pointer; font-size: 0.95rem; padding: 14px 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <i class="ri-bank-card-fill"></i>
+              <span>HO SALVATO IL CODICE, PROCEDI AL PAGAMENTO (SCONTO 50% APPLICATO)</span>
             </button>
 
-            <!-- Link discreto facoltativo (apre in una nuova scheda senza abbandonare il sito) -->
-            <a id="itcDirectCheckoutBtn" href="https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01" target="_blank" rel="noopener" style="color: #94a3b8; font-size: 0.78rem; text-decoration: underline; transition: color 0.2s; padding: 4px;" onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#94a3b8'">
-              Oppure procedi subito al modulo riservato con sconto pre-applicato ↗
-            </a>
+            <!-- Link facoltativo per chiudere e rimanere sul sito -->
+            <button type="button" id="itcSuccessStayBtn" style="background: none; border: none; color: #94a3b8; font-size: 0.8rem; text-decoration: underline; cursor: pointer; padding: 4px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">
+              Oppure chiudi e continua a navigare sul sito
+            </button>
           </div>
         </div>
       </div>
     </div>
   `;
   document.body.appendChild(modalContainer);
+
+  let activeCheckoutUrl = STRIPE_CHECKOUT_URL;
 
   // Funzione Mostra Targhettina Verde Permanente
   function showStickyTab() {
@@ -841,16 +843,11 @@
     modalContainer.classList.add('itc-active');
   }
 
-  // Funzione Chiusura Modale (se aperto da click Stripe, reindirizza direttamente a Stripe; altrimenti mostra targhettina)
+  // Funzione Chiusura Modale (quando si chiude senza compilare il form, torna sul sito tranquillamente!)
   function closePromoModal() {
     modalContainer.classList.remove('itc-active');
     sessionStorage.setItem(STORAGE_KEY_DISMISSED, 'true');
-
-    if (pendingStripeRedirect) {
-      pendingStripeRedirect = false;
-      window.location.href = STRIPE_CHECKOUT_URL;
-      return;
-    }
+    pendingStripeRedirect = false;
 
     if (!isAcademyPage) {
       showStickyTab();
@@ -862,11 +859,21 @@
   if (closeBtn) closeBtn.addEventListener('click', closePromoModal);
 
   const successCloseBtn = document.getElementById('itcSuccessCloseBtn');
-  if (successCloseBtn) successCloseBtn.addEventListener('click', function () {
-    closePromoModal();
-    hideStickyTab();
-    if (stickyTab) stickyTab.remove();
-  });
+  if (successCloseBtn) {
+    successCloseBtn.addEventListener('click', function () {
+      // Reindirizza direttamente a Stripe con il codice sconto automaticamente pre-applicato
+      window.location.href = activeCheckoutUrl;
+    });
+  }
+
+  const successStayBtn = document.getElementById('itcSuccessStayBtn');
+  if (successStayBtn) {
+    successStayBtn.addEventListener('click', function () {
+      closePromoModal();
+      hideStickyTab();
+      if (stickyTab) stickyTab.remove();
+    });
+  }
 
   const copyBtn = document.getElementById('itcCopyCodeBtn');
   if (copyBtn) {
@@ -1070,6 +1077,7 @@
           // Dati del codice generato da Stripe
           const discountCode = result.discountCode || 'BROKER50-PROMO';
           const checkoutUrl = result.checkoutUrl || ('https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01?prefilled_promo_code=' + discountCode);
+          activeCheckoutUrl = checkoutUrl;
 
           const codeDisplay = document.getElementById('itcDisplayCode');
           if (codeDisplay) codeDisplay.textContent = discountCode;
