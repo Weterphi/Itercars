@@ -1797,10 +1797,10 @@
   }
 
   .acd-slider-scroll-cue {
-    display: flex !important;
-    bottom: 46px !important;
-    font-size: 0.7rem !important;
-    z-index: 15 !important;
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
   }
 
   .acd-slider-dots {

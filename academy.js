@@ -640,6 +640,10 @@ function openLoginModal(event) {
     modal.style.visibility = "visible";
     modal.style.zIndex = "999999";
     document.body.style.overflow = "hidden";
+    document.body.classList.add("login-modal-open");
+    if (typeof window.onAcademyLoginModalOpen === 'function') {
+      window.onAcademyLoginModalOpen();
+    }
   }
 }
 window.openLoginModal = openLoginModal;
@@ -657,6 +661,10 @@ function closeLoginModal() {
       }
     }, 300);
     document.body.style.overflow = "auto";
+    document.body.classList.remove("login-modal-open");
+    if (typeof window.onAcademyLoginModalClose === 'function') {
+      window.onAcademyLoginModalClose();
+    }
   }
 }
 window.closeLoginModal = closeLoginModal;

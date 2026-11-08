@@ -491,6 +491,22 @@
       transform: translateY(-50%) translateX(0);
     }
 
+    /* Nasconde completamente la targhetta e il modulo quando la modale di login è aperta */
+    body.login-modal-open .itc-emp-left-tab,
+    body.login-modal-open #itcEmpLeftTab,
+    body.login-modal-open .itc-emp-overlay,
+    body.login-modal-open #itcEmpatheticOverlay,
+    #academyLoginModal.active ~ .itc-emp-left-tab,
+    #academyLoginModal.active ~ #itcEmpLeftTab,
+    #academyLoginModal.active ~ .itc-emp-overlay,
+    #academyLoginModal.active ~ #itcEmpatheticOverlay {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(-50%) translateX(-120%) !important;
+    }
+
     .itc-emp-left-tab:hover {
       background: linear-gradient(135deg, rgba(22, 34, 59, 0.98) 0%, rgba(13, 20, 36, 1) 100%);
       border-color: #2ecc71;
@@ -975,9 +991,20 @@
     if (progressFill) progressFill.style.width = `${pct}%`;
   }
 
+  function isLoginModalOpen() {
+    const loginModal = document.getElementById('academyLoginModal');
+    if (!loginModal) return false;
+    return (
+      document.body.classList.contains('login-modal-open') ||
+      loginModal.classList.contains('active') ||
+      (loginModal.style.display && loginModal.style.display !== 'none' && loginModal.style.visibility !== 'hidden')
+    );
+  }
+
   // Gestione Targhetta a Sinistra
   function showLeftTab() {
     if (localStorage.getItem(STORAGE_SUBMITTED) === 'true') return;
+    if (isLoginModalOpen()) return;
     if (leftTab) {
       leftTab.classList.add('itc-tab-visible');
     }
@@ -992,6 +1019,7 @@
   // Apertura modale empatico
   function openEmpatheticModal() {
     if (localStorage.getItem(STORAGE_SUBMITTED) === 'true') return;
+    if (isLoginModalOpen()) return;
     hideLeftTab();
     overlay.classList.add('itc-emp-active');
   }
@@ -1000,7 +1028,81 @@
   function closeEmpatheticModal() {
     overlay.classList.remove('itc-emp-active');
     sessionStorage.setItem(STORAGE_DISMISSED, 'true');
+    if (!isLoginModalOpen()) {
+      showLeftTab();
+    }
+  }
+
+  let wasModalOpenBeforeLogin = false;
+
+  function handleLoginModalOpened() {
+    if (overlay && overlay.classList.contains('itc-emp-active')) {
+      wasModalOpenBeforeLogin = true;
+      overlay.classList.remove('itc-emp-active');
+    }
+    hideLeftTab();
+  }
+
+  function handleLoginModalClosed() {
+    if (localStorage.getItem(STORAGE_SUBMITTED) === 'true') {
+      hideLeftTab();
+      if (overlay) overlay.classList.remove('itc-emp-active');
+      return;
+    }
+    // Se non è stato compilato, riappare il modulo (se era aperto prima) oppure la targhetta
+    setTimeout(function () {
+      if (isLoginModalOpen()) return;
+      if (wasModalOpenBeforeLogin) {
+        wasModalOpenBeforeLogin = false;
+        openEmpatheticModal();
+      } else {
+        showLeftTab();
+      }
+    }, 150);
+  }
+
+  window.onAcademyLoginModalOpen = handleLoginModalOpened;
+  window.onAcademyLoginModalClose = handleLoginModalClosed;
+  window.hideItercarsLeftTab = hideLeftTab;
+  window.restoreItercarsLeftTab = function () {
+    if (localStorage.getItem(STORAGE_SUBMITTED) === 'true') return;
+    if (isLoginModalOpen()) return;
     showLeftTab();
+  };
+
+  function setupLoginModalObserver() {
+    const loginModalEl = document.getElementById('academyLoginModal');
+    if (!loginModalEl) return;
+    let wasActive =
+      loginModalEl.classList.contains('active') ||
+      (loginModalEl.style.display && loginModalEl.style.display !== 'none' && loginModalEl.style.visibility !== 'hidden');
+
+    if (wasActive) {
+      handleLoginModalOpened();
+    }
+
+    const observer = new MutationObserver(function () {
+      const isActive =
+        loginModalEl.classList.contains('active') ||
+        (loginModalEl.style.display && loginModalEl.style.display !== 'none' && loginModalEl.style.visibility !== 'hidden');
+      if (isActive && !wasActive) {
+        wasActive = true;
+        document.body.classList.add('login-modal-open');
+        handleLoginModalOpened();
+      } else if (!isActive && wasActive) {
+        wasActive = false;
+        document.body.classList.remove('login-modal-open');
+        handleLoginModalClosed();
+      }
+    });
+
+    observer.observe(loginModalEl, { attributes: true, attributeFilter: ['class', 'style'] });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupLoginModalObserver);
+  } else {
+    setupLoginModalObserver();
   }
 
   // Event listener chiusura modale

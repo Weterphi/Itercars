@@ -1290,6 +1290,10 @@
             modal.style.pointerEvents = "auto";
             modal.style.zIndex = "999999";
             document.body.style.overflow = "hidden";
+            document.body.classList.add("login-modal-open");
+            if (typeof window.onAcademyLoginModalOpen === 'function') {
+              window.onAcademyLoginModalOpen();
+            }
           }
         }
       }
