@@ -190,8 +190,11 @@
         window.clarity('consent');
       }
       closeBanner(banner);
+      try {
+        window.dispatchEvent(new CustomEvent('itercars_cookie_consent_saved', { detail: 'accepted' }));
+      } catch (e) {}
       if (typeof showToast === 'function') {
-        showToast("🔒 Preferenze salvate: Consento ai cookie analitici e di miglioramento servizi.");
+        showToast("Preferenze salvate: Consenso ai cookie analitici e di miglioramento servizi registrato.");
       }
     });
     document.getElementById('btnCookieReject').addEventListener('click', () => {
@@ -208,8 +211,11 @@
         window.clarity('consent', false);
       }
       closeBanner(banner);
+      try {
+        window.dispatchEvent(new CustomEvent('itercars_cookie_consent_saved', { detail: 'rejected' }));
+      } catch (e) {}
       if (typeof showToast === 'function') {
-        showToast("🛡️ Preferenze salvate: Attivi solo i cookie tecnici essenziali.");
+        showToast("Preferenze salvate: Attivi solo i cookie tecnici essenziali.");
       }
     });
 

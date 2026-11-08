@@ -485,46 +485,103 @@
       }
     }
 
-    /* Ottimizzazione Mobile (< 768px) */
+    /* Ottimizzazione Mobile (< 768px): Ultracompatto, Ergonomico, Tutto a Schermo Senza Scroll */
     @media (max-width: 768px) {
+      .itc-promo-overlay {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+      }
       .itc-promo-card {
         grid-template-columns: 1fr;
-        max-width: 480px;
-        border-radius: 20px;
+        max-width: 440px;
+        max-height: 96vh;
+        border-radius: 18px;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
       }
+      /* Su mobile rimuoviamo la foto verticale per evitare scrolling e concentrare il modulo in una vista compatta */
       .itc-promo-media {
-        min-height: 220px;
-        height: 220px;
-        position: relative;
+        display: none;
       }
       .itc-promo-content {
-        padding: 22px 18px;
+        padding: 16px 14px 14px 14px;
         max-height: none;
         overflow-y: visible;
       }
-      .itc-promo-title {
-        font-size: 1.2rem;
-        line-height: 1.25;
-        margin-bottom: 8px;
+      .itc-promo-close {
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        font-size: 1.25rem;
       }
+      .itc-promo-badge {
+        font-size: 0.65rem;
+        padding: 3px 8px;
+        margin-bottom: 6px;
+        letter-spacing: 0.4px;
+      }
+      .itc-promo-title {
+        font-size: 1.05rem;
+        line-height: 1.22;
+        margin-bottom: 4px;
+      }
+      .itc-promo-desc {
+        font-size: 0.72rem;
+        line-height: 1.35;
+        margin-bottom: 10px;
+        color: #94a3b8;
+      }
+      /* Griglia a 2 colonne affiancate su mobile: Nome+Città riga 1, Telefono+Email riga 2 */
       .itc-form-grid {
-        grid-template-columns: 1fr;
-        gap: 9px;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px 8px;
+      }
+      .itc-form-group {
+        margin-bottom: 0;
+      }
+      .itc-form-label {
+        font-size: 0.66rem;
+        margin-bottom: 2px;
+        color: #cbd5e1;
+      }
+      .itc-form-input {
+        padding: 7px 9px;
+        font-size: 0.78rem;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+      .itc-privacy-box {
+        margin: 6px 0;
+        padding: 6px 8px;
+        gap: 4px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 6px;
+      }
+      .itc-privacy-text-small {
+        font-size: 0.58rem;
+        line-height: 1.25;
       }
       .itc-submit-btn {
-        padding: 13px 14px;
-        font-size: 0.9rem;
+        padding: 10px 14px;
+        font-size: 0.8rem;
+        font-weight: 800;
         letter-spacing: 0.02em;
+        border-radius: 10px;
+        margin-top: 3px;
       }
-
+      .itc-legal-note {
+        font-size: 0.62rem;
+        margin-top: 4px;
+      }
       .itc-sticky-tab {
-        padding: 10px 16px 9px 14px;
-        font-size: 0.78rem;
-        border-radius: 12px 12px 0 0;
+        padding: 8px 14px 7px 12px;
+        font-size: 0.74rem;
+        border-radius: 10px 10px 0 0;
       }
       .itc-sticky-tab:hover {
-        transform: translateX(-50%) translateY(-3px);
+        transform: translateX(-50%) translateY(-2px);
       }
     }
   `;
@@ -637,7 +694,7 @@
             </button>
 
             <p class="itc-legal-note">
-              🔒 Invio sicuro e protetto in conformità al GDPR UE 2016/679. Nessun costo nascosto.
+              Invio protetto e riservato in conformità al GDPR UE 2016/679. Nessun costo nascosto.
             </p>
           </form>
         </div>
@@ -960,24 +1017,93 @@
     });
   }
 
-  // APPARIZIONE AUTOMATICA
-  window.addEventListener('load', function () {
-    // Se ha già compilato, esci
+  // APPARIZIONE AUTOMATICA: SOLO DOPO CHIUSURA COOKIE + 20 SECONDI DI NAVIGAZIONE
+  const DELAY_AFTER_COOKIES_MS = 20000; // 20 secondi esatti per lasciar respirare e navigare l'utente
+
+  function schedulePromoModal() {
     if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
       return;
     }
-
-    // Se l'utente lo aveva già chiuso in precedenza, mostra subito la targhettina permanente
     if (sessionStorage.getItem(STORAGE_KEY_DISMISSED) === 'true') {
       showStickyTab();
       return;
     }
 
-    // Altrimenti per la prima visita, fai apparire il modale dopo 1.8 secondi
+    // Timer di 20 secondi dopo che i cookie sono stati accettati/rifiutati
     setTimeout(function () {
+      if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') return;
+      if (sessionStorage.getItem(STORAGE_KEY_DISMISSED) === 'true') return;
       openPromoModal();
-    }, 1800);
-  });
+    }, DELAY_AFTER_COOKIES_MS);
+  }
+
+  function initPromoTrigger() {
+    if (localStorage.getItem(STORAGE_KEY_SUBMITTED) === 'true') {
+      return;
+    }
+    if (sessionStorage.getItem(STORAGE_KEY_DISMISSED) === 'true') {
+      showStickyTab();
+      return;
+    }
+
+    // Verifica se l'utente ha già preso una decisione sui cookie in precedenza
+    const consent = localStorage.getItem('itercars_cookie_consent');
+    const cookieBanner = document.getElementById('itercarsCookieBanner');
+
+    // Se l'utente ha già interagito con i cookie in precedenza e il banner non è visibile
+    if (consent && !cookieBanner) {
+      // Lasciamo respirare l'utente per 20 secondi dal caricamento della pagina
+      schedulePromoModal();
+      return;
+    }
+
+    // Se il banner dei cookie è attivo/visibile:
+    // Il modulo di contatto DEVE attendere che l'utente clicchi "Accetto" o "Solo Necessari"
+    let triggered = false;
+    function handleCookieBannerClosed() {
+      if (triggered) return;
+      triggered = true;
+      // Avvia il timer di 20 secondi a partire dal momento in cui il banner dei cookie viene chiuso
+      schedulePromoModal();
+    }
+
+    // Ascolto evento custom da cookie-banner.js
+    window.addEventListener('itercars_cookie_consent_saved', handleCookieBannerClosed, { once: true });
+
+    // Ascolto click diretto sui pulsanti di accettazione o rifiuto
+    function attachCookieListeners() {
+      const btnAccept = document.getElementById('btnCookieAccept');
+      const btnReject = document.getElementById('btnCookieReject');
+
+      if (btnAccept) btnAccept.addEventListener('click', handleCookieBannerClosed, { once: true });
+      if (btnReject) btnReject.addEventListener('click', handleCookieBannerClosed, { once: true });
+
+      if (!btnAccept && !btnReject && !consent) {
+        const observer = new MutationObserver(function () {
+          const bA = document.getElementById('btnCookieAccept');
+          const bR = document.getElementById('btnCookieReject');
+          if (bA || bR) {
+            observer.disconnect();
+            if (bA) bA.addEventListener('click', handleCookieBannerClosed, { once: true });
+            if (bR) bR.addEventListener('click', handleCookieBannerClosed, { once: true });
+          }
+        });
+        observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', attachCookieListeners);
+    } else {
+      attachCookieListeners();
+    }
+  }
+
+  if (document.readyState === 'complete') {
+    initPromoTrigger();
+  } else {
+    window.addEventListener('load', initPromoTrigger);
+  }
 
   // Espone la funzione nel caso si voglia aprire anche manualmente con un pulsante nel sito
   window.openItercarsPromoModal = openPromoModal;
