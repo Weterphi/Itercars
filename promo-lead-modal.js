@@ -23,10 +23,10 @@
   styleEl.innerHTML = `
     .itc-promo-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
       background: rgba(3, 7, 18, 0.88);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -40,6 +40,9 @@
       transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
       box-sizing: border-box;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     .itc-promo-overlay.itc-active {
@@ -485,83 +488,125 @@
       }
     }
 
-    /* Ottimizzazione Mobile (< 768px): Ultracompatto, Ergonomico, Tutto a Schermo Senza Scroll */
+    /* Ottimizzazione Mobile (< 768px): Ultracompatto con Foto Inclusa e Form Ergonomico */
     @media (max-width: 768px) {
       .itc-promo-overlay {
-        padding: 10px;
+        padding: 8px;
         align-items: center;
         justify-content: center;
       }
       .itc-promo-card {
         grid-template-columns: 1fr;
         max-width: 440px;
-        max-height: 96vh;
+        width: 100%;
+        max-height: 94vh;
         border-radius: 18px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
       }
-      /* Su mobile rimuoviamo la foto verticale per evitare scrolling e concentrare il modulo in una vista compatta */
+      /* Foto visibile e proporzionata in testata modale su mobile */
       .itc-promo-media {
-        display: none;
+        display: block !important;
+        position: relative !important;
+        width: 100% !important;
+        height: 125px !important;
+        min-height: 125px !important;
+        max-height: 125px !important;
+        overflow: hidden !important;
+        border-radius: 18px 18px 0 0;
+      }
+      .itc-promo-media picture {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      .itc-promo-img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center 25%;
+        display: block;
+      }
+      .itc-media-footer {
+        bottom: 8px;
+        left: 12px;
+        right: 12px;
+      }
+      .itc-media-badge {
+        font-size: 0.62rem;
+        padding: 2px 8px;
+        margin-bottom: 2px;
+      }
+      .itc-media-caption {
+        font-size: 0.72rem;
+        line-height: 1.25;
       }
       .itc-promo-content {
-        padding: 16px 14px 14px 14px;
+        padding: 14px 14px 12px 14px;
         max-height: none;
         overflow-y: visible;
       }
       .itc-promo-close {
-        top: 10px;
-        right: 10px;
-        width: 32px;
-        height: 32px;
-        font-size: 1.25rem;
+        top: 8px;
+        right: 8px;
+        width: 30px;
+        height: 30px;
+        font-size: 1.2rem;
+        background: rgba(0, 0, 0, 0.55);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
       }
       .itc-promo-badge {
         font-size: 0.65rem;
-        padding: 3px 8px;
-        margin-bottom: 6px;
-        letter-spacing: 0.4px;
+        padding: 2px 8px;
+        margin-bottom: 4px;
+        letter-spacing: 0.3px;
       }
       .itc-promo-title {
         font-size: 1.05rem;
-        line-height: 1.22;
-        margin-bottom: 4px;
+        line-height: 1.2;
+        margin-bottom: 3px;
       }
       .itc-promo-desc {
         font-size: 0.72rem;
-        line-height: 1.35;
-        margin-bottom: 10px;
+        line-height: 1.3;
+        margin-bottom: 8px;
         color: #94a3b8;
       }
       /* Griglia a 2 colonne affiancate su mobile: Nome+Città riga 1, Telefono+Email riga 2 */
       .itc-form-grid {
         grid-template-columns: 1fr 1fr;
-        gap: 7px 8px;
+        gap: 6px 8px;
       }
       .itc-form-group {
         margin-bottom: 0;
       }
       .itc-form-label {
-        font-size: 0.66rem;
+        font-size: 0.64rem;
         margin-bottom: 2px;
         color: #cbd5e1;
       }
       .itc-form-input {
         padding: 7px 9px;
-        font-size: 0.78rem;
+        font-size: 16px; /* 16px previene lo zoom automatico di iOS Safari */
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.05);
       }
       .itc-privacy-box {
-        margin: 6px 0;
-        padding: 6px 8px;
-        gap: 4px;
+        margin: 5px 0;
+        padding: 5px 8px;
+        gap: 3px;
         background: rgba(255, 255, 255, 0.02);
         border-radius: 6px;
       }
       .itc-privacy-text-small {
         font-size: 0.58rem;
-        line-height: 1.25;
+        line-height: 1.22;
       }
       .itc-submit-btn {
         padding: 10px 14px;
@@ -572,8 +617,8 @@
         margin-top: 3px;
       }
       .itc-legal-note {
-        font-size: 0.62rem;
-        margin-top: 4px;
+        font-size: 0.6rem;
+        margin-top: 3px;
       }
       .itc-sticky-tab {
         padding: 8px 14px 7px 12px;
