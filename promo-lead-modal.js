@@ -212,12 +212,12 @@
 
     /* Titolo Diretto e Centrale */
     .itc-promo-title {
-      font-size: 1.55rem;
+      font-size: 1.45rem;
       font-weight: 900;
-      line-height: 1.15;
+      line-height: 1.25;
       color: #ffffff;
-      margin-bottom: 8px;
-      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      letter-spacing: -0.015em;
       text-align: center;
     }
 
@@ -227,50 +227,13 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Box Prezzo Scontato Centrale */
-    .itc-promo-pricing {
-      display: flex;
-      align-items: baseline;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding: 6px 14px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      align-self: center;
-    }
-
-    .itc-old-price {
-      font-size: 0.95rem;
-      color: #94a3b8;
-      text-decoration: line-through;
-    }
-
-    .itc-new-price {
-      font-size: 1.6rem;
-      font-weight: 900;
-      color: #2ecc71;
-      letter-spacing: -0.02em;
-    }
-
-    .itc-discount-tag {
-      font-size: 0.72rem;
-      font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
-      background: #2ecc71;
-      color: #030712;
-      text-transform: uppercase;
-    }
-
-    /* Testo Esatto: Ricevi alla tua mail un codice sconto del 50%... */
+    /* Testo Esplicativo di Partenariato */
     .itc-promo-desc {
       font-size: 0.88rem;
       line-height: 1.45;
-      color: #e2e8f0;
+      color: #cbd5e1;
       margin-bottom: 16px;
-      font-weight: 600;
+      font-weight: 500;
       text-align: center;
     }
 
@@ -541,23 +504,23 @@
         overflow-y: visible;
       }
       .itc-promo-title {
-        font-size: 1.35rem;
-      }
-      .itc-new-price {
-        font-size: 1.45rem;
+        font-size: 1.2rem;
+        line-height: 1.25;
+        margin-bottom: 8px;
       }
       .itc-form-grid {
         grid-template-columns: 1fr;
         gap: 9px;
       }
       .itc-submit-btn {
-        padding: 13px 16px;
-        font-size: 0.98rem;
+        padding: 13px 14px;
+        font-size: 0.9rem;
+        letter-spacing: 0.02em;
       }
 
       .itc-sticky-tab {
-        padding: 10px 18px 9px 16px;
-        font-size: 0.82rem;
+        padding: 10px 16px 9px 14px;
+        font-size: 0.78rem;
         border-radius: 12px 12px 0 0;
       }
       .itc-sticky-tab:hover {
@@ -572,13 +535,13 @@
   stickyTab.type = 'button';
   stickyTab.id = 'itcStickyPromoTab';
   stickyTab.className = 'itc-sticky-tab';
-  stickyTab.setAttribute('aria-label', 'Ricevi Sconto 50% Corso Broker Auto');
+  stickyTab.setAttribute('aria-label', 'Ricevi Sconto Partenariato Corso Broker Auto');
   stickyTab.innerHTML = `
     <div class="itc-tab-icon">
-      <i class="ri-fire-fill"></i>
+      <i class="ri-shield-star-fill"></i>
     </div>
-    <span class="itc-tab-title">RICEVI SCONTO</span>
-    <span class="itc-tab-badge">-50%</span>
+    <span class="itc-tab-title">SCONTO PARTENARIATO</span>
+    <span class="itc-tab-badge">RISERVATO</span>
   `;
   document.body.appendChild(stickyTab);
 
@@ -603,7 +566,7 @@
             <i class="ri-vip-crown-fill"></i> ITERCARS ACADEMY
           </div>
           <p class="itc-media-caption">
-            Masterclass Completa Broker Auto.
+            Opportunità Privilegiata Broker Auto.
           </p>
         </div>
       </div>
@@ -613,23 +576,16 @@
         <!-- VISTA FORM PRINCIPALE -->
         <div id="itcPromoFormWrapper">
           <div class="itc-promo-badge">
-            <i class="ri-fire-fill"></i> BONUS 50% ESCLUSIVO
+            <i class="ri-shield-star-fill"></i> ACCESSO RISERVATO
           </div>
 
-          <!-- TITOLO DIRETTO AD ALTO IMPATTO -->
+          <!-- TITOLO PRIVILEGIATO SENZA RIFERIMENTI DI PREZZO -->
           <h2 class="itc-promo-title" id="itcPromoTitle">
-            <span>SCONTO 50%</span> SUL CORSO
+            Accesso Riservato all'<span>Opportunità Privilegiata</span>
           </h2>
 
-          <div class="itc-promo-pricing">
-            <span class="itc-old-price">279,00 €</span>
-            <span class="itc-new-price">139,50 €</span>
-            <span class="itc-discount-tag">-50% SUBITO</span>
-          </div>
-
-          <!-- TESTO: Ricevi alla tua mail un codice sconto del 50%... -->
           <p class="itc-promo-desc">
-            Ricevi alla tua mail un codice sconto del 50% per il corso, da usare entro una settimana dall'attivazione.
+            Compila il modulo per ricevere via email il tuo codice sconto esclusivo di partenariato, valido per una settimana dall'attivazione.
           </p>
 
           <form id="itcLeadPromoForm">
@@ -674,9 +630,9 @@
 
             <div id="itcFormError" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 12px; text-align: center;"></div>
 
-            <!-- TASTO VERDE CALL TO ACTION: RICEVI SCONTO -->
+            <!-- TASTO VERDE CALL TO ACTION: RICEVI SCONTO PARTENARIATO -->
             <button type="submit" id="itcSubmitBtn" class="itc-submit-btn">
-              <span>RICEVI SCONTO</span>
+              <span>RICEVI SCONTO PARTENARIATO</span>
               <i class="ri-arrow-right-line"></i>
             </button>
 
@@ -686,24 +642,24 @@
           </form>
         </div>
 
-        <!-- VISTA SUCCESSO E RINGRAZIAMENTO (POST INVIO) -->
+        <!-- VISTA SUCCESSO E RINGRAZIAMENTO (POST INVIO - SENZA INDICAZIONI DI PREZZO) -->
         <div id="itcPromoSuccessWrapper" class="itc-success-view" style="display: none; text-align: center; padding: 10px 0;">
           <div class="itc-success-icon" style="font-size: 2.8rem; color: #2ecc71; margin-bottom: 8px;">
             <i class="ri-checkbox-circle-fill"></i>
           </div>
 
           <h3 class="itc-success-title" style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
-            Grazie! Richiesta inviata con successo
+            Richiesta Inviata con Successo!
           </h3>
 
           <p class="itc-success-text" style="font-size: 0.88rem; color: #94a3b8; line-height: 1.5; margin-bottom: 16px;">
-            Il tuo codice promozionale personale del <strong>50%</strong> è stato generato ed è ora attivo.<br>
+            Il tuo codice sconto esclusivo di partenariato è stato generato ed è ora attivo.<br>
             Abbiamo inviato una copia completa all'indirizzo <strong id="itcDisplayEmail" style="color: #2ecc71;"></strong>.
           </p>
 
           <!-- Box Codice Stripe Personale -->
           <div style="background: rgba(0, 146, 70, 0.12); border: 2px dashed rgba(46, 204, 113, 0.55); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
-            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 8px; text-transform: uppercase;">IL TUO CODICE STRIPE PERSONALE (50%)</span>
+            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 8px; text-transform: uppercase;">IL TUO CODICE SCONTO PARTENARIATO</span>
             
             <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
               <div id="itcDisplayCode" style="font-size: 1.65rem; font-weight: 900; letter-spacing: 2px; color: #2ecc71; font-family: monospace; background: rgba(0,0,0,0.5); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(46, 204, 113, 0.35);">
@@ -714,13 +670,7 @@
               </button>
             </div>
 
-            <div style="margin-top: 10px; text-align: center;">
-              <span style="font-size: 0.9rem; color: #94a3b8; text-decoration: line-through; margin-right: 8px;">€ 279,00</span>
-              <span style="font-size: 1.35rem; font-weight: 900; color: #ffffff; margin-right: 8px;">€ 139,50</span>
-              <span style="font-size: 0.72rem; background: #2ecc71; color: #030712; font-weight: 800; padding: 2px 7px; border-radius: 4px;">-50%</span>
-            </div>
-
-            <p id="itcDisplayExpiry" style="font-size: 0.82rem; color: #f59e0b; margin-top: 12px; margin-bottom: 0; font-weight: 700;">
+            <p id="itcDisplayExpiry" style="font-size: 0.82rem; color: #f59e0b; margin-top: 10px; margin-bottom: 0; font-weight: 700;">
               ⏰ Il tuo codice ha validità di 7 giorni a partire da oggi.
             </p>
           </div>
@@ -734,7 +684,7 @@
 
             <!-- Link discreto facoltativo (apre in una nuova scheda senza abbandonare il sito) -->
             <a id="itcDirectCheckoutBtn" href="https://buy.stripe.com/6oUaEY3RHbE8a6v9xA0co01" target="_blank" rel="noopener" style="color: #94a3b8; font-size: 0.78rem; text-decoration: underline; transition: color 0.2s; padding: 4px;" onmouseover="this.style.color='#2ecc71'" onmouseout="this.style.color='#94a3b8'">
-              Oppure procedi subito al pagamento sicuro Stripe con sconto già inserito ↗
+              Oppure procedi subito al modulo riservato con sconto pre-applicato ↗
             </a>
           </div>
         </div>
@@ -947,9 +897,9 @@
         phone: phoneCheck.formatted,
         city: city,
         interestTag: 'broker corso',
-        notes: 'Richiesta Codice Sconto 50% Corso Broker Auto (da 279€ a 139,50€) da modulo promozionale Itercars - Valido 1 settimana',
+        notes: 'Richiesta Sconto Partenariato - Accesso Riservato Opportunità Privilegiata Itercars Academy - Valido 1 settimana',
         source: 'sito_web',
-        campaignName: 'Bonus Sconto 50% Corso Meta Prezzo',
+        campaignName: 'Accesso Riservato Opportunità Privilegiata',
         sendDiscountCode: true
       };
 
