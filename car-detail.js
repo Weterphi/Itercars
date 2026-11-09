@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const carNameParam = urlParams.get('car');
   if (!carNameParam) {
     // Redirect back if no car is specified
-    window.location.href = "index.html#flotta";
+    window.location.href = "/#flotta";
     return;
   }
   // Find the car in fleetData (which is loaded from app.js) or localStorage or Supabase

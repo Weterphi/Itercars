@@ -1,29 +1,74 @@
 {
   "redirects": [
     {
-      "source": "/willie-toribio/academy",
-      "destination": "/academy",
-      "permanent": false
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
     },
     {
-      "source": "/willie-toribio/academy.html",
-      "destination": "/academy",
-      "permanent": false
+      "source": "/index",
+      "destination": "/",
+      "permanent": true
     },
     {
-      "source": "/willie-toribio/chi-siamo",
-      "destination": "/chi-siamo",
-      "permanent": false
+      "source": "/academy",
+      "destination": "/academy.html",
+      "permanent": true
     },
     {
-      "source": "/willie-toribio/chi-siamo.html",
-      "destination": "/chi-siamo",
-      "permanent": false
+      "source": "/fleet",
+      "destination": "/fleet.html",
+      "permanent": true
+    },
+    {
+      "source": "/chi-siamo",
+      "destination": "/chi-siamo.html",
+      "permanent": true
+    },
+    {
+      "source": "/willie-toribio",
+      "destination": "/willie-toribio.html",
+      "permanent": true
+    },
+    {
+      "source": "/noleggio-lungo-termine",
+      "destination": "/noleggio-lungo-termine.html",
+      "permanent": true
+    },
+    {
+      "source": "/noleggio-breve-termine",
+      "destination": "/noleggio-breve-termine.html",
+      "permanent": true
+    },
+    {
+      "source": "/magazine",
+      "destination": "/magazine.html",
+      "permanent": true
+    },
+    {
+      "source": "/partners",
+      "destination": "/partners.html",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy.html",
+      "permanent": true
+    },
+    {
+      "source": "/termini-di-servizio",
+      "destination": "/termini-di-servizio.html",
+      "permanent": true
+    },
+    {
+      "source": "/cookie-policy",
+      "destination": "/cookie-policy.html",
+      "permanent": true
     },
     {
       "source": "/willie-toribio/:slug+",
       "destination": "/:slug+",
-      "permanent": false
+      "permanent": true
     }
   ]
 }

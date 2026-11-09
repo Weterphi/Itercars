@@ -1,12 +1,11 @@
 # ITERCARS Production Apache Rewrite Rules
 RewriteEngine On
 
-# Redirect /file.html to /file
-RewriteCond %{THE_REQUEST} /([^.]+)\.html [NC]
-RewriteRule ^ /%1 [NC,L,R=301]
+# Redirect /index.html and /index to root /
+RewriteCond %{THE_REQUEST} /index(\.html)?[\s?] [NC]
+RewriteRule ^ / [R=301,L]
 
-# Internally rewrite clean URL to .html if file exists
+# Redirect clean directory-style URLs to .html if needed, or internally serve .html
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}\.html -f
 RewriteRule ^(.*)$ $1.html [NC,L]
-

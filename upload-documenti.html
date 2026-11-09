@@ -290,7 +290,7 @@
       <!-- Top Row: Navigation Actions -->
       <div class="stepper-top-nav">
         <div class="dossier-nav-actions">
-          <a href="index.html" class="btn-nav-item" title="Torna alla Homepage">
+          <a href="/" class="btn-nav-item" title="Torna alla Homepage">
             <i class="ri-home-4-line" style="color: #2ecc71; font-size: 1.1rem;"></i> <span>Home</span>
           </a>
           <button type="button" class="btn-nav-item" id="topNavBackBtn" onclick="handleProfessionalNavBack()">
@@ -719,7 +719,7 @@
       if (document.referrer && document.referrer.includes('dettaglio')) {
         window.history.back();
       } else {
-        window.location.href = 'index.html';
+        window.location.href = '/';
       }
     }
     function handleProfessionalNavNext() {
