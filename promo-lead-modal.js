@@ -40,9 +40,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(3, 7, 18, 0.88);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(3, 7, 18, 0.9);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       z-index: 9999999;
       display: flex;
       align-items: center;
@@ -65,19 +65,19 @@
     .itc-promo-card {
       position: relative;
       width: 100%;
-      max-width: 740px;
+      max-width: 780px;
       max-height: 92vh;
       overflow: hidden;
       background: linear-gradient(165deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 14, 23, 1) 100%);
-      border: 1px solid rgba(46, 204, 113, 0.35);
-      border-radius: 20px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 146, 70, 0.2);
+      border: 1px solid rgba(46, 204, 113, 0.45);
+      border-radius: 22px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.95), 0 0 50px rgba(0, 146, 70, 0.3), 0 0 2px rgba(46, 204, 113, 0.5);
       color: #ffffff;
       transform: scale(0.96) translateY(14px);
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
       display: grid;
-      grid-template-columns: 260px 1fr;
+      grid-template-columns: 280px 1fr;
     }
 
     .itc-promo-overlay.itc-active .itc-promo-card {
@@ -162,40 +162,39 @@
     }
 
     .itc-promo-content {
-      padding: 22px 24px;
+      padding: 24px 26px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       position: relative;
-      max-height: 92vh;
+      background: radial-gradient(circle at top right, rgba(46, 204, 113, 0.08) 0%, transparent 70%);
       overflow-y: auto;
-      box-sizing: border-box;
+      max-height: 92vh;
     }
 
     .itc-promo-close {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 14px;
+      right: 14px;
       width: 32px;
       height: 32px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.06);
+      background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #94a3b8;
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 1.3rem;
+      font-size: 1.2rem;
       line-height: 1;
       transition: all 0.2s ease;
       z-index: 10;
     }
 
     .itc-promo-close:hover {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.4);
-      color: #ef4444;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
     }
 
     .itc-promo-badge {
@@ -203,20 +202,21 @@
       align-items: center;
       gap: 5px;
       padding: 3px 10px;
-      background: rgba(46, 204, 113, 0.12);
-      border: 1px solid rgba(46, 204, 113, 0.35);
+      background: rgba(46, 204, 113, 0.14);
+      border: 1px solid rgba(46, 204, 113, 0.38);
       border-radius: 50px;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 800;
       color: #2ecc71;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       align-self: flex-start;
+      box-shadow: 0 0 12px rgba(46, 204, 113, 0.15);
     }
 
     .itc-promo-title {
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 900;
       line-height: 1.25;
       color: #ffffff;
@@ -231,8 +231,8 @@
     }
 
     .itc-promo-desc {
-      font-size: 0.82rem;
-      line-height: 1.4;
+      font-size: 0.84rem;
+      line-height: 1.45;
       color: #94a3b8;
       margin: 0 0 14px 0;
       font-weight: 400;
@@ -242,18 +242,18 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px 10px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .itc-form-group {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 4px;
       text-align: left;
     }
 
     .itc-form-label {
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 700;
       color: #94a3b8;
       text-transform: uppercase;
@@ -262,60 +262,69 @@
 
     .itc-form-input {
       width: 100%;
-      padding: 9px 11px;
+      padding: 10px 12px;
       background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 9px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 10px;
       color: #ffffff;
-      font-size: 0.84rem;
+      font-size: 0.86rem;
       font-family: inherit;
       outline: none;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
       box-sizing: border-box;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
     }
 
     .itc-form-input:focus {
       border-color: #2ecc71;
       background: rgba(15, 23, 42, 0.98);
-      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25), 0 0 20px rgba(46, 204, 113, 0.2);
     }
 
     .itc-form-input::placeholder {
       color: #64748b;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
     }
 
     .itc-privacy-box {
-      margin: 8px 0 12px;
+      margin: 10px 0 14px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       text-align: left;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px 12px;
     }
 
     .itc-checkbox-item {
       display: flex;
       align-items: flex-start;
-      gap: 7px;
+      gap: 8px;
       cursor: pointer;
     }
 
     .itc-checkbox-item input[type="checkbox"] {
-      margin-top: 1px;
-      width: 14px;
-      height: 14px;
+      margin-top: 2px;
+      width: 15px;
+      height: 15px;
       accent-color: #2ecc71;
       cursor: pointer;
       flex-shrink: 0;
     }
 
     .itc-privacy-text-small {
-      font-size: 0.68rem !important;
+      font-size: 0.72rem !important;
       font-weight: 400 !important;
       color: #94a3b8 !important;
-      line-height: 1.35 !important;
+      line-height: 1.4 !important;
       margin: 0 !important;
       padding: 0 !important;
+    }
+
+    .itc-privacy-text-small strong {
+      color: #e2e8f0;
     }
 
     .itc-privacy-text-small a {
@@ -325,12 +334,12 @@
 
     .itc-submit-btn {
       width: 100%;
-      padding: 12px 18px;
+      padding: 13px 20px;
       border: none;
-      border-radius: 11px;
+      border-radius: 12px;
       background: linear-gradient(135deg, #009246 0%, #2ecc71 100%);
       color: #ffffff;
-      font-size: 0.92rem;
+      font-size: 0.94rem;
       font-weight: 800;
       letter-spacing: 0.03em;
       cursor: pointer;
@@ -338,12 +347,12 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.28);
-      transition: all 0.2s ease;
+      box-shadow: 0 6px 22px rgba(46, 204, 113, 0.32);
+      transition: all 0.25s ease;
     }
 
     .itc-submit-btn:hover {
-      box-shadow: 0 8px 26px rgba(46, 204, 113, 0.4);
+      box-shadow: 0 8px 30px rgba(46, 204, 113, 0.48);
       transform: translateY(-1px);
     }
 
@@ -355,7 +364,7 @@
 
     .itc-legal-note {
       text-align: center;
-      font-size: 0.68rem;
+      font-size: 0.72rem;
       color: #64748b;
       margin: 8px 0 0;
     }
@@ -379,10 +388,7 @@
       cursor: pointer;
       z-index: 999998;
       font-family: inherit;
-      font-size: 0.8rem;
-      font-weight: 800;
-      letter-spacing: 0.4px;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, background 0.2s;
       outline: none;
     }
 
@@ -410,6 +416,69 @@
       font-size: 0.68rem;
       padding: 2px 6px;
       border-radius: 5px;
+    }
+
+    /* Adattamento Responsive Desktop e Grandi Schermi (1080p, 1440p, 4K) */
+    @media (min-width: 1024px) {
+      .itc-promo-card {
+        max-width: 860px;
+        grid-template-columns: 310px 1fr;
+        border-radius: 24px;
+      }
+      .itc-promo-content {
+        padding: 28px 32px;
+      }
+      .itc-promo-title {
+        font-size: 1.45rem;
+      }
+      .itc-promo-desc {
+        font-size: 0.9rem;
+      }
+      .itc-form-input {
+        font-size: 0.92rem;
+        padding: 11px 14px;
+      }
+      .itc-form-label {
+        font-size: 0.74rem;
+      }
+      .itc-privacy-text-small {
+        font-size: 0.74rem !important;
+      }
+      .itc-submit-btn {
+        font-size: 1rem;
+        padding: 14px 22px;
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .itc-promo-card {
+        max-width: 920px;
+        grid-template-columns: 340px 1fr;
+        border-radius: 26px;
+      }
+      .itc-promo-content {
+        padding: 32px 36px;
+      }
+      .itc-promo-title {
+        font-size: 1.6rem;
+      }
+      .itc-promo-desc {
+        font-size: 0.95rem;
+      }
+      .itc-form-input {
+        font-size: 0.98rem;
+        padding: 12px 16px;
+      }
+      .itc-form-label {
+        font-size: 0.78rem;
+      }
+      .itc-privacy-text-small {
+        font-size: 0.78rem !important;
+      }
+      .itc-submit-btn {
+        font-size: 1.05rem;
+        padding: 15px 24px;
+      }
     }
 
     @media (max-width: 640px) {
@@ -515,14 +584,14 @@
           </h2>
 
           <p class="itc-promo-desc">
-            Inserisci i tuoi recapiti per ricevere subito via email il codice sconto personale valido 7 giorni.
+            Inserisci i tuoi recapiti per ricevere subito via email il codice sconto personale valido 7 giorni per la Masterclass Broker Supercar.
           </p>
 
           <form id="itcLeadPromoForm">
             <div class="itc-form-grid">
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadName">Nome e Cognome *</label>
-                <input type="text" id="itcLeadName" name="name" class="itc-form-input" placeholder="Marco Rossi" required autocomplete="name" autocapitalize="words" />
+                <input type="text" id="itcLeadName" name="name" class="itc-form-input" placeholder="Mario Rossi" required autocomplete="name" autocapitalize="words" />
               </div>
 
               <div class="itc-form-group">
@@ -537,23 +606,23 @@
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadEmail">Email *</label>
-                <input type="email" id="itcLeadEmail" name="email" class="itc-form-input" placeholder="marco.rossi@email.it" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" />
+                <input type="email" id="itcLeadEmail" name="email" class="itc-form-input" placeholder="mario.rossi@email.it" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" />
               </div>
             </div>
 
-            <!-- CHECKBOX PRIVACY E MARKETING COMPATTE -->
+            <!-- CHECKBOX PRIVACY E MARKETING PROFESSIONALI -->
             <div class="itc-privacy-box">
               <label class="itc-checkbox-item">
-                <input type="checkbox" id="itcConsentPrivacy" required />
+                <input type="checkbox" id="itcConsentPrivacy" required checked />
                 <p class="itc-privacy-text-small">
-                  Accetto la <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a> e i <a href="/termini-di-servizio.html" target="_blank" rel="noopener">Termini di Servizio</a> *
+                  <strong>Informativa Privacy (GDPR UE 2016/679) *</strong>: Dichiaro di aver preso visione dell'Informativa Privacy e acconsento al trattamento dei miei dati personali per l'erogazione del codice sconto del 50% e l'assistenza personalizzata.
                 </p>
               </label>
 
               <label class="itc-checkbox-item">
-                <input type="checkbox" id="itcConsentMarketing" required />
+                <input type="checkbox" id="itcConsentMarketing" checked />
                 <p class="itc-privacy-text-small">
-                  Acconsento a ricevere il codice sconto e comunicazioni sui corsi Itercars.
+                  <strong>Comunicazioni e Offerte Esclusive</strong>: Acconsento alla ricezione periodica di comunicazioni informative su corsi didattici, mandati flotta e opportunità riservate da ITERCARS (facoltativo, cancellazione in 1 clic).
                 </p>
               </label>
             </div>
