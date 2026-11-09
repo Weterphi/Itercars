@@ -32,28 +32,27 @@
 
   // Iniezione CSS Responsive ad Alta Definizione (Foto Verticale Piena Senza Spazi Vuoti & Targhettina Centrale)
   const styleEl = document.createElement('style');
-  styleEl.id = 'itercars-promo-modal-styles';
+  styleEl.id = 'itercars-promo-lead-styles';
   styleEl.innerHTML = `
     .itc-promo-overlay {
       position: fixed;
-      inset: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      max-width: 100%;
       background: rgba(3, 7, 18, 0.88);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       z-index: 9999999;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 16px;
+      box-sizing: border-box;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
-      box-sizing: border-box;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -66,26 +65,25 @@
     .itc-promo-card {
       position: relative;
       width: 100%;
-      max-width: 820px;
-      max-height: 94vh;
+      max-width: 740px;
+      max-height: 92vh;
       overflow: hidden;
-      background: linear-gradient(165deg, rgba(17, 24, 39, 0.99) 0%, rgba(10, 14, 23, 1) 100%);
-      border: 1px solid rgba(46, 204, 113, 0.45);
-      border-radius: 24px;
-      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95), 0 0 50px rgba(0, 146, 70, 0.25);
+      background: linear-gradient(165deg, rgba(17, 24, 39, 0.98) 0%, rgba(10, 14, 23, 1) 100%);
+      border: 1px solid rgba(46, 204, 113, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 146, 70, 0.2);
       color: #ffffff;
-      transform: scale(0.94) translateY(20px);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.96) translateY(14px);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
       display: grid;
-      grid-template-columns: 320px 1fr;
+      grid-template-columns: 260px 1fr;
     }
 
     .itc-promo-overlay.itc-active .itc-promo-card {
       transform: scale(1) translateY(0);
     }
 
-    /* Colonna Immagine Verticale Piena: riempie completamente l'altezza al 100% senza vuoti */
     .itc-promo-media {
       position: relative;
       width: 100%;
@@ -114,81 +112,73 @@
       object-fit: cover;
       object-position: center 25%;
       display: block;
-      transition: transform 0.8s ease;
+      transition: transform 0.6s ease;
     }
 
     .itc-promo-card:hover .itc-promo-img {
-      transform: scale(1.04);
+      transform: scale(1.03);
     }
 
     .itc-media-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(10, 14, 23, 0.1) 0%, rgba(10, 14, 23, 0.35) 45%, rgba(10, 14, 23, 0.95) 100%);
+      background: linear-gradient(180deg, rgba(10, 14, 23, 0.1) 0%, rgba(10, 14, 23, 0.4) 50%, rgba(10, 14, 23, 0.95) 100%);
       pointer-events: none;
       z-index: 1;
     }
 
     .itc-media-footer {
       position: absolute;
-      bottom: 20px;
-      left: 18px;
-      right: 18px;
+      bottom: 16px;
+      left: 14px;
+      right: 14px;
       z-index: 2;
     }
 
     .itc-media-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 5px 12px;
+      gap: 5px;
+      padding: 4px 10px;
       background: rgba(46, 204, 113, 0.2);
-      border: 1px solid rgba(46, 204, 113, 0.5);
+      border: 1px solid rgba(46, 204, 113, 0.45);
       border-radius: 50px;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 800;
       color: #2ecc71;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 8px;
-      backdrop-filter: blur(8px);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      backdrop-filter: blur(6px);
     }
 
     .itc-media-caption {
-      font-size: 0.84rem;
+      font-size: 0.78rem;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.35;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.85);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+      margin: 0;
     }
 
-    /* Colonna Contenuti / Form (Scrollabile se necessario) */
     .itc-promo-content {
-      padding: 30px 28px;
+      padding: 22px 24px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       position: relative;
-      max-height: 94vh;
+      max-height: 92vh;
       overflow-y: auto;
       box-sizing: border-box;
     }
 
-    .itc-promo-content::-webkit-scrollbar {
-      width: 5px;
-    }
-    .itc-promo-content::-webkit-scrollbar-thumb {
-      background: rgba(46, 204, 113, 0.35);
-      border-radius: 10px;
-    }
-
     .itc-promo-close {
       position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(255, 255, 255, 0.12);
       color: #94a3b8;
@@ -197,44 +187,41 @@
       justify-content: center;
       cursor: pointer;
       font-size: 1.3rem;
+      line-height: 1;
       transition: all 0.2s ease;
       z-index: 10;
     }
 
     .itc-promo-close:hover {
       background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.5);
+      border-color: rgba(239, 68, 68, 0.4);
       color: #ef4444;
-      transform: rotate(90deg);
     }
 
-    /* Targettina/Badge Sconto Centrale */
     .itc-promo-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 14px;
-      background: rgba(46, 204, 113, 0.15);
-      border: 1px solid rgba(46, 204, 113, 0.45);
+      gap: 5px;
+      padding: 3px 10px;
+      background: rgba(46, 204, 113, 0.12);
+      border: 1px solid rgba(46, 204, 113, 0.35);
       border-radius: 50px;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       font-weight: 800;
       color: #2ecc71;
       text-transform: uppercase;
-      letter-spacing: 0.6px;
-      margin-bottom: 8px;
-      align-self: center;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      align-self: flex-start;
     }
 
-    /* Titolo Diretto e Centrale */
     .itc-promo-title {
-      font-size: 1.45rem;
+      font-size: 1.25rem;
       font-weight: 900;
       line-height: 1.25;
       color: #ffffff;
-      margin-bottom: 10px;
+      margin: 0 0 6px 0;
       letter-spacing: -0.015em;
-      text-align: center;
     }
 
     .itc-promo-title span {
@@ -243,22 +230,19 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Testo Esplicativo di Partenariato */
     .itc-promo-desc {
-      font-size: 0.88rem;
-      line-height: 1.45;
-      color: #cbd5e1;
-      margin-bottom: 16px;
-      font-weight: 500;
-      text-align: center;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: #94a3b8;
+      margin: 0 0 14px 0;
+      font-weight: 400;
     }
 
-    /* Griglia Form Responsive */
     .itc-form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 12px;
+      gap: 8px 10px;
+      margin-bottom: 10px;
     }
 
     .itc-form-group {
@@ -269,21 +253,21 @@
     }
 
     .itc-form-label {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       color: #94a3b8;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
     }
 
     .itc-form-input {
       width: 100%;
-      padding: 10px 12px;
+      padding: 9px 11px;
       background: rgba(15, 23, 42, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
+      border-radius: 9px;
       color: #ffffff;
-      font-size: 0.86rem;
+      font-size: 0.84rem;
       font-family: inherit;
       outline: none;
       transition: all 0.2s ease;
@@ -293,7 +277,7 @@
     .itc-form-input:focus {
       border-color: #2ecc71;
       background: rgba(15, 23, 42, 0.98);
-      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.25);
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
     }
 
     .itc-form-input::placeholder {
@@ -301,38 +285,35 @@
       font-size: 0.8rem;
     }
 
-    /* Checkboxes Privacy e Marketing */
     .itc-privacy-box {
-      margin-top: 6px;
-      margin-bottom: 16px;
+      margin: 8px 0 12px;
       display: flex;
       flex-direction: column;
-      gap: 9px;
+      gap: 6px;
       text-align: left;
     }
 
     .itc-checkbox-item {
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 7px;
       cursor: pointer;
     }
 
     .itc-checkbox-item input[type="checkbox"] {
-      margin-top: 2px;
-      width: 15px;
-      height: 15px;
+      margin-top: 1px;
+      width: 14px;
+      height: 14px;
       accent-color: #2ecc71;
       cursor: pointer;
       flex-shrink: 0;
     }
 
-    /* SPECIFICA CRUCIALE: Lettere piccole e RIGOROSAMENTE NON IN GRASSETTO */
     .itc-privacy-text-small {
-      font-size: 0.72rem !important;
+      font-size: 0.68rem !important;
       font-weight: 400 !important;
       color: #94a3b8 !important;
-      line-height: 1.45 !important;
+      line-height: 1.35 !important;
       margin: 0 !important;
       padding: 0 !important;
     }
@@ -340,42 +321,34 @@
     .itc-privacy-text-small a {
       color: #2ecc71;
       text-decoration: underline;
-      font-weight: 400 !important;
     }
 
-    .itc-privacy-text-small a:hover {
-      color: #a3e635;
-    }
-
-    /* Pulsante Call to Action: "RICEVI SCONTO" */
     .itc-submit-btn {
       width: 100%;
-      padding: 14px 20px;
+      padding: 12px 18px;
       border: none;
-      border-radius: 12px;
+      border-radius: 11px;
       background: linear-gradient(135deg, #009246 0%, #2ecc71 100%);
       color: #ffffff;
-      font-size: 1.05rem;
-      font-weight: 900;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.03em;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      box-shadow: 0 10px 25px rgba(0, 146, 70, 0.45);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.28);
+      transition: all 0.2s ease;
     }
 
-    .itc-submit-btn:hover:not(:disabled) {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 32px rgba(46, 204, 113, 0.6);
-      background: linear-gradient(135deg, #007336 0%, #2ecc71 100%);
+    .itc-submit-btn:hover {
+      box-shadow: 0 8px 26px rgba(46, 204, 113, 0.4);
+      transform: translateY(-1px);
     }
 
     .itc-submit-btn:disabled {
-      opacity: 0.7;
+      opacity: 0.6;
       cursor: not-allowed;
       transform: none;
     }
@@ -384,262 +357,103 @@
       text-align: center;
       font-size: 0.68rem;
       color: #64748b;
-      margin-top: 10px;
+      margin: 8px 0 0;
     }
 
-    /* Schermata di Ringraziamento / Successo */
-    .itc-success-view {
-      text-align: center;
-      padding: 30px 16px;
-    }
-
-    .itc-success-icon {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 16px;
-      border-radius: 50%;
-      background: rgba(46, 204, 113, 0.15);
-      border: 1px solid rgba(46, 204, 113, 0.4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #2ecc71;
-      font-size: 2rem;
-    }
-
-    .itc-success-title {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: #ffffff;
-      margin-bottom: 8px;
-    }
-
-    .itc-success-text {
-      font-size: 0.88rem;
-      color: #cbd5e1;
-      line-height: 1.55;
-      margin-bottom: 20px;
-    }
-
-    /* ==========================================================================
-       TARGETTINA VERDE INCOLLATA AL MARGINE INFERIORE (CENTRALE NELLA PAGINA)
-       Rigidamente centrata sia su Desktop che su Mobile
-       ========================================================================== */
+    /* Targhettina Basso */
     .itc-sticky-tab {
       position: fixed;
       bottom: 0;
       left: 50%;
-      transform: translateX(-50%);
-      z-index: 999998;
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 26px 11px 22px;
-      background: linear-gradient(135deg, #009246 0%, #007336 35%, #2ecc71 100%);
-      color: #ffffff;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 0.92rem;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      border: 1px solid rgba(255, 255, 255, 0.32);
+      transform: translateX(-50%) translateY(100%);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(9, 13, 22, 1) 100%);
+      border: 1px solid rgba(46, 204, 113, 0.55);
       border-bottom: none;
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 -6px 28px rgba(0, 146, 70, 0.6), 0 -2px 10px rgba(0, 0, 0, 0.4);
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7), 0 0 20px rgba(46, 204, 113, 0.3);
+      padding: 9px 18px 8px 14px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       cursor: pointer;
-      user-select: none;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-      animation: itcTabPulse 3s infinite;
+      z-index: 999998;
+      font-family: inherit;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.4px;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s;
+      outline: none;
     }
 
     .itc-sticky-tab.itc-tab-visible {
-      display: flex;
+      transform: translateX(-50%) translateY(0);
     }
 
     .itc-sticky-tab:hover {
-      padding-bottom: 15px;
-      transform: translateX(-50%) translateY(-4px);
-      box-shadow: 0 -8px 34px rgba(46, 204, 113, 0.85), 0 -2px 12px rgba(0, 0, 0, 0.5);
-      background: linear-gradient(135deg, #007336 0%, #2ecc71 100%);
+      background: linear-gradient(135deg, rgba(22, 34, 59, 0.98) 0%, rgba(13, 20, 36, 1) 100%);
+      border-color: #2ecc71;
+      box-shadow: 0 -10px 35px rgba(0, 0, 0, 0.85), 0 0 30px rgba(46, 204, 113, 0.45);
     }
 
     .itc-tab-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.25);
+      color: #2ecc71;
+      font-size: 1rem;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 0.95rem;
-      color: #a3e635;
-      flex-shrink: 0;
-    }
-
-    .itc-tab-title {
-      white-space: nowrap;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
     }
 
     .itc-tab-badge {
-      padding: 2px 7px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 6px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #a3e635;
-      letter-spacing: 0.02em;
+      background: #2ecc71;
+      color: #0c111d;
+      font-weight: 900;
+      font-size: 0.68rem;
+      padding: 2px 6px;
+      border-radius: 5px;
     }
 
-    @keyframes itcTabPulse {
-      0%, 100% {
-        box-shadow: 0 -6px 22px rgba(0, 146, 70, 0.5), 0 -2px 10px rgba(0, 0, 0, 0.35);
-      }
-      50% {
-        box-shadow: 0 -8px 30px rgba(46, 204, 113, 0.8), 0 0 16px rgba(163, 230, 53, 0.45);
-      }
-    }
-
-    /* Ottimizzazione Mobile (< 768px): Ultracompatto con Foto Inclusa e Form Ergonomico */
-    @media (max-width: 768px) {
-      .itc-promo-overlay {
-        padding: 8px;
-        align-items: center;
-        justify-content: center;
-      }
+    @media (max-width: 640px) {
       .itc-promo-card {
         grid-template-columns: 1fr;
-        max-width: 440px;
-        width: 100%;
-        max-height: 94vh;
+        max-width: 420px;
+        margin: 10px;
         border-radius: 18px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
       }
-      /* Foto visibile e proporzionata in testata modale su mobile */
       .itc-promo-media {
-        display: block !important;
-        position: relative !important;
-        width: 100% !important;
-        height: 125px !important;
-        min-height: 125px !important;
-        max-height: 125px !important;
-        overflow: hidden !important;
-        border-radius: 18px 18px 0 0;
-      }
-      .itc-promo-media picture {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
-      .itc-promo-img {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center 25%;
-        display: block;
+        height: 95px;
+        min-height: 95px;
       }
       .itc-media-footer {
         bottom: 8px;
-        left: 12px;
-        right: 12px;
+        left: 10px;
+        right: 10px;
       }
       .itc-media-badge {
         font-size: 0.62rem;
-        padding: 2px 8px;
+        padding: 2px 7px;
         margin-bottom: 2px;
       }
       .itc-media-caption {
         font-size: 0.72rem;
-        line-height: 1.25;
       }
       .itc-promo-content {
-        padding: 14px 14px 12px 14px;
+        padding: 16px 16px;
         max-height: none;
-        overflow-y: visible;
-      }
-      .itc-promo-close {
-        top: 8px;
-        right: 8px;
-        width: 30px;
-        height: 30px;
-        font-size: 1.2rem;
-        background: rgba(0, 0, 0, 0.55);
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
-      }
-      .itc-promo-badge {
-        font-size: 0.65rem;
-        padding: 2px 8px;
-        margin-bottom: 4px;
-        letter-spacing: 0.3px;
       }
       .itc-promo-title {
-        font-size: 1.05rem;
-        line-height: 1.2;
-        margin-bottom: 3px;
+        font-size: 1.12rem;
       }
       .itc-promo-desc {
-        font-size: 0.72rem;
-        line-height: 1.3;
-        margin-bottom: 8px;
-        color: #94a3b8;
-      }
-      /* Griglia a 2 colonne affiancate su mobile: Nome+Città riga 1, Telefono+Email riga 2 */
-      .itc-form-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 6px 8px;
-      }
-      .itc-form-group {
-        margin-bottom: 0;
-      }
-      .itc-form-label {
-        font-size: 0.64rem;
-        margin-bottom: 2px;
-        color: #cbd5e1;
+        font-size: 0.75rem;
+        margin-bottom: 10px;
       }
       .itc-form-input {
-        padding: 7px 9px;
-        font-size: 16px; /* 16px previene lo zoom automatico di iOS Safari */
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.05);
-      }
-      .itc-privacy-box {
-        margin: 5px 0;
-        padding: 5px 8px;
-        gap: 3px;
-        background: rgba(255, 255, 255, 0.02);
-        border-radius: 6px;
-      }
-      .itc-privacy-text-small {
-        font-size: 0.58rem;
-        line-height: 1.22;
+        padding: 8px 10px;
+        font-size: 16px; /* Previene zoom iOS */
       }
       .itc-submit-btn {
-        padding: 10px 14px;
-        font-size: 0.8rem;
-        font-weight: 800;
-        letter-spacing: 0.02em;
-        border-radius: 10px;
-        margin-top: 3px;
-      }
-      .itc-legal-note {
-        font-size: 0.6rem;
-        margin-top: 3px;
-      }
-      .itc-sticky-tab {
-        padding: 8px 14px 7px 12px;
-        font-size: 0.74rem;
-        border-radius: 10px 10px 0 0;
-      }
-      .itc-sticky-tab:hover {
-        transform: translateX(-50%) translateY(-2px);
+        padding: 11px 16px;
+        font-size: 0.84rem;
       }
     }
   `;
@@ -672,10 +486,10 @@
         &times;
       </button>
 
-      <!-- COLONNA SINISTRA: IMMAGINE VERTICALE (SIGNORI CHE SI STRINGONO LA MANO) -->
+      <!-- COLONNA MEDIA -->
       <div class="itc-promo-media">
         <picture>
-          <img src="promo_broker.jpg" alt="Mentorship e Corso Broker Auto Itercars Academy" class="itc-promo-img" loading="eager" />
+          <img src="promo_broker.jpg" alt="Masterclass Broker Auto Itercars Academy" class="itc-promo-img" loading="eager" />
         </picture>
         <div class="itc-media-overlay"></div>
         <div class="itc-media-footer">
@@ -683,124 +497,119 @@
             <i class="ri-vip-crown-fill"></i> ITERCARS ACADEMY
           </div>
           <p class="itc-media-caption">
-            Opportunità Privilegiata Broker Auto.
+            Opportunità Esclusiva Masterclass.
           </p>
         </div>
       </div>
 
-      <!-- COLONNA DESTRA: CONTENUTO & FORM AD ALTO IMPATTO -->
+      <!-- COLONNA CONTENUTO -->
       <div class="itc-promo-content">
-        <!-- VISTA FORM PRINCIPALE -->
+        <!-- VISTA FORM -->
         <div id="itcPromoFormWrapper">
           <div class="itc-promo-badge">
-            <i class="ri-shield-star-fill"></i> ACCESSO RISERVATO • SCONTO DEL 50%
+            <i class="ri-shield-star-fill"></i> ACCESSO RISERVATO • -50%
           </div>
 
-          <!-- TITOLO PRIVILEGIATO -->
           <h2 class="itc-promo-title" id="itcPromoTitle">
-            Accesso Riservato all'<span>Opportunità Privilegiata</span>
+            Codice Sconto del <span>50%</span> Masterclass
           </h2>
 
           <p class="itc-promo-desc">
-            Compila il modulo per ricevere via email il tuo codice sconto esclusivo per la partecipazione, valido per una settimana dall'attivazione.
+            Inserisci i tuoi recapiti per ricevere subito via email il codice sconto personale valido 7 giorni.
           </p>
 
           <form id="itcLeadPromoForm">
             <div class="itc-form-grid">
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadName">Nome e Cognome *</label>
-                <input type="text" id="itcLeadName" name="name" class="itc-form-input" placeholder="es. Mario Rossi" required autocomplete="name" autocapitalize="words" />
+                <input type="text" id="itcLeadName" name="name" class="itc-form-input" placeholder="Marco Rossi" required autocomplete="name" autocapitalize="words" />
               </div>
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadCity">Città *</label>
-                <input type="text" id="itcLeadCity" name="city" class="itc-form-input" placeholder="es. Milano" required autocomplete="address-level2" autocapitalize="words" />
+                <input type="text" id="itcLeadCity" name="city" class="itc-form-input" placeholder="Milano" required autocomplete="address-level2" autocapitalize="words" />
               </div>
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadPhone">Cellulare / WhatsApp *</label>
-                <input type="tel" id="itcLeadPhone" name="tel" class="itc-form-input" placeholder="+39 340 123 4567" required autocomplete="tel" inputmode="tel" />
+                <input type="tel" id="itcLeadPhone" name="tel" class="itc-form-input" placeholder="340 123 4567" required autocomplete="tel" inputmode="tel" />
               </div>
 
               <div class="itc-form-group">
                 <label class="itc-form-label" for="itcLeadEmail">Email *</label>
-                <input type="email" id="itcLeadEmail" name="email" class="itc-form-input" placeholder="es. mario.rossi@email.it" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" />
+                <input type="email" id="itcLeadEmail" name="email" class="itc-form-input" placeholder="marco.rossi@email.it" required autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" />
               </div>
             </div>
 
-            <!-- CHECKBOX PRIVACY E MARKETING (LETTERE PICCOLE E RIGOROSAMENTE NON IN GRASSETTO) -->
+            <!-- CHECKBOX PRIVACY E MARKETING COMPATTE -->
             <div class="itc-privacy-box">
               <label class="itc-checkbox-item">
                 <input type="checkbox" id="itcConsentPrivacy" required />
                 <p class="itc-privacy-text-small">
-                  Dichiaro di aver preso visione e di accettare la <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a> e i <a href="/termini-di-servizio.html" target="_blank" rel="noopener">Termini di Servizio</a>.
+                  Accetto la <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a> e i <a href="/termini-di-servizio.html" target="_blank" rel="noopener">Termini di Servizio</a> *
                 </p>
               </label>
 
               <label class="itc-checkbox-item">
                 <input type="checkbox" id="itcConsentMarketing" required />
                 <p class="itc-privacy-text-small">
-                  acconsento espressamente all'utilizzo dei dati forniti (nome, email, numero di telefono e città) per finalità di marketing, comunicazioni commerciali, offerte promozionali e newsletter relative ai corsi ed ai servizi di itercars, conformemente alla normativa europea gdpr (ue 2016/679).
+                  Acconsento a ricevere il codice sconto e comunicazioni sui corsi Itercars.
                 </p>
               </label>
             </div>
 
-            <div id="itcFormError" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; margin-bottom: 12px; text-align: center;"></div>
+            <div id="itcFormError" style="display: none; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #ef4444; padding: 7px 10px; border-radius: 8px; font-size: 0.78rem; margin-bottom: 10px; text-align: center;"></div>
 
-            <!-- TASTO VERDE CALL TO ACTION: RICEVI SCONTO PARTECIPAZIONE -->
             <button type="submit" id="itcSubmitBtn" class="itc-submit-btn">
-              <span>RICEVI SCONTO PARTECIPAZIONE</span>
+              <span>RICEVI IL TUO SCONTO DEL 50%</span>
               <i class="ri-arrow-right-line"></i>
             </button>
 
             <p class="itc-legal-note">
-              Invio protetto e riservato in conformità al GDPR UE 2016/679. Nessun costo nascosto.
+              Nessun vincolo di acquisto • Valido 7 giorni dall'attivazione
             </p>
           </form>
         </div>
 
-        <!-- VISTA SUCCESSO E RINGRAZIAMENTO (POST INVIO - SENZA INDICAZIONI DI PREZZO) -->
-        <div id="itcPromoSuccessWrapper" class="itc-success-view" style="display: none; text-align: center; padding: 10px 0;">
-          <div class="itc-success-icon" style="font-size: 2.8rem; color: #2ecc71; margin-bottom: 8px;">
+        <!-- VISTA SUCCESSO -->
+        <div id="itcPromoSuccessWrapper" class="itc-success-view" style="display: none; text-align: center; padding: 6px 0;">
+          <div class="itc-success-icon" style="font-size: 2.4rem; color: #2ecc71; margin-bottom: 6px;">
             <i class="ri-checkbox-circle-fill"></i>
           </div>
 
-          <h3 class="itc-success-title" style="font-size: 1.45rem; font-weight: 800; color: #ffffff; margin-bottom: 6px;">
+          <h3 class="itc-success-title" style="font-size: 1.3rem; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
             Richiesta Inviata con Successo!
           </h3>
 
-          <p class="itc-success-text" style="font-size: 0.88rem; color: #94a3b8; line-height: 1.5; margin-bottom: 16px;">
-            Il tuo codice sconto del <strong>50%</strong> per la partecipazione è stato generato ed è ora attivo.<br>
-            Abbiamo inviato una copia completa all'indirizzo <strong id="itcDisplayEmail" style="color: #2ecc71;"></strong>.
+          <p class="itc-success-text" style="font-size: 0.82rem; color: #94a3b8; line-height: 1.45; margin-bottom: 12px;">
+            Il tuo codice sconto del <strong>50%</strong> è stato generato ed è ora attivo.<br>
+            Copia inviata a: <strong id="itcDisplayEmail" style="color: #2ecc71;"></strong>
           </p>
 
-          <!-- Box Codice Stripe Personale -->
-          <div style="background: rgba(0, 146, 70, 0.12); border: 2px dashed rgba(46, 204, 113, 0.55); border-radius: 14px; padding: 16px; margin-bottom: 18px;">
-            <span style="font-size: 0.72rem; font-weight: 800; color: #d4af37; letter-spacing: 1.2px; display: block; margin-bottom: 8px; text-transform: uppercase;">IL TUO CODICE SCONTO DEL 50%</span>
+          <div style="background: rgba(0, 146, 70, 0.12); border: 2px dashed rgba(46, 204, 113, 0.5); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+            <span style="font-size: 0.68rem; font-weight: 800; color: #d4af37; letter-spacing: 1px; display: block; margin-bottom: 6px; text-transform: uppercase;">IL TUO CODICE SCONTO DEL 50%</span>
             
-            <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap;">
-              <div id="itcDisplayCode" style="font-size: 1.65rem; font-weight: 900; letter-spacing: 2px; color: #2ecc71; font-family: monospace; background: rgba(0,0,0,0.5); padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(46, 204, 113, 0.35);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap;">
+              <div id="itcDisplayCode" style="font-size: 1.45rem; font-weight: 900; letter-spacing: 2px; color: #2ecc71; font-family: monospace; background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 8px; border: 1px solid rgba(46, 204, 113, 0.35);">
                 GENERAZIONE...
               </div>
-              <button type="button" id="itcCopyCodeBtn" style="background: rgba(46, 204, 113, 0.2); border: 1px solid rgba(46, 204, 113, 0.5); color: #2ecc71; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; font-weight: 700; transition: all 0.2s;" title="Copia codice">
+              <button type="button" id="itcCopyCodeBtn" style="background: rgba(46, 204, 113, 0.2); border: 1px solid rgba(46, 204, 113, 0.5); color: #2ecc71; padding: 6px 10px; border-radius: 8px; cursor: pointer; font-size: 0.78rem; font-weight: 700; transition: all 0.2s;" title="Copia codice">
                 <i class="ri-file-copy-line"></i> Copia
               </button>
             </div>
 
-            <p id="itcDisplayExpiry" style="font-size: 0.82rem; color: #f59e0b; margin-top: 10px; margin-bottom: 0; font-weight: 700;">
-              <i class="ri-time-line"></i> Il tuo codice ha validità di 7 giorni a partire da oggi.
+            <p id="itcDisplayExpiry" style="font-size: 0.76rem; color: #f59e0b; margin: 6px 0 0; font-weight: 600;">
+              <i class="ri-time-line"></i> Validità: 7 giorni a partire da oggi
             </p>
           </div>
 
-          <!-- Azioni: Procedi al pagamento su Stripe con codice inserito o rimani sul sito -->
-          <div style="display: flex; flex-direction: column; gap: 10px;">
-            <button type="button" id="itcSuccessCloseBtn" class="itc-submit-btn" style="background: linear-gradient(135deg, #009246 0%, #2ecc71 100%); cursor: pointer; font-size: 0.95rem; padding: 14px 20px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" id="itcSuccessCloseBtn" class="itc-submit-btn" style="background: linear-gradient(135deg, #009246 0%, #2ecc71 100%); cursor: pointer; font-size: 0.88rem; padding: 12px 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px;">
               <i class="ri-bank-card-fill"></i>
-              <span>HO SALVATO IL CODICE, PROCEDI AL PAGAMENTO (SCONTO 50% APPLICATO)</span>
+              <span>Procedi al Pagamento con Sconto 50%</span>
             </button>
 
-            <!-- Link facoltativo per chiudere e rimanere sul sito -->
-            <button type="button" id="itcSuccessStayBtn" style="background: none; border: none; color: #94a3b8; font-size: 0.8rem; text-decoration: underline; cursor: pointer; padding: 4px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">
+            <button type="button" id="itcSuccessStayBtn" style="background: none; border: none; color: #94a3b8; font-size: 0.78rem; text-decoration: underline; cursor: pointer; padding: 3px; transition: color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#94a3b8'">
               Oppure chiudi e continua a navigare sul sito
             </button>
           </div>

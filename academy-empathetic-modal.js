@@ -30,9 +30,9 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      background: rgba(3, 7, 18, 0.92);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      background: rgba(3, 7, 18, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       z-index: 99999999;
       display: flex;
       align-items: center;
@@ -40,7 +40,7 @@
       padding: 16px;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.3s;
       box-sizing: border-box;
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       overflow-x: hidden;
@@ -56,16 +56,18 @@
     .itc-emp-card {
       position: relative;
       width: 100%;
-      max-width: 680px;
-      background: linear-gradient(165deg, rgba(15, 23, 42, 0.99) 0%, rgba(9, 13, 22, 1) 100%);
-      border: 1px solid rgba(46, 204, 113, 0.45);
-      border-radius: 24px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 60px rgba(0, 146, 70, 0.25);
+      max-width: 520px;
+      max-height: 92vh;
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.98) 0%, rgba(9, 13, 22, 1) 100%);
+      border: 1px solid rgba(46, 204, 113, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 146, 70, 0.2);
       color: #ffffff;
-      transform: scale(0.95) translateY(20px);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.96) translateY(14px);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       box-sizing: border-box;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       margin: auto;
     }
 
@@ -74,58 +76,58 @@
     }
 
     .itc-emp-header {
-      padding: 18px 24px;
+      padding: 14px 20px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.25);
     }
 
     .itc-emp-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .itc-emp-brand-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
       background: rgba(46, 204, 113, 0.15);
       border: 1px solid rgba(46, 204, 113, 0.35);
       color: #2ecc71;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 17px;
     }
 
     .itc-emp-brand-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
-      letter-spacing: 0.6px;
+      letter-spacing: 0.5px;
       color: #ffffff;
       text-transform: uppercase;
     }
 
     .itc-emp-brand-sub {
-      font-size: 12px;
+      font-size: 11px;
       color: #94a3b8;
     }
 
     .itc-emp-close {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #94a3b8;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 20px;
+      font-size: 18px;
       transition: all 0.2s;
     }
 
@@ -135,22 +137,22 @@
     }
 
     .itc-emp-progress-bar-wrap {
-      padding: 14px 24px 4px;
+      padding: 10px 20px 2px;
     }
 
     .itc-emp-progress-meta {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
       color: #94a3b8;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .itc-emp-progress-track {
       width: 100%;
-      height: 6px;
+      height: 4px;
       background: rgba(255, 255, 255, 0.08);
       border-radius: 99px;
       overflow: hidden;
@@ -164,90 +166,110 @@
     }
 
     .itc-emp-body {
-      padding: 24px;
+      padding: 18px 22px 22px;
     }
 
     .itc-emp-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 12px;
+      gap: 5px;
+      padding: 3px 10px;
       border-radius: 99px;
-      background: rgba(46, 204, 113, 0.15);
-      border: 1px solid rgba(46, 204, 113, 0.35);
+      background: rgba(46, 204, 113, 0.12);
+      border: 1px solid rgba(46, 204, 113, 0.3);
       color: #2ecc71;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 14px;
+      letter-spacing: 0.4px;
+      margin-bottom: 10px;
     }
 
     .itc-emp-title {
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 800;
       color: #ffffff;
-      line-height: 1.32;
-      margin: 0 0 10px 0;
+      line-height: 1.3;
+      margin: 0 0 6px 0;
     }
 
     .itc-emp-desc {
-      font-size: 14px;
+      font-size: 13px;
       color: #94a3b8;
-      line-height: 1.55;
-      margin: 0 0 22px 0;
+      line-height: 1.45;
+      margin: 0 0 16px 0;
     }
 
     .itc-emp-options {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 9px;
+      margin-bottom: 14px;
     }
 
     .itc-emp-option-btn {
       width: 100%;
-      padding: 16px 20px;
-      border-radius: 16px;
+      padding: 12px 15px;
+      border-radius: 12px;
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       color: #f1f5f9;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 13.5px;
+      font-weight: 600;
       text-align: left;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
       transition: all 0.2s ease;
       box-sizing: border-box;
-      line-height: 1.4;
+      line-height: 1.35;
     }
 
     .itc-emp-option-btn:hover {
       background: rgba(46, 204, 113, 0.08);
-      border-color: rgba(46, 204, 113, 0.5);
+      border-color: rgba(46, 204, 113, 0.45);
       color: #ffffff;
       transform: translateY(-1px);
     }
 
     .itc-emp-option-btn.itc-selected {
-      background: rgba(46, 204, 113, 0.16);
+      background: rgba(46, 204, 113, 0.14);
       border-color: #2ecc71;
       color: #ffffff;
-      box-shadow: 0 0 20px rgba(46, 204, 113, 0.2);
+      box-shadow: 0 0 18px rgba(46, 204, 113, 0.2);
+    }
+
+    .itc-emp-opt-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .itc-emp-opt-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .itc-emp-opt-desc {
+      font-size: 11.5px;
+      font-weight: 400;
+      color: #94a3b8;
     }
 
     .itc-emp-opt-circle {
-      width: 24px;
-      height: 24px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
+      font-size: 12px;
       flex-shrink: 0;
-      margin-left: 12px;
       transition: all 0.2s;
     }
 
@@ -263,32 +285,31 @@
       color: #0c111d;
     }
 
-    /* STEP 2: Validazione Radar */
     .itc-emp-scan-wrap {
       text-align: center;
-      padding: 34px 14px;
+      padding: 24px 10px;
     }
 
     .itc-emp-radar {
       position: relative;
-      width: 74px;
-      height: 74px;
-      border-radius: 22px;
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
       background: linear-gradient(135deg, #009245 0%, #2ecc71 100%);
       display: flex;
       align-items: center;
       justify-content: center;
       color: #ffffff;
-      font-size: 34px;
-      margin: 0 auto 22px;
-      box-shadow: 0 10px 30px rgba(46, 204, 113, 0.35);
+      font-size: 26px;
+      margin: 0 auto 16px;
+      box-shadow: 0 10px 28px rgba(46, 204, 113, 0.35);
     }
 
     .itc-emp-radar::after {
       content: '';
       position: absolute;
-      inset: -6px;
-      border-radius: 26px;
+      inset: -5px;
+      border-radius: 22px;
       border: 1px solid rgba(46, 204, 113, 0.4);
       animation: itcEmpPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
@@ -298,116 +319,113 @@
       100% { transform: scale(1.3); opacity: 0; }
     }
 
-    /* STEP 4: Form Fields */
+    .itc-emp-summary {
+      padding: 9px 12px;
+      background: rgba(46, 204, 113, 0.08);
+      border: 1px solid rgba(46, 204, 113, 0.22);
+      border-radius: 9px;
+      font-size: 12px;
+      color: #cbd5e1;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
     .itc-emp-field {
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .itc-emp-label {
-      display: block;
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 700;
-      color: #cbd5e1;
-      margin-bottom: 8px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      margin-bottom: 4px;
+      display: block;
     }
 
     .itc-emp-input-wrap {
       position: relative;
-    }
-
-    .itc-emp-input {
-      width: 100%;
-      padding: 14px 16px 14px 42px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #ffffff;
-      font-size: 15px;
-      box-sizing: border-box;
-      outline: none;
-      transition: all 0.2s;
-    }
-
-    .itc-emp-input:focus {
-      border-color: #2ecc71;
-      background: rgba(255, 255, 255, 0.08);
-      box-shadow: 0 0 15px rgba(46, 204, 113, 0.2);
+      display: flex;
+      align-items: center;
     }
 
     .itc-emp-input-icon {
       position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: #64748b;
-      font-size: 18px;
+      left: 13px;
+      color: #2ecc71;
+      font-size: 16px;
+      pointer-events: none;
     }
 
-    .itc-emp-summary {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 13px;
-      color: #94a3b8;
-      margin-bottom: 18px;
-      line-height: 1.6;
-    }
-
-    .itc-emp-summary strong {
+    .itc-emp-input {
+      width: 100%;
+      padding: 10px 13px 10px 38px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
       color: #ffffff;
+      font-size: 13.5px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+      box-sizing: border-box;
     }
 
-    /* Checkboxes: Privacy e Marketing */
+    .itc-emp-input:focus {
+      background: rgba(15, 23, 42, 0.95);
+      border-color: #2ecc71;
+      box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+    }
+
     .itc-emp-checkbox-group {
+      margin: 10px 0 13px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-top: 14px;
-      margin-bottom: 20px;
+      gap: 6px;
     }
 
     .itc-emp-privacy {
       display: flex;
       align-items: flex-start;
-      gap: 12px;
-      font-size: 12px;
-      color: #94a3b8;
-      line-height: 1.5;
+      gap: 7px;
       cursor: pointer;
-      user-select: none;
+      font-size: 11px;
+      color: #94a3b8;
+      line-height: 1.35;
     }
 
     .itc-emp-privacy input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
-      margin-top: 2px;
+      width: 14px;
+      height: 14px;
       accent-color: #2ecc71;
-      cursor: pointer;
+      margin-top: 1px;
       flex-shrink: 0;
+      cursor: pointer;
     }
 
     .itc-emp-cta-btn {
       width: 100%;
-      padding: 16px 26px;
-      border-radius: 14px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 11px;
       background: linear-gradient(135deg, #009245 0%, #2ecc71 100%);
       color: #ffffff;
-      font-size: 16px;
+      font-size: 13.5px;
       font-weight: 800;
-      border: none;
+      letter-spacing: 0.3px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      box-shadow: 0 8px 25px rgba(0, 146, 70, 0.4);
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(46, 204, 113, 0.28);
       transition: all 0.2s ease;
     }
 
     .itc-emp-cta-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 30px rgba(0, 146, 70, 0.55);
+      box-shadow: 0 8px 26px rgba(46, 204, 113, 0.4);
+      transform: translateY(-1px);
     }
 
     .itc-emp-cta-btn:disabled {
@@ -421,46 +439,42 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding-top: 18px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      margin-top: 22px;
+      margin-top: 12px;
     }
 
     .itc-emp-btn-back {
-      padding: 12px 20px;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.06);
+      padding: 9px 15px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #cbd5e1;
-      font-size: 13px;
-      font-weight: 700;
+      color: #94a3b8;
+      font-size: 12.5px;
+      font-weight: 600;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 5px;
       transition: all 0.2s;
     }
 
     .itc-emp-btn-back:hover {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.1);
       color: #ffffff;
     }
 
     .itc-emp-error {
-      padding: 12px 16px;
-      border-radius: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
       background: rgba(239, 68, 68, 0.15);
       border: 1px solid rgba(239, 68, 68, 0.35);
       color: #fca5a5;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
       display: none;
     }
 
-    /* ======================================================================
-       TARGHETTA SUL MARGINE SINISTRO ("Compila modulo")
-       ====================================================================== */
+    /* Targhetta Sinistra */
     .itc-emp-left-tab {
       position: fixed;
       left: 0;
@@ -469,19 +483,19 @@
       background: linear-gradient(135deg, rgba(15, 23, 42, 0.98) 0%, rgba(9, 13, 22, 1) 100%);
       border: 1px solid rgba(46, 204, 113, 0.55);
       border-left: none;
-      border-radius: 0 16px 16px 0;
-      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.7), 0 0 25px rgba(46, 204, 113, 0.35);
-      padding: 14px 18px 14px 12px;
+      border-radius: 0 14px 14px 0;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(46, 204, 113, 0.3);
+      padding: 11px 15px 11px 9px;
       color: #ffffff;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       cursor: pointer;
       z-index: 9999999;
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-size: 14px;
+      font-family: inherit;
+      font-size: 12.5px;
       font-weight: 800;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.3px;
       transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, background 0.2s, padding 0.2s;
       box-sizing: border-box;
       outline: none;
@@ -491,7 +505,7 @@
       transform: translateY(-50%) translateX(0);
     }
 
-    /* Nasconde completamente la targhetta e il modulo quando la modale di login è aperta */
+    /* Nasconde completamente quando login aperto */
     body.login-modal-open .itc-emp-left-tab,
     body.login-modal-open #itcEmpLeftTab,
     body.login-modal-open .itc-emp-overlay,
@@ -510,188 +524,41 @@
     .itc-emp-left-tab:hover {
       background: linear-gradient(135deg, rgba(22, 34, 59, 0.98) 0%, rgba(13, 20, 36, 1) 100%);
       border-color: #2ecc71;
-      box-shadow: 0 14px 45px rgba(0, 0, 0, 0.85), 0 0 35px rgba(46, 204, 113, 0.5);
-      padding-right: 22px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.85), 0 0 30px rgba(46, 204, 113, 0.45);
+      padding-right: 18px;
     }
 
     .itc-emp-left-tab .itc-tab-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
       background: rgba(46, 204, 113, 0.2);
-      border: 1px solid rgba(46, 204, 113, 0.45);
+      border: 1px solid rgba(46, 204, 113, 0.4);
       color: #2ecc71;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 14px;
       flex-shrink: 0;
     }
 
-    /* ======================================================================
-       ADATTAMENTO RESPONSIVE PER DESKTOP & SCHERMI GRANDI (2K / 4K)
-       ====================================================================== */
-    @media (min-width: 1024px) {
+    @media (max-width: 640px) {
       .itc-emp-card {
-        max-width: 760px;
-        border-radius: 28px;
+        max-width: 100%;
+        margin: 8px;
+        border-radius: 18px;
       }
-
       .itc-emp-header {
-        padding: 22px 32px;
+        padding: 12px 16px;
       }
-
-      .itc-emp-brand-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 22px;
-        border-radius: 12px;
-      }
-
-      .itc-emp-brand-title {
-        font-size: 15px;
-        letter-spacing: 0.8px;
-      }
-
-      .itc-emp-brand-sub {
-        font-size: 13px;
-      }
-
-      .itc-emp-close {
-        width: 40px;
-        height: 40px;
-        font-size: 22px;
-      }
-
-      .itc-emp-progress-bar-wrap {
-        padding: 18px 32px 6px;
-      }
-
-      .itc-emp-progress-meta {
-        font-size: 13px;
-      }
-
-      .itc-emp-progress-track {
-        height: 8px;
-      }
-
       .itc-emp-body {
-        padding: 32px;
+        padding: 16px 16px 20px;
       }
-
-      .itc-emp-badge {
-        font-size: 13px;
-        padding: 6px 16px;
-        margin-bottom: 16px;
-      }
-
       .itc-emp-title {
-        font-size: 26px;
-        line-height: 1.35;
-        margin-bottom: 12px;
+        font-size: 16.5px;
       }
-
-      .itc-emp-desc {
-        font-size: 16px;
-        line-height: 1.6;
-        margin-bottom: 26px;
-      }
-
-      .itc-emp-option-btn {
-        padding: 18px 24px;
-        border-radius: 16px;
-        font-size: 16px;
-      }
-
-      .itc-emp-opt-circle {
-        width: 28px;
-        height: 28px;
-        font-size: 15px;
-      }
-
-      .itc-emp-label {
-        font-size: 15px;
-        margin-bottom: 10px;
-      }
-
       .itc-emp-input {
-        padding: 16px 18px 16px 48px;
-        border-radius: 14px;
-        font-size: 16px;
-      }
-
-      .itc-emp-input-icon {
-        left: 16px;
-        font-size: 20px;
-      }
-
-      .itc-emp-summary {
-        padding: 16px 20px;
-        font-size: 14px;
-        margin-bottom: 22px;
-        border-radius: 14px;
-      }
-
-      .itc-emp-privacy {
-        font-size: 13px;
-        gap: 12px;
-      }
-
-      .itc-emp-privacy input[type="checkbox"] {
-        width: 20px;
-        height: 20px;
-      }
-
-      .itc-emp-cta-btn {
-        padding: 18px 28px;
-        font-size: 17px;
-        border-radius: 16px;
-      }
-
-      .itc-emp-btn-back {
-        padding: 12px 22px;
-        font-size: 14px;
-        border-radius: 12px;
-      }
-
-      .itc-emp-left-tab {
-        font-size: 15px;
-        padding: 16px 22px 16px 14px;
-        border-radius: 0 18px 18px 0;
-      }
-
-      .itc-emp-left-tab .itc-tab-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 18px;
-      }
-    }
-
-    @media (min-width: 1440px) {
-      .itc-emp-card {
-        max-width: 820px;
-      }
-
-      .itc-emp-title {
-        font-size: 29px;
-      }
-
-      .itc-emp-desc {
-        font-size: 17px;
-      }
-
-      .itc-emp-option-btn {
-        padding: 20px 26px;
-        font-size: 17px;
-      }
-
-      .itc-emp-label {
-        font-size: 16px;
-      }
-
-      .itc-emp-input {
-        font-size: 17px;
-        padding: 17px 20px 17px 50px;
+        font-size: 16px; /* Previene zoom iOS */
       }
     }
   `;
@@ -717,90 +584,97 @@
   overlay.id = 'itcEmpatheticOverlay';
 
   overlay.innerHTML = `
-    <div class="itc-emp-card" id="itcEmpatheticCard" role="dialog" aria-modal="true">
-      <!-- Header -->
+    <div class="itc-emp-card" role="dialog" aria-modal="true">
+      <!-- HEADER COMPATTO -->
       <div class="itc-emp-header">
         <div class="itc-emp-brand">
           <div class="itc-emp-brand-icon">
-            <i class="ri-roadster-line"></i>
+            <i class="ri-vip-crown-fill"></i>
           </div>
           <div>
-            <div class="itc-emp-brand-title">ITERCARS Academy</div>
-            <div class="itc-emp-brand-sub">Masterclass &amp; Partenariato Operativo</div>
+            <div class="itc-emp-brand-title">ITERCARS ACADEMY</div>
+            <div class="itc-emp-brand-sub">Valutazione Candidatura</div>
           </div>
         </div>
-        <button type="button" class="itc-emp-close" id="itcEmpCloseBtn" title="Chiudi">
-          <i class="ri-close-line"></i>
+        <button type="button" class="itc-emp-close" id="itcEmpCloseBtn" aria-label="Chiudi modulo">
+          &times;
         </button>
       </div>
 
-      <!-- Barra di Progresso -->
+      <!-- PROGRESS TRACK -->
       <div class="itc-emp-progress-bar-wrap" id="itcEmpProgressWrap">
         <div class="itc-emp-progress-meta">
           <span id="itcEmpProgressLabel">Fase 1 di 3</span>
-          <span id="itcEmpProgressPercent" style="color: #2ecc71; font-weight: 700;">33%</span>
+          <span id="itcEmpProgressPercent">33%</span>
         </div>
         <div class="itc-emp-progress-track">
           <div class="itc-emp-progress-fill" id="itcEmpProgressFill" style="width: 33%;"></div>
         </div>
       </div>
 
-      <!-- Corpo del Modulo -->
       <div class="itc-emp-body">
         <div class="itc-emp-error" id="itcEmpErrorBox"></div>
 
-        <!-- STEP 1: L'AGGANCIO (Partenariato o Masterclass) -->
+        <!-- STEP 1: L'AGGANCIO -->
         <div id="itcEmpStep1">
           <div class="itc-emp-badge">
             <i class="ri-shield-star-line"></i> Opportunità Riservata
           </div>
           <h3 class="itc-emp-title">
-            Vuoi entrare nel business del Noleggio a Lungo Termine e Supercar?
+            Seleziona il tuo obiettivo
           </h3>
           <p class="itc-emp-desc">
-            Rispondi a 3 brevi domande per scoprire se il tuo profilo è idoneo per la Masterclass o per il Partenariato Operativo ITERCARS (richiede 30 secondi).
+            Verifica in 30 secondi se il tuo profilo ha i requisiti per collaborare con noi.
           </p>
 
-          <label class="itc-emp-label">A quale percorso o collaborazione sei maggiormente interessato?</label>
           <div class="itc-emp-options">
             <button type="button" class="itc-emp-option-btn" data-step1="Masterclass Completa Broker Supercar">
-              <span>Masterclass Completa Broker Supercar (Diventa Broker Indipendente)</span>
+              <div class="itc-emp-opt-text">
+                <span class="itc-emp-opt-title">Masterclass Broker Supercar</span>
+                <span class="itc-emp-opt-desc">Percorso per operare come broker indipendente</span>
+              </div>
               <div class="itc-emp-opt-circle"><i class="ri-arrow-right-line"></i></div>
             </button>
             <button type="button" class="itc-emp-option-btn" data-step1="Partenariato Ufficiale ITERCARS">
-              <span>Partenariato Ufficiale ITERCARS (Collabora con la nostra flotta e mandati)</span>
+              <div class="itc-emp-opt-text">
+                <span class="itc-emp-opt-title">Partenariato Ufficiale ITERCARS</span>
+                <span class="itc-emp-opt-desc">Collaborazione diretta con la flotta e mandati attivi</span>
+              </div>
               <div class="itc-emp-opt-circle"><i class="ri-arrow-right-line"></i></div>
             </button>
             <button type="button" class="itc-emp-option-btn" data-step1="Entrambi (Formazione + Partnership Commerciale)">
-              <span>Entrambi (Formazione + Partnership Commerciale Immediata)</span>
+              <div class="itc-emp-opt-text">
+                <span class="itc-emp-opt-title">Formazione + Partenariato</span>
+                <span class="itc-emp-opt-desc">Masterclass completa e partnership operativa immediata</span>
+              </div>
               <div class="itc-emp-opt-circle"><i class="ri-arrow-right-line"></i></div>
             </button>
           </div>
         </div>
 
-        <!-- STEP 2: LA VALIDAZIONE (Transizione animata 2 secondi) -->
+        <!-- STEP 2: LA VALIDAZIONE -->
         <div id="itcEmpStep2" style="display: none;">
           <div class="itc-emp-scan-wrap">
             <div class="itc-emp-radar">
               <i class="ri-pulse-line"></i>
             </div>
             <div class="itc-emp-badge">
-              <i class="ri-cpu-line"></i> Analisi Disponibilità &amp; Requisiti
+              <i class="ri-cpu-line"></i> Analisi Idoneità
             </div>
-            <h4 style="font-size: 20px; font-weight: 800; color: #ffffff; line-height: 1.4; margin: 0 0 12px 0;">
-              "Verifichiamo il tuo profilo e la disponibilità territoriale... Il mercato del noleggio luxury e del brokeraggio consente provvigioni elevate senza necessità di possedere i veicoli."
+            <h4 style="font-size: 16px; font-weight: 800; color: #ffffff; line-height: 1.35; margin: 0 0 6px 0;">
+              Verifica disponibilità posti e tutor in corso...
             </h4>
-            <p style="font-size: 14px; color: #94a3b8; margin: 0 0 22px 0;">
-              Analisi disponibilità posti riservati e tutor per l'edizione in corso...
+            <p style="font-size: 12.5px; color: #94a3b8; margin: 0 0 16px 0;">
+              Assegnazione referente per la sessione corrente.
             </p>
 
-            <div style="width: 100%; max-width: 320px; height: 8px; background: rgba(255,255,255,0.08); border-radius: 99px; margin: 0 auto 14px; overflow: hidden;">
+            <div style="width: 100%; max-width: 260px; height: 5px; background: rgba(255,255,255,0.08); border-radius: 99px; margin: 0 auto 10px; overflow: hidden;">
               <div id="itcEmpRadarBar" style="width: 0%; height: 100%; background: #2ecc71; border-radius: 99px; transition: width 0.1s linear;"></div>
             </div>
-            <div id="itcEmpRadarPercent" style="font-size: 12px; color: #64748b; font-weight: 700;">0%</div>
+            <div id="itcEmpRadarPercent" style="font-size: 11px; color: #64748b; font-weight: 700;">0%</div>
 
-            <div style="margin-top: 20px;">
-              <button type="button" id="itcEmpSkipStep2" style="background: none; border: none; color: #94a3b8; font-size: 13px; text-decoration: underline; cursor: pointer;">
+            <div style="margin-top: 14px;">
+              <button type="button" id="itcEmpSkipStep2" style="background: none; border: none; color: #94a3b8; font-size: 12px; text-decoration: underline; cursor: pointer;">
                 Continua subito
               </button>
             </div>
@@ -810,40 +684,40 @@
         <!-- STEP 3: LA QUALIFICAZIONE -->
         <div id="itcEmpStep3" style="display: none;">
           <div class="itc-emp-badge">
-            <i class="ri-user-star-line"></i> Profilazione Candidatura
+            <i class="ri-user-star-line"></i> Profilazione Rapida
           </div>
-          <h3 class="itc-emp-title">Inquadriamo la tua situazione e disponibilità</h3>
+          <h3 class="itc-emp-title">Esperienza e disponibilità</h3>
           <p class="itc-emp-desc">
-            Definisci la tua esperienza pregressa e il tempo a disposizione per strutturare il piano d'avvio.
+            Seleziona la tua situazione per calibrare il percorso su misura.
           </p>
 
-          <div style="margin-bottom: 22px;">
-            <label class="itc-emp-label">Qual è la tua attuale esperienza nel settore vendite o automotive?</label>
+          <div style="margin-bottom: 12px;">
+            <label class="itc-emp-label">Esperienza commerciale o automotive:</label>
             <div class="itc-emp-options">
               <button type="button" class="itc-emp-option-btn itc-q1-btn" data-q1="Parto da zero / Appassionato di auto">
-                <span>Parto da zero / Appassionato di auto</span>
+                <span>Parto da zero / Appassionato</span>
                 <div class="itc-emp-opt-circle"><i class="ri-check-line"></i></div>
               </button>
               <button type="button" class="itc-emp-option-btn itc-q1-btn" data-q1="Ho esperienza commerciale / Vendite">
-                <span>Ho esperienza commerciale / Vendite</span>
+                <span>Esperienza commerciale o vendite</span>
                 <div class="itc-emp-opt-circle"><i class="ri-check-line"></i></div>
               </button>
               <button type="button" class="itc-emp-option-btn itc-q1-btn" data-q1="Opero già nel settore automotive o noleggi">
-                <span>Opero già nel settore automotive o noleggi</span>
+                <span>Già attivo nel settore auto / noleggi</span>
                 <div class="itc-emp-opt-circle"><i class="ri-check-line"></i></div>
               </button>
             </div>
           </div>
 
           <div>
-            <label class="itc-emp-label">Quanto tempo desideri dedicare a questa attività?</label>
+            <label class="itc-emp-label">Tempo da dedicare all'attività:</label>
             <div class="itc-emp-options">
               <button type="button" class="itc-emp-option-btn itc-q2-btn" data-q2="Part-time (Qualche ora a settimana)">
-                <span>Part-time (Qualche ora a settimana per entrate extra)</span>
+                <span>Part-time (entrate extra nel tempo libero)</span>
                 <div class="itc-emp-opt-circle"><i class="ri-check-line"></i></div>
               </button>
               <button type="button" class="itc-emp-option-btn itc-q2-btn" data-q2="Full-time (Voglio creare la mia agenzia)">
-                <span>Full-time (Voglio creare la mia agenzia o attività principale)</span>
+                <span>Full-time (attività principale o agenzia)</span>
                 <div class="itc-emp-opt-circle"><i class="ri-check-line"></i></div>
               </button>
             </div>
@@ -853,108 +727,99 @@
             <button type="button" class="itc-emp-btn-back" id="itcEmpBackTo1">
               <i class="ri-arrow-left-line"></i> Indietro
             </button>
-            <button type="button" class="itc-emp-cta-btn" id="itcEmpProceedTo4" style="width: auto; padding: 12px 24px; font-size: 14px;">
-              <span>Procedi alla Candidatura</span> <i class="ri-arrow-right-line"></i>
+            <button type="button" class="itc-emp-cta-btn" id="itcEmpProceedTo4" style="width: auto; padding: 10px 20px; font-size: 13px;">
+              <span>Continua</span> <i class="ri-arrow-right-line"></i>
             </button>
           </div>
         </div>
 
-        <!-- STEP 4: LA RICOMPENSA E L'ACQUISIZIONE CON DOPPIA SPUNTA -->
+        <!-- STEP 4: LA RICOMPENSA E L'ACQUISIZIONE -->
         <div id="itcEmpStep4" style="display: none;">
           <form id="itcEmpLeadForm">
             <div class="itc-emp-badge">
-              <i class="ri-checkbox-circle-line"></i> Profilo Idoneo
+              <i class="ri-checkbox-circle-line"></i> Requisiti Confermati
             </div>
-            <h3 class="itc-emp-title">Ottimo! Il tuo profilo ha i requisiti per accedere al programma.</h3>
+            <h3 class="itc-emp-title">Ottimo! Profilo Idoneo</h3>
             <p class="itc-emp-desc">
-              Un responsabile didattico o commerciale ITERCARS ti illustrerà il piano operativo, le provvigioni medie e le modalità di accesso.
+              Ricevi gratuitamente il programma dettagliato, il piano provvigioni e le date disponibili.
             </p>
 
             <div class="itc-emp-summary">
-              <div style="font-weight: 700; color: #2ecc71; margin-bottom: 4px;">Riepilogo della tua selezione:</div>
-              <div>Percorso: <strong id="itcEmpSumPercorso">-</strong></div>
-              <div>Esperienza: <strong id="itcEmpSumExp">-</strong> • Dedizione: <strong id="itcEmpSumTime">-</strong></div>
+              <span id="itcEmpSumPercorso">-</span> • <span id="itcEmpSumExp">-</span> • <span id="itcEmpSumTime">-</span>
             </div>
 
             <div class="itc-emp-field">
-              <label class="itc-emp-label">A chi dobbiamo intestare la candidatura? *</label>
+              <label class="itc-emp-label">Nome e Cognome *</label>
               <div class="itc-emp-input-wrap">
                 <i class="ri-user-line itc-emp-input-icon"></i>
-                <input type="text" class="itc-emp-input" id="itcEmpName" name="name" autocomplete="name" autocapitalize="words" required placeholder="es. Marco Rossi" />
+                <input type="text" class="itc-emp-input" id="itcEmpName" name="name" autocomplete="name" autocapitalize="words" required placeholder="Marco Rossi" />
               </div>
             </div>
 
             <div class="itc-emp-field">
-              <label class="itc-emp-label">A quale email inviamo il programma e la documentazione? *</label>
+              <label class="itc-emp-label">Indirizzo Email *</label>
               <div class="itc-emp-input-wrap">
                 <i class="ri-mail-line itc-emp-input-icon"></i>
-                <input type="email" class="itc-emp-input" id="itcEmpEmail" name="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" required placeholder="es. marco.rossi@email.it" />
+                <input type="email" class="itc-emp-input" id="itcEmpEmail" name="email" autocomplete="email" autocapitalize="none" autocorrect="off" spellcheck="false" required placeholder="marco.rossi@email.it" />
               </div>
             </div>
 
             <div class="itc-emp-field">
-              <label class="itc-emp-label">A quale numero preferisci ricevere il colloquio informativo? *</label>
+              <label class="itc-emp-label">Cellulare / WhatsApp *</label>
               <div class="itc-emp-input-wrap">
                 <i class="ri-phone-line itc-emp-input-icon"></i>
-                <input type="tel" class="itc-emp-input" id="itcEmpPhone" name="tel" autocomplete="tel" inputmode="tel" required placeholder="Inserisci il tuo cellulare" />
+                <input type="tel" class="itc-emp-input" id="itcEmpPhone" name="tel" autocomplete="tel" inputmode="tel" required placeholder="340 123 4567" />
               </div>
             </div>
 
             <!-- DOPPIE SPUNTE: PRIVACY POLICY & MARKETING -->
             <div class="itc-emp-checkbox-group">
-              <!-- Spunta 1: Privacy Policy Obbligatoria -->
               <label class="itc-emp-privacy">
                 <input type="checkbox" id="itcEmpPrivacy" required checked />
-                <span>
-                  <strong>Informativa Privacy *</strong>: Ho letto e accetto l'Informativa sul trattamento dei dati personali a norma del Regolamento UE 2016/679 (GDPR) per la gestione della candidatura gratuita. Nessun costo né vincolo contrattuale.
-                </span>
+                <span>Ho letto e accetto l'<strong>Informativa Privacy</strong> (GDPR UE 2016/679). Nessun vincolo.</span>
               </label>
 
-              <!-- Spunta 2: Marketing & Comunicazioni Riservate -->
               <label class="itc-emp-privacy">
                 <input type="checkbox" id="itcEmpMarketing" checked />
-                <span>
-                  <strong>Consenso Marketing</strong>: Acconsento a ricevere comunicazioni informative, anteprime su mandati flotta e opportunità commerciali riservate da ITERCARS Academy via email o telefono.
-                </span>
+                <span>Acconsento a ricevere anteprime su mandati flotta e opportunità riservate.</span>
               </label>
             </div>
 
             <button type="submit" class="itc-emp-cta-btn" id="itcEmpSubmitBtn">
-              <span>Invia la Mia Candidatura Gratuita</span> <i class="ri-send-plane-fill"></i>
+              <span>Invia Candidatura Gratuita</span> <i class="ri-send-plane-fill"></i>
             </button>
 
-            <div style="text-align: center; font-size: 12px; color: #64748b; margin-top: 12px;">
-              <i class="ri-lock-line"></i> Colloquio orientativo 100% gratuito e non vincolante
+            <div style="text-align: center; font-size: 11px; color: #64748b; margin-top: 9px;">
+              <i class="ri-lock-line"></i> Consulenza 100% gratuita • Nessun vincolo contrattuale
             </div>
           </form>
         </div>
 
         <!-- STEP 5: CONFERMA E SUCCESSO -->
-        <div id="itcEmpStep5" style="display: none; text-align: center; padding: 24px 12px;">
-          <div style="width: 68px; height: 68px; border-radius: 22px; background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; font-size: 34px; margin: 0 auto 18px;">
+        <div id="itcEmpStep5" style="display: none; text-align: center; padding: 18px 8px;">
+          <div style="width: 54px; height: 54px; border-radius: 16px; background: rgba(46, 204, 113, 0.15); border: 1px solid #2ecc71; color: #2ecc71; display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 12px;">
             <i class="ri-check-double-line"></i>
           </div>
 
           <div class="itc-emp-badge">
-            <i class="ri-checkbox-circle-fill"></i> Candidatura Registrata
+            <i class="ri-checkbox-circle-fill"></i> Candidatura Ricevuta
           </div>
 
           <h3 class="itc-emp-title" id="itcEmpSuccessTitle">
             Candidatura registrata con successo!
           </h3>
 
-          <p class="itc-emp-desc" id="itcEmpSuccessDesc" style="max-width: 460px; margin: 0 auto 26px;">
-            Un responsabile ITERCARS esaminerà la tua richiesta e ti contatterà al numero indicato entro 24 ore lavorative.
+          <p class="itc-emp-desc" id="itcEmpSuccessDesc" style="max-width: 420px; margin: 0 auto 18px;">
+            Un nostro responsabile didattico esaminerà la tua richiesta e ti contatterà al numero indicato.
           </p>
 
-          <button type="button" class="itc-emp-cta-btn" id="itcEmpFinishBtn" style="max-width: 260px; margin: 0 auto;">
-            <span>Chiudi e continua</span>
+          <button type="button" class="itc-emp-cta-btn" id="itcEmpFinishBtn" style="max-width: 200px; margin: 0 auto;">
+            <span>Torna alla Pagina</span>
           </button>
         </div>
       </div>
     </div>
   `;
-
   document.body.appendChild(overlay);
 
   // Variabili di stato
