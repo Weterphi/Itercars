@@ -1004,7 +1004,8 @@
         interestTag: 'broker corso',
         notes: 'Richiesta Sconto Partecipazione 50% - Accesso Riservato Opportunità Privilegiata Itercars Academy - Valido 1 settimana',
         source: 'sito_web',
-        campaignName: 'Accesso Riservato Opportunità Privilegiata',
+        campaignName: 'Richiesta Sconto 50% Masterclass Broker Supercar',
+        brand: 'itercars',
         answers: {
           'Tipo Richiesta': 'Sconto 50% Masterclass Broker Auto',
           'Validità': '7 Giorni',
