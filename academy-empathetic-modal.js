@@ -985,10 +985,8 @@
   }
 
   // =========================================================================
-  // SISTEMA AUTOFILL MULTI-LIVELLO: NATIVO DISPOSITIVO + CACHE CONDIVISA + URL
+  // SISTEMA PARAMETRI URL (Nessun pre-riempimento da cache o dati admin)
   // =========================================================================
-  const CONTACT_CACHE_KEY = 'itercars_contact_cache';
-
   function getStoredContactInfo() {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -997,27 +995,11 @@
       const urlPhone = params.get('telefono') || params.get('phone') || params.get('tel') || params.get('cellulare') || '';
       const urlCity = params.get('citta') || params.get('city') || '';
 
-      let localData = {};
-      const raw = localStorage.getItem(CONTACT_CACHE_KEY);
-      if (raw) {
-        try { localData = JSON.parse(raw) || {}; } catch (e) {}
-      }
-
-      let stratData = {};
-      const rawStrat = localStorage.getItem('stratoshub_contact_cache');
-      if (rawStrat) {
-        try { stratData = JSON.parse(rawStrat) || {}; } catch (e) {}
-      }
-
-      const altName = localStorage.getItem('itercars_user_name') || localStorage.getItem('stratoshub_user_name') || '';
-      const altEmail = localStorage.getItem('itercars_user_email') || localStorage.getItem('stratoshub_user_email') || '';
-      const altPhone = localStorage.getItem('itercars_user_phone') || localStorage.getItem('stratoshub_user_phone') || '';
-
       return {
-        name: urlName || localData.name || stratData.name || altName || '',
-        email: urlEmail || localData.email || stratData.email || altEmail || '',
-        phone: urlPhone || localData.phone || stratData.phone || altPhone || '',
-        city: urlCity || localData.city || stratData.city || ''
+        name: urlName.trim(),
+        email: urlEmail.trim(),
+        phone: urlPhone.trim(),
+        city: urlCity.trim()
       };
     } catch (e) {
       return { name: '', email: '', phone: '', city: '' };
@@ -1025,24 +1007,7 @@
   }
 
   function saveStoredContactInfo(info) {
-    try {
-      if (!info) return;
-      const current = getStoredContactInfo();
-      const updated = {
-        name: (info.name !== undefined ? info.name : current.name).trim(),
-        email: (info.email !== undefined ? info.email : current.email).trim(),
-        phone: (info.phone !== undefined ? info.phone : current.phone).trim(),
-        city: (info.city !== undefined ? info.city : current.city).trim(),
-        updatedAt: Date.now()
-      };
-      if (updated.name || updated.email || updated.phone) {
-        localStorage.setItem(CONTACT_CACHE_KEY, JSON.stringify(updated));
-        localStorage.setItem('stratoshub_contact_cache', JSON.stringify(updated));
-        if (updated.name) localStorage.setItem('itercars_user_name', updated.name);
-        if (updated.email) localStorage.setItem('itercars_user_email', updated.email);
-        if (updated.phone) localStorage.setItem('itercars_user_phone', updated.phone);
-      }
-    } catch (e) {}
+    // Nessun salvataggio in cache globali o condivise per evitare conflitti tra utenti
   }
 
   function autoFillContactFields() {
@@ -1051,6 +1016,7 @@
     const emailInput = document.getElementById('itcEmpEmail');
     const phoneInput = document.getElementById('itcEmpPhone');
 
+    // Compila i campi SOLO se passati esplicitamente via parametro URL (es. da inserzioni ADS)
     if (nameInput && !nameInput.value && contact.name) {
       nameInput.value = contact.name;
     }

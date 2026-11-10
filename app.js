@@ -1260,7 +1260,6 @@ function cacheUserData(name, email, phone) {
     };
     if (cleanN || cleanE || cleanP) {
       localStorage.setItem('itercars_contact_cache', JSON.stringify(data));
-      localStorage.setItem('stratoshub_contact_cache', JSON.stringify(data));
       if (cleanN) localStorage.setItem('itercars_user_name', cleanN);
       if (cleanE) localStorage.setItem('itercars_user_email', cleanE);
       if (cleanP) localStorage.setItem('itercars_user_phone', cleanP);
